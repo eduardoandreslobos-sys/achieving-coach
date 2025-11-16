@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -13,6 +12,7 @@ const TOOLS = [
     description: 'Visualize and assess balance across key life areas',
     category: 'Self-Assessment',
     icon: '🎯',
+    href: '/tools/wheel-of-life',
   },
   {
     id: 'grow-model',
@@ -20,6 +20,7 @@ const TOOLS = [
     description: 'Goal, Reality, Options, Will - structured coaching framework',
     category: 'Goal Setting',
     icon: '📈',
+    href: '/grow-worksheet',
   },
   {
     id: 'values-clarification',
@@ -27,6 +28,7 @@ const TOOLS = [
     description: 'Identify and prioritize your core values',
     category: 'Self-Discovery',
     icon: '💎',
+    href: '/tools/values-clarification',
   },
   {
     id: 'habit-loop',
@@ -34,6 +36,7 @@ const TOOLS = [
     description: 'Break down habits into cue, routine, and reward',
     category: 'Behavior Change',
     icon: '🔄',
+    href: '/tools/habit-loop',
   },
 ];
 
@@ -72,6 +75,7 @@ export default function ToolsPage() {
             <div className="flex items-center gap-6">
               <Link href="/dashboard" className="text-gray-600 hover:text-primary-600">Dashboard</Link>
               <Link href="/goals" className="text-gray-600 hover:text-primary-600">My Goals</Link>
+              <Link href="/grow-worksheet" className="text-gray-600 hover:text-primary-600">GROW Sessions</Link>
               <span className="text-gray-700">{user?.email}</span>
             </div>
           </div>
@@ -90,7 +94,7 @@ export default function ToolsPage() {
           {TOOLS.map((tool) => (
             <Link
               key={tool.id}
-              href={`/tools/${tool.id}`}
+              href={tool.href}
               className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
             >
               <div className="flex items-start gap-4">

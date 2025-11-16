@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
@@ -54,6 +53,9 @@ export default function DashboardPage() {
               <Link href="/tools" className="text-gray-600 hover:text-primary-600 font-medium">
                 Tools
               </Link>
+              <Link href="/grow-worksheet" className="text-gray-600 hover:text-primary-600 font-medium">
+                GROW Sessions
+              </Link>
               <span className="text-gray-700">{user?.email}</span>
               <button
                 onClick={handleSignOut}
@@ -81,14 +83,16 @@ export default function DashboardPage() {
             <h3 className="text-lg font-semibold mb-2">My Goals</h3>
             <p className="text-gray-600">Manage your objectives</p>
           </Link>
+
+          <Link href="/grow-worksheet" className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+            <h3 className="text-lg font-semibold mb-2">GROW Sessions</h3>
+            <p className="text-gray-600">Structured coaching framework</p>
+          </Link>
+
           <Link href="/tools" className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
             <h3 className="text-lg font-semibold mb-2">Coaching Tools</h3>
             <p className="text-gray-600">Access exercises & frameworks</p>
           </Link>
-          <div className="bg-white p-6 rounded-xl shadow-sm">
-            <h3 className="text-lg font-semibold mb-2">Next Session</h3>
-            <p className="text-gray-600">No upcoming sessions</p>
-          </div>
         </div>
 
         <div className="bg-white rounded-xl shadow-sm p-6">
