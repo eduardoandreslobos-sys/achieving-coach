@@ -37,72 +37,80 @@ export default function GrowWorksheet({ sessionId, coacheeId, coachId, onSave, o
   ];
 
   useEffect(() => {
-    if (sessionId) {
-      loadSession(sessionId);
-    } else {
-      createNewSession();
-    }
-  }, [sessionId]);
+    // Always create a new session for now (mock data mode)
+    createNewSession();
+  }, []);
 
-  const loadSession = async (id: string) => {
-    try {
-      const response = await fetch(`/api/v1/grow-sessions/${id}`);
-      const data = await response.json();
-      if (data.success) {
-        setSession(data.data);
-      }
-    } catch (error) {
-      console.error('Error loading session:', error);
-    }
-  };
-
-  const createNewSession = async () => {
+  const createNewSession = () => {
     const newSession: GrowSession = {
-      id: `temp-${Date.now()}`,
+      id: `session-${Date.now()}`,
       coacheeId,
       coachId,
       sessionDate: new Date(),
       status: 'draft',
-      goal: { description: '', specificGoal: '', measurableOutcome: '', achievableSteps: [''], relevance: '', timeframe: '', priority: 'medium' },
-      reality: { currentSituation: '', obstacles: [''], resources: [''], skillsAvailable: [''], supportSystems: [''], previousAttempts: '', emotionalState: '' },
-      options: { brainstormedOptions: [''], prosAndCons: [], selectedOptions: [], alternativePaths: [''] },
-      will: { commitmentLevel: 5, actionSteps: [{ step: '', deadline: new Date(), responsible: '', completed: false }], potentialObstacles: [''], supportNeeded: [''], successMetrics: [''], followUpDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), accountabilityPartner: '' },
+      goal: { 
+        description: '', 
+        specificGoal: '', 
+        measurableOutcome: '', 
+        achievableSteps: [''], 
+        relevance: '', 
+        timeframe: '', 
+        priority: 'medium' 
+      },
+      reality: { 
+        currentSituation: '', 
+        obstacles: [''], 
+        resources: [''], 
+        skillsAvailable: [''], 
+        supportSystems: [''], 
+        previousAttempts: '', 
+        emotionalState: '' 
+      },
+      options: { 
+        brainstormedOptions: [''], 
+        prosAndCons: [], 
+        selectedOptions: [], 
+        alternativePaths: [''] 
+      },
+      will: { 
+        commitmentLevel: 5, 
+        actionSteps: [{ step: '', deadline: new Date(), responsible: '', completed: false }], 
+        potentialObstacles: [''], 
+        supportNeeded: [''], 
+        successMetrics: [''], 
+        followUpDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), 
+        accountabilityPartner: '' 
+      },
       notes: '',
     };
     setSession(newSession);
   };
 
-  const handleSave = async () => {
+  const handleSave = () => {
     if (!session) return;
     setIsSaving(true);
-    try {
-      const url = session.id.startsWith('temp-') ? '/api/v1/grow-sessions' : `/api/v1/grow-sessions/${session.id}`;
-      const method = session.id.startsWith('temp-') ? 'POST' : 'PATCH';
-      const response = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(session) });
-      const data = await response.json();
-      if (data.success) {
-        setSession(data.data);
-        onSave?.(data.data);
-      }
-    } catch (error) {
-      console.error('Error saving session:', error);
-    } finally {
+    
+    // Simulate save with timeout
+    setTimeout(() => {
+      console.log('Session saved (mock):', session);
+      onSave?.(session);
       setIsSaving(false);
-    }
+      alert('Session saved successfully! (Mock mode - not saved to database yet)');
+    }, 500);
   };
 
-  const handleComplete = async () => {
+  const handleComplete = () => {
     if (!session) return;
-    try {
-      const response = await fetch(`/api/v1/grow-sessions/${session.id}/complete`, { method: 'POST' });
-      const data = await response.json();
-      if (data.success) {
-        setSession(data.data);
-        onComplete?.(data.data);
-      }
-    } catch (error) {
-      console.error('Error completing session:', error);
-    }
+    
+    const completedSession = {
+      ...session,
+      status: 'completed' as const,
+    };
+    
+    console.log('Session completed (mock):', completedSession);
+    setSession(completedSession);
+    onComplete?.(completedSession);
+    alert('Session completed! (Mock mode - not saved to database yet)');
   };
 
   const updateField = (step: string, field: string, value: any) => {
@@ -140,6 +148,7 @@ export default function GrowWorksheet({ sessionId, coacheeId, coachId, onSave, o
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">GROW Model Worksheet</h1>
         <p className="text-gray-600">A structured framework for goal setting and problem solving</p>
+        <p className="text-sm text-yellow-600 mt-2">⚠️ Demo Mode - Changes are not persisted to database</p>
       </div>
 
       <div className="mb-8">
@@ -218,7 +227,9 @@ function GoalStep({ session, updateField, addArrayItem, updateArrayItem, removeA
         {session.goal.achievableSteps.map((step: string, index: number) => (
           <div key={index} className="flex gap-2 mb-2">
             <input type="text" value={step} onChange={(e) => updateArrayItem('goal', 'achievableSteps', index, e.target.value)} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder={`Step ${index + 1}`} />
-            <button onClick={() => removeArrayItem('goal', 'achievableSteps', index)} className="px-3 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200">Remove</button>
+            {session.goal.achievableSteps.length > 1 && (
+              <button onClick={() => removeArrayItem('goal', 'achievableSteps', index)} className="px-3 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200">Remove</button>
+            )}
           </div>
         ))}
         <button onClick={() => addArrayItem('goal', 'achievableSteps')} className="mt-2 px-4 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200">+ Add Step</button>
@@ -261,7 +272,9 @@ function RealityStep({ session, updateField, addArrayItem, updateArrayItem, remo
         {session.reality.obstacles.map((obstacle: string, index: number) => (
           <div key={index} className="flex gap-2 mb-2">
             <input type="text" value={obstacle} onChange={(e) => updateArrayItem('reality', 'obstacles', index, e.target.value)} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="What's standing in your way?" />
-            <button onClick={() => removeArrayItem('reality', 'obstacles', index)} className="px-3 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200">Remove</button>
+            {session.reality.obstacles.length > 1 && (
+              <button onClick={() => removeArrayItem('reality', 'obstacles', index)} className="px-3 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200">Remove</button>
+            )}
           </div>
         ))}
         <button onClick={() => addArrayItem('reality', 'obstacles')} className="mt-2 px-4 py-2 bg-green-100 text-green-600 rounded-lg hover:bg-green-200">+ Add Obstacle</button>
@@ -282,7 +295,9 @@ function OptionsStep({ session, updateField, addArrayItem, updateArrayItem, remo
         {session.options.brainstormedOptions.map((option: string, index: number) => (
           <div key={index} className="flex gap-2 mb-2">
             <input type="text" value={option} onChange={(e) => updateArrayItem('options', 'brainstormedOptions', index, e.target.value)} className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500" placeholder={`Option ${index + 1}`} />
-            <button onClick={() => removeArrayItem('options', 'brainstormedOptions', index)} className="px-3 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200">Remove</button>
+            {session.options.brainstormedOptions.length > 1 && (
+              <button onClick={() => removeArrayItem('options', 'brainstormedOptions', index)} className="px-3 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200">Remove</button>
+            )}
           </div>
         ))}
         <button onClick={() => addArrayItem('options', 'brainstormedOptions')} className="mt-2 px-4 py-2 bg-yellow-100 text-yellow-700 rounded-lg hover:bg-yellow-200">+ Add Option</button>
@@ -291,7 +306,7 @@ function OptionsStep({ session, updateField, addArrayItem, updateArrayItem, remo
   );
 }
 
-function WillStep({ session, updateField, addArrayItem, updateArrayItem, removeArrayItem }: any) {
+function WillStep({ session, updateField }: any) {
   return (
     <div className="space-y-6">
       <div>
@@ -304,6 +319,7 @@ function WillStep({ session, updateField, addArrayItem, updateArrayItem, removeA
           <input type="range" min="1" max="10" value={session.will.commitmentLevel} onChange={(e) => updateField('will', 'commitmentLevel', parseInt(e.target.value))} className="flex-1" />
           <span className="text-2xl font-bold text-purple-600 w-12 text-center">{session.will.commitmentLevel}</span>
         </div>
+        <p className="text-sm text-gray-500 mt-1">How committed are you to taking action?</p>
       </div>
     </div>
   );
