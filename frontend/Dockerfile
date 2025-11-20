@@ -10,7 +10,7 @@ RUN npm install
 # Copy source code
 COPY . .
 
-# Build with static generation disabled
+# Build (usará .env.production con valores dummy)
 RUN npm run build
 
 # Production image
