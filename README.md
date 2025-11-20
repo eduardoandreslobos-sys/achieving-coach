@@ -19,3 +19,9 @@ Professional Coaching Platform with ICF ACC Exam Simulator
 - **Hosting**: Google Cloud Run
 - **CI/CD**: Cloud Build + GitHub Actions
 - **Testing**: Playwright (UAT), Jest (Unit tests)
+
+## CI/CD Status
+
+✅ Automated deployment via Cloud Build
+✅ GitHub integration configured
+✅ Firebase environment variables secured
