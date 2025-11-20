@@ -1,116 +1,139 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
-import Link from 'next/link';
 
-const TOOLS = [
+import Link from 'next/link';
+import { Target, TrendingUp, Gem, RefreshCw, Shield, Sparkles, Compass } from 'lucide-react';
+
+const tools = [
   {
     id: 'wheel-of-life',
-    name: 'Wheel of Life',
+    title: 'Wheel of Life',
     description: 'Visualize and assess balance across key life areas',
     category: 'Self-Assessment',
-    icon: '🎯',
+    icon: Target,
     href: '/tools/wheel-of-life',
+    color: 'bg-red-500',
   },
   {
-    id: 'grow-model',
-    name: 'GROW Model Worksheet',
+    id: 'grow-worksheet',
+    title: 'GROW Model Worksheet',
     description: 'Goal, Reality, Options, Will - structured coaching framework',
     category: 'Goal Setting',
-    icon: '📈',
+    icon: TrendingUp,
     href: '/grow-worksheet',
+    color: 'bg-pink-500',
+  },
+  {
+    id: 'resilience-scale',
+    title: 'Resilience Assessment Scale',
+    description: 'Evaluate your resilience across emotional, physical, mental, and social dimensions',
+    category: 'Self-Assessment',
+    icon: Shield,
+    href: '/tools/resilience-scale',
+    color: 'bg-green-500',
   },
   {
     id: 'values-clarification',
-    name: 'Values Clarification Matrix',
+    title: 'Values Clarification Matrix',
     description: 'Identify and prioritize your core values',
     category: 'Self-Discovery',
-    icon: '💎',
+    icon: Gem,
     href: '/tools/values-clarification',
+    color: 'bg-blue-500',
   },
   {
     id: 'habit-loop',
-    name: 'Habit Loop Analyzer',
+    title: 'Habit Loop Analyzer',
     description: 'Break down habits into cue, routine, and reward',
     category: 'Behavior Change',
-    icon: '🔄',
+    icon: RefreshCw,
     href: '/tools/habit-loop',
+    color: 'bg-purple-500',
+  },
+  {
+    id: 'limiting-beliefs',
+    title: 'Limiting Beliefs Reframe',
+    description: 'Transform limiting beliefs into empowering ones',
+    category: 'Mindset',
+    icon: Sparkles,
+    href: '/tools/limiting-beliefs',
+    color: 'bg-yellow-500',
+  },
+  {
+    id: 'career-compass',
+    title: 'Career Compass Mapping',
+    description: 'Map your career journey and chart your path forward',
+    category: 'Career Development',
+    icon: Compass,
+    href: '/tools/career-compass',
+    color: 'bg-indigo-500',
   },
 ];
 
 export default function ToolsPage() {
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(user);
-      } else {
-        router.push('/sign-in');
-      }
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, [router]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-primary-600">AchievingCoach</h1>
-            <div className="flex items-center gap-6">
-              <Link href="/dashboard" className="text-gray-600 hover:text-primary-600">Dashboard</Link>
-              <Link href="/goals" className="text-gray-600 hover:text-primary-600">My Goals</Link>
-              <Link href="/grow-worksheet" className="text-gray-600 hover:text-primary-600">GROW Sessions</Link>
-              <span className="text-gray-700">{user?.email}</span>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Tools & Exercises</h2>
-          <p className="text-gray-600 mt-2">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Tools & Exercises
+          </h1>
+          <p className="text-lg text-gray-600">
             Powerful coaching tools to support your growth journey
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {TOOLS.map((tool) => (
-            <Link
-              key={tool.id}
-              href={tool.href}
-              className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
-            >
-              <div className="flex items-start gap-4">
-                <div className="text-4xl">{tool.icon}</div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{tool.name}</h3>
-                  <p className="text-gray-600 mb-3">{tool.description}</p>
-                  <span className="inline-block bg-primary-100 text-primary-700 px-3 py-1 rounded-full text-sm font-medium">
-                    {tool.category}
-                  </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {tools.map((tool) => {
+            const Icon = tool.icon;
+            return (
+              <Link
+                key={tool.id}
+                href={tool.href}
+                className="group bg-white rounded-2xl border-2 border-gray-200 p-8 hover:border-primary-500 hover:shadow-xl transition-all duration-300"
+              >
+                <div className="flex flex-col items-center text-center gap-4">
+                  <div className={`${tool.color} p-4 rounded-xl text-white group-hover:scale-110 transition-transform`}>
+                    <Icon size={32} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
+                      {tool.title}
+                    </h3>
+                    <p className="text-gray-600 mb-4 text-sm">
+                      {tool.description}
+                    </p>
+                    <span className="inline-block px-4 py-1.5 bg-primary-50 text-primary-700 text-sm font-semibold rounded-full">
+                      {tool.category}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
-      </main>
+
+        {/* Coming Soon Section */}
+        <div className="mt-16">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            Coming Soon
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              'Stakeholder Map',
+              'Feedback Feed-Forward Planner',
+              'Emotional Triggers Journal',
+            ].map((tool) => (
+              <div
+                key={tool}
+                className="bg-gray-50 rounded-xl border-2 border-dashed border-gray-300 p-6"
+              >
+                <h4 className="font-semibold text-gray-700">{tool}</h4>
+                <p className="text-sm text-gray-500 mt-1">In development</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

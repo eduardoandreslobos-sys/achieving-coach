@@ -2,34 +2,38 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Copiar package files
+# Copy package files
 COPY package*.json ./
 
-# Instalar dependencias
+# Install dependencies
 RUN npm install
 
-# Copiar código fuente y configuración
+# Copy source code
 COPY . .
 
-# Build de Next.js
+# Build the application
 RUN npm run build
 
-# Imagen de producción
+# Production image
 FROM node:18-alpine
 
 WORKDIR /app
 
-# Copiar solo lo necesario
-COPY --from=builder /app/next.config.js ./
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
+ENV NODE_ENV=production
 
-# Exponer puerto
+# Copy package files
+COPY package*.json ./
+
+# Install production dependencies only
+RUN npm install --production
+
+# Copy built application
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/next.config.js ./
+
+# Expose port
 EXPOSE 3000
 
-ENV NODE_ENV=production
-ENV PORT=3000
-
+# Start the app
 CMD ["npm", "start"]

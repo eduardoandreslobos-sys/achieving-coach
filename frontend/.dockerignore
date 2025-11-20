@@ -1,8 +1,8 @@
 node_modules
-.next
 npm-debug.log
 .env.local
-.env*.local
-*.md
 .git
 .gitignore
+README.md
+.next
+out

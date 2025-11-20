@@ -1,187 +1,131 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { db } from '@/lib/firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import Link from 'next/link';
+import { Users, Mail, Calendar } from 'lucide-react';
 
-const ALL_CLIENTS = [
-  {
-    id: '1',
-    name: 'Sarah Johnson',
-    email: 'sarah.j@example.com',
-    status: 'active',
-    joinedDate: '2025-09-15',
-    totalSessions: 12,
-    progress: 75,
-  },
-  {
-    id: '2',
-    name: 'Michael Chen',
-    email: 'michael.c@example.com',
-    status: 'active',
-    joinedDate: '2025-10-01',
-    totalSessions: 8,
-    progress: 60,
-  },
-  {
-    id: '3',
-    name: 'Emma Davis',
-    email: 'emma.d@example.com',
-    status: 'active',
-    joinedDate: '2025-10-20',
-    totalSessions: 4,
-    progress: 40,
-  },
-  {
-    id: '4',
-    name: 'James Wilson',
-    email: 'james.w@example.com',
-    status: 'active',
-    joinedDate: '2025-08-10',
-    totalSessions: 18,
-    progress: 85,
-  },
-];
+interface Client {
+  uid: string;
+  displayName: string;
+  email: string;
+  createdAt: any;
+  organization?: string;
+}
 
-export default function ClientsListPage() {
-  const [user, setUser] = useState<any>(null);
+export default function CoachClientsPage() {
+  const { userProfile } = useAuth();
+  const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const router = useRouter();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(user);
-      } else {
-        router.push('/sign-in');
+    const fetchClients = async () => {
+      if (!userProfile?.uid) return;
+
+      try {
+        const q = query(
+          collection(db, 'users'),
+          where('role', '==', 'coachee'),
+          where('coacheeInfo.coachId', '==', userProfile.uid)
+        );
+        
+        const snapshot = await getDocs(q);
+        const clientsData = snapshot.docs.map(doc => ({
+          uid: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate(),
+        })) as Client[];
+        
+        setClients(clientsData);
+      } catch (error) {
+        console.error('Error fetching clients:', error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
-    });
+    };
 
-    return () => unsubscribe();
-  }, [router]);
-
-  const filteredClients = ALL_CLIENTS.filter(client =>
-    client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    client.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    fetchClients();
+  }, [userProfile]);
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-primary-600">AchievingCoach</h1>
-            <div className="flex items-center gap-6">
-              <Link href="/coach" className="text-gray-600 hover:text-primary-600 font-medium">
-                Dashboard
-              </Link>
-              <span className="text-gray-700">{user?.email}</span>
-            </div>
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">My Clients</h1>
+            <p className="text-gray-600">Manage your coaching relationships</p>
           </div>
-        </div>
-      </nav>
-
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        <div className="mb-8">
-          <Link href="/coach" className="text-primary-600 hover:underline mb-4 inline-block">
-            ← Back to Dashboard
+          <Link
+            href="/coach/invite"
+            className="px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 flex items-center gap-2"
+          >
+            <Users size={20} />
+            Invite Client
           </Link>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            My Clients
-          </h2>
-          <p className="text-gray-600">
-            Manage and track all your coaching relationships
-          </p>
         </div>
 
-        {/* Search and Filter */}
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-          <input
-            type="text"
-            placeholder="Search clients by name or email..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-          />
-        </div>
+        {clients.length === 0 ? (
+          <div className="bg-white rounded-xl border-2 border-gray-200 p-12 text-center">
+            <Users className="mx-auto text-gray-400 mb-4" size={64} />
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">No clients yet</h2>
+            <p className="text-gray-600 mb-6">Start building your coaching practice by inviting your first client</p>
+            <Link
+              href="/coach/invite"
+              className="inline-flex items-center px-8 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700"
+            >
+              <Users size={20} className="mr-2" />
+              Invite Your First Client
+            </Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {clients.map((client) => (
+              <Link
+                key={client.uid}
+                href={`/coach/clients/${client.uid}`}
+                className="bg-white rounded-xl border-2 border-gray-200 p-6 hover:border-primary-300 hover:shadow-lg transition-all"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold text-2xl">
+                    {client.displayName?.charAt(0) || 'C'}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-gray-900 text-lg truncate">{client.displayName}</h3>
+                    {client.organization && (
+                      <p className="text-sm text-gray-500 truncate">{client.organization}</p>
+                    )}
+                  </div>
+                </div>
 
-        {/* Clients Table */}
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Client</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Joined</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Sessions</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Progress</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredClients.map((client) => (
-                <tr key={client.id} className="border-b border-gray-100 hover:bg-gray-50">
-                  <td className="px-6 py-4">
-                    <div>
-                      <div className="font-semibold text-gray-900">{client.name}</div>
-                      <div className="text-sm text-gray-600">{client.email}</div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-gray-700">
-                    {new Date(client.joinedDate).toLocaleDateString('en-US', { 
-                      month: 'short', 
-                      year: 'numeric' 
-                    })}
-                  </td>
-                  <td className="px-6 py-4 text-gray-700">{client.totalSessions}</td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 bg-gray-200 rounded-full h-2 w-24">
-                        <div 
-                          className="bg-primary-600 h-2 rounded-full"
-                          style={{ width: `${client.progress}%` }}
-                        />
-                      </div>
-                      <span className="text-sm font-medium text-gray-700">{client.progress}%</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
-                      Active
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <Link
-                      href={`/coach/clients/${client.id}`}
-                      className="text-primary-600 hover:text-primary-700 font-medium"
-                    >
-                      View Details →
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Mail size={16} />
+                    <span className="truncate">{client.email}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Calendar size={16} />
+                    <span>Since {client.createdAt?.toLocaleDateString() || 'Recently'}</span>
+                  </div>
+                </div>
 
-          {filteredClients.length === 0 && (
-            <div className="text-center py-12 text-gray-500">
-              No clients found matching your search.
-            </div>
-          )}
-        </div>
-      </main>
+                <div className="mt-4 pt-4 border-t border-gray-200">
+                  <span className="text-sm text-primary-600 font-medium">View Details →</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,24 +1,19 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
-
-export class ApiClient {
+class ApiClient {
   private baseUrl: string;
   private token: string | null = null;
 
-  constructor() {
-    this.baseUrl = API_URL;
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
   }
 
-  setToken(token: string | null) {
+  setToken(token: string) {
     this.token = token;
   }
 
-  private async request<T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<T> {
-    const headers: HeadersInit = {
+  async request(endpoint: string, options: RequestInit = {}) {
+    const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      ...options.headers,
+      ...(options.headers as Record<string, string> || {}),
     };
 
     if (this.token) {
@@ -31,36 +26,39 @@ export class ApiClient {
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: 'Unknown error' }));
-      throw new Error(error.message || `HTTP ${response.status}`);
+      throw new Error(`API Error: ${response.statusText}`);
     }
 
     return response.json();
   }
 
-  async get<T>(endpoint: string): Promise<T> {
-    return this.request<T>(endpoint);
+  async get(endpoint: string) {
+    return this.request(endpoint);
   }
 
-  async post<T>(endpoint: string, data: any): Promise<T> {
-    return this.request<T>(endpoint, {
+  async post(endpoint: string, data: any) {
+    return this.request(endpoint, {
       method: 'POST',
       body: JSON.stringify(data),
     });
   }
 
-  async put<T>(endpoint: string, data: any): Promise<T> {
-    return this.request<T>(endpoint, {
+  async put(endpoint: string, data: any) {
+    return this.request(endpoint, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
   }
 
-  async delete<T>(endpoint: string): Promise<T> {
-    return this.request<T>(endpoint, {
+  async delete(endpoint: string) {
+    return this.request(endpoint, {
       method: 'DELETE',
     });
   }
 }
 
-export const apiClient = new ApiClient();
+const apiClient = new ApiClient(
+  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1'
+);
+
+export default apiClient;

@@ -92,17 +92,32 @@ export class GrowSessionService {
     if (!doc.exists) return null;
     
     const currentData = doc.data() as GrowSession;
-    const updatedData: Partial<GrowSession> = {
-      ...updates,
+    
+    // Merge updates properly
+    const updateData: any = {
       updatedAt: new Date(),
     };
     
-    if (updates.goal) updatedData.goal = { ...currentData.goal, ...updates.goal };
-    if (updates.reality) updatedData.reality = { ...currentData.reality, ...updates.reality };
-    if (updates.options) updatedData.options = { ...currentData.options, ...updates.options };
-    if (updates.will) updatedData.will = { ...currentData.will, ...updates.will };
+    if (updates.goal) {
+      updateData.goal = { ...currentData.goal, ...updates.goal };
+    }
+    if (updates.reality) {
+      updateData.reality = { ...currentData.reality, ...updates.reality };
+    }
+    if (updates.options) {
+      updateData.options = { ...currentData.options, ...updates.options };
+    }
+    if (updates.will) {
+      updateData.will = { ...currentData.will, ...updates.will };
+    }
+    if (updates.notes !== undefined) {
+      updateData.notes = updates.notes;
+    }
+    if (updates.status) {
+      updateData.status = updates.status;
+    }
     
-    await sessionRef.update(updatedData);
+    await sessionRef.update(updateData);
     const updated = await sessionRef.get();
     return updated.data() as GrowSession;
   }

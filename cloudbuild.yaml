@@ -1,0 +1,61 @@
+steps:
+  # Install dependencies
+  - name: 'node:18'
+    dir: 'frontend'
+    entrypoint: npm
+    args: ['install']
+  
+  # Build the application
+  - name: 'node:18'
+    dir: 'frontend'
+    entrypoint: npm
+    args: ['run', 'build']
+    env:
+      - 'NODE_ENV=production'
+  
+  # Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    dir: 'frontend'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:$COMMIT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:latest'
+      - '.'
+  
+  # Push to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:$COMMIT_SHA'
+  
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:latest'
+  
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'achieving-coach-frontend'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:$COMMIT_SHA'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+
+images:
+  - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:latest'
+
+options:
+  machineType: 'E2_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY
+
+timeout: '1200s'

@@ -1,153 +1,255 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { db } from '@/lib/firebase';
+import { collection, addDoc, query, where, getDocs, serverTimestamp, orderBy, limit } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
-import Link from 'next/link';
+import { Radar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 
-const LIFE_AREAS = [
-  'Career',
-  'Finance',
-  'Health',
-  'Family',
-  'Romance',
-  'Personal Growth',
-  'Fun & Recreation',
-  'Physical Environment',
+ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
+
+const lifeAreas = [
+  { id: 'career', name: 'Career', icon: '💼' },
+  { id: 'finance', name: 'Finance', icon: '💰' },
+  { id: 'health', name: 'Health', icon: '❤️' },
+  { id: 'relationships', name: 'Relationships', icon: '👥' },
+  { id: 'personal', name: 'Personal Growth', icon: '🌱' },
+  { id: 'fun', name: 'Fun & Recreation', icon: '🎉' },
+  { id: 'environment', name: 'Physical Environment', icon: '🏡' },
+  { id: 'spirituality', name: 'Spirituality', icon: '🧘' },
 ];
 
 export default function WheelOfLifePage() {
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [scores, setScores] = useState<Record<string, number>>({});
-  const [saved, setSaved] = useState(false);
+  const { user, userProfile } = useAuth();
   const router = useRouter();
+  const [scores, setScores] = useState<{ [key: string]: number }>({});
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [hasAccess, setHasAccess] = useState(false);
+  const [lastResult, setLastResult] = useState<any>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(user);
-        // Initialize scores
-        const initialScores: Record<string, number> = {};
-        LIFE_AREAS.forEach(area => {
-          initialScores[area] = 5;
-        });
-        setScores(initialScores);
-      } else {
-        router.push('/sign-in');
+    const checkAccess = async () => {
+      if (!user || !userProfile) return;
+
+      // Coaches siempre tienen acceso
+      if (userProfile.role === 'coach') {
+        setHasAccess(true);
+        setLoading(false);
+        return;
       }
-      setLoading(false);
-    });
 
-    return () => unsubscribe();
-  }, [router]);
+      // Coachees deben tener la herramienta asignada
+      try {
+        const q = query(
+          collection(db, 'tool_assignments'),
+          where('coacheeId', '==', user.uid),
+          where('toolId', '==', 'wheel-of-life')
+        );
+        const snapshot = await getDocs(q);
+        
+        if (snapshot.empty) {
+          setHasAccess(false);
+          setLoading(false);
+          return;
+        }
 
-  const handleScoreChange = (area: string, value: number) => {
-    setScores({ ...scores, [area]: value });
-    setSaved(false);
+        setHasAccess(true);
+
+        // Cargar último resultado si existe
+        const resultsQuery = query(
+          collection(db, 'tool_results'),
+          where('userId', '==', user.uid),
+          where('toolId', '==', 'wheel-of-life'),
+          orderBy('completedAt', 'desc'),
+          limit(1)
+        );
+        const resultsSnapshot = await getDocs(resultsQuery);
+        
+        if (!resultsSnapshot.empty) {
+          const lastDoc = resultsSnapshot.docs[0];
+          setLastResult(lastDoc.data());
+          setScores(lastDoc.data().results.scores || {});
+        }
+      } catch (error) {
+        console.error('Error checking access:', error);
+        setHasAccess(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAccess();
+  }, [user, userProfile]);
+
+  const handleScoreChange = (areaId: string, value: number) => {
+    setScores(prev => ({ ...prev, [areaId]: value }));
   };
 
-  const handleSave = () => {
-    // Mock save - en producción esto llamaría al API
-    console.log('Saving Wheel of Life:', scores);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
-  };
+  const handleSave = async () => {
+    if (!user || !userProfile) return;
 
-  const getAverageScore = () => {
-    const total = Object.values(scores).reduce((a, b) => a + b, 0);
-    return (total / LIFE_AREAS.length).toFixed(1);
+    const allScored = lifeAreas.every(area => scores[area.id] !== undefined);
+    if (!allScored) {
+      alert('Please rate all areas before saving');
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const coachId = userProfile.role === 'coachee' 
+        ? userProfile.coacheeInfo?.coachId 
+        : user.uid;
+
+      await addDoc(collection(db, 'tool_results'), {
+        userId: user.uid,
+        toolId: 'wheel-of-life',
+        toolName: 'Wheel of Life',
+        coachId: coachId,
+        results: {
+          scores,
+          averageScore: Object.values(scores).reduce((a, b) => a + b, 0) / lifeAreas.length,
+        },
+        completedAt: serverTimestamp(),
+      });
+
+      alert('Results saved successfully!');
+    } catch (error) {
+      console.error('Error saving results:', error);
+      alert('Error saving results. Please try again.');
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
       </div>
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-primary-600">AchievingCoach</h1>
-            <div className="flex items-center gap-6">
-              <Link href="/dashboard" className="text-gray-600 hover:text-primary-600">Dashboard</Link>
-              <Link href="/tools" className="text-gray-600 hover:text-primary-600">Tools</Link>
-              <span className="text-gray-700">{user?.email}</span>
-            </div>
-          </div>
+  if (!hasAccess) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-8">
+        <div className="bg-white rounded-xl border-2 border-gray-200 p-8 max-w-md text-center">
+          <div className="text-6xl mb-4">🔒</div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Tool Not Assigned</h1>
+          <p className="text-gray-600 mb-6">
+            This tool hasn't been assigned to you yet. Please contact your coach to get access.
+          </p>
+          <button
+            onClick={() => router.push('/dashboard')}
+            className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+          >
+            Back to Dashboard
+          </button>
         </div>
-      </nav>
+      </div>
+    );
+  }
 
-      <main className="max-w-4xl mx-auto px-6 py-8">
+  const chartData = {
+    labels: lifeAreas.map(area => area.name),
+    datasets: [
+      {
+        label: 'Current',
+        data: lifeAreas.map(area => scores[area.id] || 0),
+        backgroundColor: 'rgba(99, 102, 241, 0.2)',
+        borderColor: 'rgba(99, 102, 241, 1)',
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    scales: {
+      r: {
+        beginAtZero: true,
+        max: 10,
+        ticks: { stepSize: 2 },
+      },
+    },
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-5xl mx-auto">
         <div className="mb-8">
-          <Link href="/tools" className="text-primary-600 hover:underline mb-4 inline-block">
-            ← Back to Tools
-          </Link>
-          <h2 className="text-3xl font-bold text-gray-900">Wheel of Life</h2>
-          <p className="text-gray-600 mt-2">
-            Rate your satisfaction in each life area from 1 (lowest) to 10 (highest)
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Wheel of Life</h1>
+          <p className="text-gray-600">
+            Rate your satisfaction in each life area from 0 (very dissatisfied) to 10 (very satisfied)
           </p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-8 mb-6">
-          <div className="mb-6 text-center">
-            <div className="text-5xl font-bold text-primary-600">{getAverageScore()}</div>
-            <div className="text-gray-600 mt-2">Overall Balance Score</div>
+        {lastResult && (
+          <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 mb-6">
+            <p className="text-sm text-blue-900">
+              📊 Last completed: {lastResult.completedAt?.toDate?.()?.toLocaleDateString() || 'Recently'}
+              {' - '}Average: {lastResult.results.averageScore.toFixed(1)}/10
+            </p>
           </div>
+        )}
 
-          <div className="space-y-6">
-            {LIFE_AREAS.map((area) => (
-              <div key={area}>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="text-sm font-medium text-gray-700">{area}</label>
-                  <span className="text-lg font-bold text-primary-600">{scores[area]}/10</span>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Scores Input */}
+          <div className="space-y-4">
+            {lifeAreas.map(area => (
+              <div key={area.id} className="bg-white rounded-xl border-2 border-gray-200 p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">{area.icon}</span>
+                    <span className="font-medium text-gray-900">{area.name}</span>
+                  </div>
+                  <span className="text-2xl font-bold text-primary-600">
+                    {scores[area.id] || 0}
+                  </span>
                 </div>
                 <input
                   type="range"
-                  min="1"
+                  min="0"
                   max="10"
-                  value={scores[area] || 5}
-                  onChange={(e) => handleScoreChange(area, parseInt(e.target.value))}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                  style={{
-                    background: `linear-gradient(to right, #6366f1 0%, #6366f1 ${(scores[area] - 1) * 11.11}%, #e5e7eb ${(scores[area] - 1) * 11.11}%, #e5e7eb 100%)`
-                  }}
+                  value={scores[area.id] || 0}
+                  onChange={(e) => handleScoreChange(area.id, parseInt(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
                 />
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>0</span>
+                  <span>5</span>
+                  <span>10</span>
+                </div>
               </div>
             ))}
           </div>
 
-          <div className="mt-8 flex gap-4">
-            <button
-              onClick={handleSave}
-              className="bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 font-semibold"
-            >
-              {saved ? '✓ Saved!' : 'Save Progress'}
-            </button>
-            <Link
-              href="/tools"
-              className="border-2 border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50 font-semibold"
-            >
-              Cancel
-            </Link>
+          {/* Chart */}
+          <div className="bg-white rounded-xl border-2 border-gray-200 p-6">
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Your Wheel</h3>
+            <Radar data={chartData} options={chartOptions} />
           </div>
         </div>
 
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
-          <h3 className="font-bold text-blue-900 mb-2">💡 Reflection Questions</h3>
-          <ul className="space-y-2 text-blue-800">
-            <li>• Which areas are you most satisfied with?</li>
-            <li>• Which areas need more attention?</li>
-            <li>• What would it take to move your lowest score up by just 1 point?</li>
-            <li>• Are there areas where you're sacrificing one for another?</li>
-          </ul>
+        <div className="mt-8 flex justify-end">
+          <button
+            onClick={handleSave}
+            disabled={saving || Object.keys(scores).length < lifeAreas.length}
+            className="px-8 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {saving ? 'Saving...' : 'Save Results'}
+          </button>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

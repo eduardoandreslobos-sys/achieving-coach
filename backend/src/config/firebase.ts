@@ -1,34 +1,30 @@
-import dotenv from 'dotenv';
-import path from 'path';
 import admin from 'firebase-admin';
+import { Firestore } from '@google-cloud/firestore';
 
-// Cargar variables de entorno
-dotenv.config({ path: path.join(__dirname, '../../.env') });
-
-const projectId = process.env.FIREBASE_PROJECT_ID;
-const credentialsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+const projectId = process.env.FIREBASE_PROJECT_ID || 'achieving-coach-dev-1763154191';
 
 console.log('🔧 Firebase Config:');
-console.log('  - Project ID:', projectId);
-console.log('  - Credentials Path:', credentialsPath);
+console.log(`  - Project ID: ${projectId}`);
+console.log(`  - Environment: ${process.env.NODE_ENV}`);
 
-if (!projectId) {
-  throw new Error('FIREBASE_PROJECT_ID not configured');
+// Initialize Firebase Admin with Application Default Credentials
+// In Cloud Run, this automatically uses the service account
+if (!admin.apps.length) {
+  try {
+    admin.initializeApp({
+      projectId: projectId,
+    });
+    console.log('✅ Firebase Admin initialized successfully');
+  } catch (error) {
+    console.error('❌ Firebase Admin initialization error:', error);
+  }
 }
 
-if (!credentialsPath) {
-  throw new Error('GOOGLE_APPLICATION_CREDENTIALS not configured');
-}
-
-const app = admin.initializeApp({
-  credential: admin.credential.applicationDefault(),
-  projectId,
+// Initialize Firestore
+const db = new Firestore({
+  projectId: projectId,
 });
 
-export const db = admin.firestore();
-export const auth = admin.auth();
-export const storage = admin.storage();
+const auth = admin.auth();
 
-console.log('✅ Firebase initialized successfully');
-
-export default app;
+export { admin, db, auth };
