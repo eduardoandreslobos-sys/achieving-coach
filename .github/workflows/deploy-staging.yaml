@@ -1,0 +1,43 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://staging-achievingcoach.com
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+      
+      - name: Build and push to GCR
+        run: |
+          gcloud builds submit --config=cloudbuild.yaml \
+            --substitutions=_ENV=staging
+      
+      - name: Run smoke tests
+        run: |
+          npx playwright test tests/uat/smoke.spec.ts --config=playwright.config.staging.ts
+        env:
+          BASE_URL: https://staging-achievingcoach.com
+      
+      - name: Notify on success
+        if: success()
+        run: echo "✅ Staging deployment successful"
+      
+      - name: Notify on failure
+        if: failure()
+        run: echo "❌ Staging deployment failed"

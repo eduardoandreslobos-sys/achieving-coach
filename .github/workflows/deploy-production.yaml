@@ -1,0 +1,71 @@
+name: Deploy to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to deploy'
+        required: true
+
+jobs:
+  full-uat-suite:
+    name: Full UAT Suite
+    runs-on: ubuntu-latest
+    environment: staging
+    
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+      
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+      
+      - name: Run full UAT suite
+        run: npx playwright test tests/uat/
+        env:
+          BASE_URL: https://staging-achievingcoach.com
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: uat-results
+          path: frontend/playwright-report/
+
+  deploy-production:
+    name: Deploy to Production
+    needs: full-uat-suite
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://achievingcoach.com
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      
+      - name: Deploy to production
+        run: |
+          gcloud builds submit --config=cloudbuild.yaml \
+            --substitutions=_ENV=production
+      
+      - name: Run production smoke tests
+        run: |
+          npx playwright test tests/uat/smoke.spec.ts
+        env:
+          BASE_URL: https://achievingcoach.com
+      
+      - name: Create release tag
+        run: |
+          git tag -a "v${{ github.event.inputs.version }}" -m "Production release ${{ github.event.inputs.version }}"
+          git push origin "v${{ github.event.inputs.version }}"
