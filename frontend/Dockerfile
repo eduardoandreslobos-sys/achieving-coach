@@ -19,6 +19,9 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
+# Install bash for the start script
+RUN apk add --no-cache bash
+
 # Copy package files
 COPY package*.json ./
 
@@ -30,8 +33,12 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/next.config.js ./
 
+# Copy start script
+COPY start.sh ./
+RUN chmod +x start.sh
+
 # Expose port
 EXPOSE 3000
 
-# Start the app
-CMD ["npm", "start"]
+# Start with our custom script
+CMD ["./start.sh"]
