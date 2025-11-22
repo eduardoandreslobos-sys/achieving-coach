@@ -17,9 +17,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <script src="/firebase-config.js" />
-      </head>
       <body className={inter.className}>
         <AuthProvider>{children}</AuthProvider>
       </body>
