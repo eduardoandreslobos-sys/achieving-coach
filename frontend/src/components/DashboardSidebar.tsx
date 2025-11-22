@@ -1,8 +1,8 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { LayoutDashboard, Target, Wrench, MessageSquare, Calendar, BookOpen, FileText } from 'lucide-react';
+import { LayoutDashboard, Target, Wrench, MessageSquare, Calendar, BookOpen, FileText, LogOut } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 const navigation = [
@@ -17,7 +17,8 @@ const navigation = [
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
-  const { userProfile } = useAuth();
+  const router = useRouter();
+  const { userProfile, signOut } = useAuth();
 
   const getInitials = () => {
     if (userProfile?.firstName && userProfile?.lastName) {
@@ -33,13 +34,18 @@ export default function DashboardSidebar() {
     return 'U';
   };
 
+  const handleSignOut = async () => {
+    await signOut();
+    router.push('/sign-in');
+  };
+
   return (
-    <div className="flex flex-col w-64 bg-white border-r border-gray-200">
+    <div className="flex flex-col w-64 bg-white border-r border-gray-200 h-screen">
       <div className="flex items-center justify-center h-16 border-b border-gray-200">
         <h1 className="text-xl font-bold text-primary-600">AchievingCoach</h1>
       </div>
       
-      <nav className="flex-1 px-4 py-4 space-y-1">
+      <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
         {navigation.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href;
@@ -61,17 +67,31 @@ export default function DashboardSidebar() {
       </nav>
 
       {userProfile && (
-        <div className="p-4 border-t border-gray-200">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold">
-              {getInitials()}
+        <div className="border-t border-gray-200">
+          {/* User Info */}
+          <div className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold">
+                {getInitials()}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900 truncate">
+                  {userProfile.displayName || `${userProfile.firstName || ''} ${userProfile.lastName || ''}`.trim() || 'User'}
+                </p>
+                <p className="text-xs text-gray-500 truncate">{userProfile.email}</p>
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 truncate">
-                {userProfile.displayName || `${userProfile.firstName || ''} ${userProfile.lastName || ''}`.trim() || 'User'}
-              </p>
-              <p className="text-xs text-gray-500 truncate">{userProfile.email}</p>
-            </div>
+          </div>
+
+          {/* Logout Button */}
+          <div className="px-4 pb-4">
+            <button
+              onClick={handleSignOut}
+              className="flex items-center w-full px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            >
+              <LogOut className="w-5 h-5 mr-3" />
+              Sign Out
+            </button>
           </div>
         </div>
       )}
