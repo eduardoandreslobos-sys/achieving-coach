@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/contexts/AuthContext';
-import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <Script src="/firebase-config.js" strategy="beforeInteractive" />
+        <script src="/firebase-config.js" />
       </head>
       <body className={inter.className}>
         <AuthProvider>{children}</AuthProvider>
