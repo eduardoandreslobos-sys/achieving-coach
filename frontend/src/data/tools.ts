@@ -102,3 +102,4 @@ export function getToolDisplayName(id: string): string {
   const tool = getToolById(id);
   return tool ? `${tool.name} - ${tool.category}` : id;
 }
+
