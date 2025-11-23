@@ -1,23 +1,31 @@
-export type UserRole = 'coach' | 'coachee';
-export type SubscriptionStatus = 'trial' | 'active' | 'canceled' | 'expired' | 'past_due';
+import { Timestamp } from 'firebase/firestore';
+import { ValueProposition } from './coaching';
 
 export interface UserProfile {
   uid: string;
   email: string;
-  role: UserRole;
+  displayName?: string;
   firstName?: string;
   lastName?: string;
-  displayName?: string;
-  photoURL?: string;
+  role: 'coach' | 'coachee';
+  
+  // Coach-specific
   organization?: string;
-  createdAt?: any;
-  updatedAt?: any;
-  subscriptionStatus?: SubscriptionStatus;
-  trialEndsAt?: any;
-  subscriptionId?: string;
+  subscriptionStatus?: 'trial' | 'active' | 'expired' | 'canceled';
+  trialEndsAt?: Timestamp;
+  valueProposition?: ValueProposition;
+  bio?: string;
+  certifications?: string[];
+  specialties?: string[];
+  
+  // Coachee-specific
   coacheeInfo?: {
-    coachId?: string;
-    goals?: string[];
+    coachId: string;
+    coachName: string;
     onboardingCompleted?: boolean;
+    goals?: string[];
   };
+  
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 }

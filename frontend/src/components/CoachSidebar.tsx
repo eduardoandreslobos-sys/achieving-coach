@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { LayoutDashboard, Users, Wrench, UserPlus, Award, MessageSquare, Calendar, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, Wrench, UserPlus, Award, MessageSquare, Calendar, LogOut, User } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
 const navigation = [
@@ -13,6 +13,7 @@ const navigation = [
   { name: 'ICF Simulator', href: '/coach/icf-simulator', icon: Award },
   { name: 'Messages', href: '/messages', icon: MessageSquare },
   { name: 'Sessions', href: '/sessions', icon: Calendar },
+  { name: 'Profile', href: '/coach/profile', icon: User },
 ];
 
 export default function CoachSidebar() {
@@ -68,7 +69,6 @@ export default function CoachSidebar() {
 
       {userProfile && (
         <div className="border-t border-gray-200">
-          {/* User Info */}
           <div className="p-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold">
@@ -83,7 +83,6 @@ export default function CoachSidebar() {
             </div>
           </div>
 
-          {/* Logout Button */}
           <div className="px-4 pb-4">
             <button
               onClick={handleSignOut}
