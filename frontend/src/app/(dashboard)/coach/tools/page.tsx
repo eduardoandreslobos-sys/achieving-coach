@@ -5,82 +5,8 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
-import { Target, Brain, TrendingUp, Smile, Compass, Shield, Users, MessageSquare, Heart, X } from 'lucide-react';
-
-const tools = [
-  {
-    id: 'wheel-of-life',
-    name: 'Wheel of Life',
-    description: 'Assess balance across 8 key life areas',
-    category: 'Assessment',
-    icon: Target,
-    color: 'bg-blue-600',
-  },
-  {
-    id: 'values-clarification',
-    name: 'Values Clarification',
-    description: 'Identify and prioritize core values',
-    category: 'Self-Discovery',
-    icon: Brain,
-    color: 'bg-purple-600',
-  },
-  {
-    id: 'limiting-beliefs',
-    name: 'Limiting Beliefs',
-    description: 'Identify and challenge limiting beliefs',
-    category: 'Mindset',
-    icon: TrendingUp,
-    color: 'bg-orange-600',
-  },
-  {
-    id: 'habit-loop',
-    name: 'Habit Loop',
-    description: 'Build positive habits using cue-routine-reward',
-    category: 'Behavior Change',
-    icon: Smile,
-    color: 'bg-green-600',
-  },
-  {
-    id: 'career-compass',
-    name: 'Career Compass',
-    description: 'Navigate career direction and goals',
-    category: 'Career',
-    icon: Compass,
-    color: 'bg-indigo-600',
-  },
-  {
-    id: 'resilience-scale',
-    name: 'Resilience Scale',
-    description: 'Measure and build resilience',
-    category: 'Wellbeing',
-    icon: Shield,
-    color: 'bg-pink-600',
-  },
-  {
-    id: 'stakeholder-map',
-    name: 'Stakeholder Map',
-    description: 'Identify and analyze key stakeholders',
-    category: 'Relationships',
-    icon: Users,
-    color: 'bg-teal-600',
-  },
-  {
-    id: 'feedback-feedforward',
-    name: 'Feedback Feed-Forward',
-    description: 'Transform feedback into future-focused strategies',
-    category: 'Communication',
-    icon: MessageSquare,
-    color: 'bg-cyan-600',
-  },
-  {
-    id: 'emotional-triggers',
-    name: 'Emotional Triggers Journal',
-    description: 'Identify patterns and develop healthier responses',
-    category: 'Self-Awareness',
-    icon: Heart,
-    color: 'bg-rose-600',
-  },
-];
+import { COACHING_TOOLS } from '@/data/tools';
+import { Users, X } from 'lucide-react';
 
 interface Client {
   id: string;
@@ -90,7 +16,7 @@ interface Client {
 export default function CoachToolsPage() {
   const { userProfile } = useAuth();
   const [clients, setClients] = useState<Client[]>([]);
-  const [previewTool, setPreviewTool] = useState<typeof tools[0] | null>(null);
+  const [previewTool, setPreviewTool] = useState<typeof COACHING_TOOLS[0] | null>(null);
 
   useEffect(() => {
     if (userProfile?.uid) {
@@ -129,7 +55,7 @@ export default function CoachToolsPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {tools.map((tool) => {
+          {COACHING_TOOLS.map((tool) => {
             const Icon = tool.icon;
             return (
               <div
@@ -218,75 +144,6 @@ export default function CoachToolsPage() {
                   {previewTool.id === 'feedback-feedforward' && 'Transform past feedback into future-focused action plans, shifting from "what went wrong" to "what to do differently next time."'}
                   {previewTool.id === 'emotional-triggers' && 'Track emotional triggers, physical sensations, thoughts, and responses to identify patterns and develop healthier reactions.'}
                 </p>
-              </div>
-
-              <div className="mb-6">
-                <h3 className="font-bold text-gray-900 mb-2">Best used for</h3>
-                <ul className="space-y-1 text-gray-700">
-                  {previewTool.id === 'wheel-of-life' && (
-                    <>
-                      <li>• Initial assessment sessions</li>
-                      <li>• Identifying areas needing attention</li>
-                      <li>• Tracking progress over time</li>
-                    </>
-                  )}
-                  {previewTool.id === 'values-clarification' && (
-                    <>
-                      <li>• Decision-making challenges</li>
-                      <li>• Career transitions</li>
-                      <li>• Alignment and authenticity work</li>
-                    </>
-                  )}
-                  {previewTool.id === 'limiting-beliefs' && (
-                    <>
-                      <li>• Overcoming self-doubt</li>
-                      <li>• Breaking through plateaus</li>
-                      <li>• Mindset shifts</li>
-                    </>
-                  )}
-                  {previewTool.id === 'habit-loop' && (
-                    <>
-                      <li>• Building new positive habits</li>
-                      <li>• Breaking unwanted patterns</li>
-                      <li>• Sustainable behavior change</li>
-                    </>
-                  )}
-                  {previewTool.id === 'career-compass' && (
-                    <>
-                      <li>• Career exploration</li>
-                      <li>• Professional development planning</li>
-                      <li>• Skill gap analysis</li>
-                    </>
-                  )}
-                  {previewTool.id === 'resilience-scale' && (
-                    <>
-                      <li>• Stress management</li>
-                      <li>• Building mental toughness</li>
-                      <li>• Recovery from setbacks</li>
-                    </>
-                  )}
-                  {previewTool.id === 'stakeholder-map' && (
-                    <>
-                      <li>• Project planning</li>
-                      <li>• Organizational change</li>
-                      <li>• Influence strategy</li>
-                    </>
-                  )}
-                  {previewTool.id === 'feedback-feedforward' && (
-                    <>
-                      <li>• Performance improvement</li>
-                      <li>• Learning from mistakes</li>
-                      <li>• Communication development</li>
-                    </>
-                  )}
-                  {previewTool.id === 'emotional-triggers' && (
-                    <>
-                      <li>• Emotional intelligence</li>
-                      <li>• Self-awareness building</li>
-                      <li>• Stress response management</li>
-                    </>
-                  )}
-                </ul>
               </div>
 
               <div className="flex gap-3">
