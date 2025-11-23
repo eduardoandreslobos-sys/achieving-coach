@@ -8,20 +8,20 @@ import { db } from '@/lib/firebase';
 import { createCoachingProgram } from '@/lib/coachingService';
 import { Plus, Trash2, Target } from 'lucide-react';
 
-export default function NewProgramPage() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { userProfile } = useAuth();
-  const coacheeId = searchParams?.get('coacheeId') || '';
-
-  interface Coachee {
+interface Coachee {
   id: string;
   displayName?: string;
   email?: string;
   [key: string]: any;
 }
 
-const [coachee, setCoachee] = useState<Coachee | null>(null);
+export default function NewProgramPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { userProfile } = useAuth();
+  const coacheeId = searchParams?.get('coacheeId') || '';
+
+  const [coachee, setCoachee] = useState<Coachee | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -46,7 +46,7 @@ const [coachee, setCoachee] = useState<Coachee | null>(null);
       const docSnap = await getDoc(docRef);
       
       if (docSnap.exists()) {
-        const data = { id: docSnap.id, ...docSnap.data() };
+        const data = { id: docSnap.id, ...docSnap.data() } as Coachee;
         setCoachee(data);
         
         // Pre-fill title with coachee name
@@ -102,7 +102,7 @@ const [coachee, setCoachee] = useState<Coachee | null>(null);
       const programId = await createCoachingProgram(
         userProfile.uid,
         coachee.id,
-        coachee.displayName || coachee.email,
+        coachee.displayName || coachee.email || 'Unknown',
         {
           title: formData.title,
           description: formData.description,
