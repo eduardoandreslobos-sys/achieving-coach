@@ -14,7 +14,14 @@ export default function NewProgramPage() {
   const { userProfile } = useAuth();
   const coacheeId = searchParams?.get('coacheeId') || '';
 
-  const [coachee, setCoachee] = useState<any>(null);
+  interface Coachee {
+  id: string;
+  displayName?: string;
+  email?: string;
+  [key: string]: any;
+}
+
+const [coachee, setCoachee] = useState<Coachee | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
