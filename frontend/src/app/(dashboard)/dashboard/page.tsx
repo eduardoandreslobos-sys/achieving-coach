@@ -51,7 +51,7 @@ export default function CoacheeDashboard() {
       const sessionsData = sessionsSnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-      }));
+      })) as Array<{id: string; status: string; scheduledDate?: any; scheduledTime?: string; title?: string; type?: string; [key: string]: any}>;
       
       const upcoming = sessionsData.filter(s => s.status === 'scheduled').slice(0, 3);
       const completed = sessionsData.filter(s => s.status === 'completed').length;
