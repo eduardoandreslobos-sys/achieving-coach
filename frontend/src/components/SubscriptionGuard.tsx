@@ -1,49 +1,71 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { CreditCard, Clock } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { Clock, CreditCard } from 'lucide-react';
 
-export default function SubscriptionGuard({ children }: { children: React.ReactNode }) {
-  const { userProfile } = useAuth();
+interface SubscriptionGuardProps {
+  children: React.ReactNode;
+}
+
+export default function SubscriptionGuard({ children }: SubscriptionGuardProps) {
   const router = useRouter();
+  const { userProfile, loading } = useAuth();
+  const [showWarning, setShowWarning] = useState(false);
 
   useEffect(() => {
-    if (userProfile && userProfile.subscriptionStatus === 'expired') {
-      router.push('/subscription-expired');
+    if (!loading && userProfile?.role === 'coach') {
+      const status = userProfile.subscriptionStatus;
+      
+      if (status === 'expired' || status === 'canceled') {
+        router.push('/subscription-expired');
+      } else if (status === 'trial' && userProfile.trialEndsAt) {
+        // Convert Firestore Timestamp to Date
+        const trialEndDate = userProfile.trialEndsAt.toDate();
+        const daysRemaining = Math.ceil((trialEndDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+        
+        if (daysRemaining <= 3) {
+          setShowWarning(true);
+        }
+      }
     }
-  }, [userProfile, router]);
+  }, [userProfile, loading, router]);
 
-  if (!userProfile) return null;
-
-  const isExpired = userProfile.subscriptionStatus === 'expired';
-  const isInTrial = userProfile.subscriptionStatus === 'trial';
-  const trialEndsAt = userProfile.trialEndsAt;
-  
-  if (isExpired) {
-    return null;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      </div>
+    );
   }
 
+  const trialEndsAt = userProfile?.trialEndsAt;
   const daysRemaining = trialEndsAt 
-    ? Math.ceil((trialEndsAt.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+    ? Math.ceil((trialEndsAt.toDate().getTime() - Date.now()) / (1000 * 60 * 60 * 24))
     : 0;
 
   return (
     <>
-      {isInTrial && daysRemaining <= 3 && (
-        <div className="bg-orange-50 border-b-2 border-orange-200 px-4 py-3">
+      {showWarning && (
+        <div className="bg-yellow-50 border-b-2 border-yellow-200 p-4">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Clock className="text-orange-600" size={20} />
-              <p className="text-sm font-medium text-orange-900">
-                Your free trial ends in {daysRemaining} day{daysRemaining !== 1 ? 's' : ''}
-              </p>
+            <div className="flex items-center gap-3">
+              <Clock className="text-yellow-600" size={24} />
+              <div>
+                <p className="font-bold text-yellow-900">
+                  Trial ending in {daysRemaining} {daysRemaining === 1 ? 'day' : 'days'}
+                </p>
+                <p className="text-sm text-yellow-800">
+                  Subscribe now to continue using all features
+                </p>
+              </div>
             </div>
             <button
-              onClick={() => router.push('/subscribe')}
-              className="px-4 py-2 bg-orange-600 text-white rounded-lg text-sm font-medium hover:bg-orange-700"
+              onClick={() => router.push('/subscription')}
+              className="flex items-center gap-2 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700"
             >
+              <CreditCard size={18} />
               Subscribe Now
             </button>
           </div>
