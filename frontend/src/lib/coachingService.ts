@@ -12,7 +12,7 @@ import {
   Timestamp 
 } from 'firebase/firestore';
 import { db } from './firebase';
-import { CoachingProgram, Session } from '@/types/coaching';
+import { CoachingProgram, Session, SessionType } from '@/types/coaching';
 
 // ============ COACHING PROGRAMS ============
 
@@ -124,6 +124,7 @@ export async function createSession(
     scheduledTime: string;
     duration: number;
     objective: string;
+    type?: SessionType;
   }
 ): Promise<string> {
   const sessionRef = doc(collection(db, 'sessions'));
@@ -134,12 +135,17 @@ export async function createSession(
     coacheeId,
     coacheeName,
     sessionNumber: data.sessionNumber,
+    type: data.type || 'regular',
     title: data.title,
     scheduledDate: Timestamp.fromDate(data.scheduledDate),
     scheduledTime: data.scheduledTime,
     duration: data.duration,
     status: 'scheduled',
+    goal: data.objective,
     objective: data.objective,
+    agenda: [],
+    activities: [],
+    keyTopics: [],
     createdAt: serverTimestamp() as Timestamp,
     updatedAt: serverTimestamp() as Timestamp,
   };
