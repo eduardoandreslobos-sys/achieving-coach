@@ -39,14 +39,13 @@ export default function JoinCoachPage() {
         
         if (coachDoc.exists()) {
           const data = coachDoc.data();
-          logs.push(`Coach data: ${JSON.stringify(data)}`);
           logs.push(`Coach role: ${data.role}`);
           
           if (data.role === 'coach') {
             setCoachInfo({ uid: coachDoc.id, ...data });
             logs.push('✅ Coach found and validated');
           } else {
-            logs.push('❌ User is not a coach');
+            logs.push(`❌ User is not a coach. Role: ${data.role}`);
             setError(`This user is not a coach. Role: ${data.role}`);
           }
         } else {
@@ -55,8 +54,7 @@ export default function JoinCoachPage() {
         }
       } catch (err: any) {
         logs.push(`❌ Error: ${err.message}`);
-        logs.push(`Error code: ${err.code}`);
-        logs.push(`Error stack: ${err.stack}`);
+        logs.push(`Error code: ${err.code || 'N/A'}`);
         setError(`Failed to load coach information: ${err.message}`);
       } finally {
         setDebugInfo(logs);
@@ -143,10 +141,9 @@ export default function JoinCoachPage() {
               <p className="text-sm text-gray-600">Coach ID: {coachId}</p>
             </div>
 
-            {/* Debug Info */}
             <details className="mt-6">
               <summary className="cursor-pointer text-sm font-medium text-gray-700 mb-2">
-                🔍 Debug Information (Click to expand)
+                🔍 Debug Information
               </summary>
               <div className="bg-gray-50 rounded-lg p-4 text-xs font-mono space-y-1 max-h-64 overflow-y-auto">
                 {debugInfo.map((log, idx) => (
@@ -158,10 +155,7 @@ export default function JoinCoachPage() {
             </details>
 
             <div className="mt-6 text-center">
-              
-                href="/"
-                className="text-primary-600 hover:text-primary-700 font-medium"
-              >
+              <a href="/" className="text-primary-600 hover:text-primary-700 font-medium">
                 Go to Homepage
               </a>
             </div>
@@ -179,7 +173,7 @@ export default function JoinCoachPage() {
             {coachInfo?.firstName?.[0]}{coachInfo?.lastName?.[0]}
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Join {coachInfo?.displayName}'s Coaching
+            Join {coachInfo?.displayName} Coaching
           </h1>
           <p className="text-gray-600">Create your account to start your coaching journey</p>
         </div>
@@ -216,27 +210,62 @@ export default function JoinCoachPage() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
-                <input type="text" required value={formData.firstName} onChange={(e) => setFormData({ ...formData, firstName: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
+                <input 
+                  type="text" 
+                  required 
+                  value={formData.firstName} 
+                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })} 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" 
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
-                <input type="text" required value={formData.lastName} onChange={(e) => setFormData({ ...formData, lastName: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
+                <input 
+                  type="text" 
+                  required 
+                  value={formData.lastName} 
+                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })} 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" 
+                />
               </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-              <input type="email" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
+              <input 
+                type="email" 
+                required 
+                value={formData.email} 
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })} 
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" 
+              />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Password *</label>
-              <input type="password" required value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="Min 6 characters" />
+              <input 
+                type="password" 
+                required 
+                value={formData.password} 
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })} 
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" 
+                placeholder="Min 6 characters" 
+              />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password *</label>
-              <input type="password" required value={formData.confirmPassword} onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
+              <input 
+                type="password" 
+                required 
+                value={formData.confirmPassword} 
+                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })} 
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" 
+              />
             </div>
           </div>
-          <button type="submit" disabled={submitting} className="w-full mt-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed">
+          <button 
+            type="submit" 
+            disabled={submitting} 
+            className="w-full mt-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             {submitting ? 'Creating account...' : 'Create Account & Start Coaching'}
           </button>
         </form>
