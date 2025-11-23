@@ -65,7 +65,7 @@ export default function CoacheeDashboard() {
       const toolsData = toolsSnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-      }));
+      })) as Array<{id: string; status: string; toolName?: string; dueDate?: string; instructions?: string; [key: string]: any}>;
       
       const completedTools = toolsData.filter(t => t.status === 'completed').length;
 
