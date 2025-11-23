@@ -1,154 +1,168 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import type { UserRole } from '@/types/user';
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const { user } = useAuth();
-  const [step, setStep] = useState(1);
-  const [role, setRole] = useState<UserRole>('coachee');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [organization, setOrganization] = useState('');
+  const { userProfile } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [role, setRole] = useState<'coach' | 'coachee'>('coachee');
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    organization: '',
+  });
+
+  useEffect(() => {
+    if (!userProfile) {
+      router.push('/sign-in');
+    }
+  }, [userProfile, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
+    if (!userProfile) return;
 
     setLoading(true);
+
     try {
-      const baseData = {
-        uid: user.uid,
-        email: user.email,
-        role,
-        firstName,
-        lastName,
-        displayName: `${firstName} ${lastName}`,
-        organization: organization || null,
-        createdAt: serverTimestamp(),
+      const userData: any = {
+        uid: userProfile.uid,
+        email: userProfile.email,
+        role: role,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        displayName: `${formData.firstName} ${formData.lastName}`,
         updatedAt: serverTimestamp(),
       };
 
-      // Solo coaches tienen subscriptionStatus y trial
       if (role === 'coach') {
-        await setDoc(doc(db, 'users', user.uid), {
-          ...baseData,
-          subscriptionStatus: 'trial',
-          trialEndsAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 14 días
-        });
+        userData.organization = formData.organization;
+        userData.subscriptionStatus = 'trial';
+        userData.trialEndsAt = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
+      } else {
+        userData.coacheeInfo = {
+          coachId: '',
+          coachName: '',
+          onboardingCompleted: true,
+          goals: [],
+        };
+      }
+
+      await setDoc(doc(db, 'users', userProfile.uid), userData, { merge: true });
+
+      if (role === 'coach') {
         router.push('/coach');
       } else {
-        // Coachees NO tienen subscriptionStatus (son gratis)
-        await setDoc(doc(db, 'users', user.uid), {
-          ...baseData,
-          coacheeInfo: {
-            goals: [],
-            onboardingCompleted: true,
-            coachId: null, // Se asignará cuando acepten invitación
-          },
-        });
         router.push('/dashboard');
       }
     } catch (error) {
-      console.error('Error creating profile:', error);
-      alert('Error creating profile. Please try again.');
+      console.error('Error updating profile:', error);
+      alert('Failed to complete onboarding');
     } finally {
       setLoading(false);
     }
   };
 
+  if (!userProfile) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary-50 to-white flex items-center justify-center py-12 px-4">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome to AchievingCoach!</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome to AchievingCoach</h1>
           <p className="text-gray-600">Let's set up your profile</p>
         </div>
 
-        <div className="bg-white rounded-xl border-2 border-gray-200 p-8">
-          {step === 1 && (
+        <form onSubmit={handleSubmit} className="bg-white rounded-xl border-2 border-gray-200 p-6 space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-3">I am a:</label>
+            <div className="space-y-2">
+              <label className="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-primary-300 transition-colors">
+                <input
+                  type="radio"
+                  value="coach"
+                  checked={role === 'coach'}
+                  onChange={(e) => setRole(e.target.value as 'coach' | 'coachee')}
+                  className="w-4 h-4 text-primary-600"
+                />
+                <div className="ml-3">
+                  <div className="font-medium text-gray-900">Coach</div>
+                  <div className="text-sm text-gray-600">I provide coaching services</div>
+                </div>
+              </label>
+              <label className="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-primary-300 transition-colors">
+                <input
+                  type="radio"
+                  value="coachee"
+                  checked={role === 'coachee'}
+                  onChange={(e) => setRole(e.target.value as 'coach' | 'coachee')}
+                  className="w-4 h-4 text-primary-600"
+                />
+                <div className="ml-3">
+                  <div className="font-medium text-gray-900">Coachee</div>
+                  <div className="text-sm text-gray-600">I'm seeking coaching</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <h2 className="text-xl font-bold text-gray-900 mb-4">I am a...</h2>
-              <div className="space-y-3">
-                <button
-                  onClick={() => { setRole('coach'); setStep(2); }}
-                  className="w-full p-4 text-left border-2 border-gray-200 rounded-lg hover:border-primary-500 hover:bg-primary-50 transition-colors"
-                >
-                  <p className="font-medium text-gray-900">Coach</p>
-                  <p className="text-sm text-gray-600">I help others achieve their goals</p>
-                  <p className="text-xs text-primary-600 mt-1">14-day free trial • $29/month after</p>
-                </button>
-                <button
-                  onClick={() => { setRole('coachee'); setStep(2); }}
-                  className="w-full p-4 text-left border-2 border-gray-200 rounded-lg hover:border-primary-500 hover:bg-primary-50 transition-colors"
-                >
-                  <p className="font-medium text-gray-900">Coachee</p>
-                  <p className="text-sm text-gray-600">I want to work with a coach</p>
-                  <p className="text-xs text-green-600 mt-1">Free with coach invitation</p>
-                </button>
-              </div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
+              <input
+                type="text"
+                required
+                value={formData.firstName}
+                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
+              <input
+                type="text"
+                required
+                value={formData.lastName}
+                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              />
+            </div>
+          </div>
+
+          {role === 'coach' && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Organization (Optional)
+              </label>
+              <input
+                type="text"
+                value={formData.organization}
+                onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
+                placeholder="Your coaching practice or company"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              />
             </div>
           )}
 
-          {step === 2 && (
-            <form onSubmit={handleSubmit}>
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Your Information</h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                  <input
-                    type="text"
-                    required
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                  <input
-                    type="text"
-                    required
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Organization (Optional)</label>
-                  <input
-                    type="text"
-                    value={organization}
-                    onChange={(e) => setOrganization(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                  />
-                </div>
-              </div>
-              <div className="flex gap-3 mt-6">
-                <button
-                  type="button"
-                  onClick={() => setStep(1)}
-                  className="flex-1 py-2 px-4 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
-                >
-                  Back
-                </button>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="flex-1 py-2 px-4 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
-                >
-                  {loading ? 'Creating...' : 'Complete Setup'}
-                </button>
-              </div>
-            </form>
-          )}
-        </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? 'Setting up...' : 'Complete Setup'}
+          </button>
+        </form>
       </div>
     </div>
   );
