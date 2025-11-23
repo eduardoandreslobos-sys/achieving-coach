@@ -8,8 +8,15 @@ export default function InviteCoacheesPage() {
   const { userProfile } = useAuth();
   const [copied, setCopied] = useState(false);
 
+  // Use production domain in production, localhost in development
+  const baseUrl = typeof window !== 'undefined' 
+    ? (window.location.hostname === 'localhost' 
+        ? 'http://localhost:3000' 
+        : 'https://achievingcoach.com')
+    : '';
+
   const inviteLink = userProfile?.uid 
-    ? `${window.location.origin}/join/${userProfile.uid}`
+    ? `${baseUrl}/join/${userProfile.uid}`
     : '';
 
   const copyToClipboard = () => {
