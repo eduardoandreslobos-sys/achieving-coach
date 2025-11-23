@@ -7,7 +7,7 @@ export default function CoachLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ProtectedRoute requiredRole="coach">
+    <ProtectedRoute allowedRoles={['coach']}>
       <div className="flex h-screen bg-gray-50">
         <CoachSidebar />
         <main className="flex-1 overflow-y-auto">

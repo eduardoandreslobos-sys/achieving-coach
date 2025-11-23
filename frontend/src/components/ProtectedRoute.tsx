@@ -3,13 +3,14 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import type { UserRole } from '@/types/user';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  requiredRole?: 'coach' | 'coachee';
+  allowedRoles?: UserRole[];
 }
 
-export default function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) {
+export default function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
   const router = useRouter();
   const { user, userProfile, loading } = useAuth();
   const [authorized, setAuthorized] = useState(false);
@@ -18,13 +19,13 @@ export default function ProtectedRoute({ children, requiredRole }: ProtectedRout
     if (!loading) {
       if (!user) {
         router.push('/sign-in');
-      } else if (requiredRole && userProfile?.role !== requiredRole) {
+      } else if (allowedRoles && userProfile?.role && !allowedRoles.includes(userProfile.role)) {
         router.push('/dashboard');
       } else {
         setAuthorized(true);
       }
     }
-  }, [user, userProfile, loading, requiredRole, router]);
+  }, [user, userProfile, loading, allowedRoles, router]);
 
   if (loading || !authorized) {
     return (

@@ -1,13 +1,15 @@
 import { Timestamp } from 'firebase/firestore';
 import { ValueProposition } from './coaching';
 
+export type UserRole = 'coach' | 'coachee';
+
 export interface UserProfile {
   uid: string;
   email: string;
   displayName?: string;
   firstName?: string;
   lastName?: string;
-  role: 'coach' | 'coachee';
+  role: UserRole;
   
   // Coach-specific
   organization?: string;
