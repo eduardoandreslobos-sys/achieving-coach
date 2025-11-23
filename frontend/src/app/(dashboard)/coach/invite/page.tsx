@@ -1,23 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Copy, Check, UserPlus } from 'lucide-react';
 
 export default function InviteCoacheesPage() {
   const { userProfile } = useAuth();
   const [copied, setCopied] = useState(false);
+  const [inviteLink, setInviteLink] = useState('');
 
-  // Use production domain in production, localhost in development
-  const baseUrl = typeof window !== 'undefined' 
-    ? (window.location.hostname === 'localhost' 
+  useEffect(() => {
+    if (typeof window !== 'undefined' && userProfile?.uid) {
+      const baseUrl = window.location.hostname === 'localhost' 
         ? 'http://localhost:3000' 
-        : 'https://achievingcoach.com')
-    : '';
-
-  const inviteLink = userProfile?.uid 
-    ? `${baseUrl}/join/${userProfile.uid}`
-    : '';
+        : 'https://achievingcoach.com';
+      setInviteLink(`${baseUrl}/join/${userProfile.uid}`);
+    }
+  }, [userProfile]);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(inviteLink);
@@ -47,11 +46,12 @@ export default function InviteCoacheesPage() {
           <div className="bg-gray-50 rounded-lg p-4 mb-4">
             <div className="flex items-center justify-between gap-4">
               <code className="flex-1 text-sm text-gray-900 break-all">
-                {inviteLink}
+                {inviteLink || 'Loading...'}
               </code>
               <button
                 onClick={copyToClipboard}
-                className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors flex-shrink-0"
+                disabled={!inviteLink}
+                className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors flex-shrink-0 disabled:opacity-50"
               >
                 {copied ? (
                   <>
