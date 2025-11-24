@@ -49,3 +49,5 @@ venv/
 .idea/
 *.swp
 *.swo
+proyecto.tar.gz
+estado_proyecto.txt
