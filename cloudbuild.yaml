@@ -16,11 +16,20 @@ steps:
       - '--build-arg'
       - 'NEXT_PUBLIC_FIREBASE_APP_ID=1:977373202400:web:36c3267a2e0750fc070fd6'
       - '-t'
+      - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:$COMMIT_SHA'
+      - '-t'
       - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:latest'
       - '.'
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/achieving-coach-frontend:latest']
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:$COMMIT_SHA'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:latest'
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
@@ -29,7 +38,7 @@ steps:
       - 'deploy'
       - 'achieving-coach-frontend'
       - '--image'
-      - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:latest'
+      - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:$COMMIT_SHA'
       - '--region'
       - 'us-central1'
       - '--platform'
@@ -37,6 +46,11 @@ steps:
       - '--allow-unauthenticated'
 
 images:
+  - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:$COMMIT_SHA'
   - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:latest'
+
+options:
+  machineType: 'E2_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY
 
 timeout: '1800s'
