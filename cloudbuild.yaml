@@ -1,39 +1,27 @@
 steps:
-  # Build Docker image with Firebase credentials
   - name: 'gcr.io/cloud-builders/docker'
     dir: 'frontend'
     args:
       - 'build'
       - '--build-arg'
-      - 'NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyDV6_XYStY6a7dhlS0W2v0DRjMSt1lMDDg'
+      - 'NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyBnkq3E9GzE1qdPKgPUBqX3qG6RlHYLDXM'
       - '--build-arg'
-      - 'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=achieving-coach-dev-1763154191.firebaseapp.com'
+      - 'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=triple-shift-478220-b2.firebaseapp.com'
       - '--build-arg'
-      - 'NEXT_PUBLIC_FIREBASE_PROJECT_ID=achieving-coach-dev-1763154191'
+      - 'NEXT_PUBLIC_FIREBASE_PROJECT_ID=triple-shift-478220-b2'
       - '--build-arg'
-      - 'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=achieving-coach-dev-1763154191.firebasestorage.app'
+      - 'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=triple-shift-478220-b2.firebasestorage.app'
       - '--build-arg'
-      - 'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=360022789814'
+      - 'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=977373202400'
       - '--build-arg'
-      - 'NEXT_PUBLIC_FIREBASE_APP_ID=1:360022789814:web:5fb7a9f08dad3ecdb6e017'
-      - '-t'
-      - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:$COMMIT_SHA'
+      - 'NEXT_PUBLIC_FIREBASE_APP_ID=1:977373202400:web:36c3267a2e0750fc070fd6'
       - '-t'
       - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:latest'
       - '.'
-  
-  # Push to Container Registry
+
   - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:$COMMIT_SHA'
-  
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:latest'
-  
-  # Deploy to Cloud Run
+    args: ['push', 'gcr.io/$PROJECT_ID/achieving-coach-frontend:latest']
+
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -41,7 +29,7 @@ steps:
       - 'deploy'
       - 'achieving-coach-frontend'
       - '--image'
-      - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:$COMMIT_SHA'
+      - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:latest'
       - '--region'
       - 'us-central1'
       - '--platform'
@@ -49,11 +37,6 @@ steps:
       - '--allow-unauthenticated'
 
 images:
-  - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:$COMMIT_SHA'
   - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:latest'
-
-options:
-  machineType: 'E2_HIGHCPU_8'
-  logging: CLOUD_LOGGING_ONLY
 
 timeout: '1800s'
