@@ -17,12 +17,22 @@ import { createGrowSessionRoutes } from './routes/growSessions';
 // Import config
 import { config } from './config/environment';
 
+// Import middleware
+import { authMiddleware } from './middleware/auth.middleware';
+import { tenantMiddleware } from './middleware/tenant.middleware';
+
 // Initialize Express
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Authentication middleware (optional for public routes)
+// app.use(authMiddleware); // Uncomment when auth is ready
+
+// Tenant isolation middleware
+// app.use(tenantMiddleware); // Uncomment after auth is enabled
 
 // Health check (before Firebase initialization)
 app.get('/health', (req, res) => {
