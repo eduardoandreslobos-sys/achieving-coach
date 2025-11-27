@@ -2,7 +2,6 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Helper functions
     function isAuthenticated() {
       return request.auth != null;
     }
@@ -11,78 +10,62 @@ service cloud.firestore {
       return request.auth.uid == userId;
     }
     
+    // Activity logs
+    match /activity_logs/{logId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if false; // Logs are immutable
+    }
+    
     // Users collection
     match /users/{userId} {
       allow read: if isAuthenticated();
       allow write: if isOwner(userId);
     }
     
-    // Goals collection
+    // Goals
     match /goals/{goalId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update, delete: if isAuthenticated() && 
-                               resource.data.userId == request.auth.uid;
+      allow read, write: if isAuthenticated();
     }
     
-    // Sessions collection
+    // Sessions
     match /sessions/{sessionId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update, delete: if isAuthenticated() && 
-                               (resource.data.coachId == request.auth.uid || 
-                                resource.data.coacheeId == request.auth.uid);
+      allow read, write: if isAuthenticated();
     }
     
-    // Reflections collection
+    // Reflections
     match /reflections/{reflectionId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update, delete: if isAuthenticated() && 
-                               resource.data.userId == request.auth.uid;
+      allow read, write: if isAuthenticated();
     }
     
     // GROW Sessions
     match /grow_sessions/{sessionId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update, delete: if isAuthenticated() && 
-                               resource.data.userId == request.auth.uid;
+      allow read, write: if isAuthenticated();
     }
     
     // Tool assignments
     match /tool_assignments/{assignmentId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update, delete: if isAuthenticated();
+      allow read, write: if isAuthenticated();
     }
     
     // Wheel of Life
     match /wheel_of_life/{assessmentId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update, delete: if isAuthenticated() && 
-                               resource.data.userId == request.auth.uid;
+      allow read, write: if isAuthenticated();
     }
     
     // DISC Results
     match /disc_results/{resultId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update, delete: if isAuthenticated() && 
-                               resource.data.userId == request.auth.uid;
+      allow read, write: if isAuthenticated();
     }
     
-    // Coaches collection
+    // Coaches
     match /coaches/{coachId} {
-      allow read: if isAuthenticated();
-      allow write: if isAuthenticated();
+      allow read, write: if isAuthenticated();
     }
     
-    // Coachees collection
+    // Coachees
     match /coachees/{coacheeId} {
-      allow read: if isAuthenticated();
-      allow write: if isAuthenticated();
+      allow read, write: if isAuthenticated();
     }
   }
 }
