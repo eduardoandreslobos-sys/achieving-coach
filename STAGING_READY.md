@@ -8,6 +8,12 @@
 - [x] Cloud Build trigger configured
 - [x] Auto-deploy on push to staging branch
 
+### Infrastructure:
+- **Firebase Project:** achieving-coach-staging
+- **Cloud Run Service:** achieving-coach-frontend-staging
+- **Branch:** staging
+- **Auto-deploy:** Enabled
+
 ### Next Steps:
 - Sprint 2.1: Organization Model
 - Sprint 2.2: Role-based permissions
@@ -17,6 +23,5 @@
 ---
 
 **Date:** November 27, 2025  
-**Branch:** staging  
-**Firebase:** achieving-coach-staging  
-**Cloud Run:** achieving-coach-frontend-staging
+**Environment:** Pre-production staging  
+**Trigger:** staging-deploy
