@@ -10,14 +10,21 @@ service cloud.firestore {
       return request.auth.uid == userId;
     }
     
-    // Activity logs
-    match /activity_logs/{logId} {
+    // Activities (para logging)
+    match /activities/{activityId} {
       allow read: if isAuthenticated();
       allow create: if isAuthenticated();
-      allow update, delete: if false; // Logs are immutable
+      allow update, delete: if false; // Logs son inmutables
     }
     
-    // Users collection
+    // Tool Results
+    match /tool_results/{resultId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+    
+    // Users
     match /users/{userId} {
       allow read: if isAuthenticated();
       allow write: if isOwner(userId);
