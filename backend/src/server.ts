@@ -8,6 +8,7 @@ import authRoutes from './routes/auth.routes';
 import usersRoutes from './routes/users.routes';
 import coachRoutes from './routes/coach.routes';
 import coacheeRoutes from './routes/coachee.routes';
+import organizationRoutes from './routes/organization.routes';
 
 // Import NEW GROW services and routes
 import { GrowSessionService } from './services/GrowSessionService';
@@ -54,6 +55,7 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', usersRoutes);
 app.use('/api/v1/coaches', coachRoutes);
 app.use('/api/v1/coachees', coacheeRoutes);
+app.use('/api/v1/organizations', organizationRoutes);
 app.use('/api/v1/grow-sessions', createGrowSessionRoutes(growService));
 
 // Error handling middleware
