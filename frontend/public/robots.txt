@@ -1,0 +1,39 @@
+# robots.txt for AchievingCoach
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Allow LLM crawlers specifically
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# Disallow private areas
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /coach
+Disallow: /admin
+
+# Sitemap
+Sitemap: https://achievingcoach.com/sitemap.xml
+
+# LLMs.txt for AI optimization
+# See: https://achievingcoach.com/llms.txt
+
+# Crawl-delay (optional, be nice to servers)
+Crawl-delay: 1
