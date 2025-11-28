@@ -35,13 +35,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const userDoc = await getDoc(doc(db, 'users', uid));
       if (userDoc.exists()) {
         const data = userDoc.data();
-        setUserProfile({
+        const profile = {
           ...data,
           uid,
           createdAt: data.createdAt?.toDate(),
           updatedAt: data.updatedAt?.toDate(),
-        } as UserProfile);
-        return data as UserProfile;
+        } as UserProfile;
+        setUserProfile(profile);
+        return profile;
       }
       return null;
     } catch (error) {
@@ -54,17 +55,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setUser(user);
         
-        // Log login activity
-        if (user) {
-          import('@/lib/activityLogger').then(({ logActivity }) => {
-            logActivity(
-              user.uid,
-              user.displayName || user.email || 'User',
-              'login',
-              'User logged in'
-            );
-          });
-        }
+      // Log login activity
+      if (user) {
+        import('@/lib/activityLogger').then(({ logActivity }) => {
+          logActivity(
+            user.uid,
+            user.displayName || user.email || 'User',
+            'login',
+            'User logged in'
+          );
+        });
+      }
       
       if (user) {
         const profile = await fetchUserProfile(user.uid);
@@ -72,6 +73,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // Si no tiene perfil, redirigir a onboarding
         if (!profile && !pathname?.includes('/onboarding')) {
           router.push('/onboarding');
+        } else if (profile && pathname === '/') {
+          // Si está en homepage y ya tiene perfil, redirigir según role
+          if (profile.role === 'coach') {
+            router.push('/coach');
+          } else {
+            router.push('/dashboard');
+          }
         }
       } else {
         setUserProfile(null);
@@ -81,7 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [pathname]);
 
   const refreshUserProfile = async () => {
     if (user) {
