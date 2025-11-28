@@ -10,7 +10,7 @@ export default function DashboardLayout({
 }) {
   return (
     <AuthProvider>
-      <ProtectedRoute>
+      <ProtectedRoute allowedRoles={['coachee']}>
         {children}
       </ProtectedRoute>
     </AuthProvider>
