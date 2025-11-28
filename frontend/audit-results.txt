@@ -1,0 +1,167 @@
+🔍 AUDITORÍA SEO COMPLETA - AchievingCoach
+==========================================
+
+📸 1. AUDITORÍA DE IMÁGENES
+----------------------------
+
+Buscando etiquetas <img> sin ALT:
+7
+
+Buscando etiquetas <Image> de Next.js sin ALT:
+0
+
+Archivos de imagen en public/:
+public/favicon.svg
+
+📄 2. AUDITORÍA DE METADATA POR PÁGINA
+---------------------------------------
+
+Páginas sin metadata export:
+❌ src/app/(dashboard)/sessions/page.tsx
+❌ src/app/(dashboard)/messages/page.tsx
+❌ src/app/(dashboard)/goals/page.tsx
+❌ src/app/(dashboard)/resources/page.tsx
+❌ src/app/(dashboard)/tools/page.tsx
+❌ src/app/(dashboard)/tools/habit-loop/page.tsx
+❌ src/app/(dashboard)/tools/career-compass/page.tsx
+❌ src/app/(dashboard)/tools/stakeholder-map/page.tsx
+❌ src/app/(dashboard)/tools/resilience-scale/page.tsx
+❌ src/app/(dashboard)/tools/limiting-beliefs/page.tsx
+❌ src/app/(dashboard)/tools/emotional-triggers/page.tsx
+❌ src/app/(dashboard)/tools/disc/page.tsx
+❌ src/app/(dashboard)/tools/disc/result/[resultId]/page.tsx
+❌ src/app/(dashboard)/tools/values-clarification/page.tsx
+❌ src/app/(dashboard)/tools/wheel-of-life/page.tsx
+❌ src/app/(dashboard)/tools/feedback-feedforward/page.tsx
+❌ src/app/(dashboard)/reflections/page.tsx
+❌ src/app/(dashboard)/coach/tools/page.tsx
+❌ src/app/(dashboard)/coach/page.tsx
+❌ src/app/(dashboard)/coach/invite/page.tsx
+❌ src/app/(dashboard)/coach/profile/page.tsx
+❌ src/app/(dashboard)/coach/icf-simulator/page.tsx
+❌ src/app/(dashboard)/coach/programs/[programId]/page.tsx
+❌ src/app/(dashboard)/coach/programs/new/page.tsx
+❌ src/app/(dashboard)/coach/clients/page.tsx
+❌ src/app/(dashboard)/coach/clients/[id]/page.tsx
+❌ src/app/(dashboard)/coach/clients/[id]/assign-tools/page.tsx
+❌ src/app/(dashboard)/dashboard/page.tsx
+❌ src/app/(dashboard)/grow-worksheet/page.tsx
+❌ src/app/page.tsx
+❌ src/app/(auth)/sign-in/page.tsx
+❌ src/app/(auth)/join/[coachId]/page.tsx
+❌ src/app/(auth)/onboarding/page.tsx
+❌ src/app/(auth)/sign-up/page.tsx
+❌ src/app/(auth)/subscription-expired/page.tsx
+
+📐 3. HEADERS SEMÁNTICOS (H1)
+-----------------------------
+
+Páginas sin H1:
+⚠️  src/app/(dashboard)/messages/page.tsx
+⚠️  src/app/(dashboard)/tools/disc/result/[resultId]/page.tsx
+⚠️  src/app/(auth)/sign-in/page.tsx
+⚠️  src/app/(auth)/sign-up/page.tsx
+
+Páginas con múltiples H1:
+❌ src/app/(dashboard)/tools/limiting-beliefs/page.tsx (2 H1s)
+❌ src/app/(dashboard)/tools/values-clarification/page.tsx (4 H1s)
+❌ src/app/(dashboard)/tools/wheel-of-life/page.tsx (2 H1s)
+❌ src/app/(dashboard)/coach/icf-simulator/page.tsx (2 H1s)
+❌ src/app/(dashboard)/coach/programs/[programId]/page.tsx (2 H1s)
+❌ src/app/(dashboard)/coach/programs/new/page.tsx (2 H1s)
+❌ src/app/(auth)/join/[coachId]/page.tsx (2 H1s)
+
+🧩 4. COMPONENTES
+-----------------
+
+Total de componentes:
+31
+
+Total de páginas:
+35
+
+♿ 5. ACCESIBILIDAD
+------------------
+
+Botones sin ARIA o texto:
+src/components/DashboardSidebar.tsx:            <button
+src/components/UserMenu.tsx:      <button
+src/components/tools/ResilienceResults.tsx:        <button
+src/components/tools/ResilienceResults.tsx:        <button
+src/components/tools/ResilienceQuestionnaire.tsx:                  <button
+src/components/tools/ResilienceQuestionnaire.tsx:        <button
+src/components/tools/ResilienceQuestionnaire.tsx:        <button
+src/components/tools/BeliefReframeForm.tsx:                    <button
+src/components/tools/BeliefReframeForm.tsx:              <button
+src/components/tools/BeliefReframeForm.tsx:                    <button
+
+Links sin texto descriptivo:
+src/components/DISCResults.tsx:          <Link href="/tools/disc" className="text-blue-600 hover:underline">
+src/components/DISCResults.tsx:            <Link 
+src/components/DISCResults.tsx:          <Link 
+src/components/DISCResults.tsx:          <Link 
+src/components/DashboardSidebar.tsx:            <Link
+src/components/coachee/QuickActionsWidget.tsx:            <Link
+src/components/coachee/ActiveGoalsWidget.tsx:        <Link 
+src/components/coachee/ActiveGoalsWidget.tsx:          <Link
+src/components/CoachSidebar.tsx:            <Link
+src/app/(dashboard)/tools/page.tsx:              <Link
+
+⚡ 6. PERFORMANCE
+----------------
+
+Imágenes grandes (>500KB) en public/:
+
+Scripts sin defer/async:
+src/app/layout.tsx:        <script
+src/app/layout.tsx:        <script
+src/app/layout.tsx:        <script
+
+🔗 7. ESTRUCTURA DE URLs
+------------------------
+
+Páginas dinámicas [id]:
+src/app/(dashboard)/tools/disc/result/[resultId]
+src/app/(dashboard)/coach/programs/[programId]
+src/app/(dashboard)/coach/clients/[id]
+src/app/api/goals/[id]
+src/app/(auth)/join/[coachId]
+
+Rutas totales:
+/(dashboard)/sessions
+/(dashboard)/messages
+/(dashboard)/goals
+/(dashboard)/resources
+/(dashboard)/tools
+/(dashboard)/tools/habit-loop
+/(dashboard)/tools/career-compass
+/(dashboard)/tools/stakeholder-map
+/(dashboard)/tools/resilience-scale
+/(dashboard)/tools/limiting-beliefs
+/(dashboard)/tools/emotional-triggers
+/(dashboard)/tools/disc
+/(dashboard)/tools/disc/result/[resultId]
+/(dashboard)/tools/values-clarification
+/(dashboard)/tools/wheel-of-life
+/(dashboard)/tools/feedback-feedforward
+/(dashboard)/reflections
+/(dashboard)/coach/tools
+/(dashboard)/coach
+/(dashboard)/coach/invite
+/(dashboard)/coach/profile
+/(dashboard)/coach/icf-simulator
+/(dashboard)/coach/programs/[programId]
+/(dashboard)/coach/programs/new
+/(dashboard)/coach/clients
+/(dashboard)/coach/clients/[id]
+/(dashboard)/coach/clients/[id]/assign-tools
+/(dashboard)/dashboard
+/(dashboard)/grow-worksheet
+
+/(auth)/sign-in
+/(auth)/join/[coachId]
+/(auth)/onboarding
+/(auth)/sign-up
+/(auth)/subscription-expired
+
+✅ Auditoría completa
