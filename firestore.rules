@@ -10,6 +10,10 @@ service cloud.firestore {
       return request.auth.uid == userId;
     }
     
+    function isCoach(userId) {
+      return get(/databases/$(database)/documents/users/$(userId)).data.role == 'coach';
+    }
+    
     // Activities (para logging)
     match /activities/{activityId} {
       allow read: if isAuthenticated();
@@ -26,8 +30,16 @@ service cloud.firestore {
     
     // Users
     match /users/{userId} {
-      allow read: if isAuthenticated();
-      allow write: if isOwner(userId);
+      // Allow public read of coach profiles (for invitation links)
+      allow read: if isAuthenticated() || 
+                     resource.data.role == 'coach';
+      
+      // Only owner can update their profile
+      allow update: if isOwner(userId);
+      
+      // Allow creation during signup/onboarding
+      allow create: if request.auth != null && 
+                       request.auth.uid == userId;
     }
     
     // Goals
@@ -73,6 +85,17 @@ service cloud.firestore {
     // Coachees
     match /coachees/{coacheeId} {
       allow read, write: if isAuthenticated();
+    }
+    
+    // Notifications
+    match /notifications/{notificationId} {
+      allow read: if isAuthenticated() && 
+                     resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid;
+      allow delete: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid;
     }
   }
 }
