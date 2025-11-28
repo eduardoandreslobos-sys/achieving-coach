@@ -46,7 +46,7 @@ export default function SignUpPage() {
       setVerificationSent(true);
       
       setTimeout(() => {
-        router.push('/onboarding');
+        router.push('/onboarding?source=signup');
       }, 3000);
     } catch (err: any) {
       if (err.code === 'auth/email-already-in-use') {
