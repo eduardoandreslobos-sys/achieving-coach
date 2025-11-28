@@ -55,7 +55,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setUser(user);
         
-      // Log login activity
       if (user) {
         import('@/lib/activityLogger').then(({ logActivity }) => {
           logActivity(
@@ -70,11 +69,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (user) {
         const profile = await fetchUserProfile(user.uid);
         
-        // Si no tiene perfil, redirigir a onboarding
         if (!profile && !pathname?.includes('/onboarding')) {
           router.push('/onboarding');
         } else if (profile && pathname === '/') {
-          // Si está en homepage y ya tiene perfil, redirigir según role
           if (profile.role === 'coach') {
             router.push('/coach');
           } else {

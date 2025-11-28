@@ -18,7 +18,6 @@ export default function SignIn() {
 
   useEffect(() => {
     if (user && !authLoading) {
-      // User already logged in, redirect to appropriate dashboard
       redirectToDashboard(user.uid);
     }
   }, [user, authLoading, router]);
@@ -49,8 +48,6 @@ export default function SignIn() {
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      
-      // Fetch user role and redirect accordingly
       await redirectToDashboard(userCredential.user.uid);
     } catch (err: any) {
       setError(err.message || 'Failed to sign in');
