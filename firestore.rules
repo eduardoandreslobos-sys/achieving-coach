@@ -10,40 +10,15 @@ service cloud.firestore {
       return request.auth.uid == userId;
     }
     
-    function isCoach(userId) {
-      return get(/databases/$(database)/documents/users/$(userId)).data.role == 'coach';
-    }
-    
-    // Activities (para logging)
-    match /activities/{activityId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update, delete: if false; // Logs son inmutables
-    }
-    
-    // Tool Results
-    match /tool_results/{resultId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update, delete: if isAuthenticated();
-    }
-    
     // Users
     match /users/{userId} {
-      // Allow public read of coach profiles (for invitation links)
-      allow read: if isAuthenticated() || 
-                     resource.data.role == 'coach';
-      
-      // Only owner can update their profile
+      allow read: if isAuthenticated() || resource.data.role == 'coach';
       allow update: if isOwner(userId);
-      
-      // Allow creation during signup/onboarding
-      allow create: if request.auth != null && 
-                       request.auth.uid == userId;
+      allow create: if request.auth != null && request.auth.uid == userId;
     }
     
-    // Goals
-    match /goals/{goalId} {
+    // Coaching Programs
+    match /coaching_programs/{programId} {
       allow read, write: if isAuthenticated();
     }
     
@@ -52,8 +27,18 @@ service cloud.firestore {
       allow read, write: if isAuthenticated();
     }
     
+    // Goals
+    match /goals/{goalId} {
+      allow read, write: if isAuthenticated();
+    }
+    
     // Reflections
     match /reflections/{reflectionId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Tool Results
+    match /tool_results/{resultId} {
       allow read, write: if isAuthenticated();
     }
     
@@ -62,7 +47,7 @@ service cloud.firestore {
       allow read, write: if isAuthenticated();
     }
     
-    // Tool assignments
+    // Tool Assignments
     match /tool_assignments/{assignmentId} {
       allow read, write: if isAuthenticated();
     }
@@ -77,25 +62,17 @@ service cloud.firestore {
       allow read, write: if isAuthenticated();
     }
     
-    // Coaches
-    match /coaches/{coachId} {
-      allow read, write: if isAuthenticated();
-    }
-    
-    // Coachees
-    match /coachees/{coacheeId} {
-      allow read, write: if isAuthenticated();
+    // Activities
+    match /activities/{activityId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
     }
     
     // Notifications
     match /notifications/{notificationId} {
-      allow read: if isAuthenticated() && 
-                     resource.data.userId == request.auth.uid;
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
       allow create: if isAuthenticated();
-      allow update: if isAuthenticated() && 
-                       resource.data.userId == request.auth.uid;
-      allow delete: if isAuthenticated() && 
-                       resource.data.userId == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
     }
   }
 }
