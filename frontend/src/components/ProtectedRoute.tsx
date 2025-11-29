@@ -37,7 +37,7 @@ export default function ProtectedRoute({ children, allowedRoles }: ProtectedRout
         }
       }
     }
-  }, [user, userProfile, loading, allowedRoles, router]);
+  }, [user, userProfile, loading, allowedRoles]); // ✅ Removed router
 
   // Show loading while checking auth
   if (loading) {
