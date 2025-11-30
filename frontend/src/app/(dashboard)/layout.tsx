@@ -14,16 +14,13 @@ export default function DashboardLayout({
     <AuthProvider>
       <NotificationProvider>
         <ProtectedRoute>
-          <div className="min-h-screen bg-gray-50">
-            {/* Top bar with notification bell for coachees */}
-            <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-end px-6">
+          <div className="relative">
+            {/* Floating notification bell - top right */}
+            <div className="fixed top-6 right-6 z-50">
               <NotificationBell />
             </div>
             
-            {/* Main content */}
-            <main>
-              {children}
-            </main>
+            {children}
           </div>
         </ProtectedRoute>
       </NotificationProvider>

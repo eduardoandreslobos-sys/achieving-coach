@@ -15,17 +15,14 @@ export default function CoachLayout({
       <ProtectedRoute allowedRoles={['coach']}>
         <div className="flex h-screen bg-gray-50">
           <CoachSidebar />
-          <div className="flex-1 flex flex-col">
-            {/* Top bar with notification bell */}
-            <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-end px-6">
+          <main className="flex-1 overflow-y-auto relative">
+            {/* Floating notification bell - top right */}
+            <div className="fixed top-6 right-6 z-50">
               <NotificationBell />
             </div>
             
-            {/* Main content */}
-            <main className="flex-1 overflow-y-auto">
-              {children}
-            </main>
-          </div>
+            {children}
+          </main>
         </div>
       </ProtectedRoute>
     </NotificationProvider>
