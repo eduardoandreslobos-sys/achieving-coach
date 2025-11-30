@@ -1,0 +1,5 @@
+// Agregar después de las imports existentes:
+import organizationRoutes from './routes/organization.routes';
+
+// Agregar después de las rutas existentes:
+app.use('/api/v1/organizations', organizationRoutes);

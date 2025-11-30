@@ -1,0 +1,17 @@
+INSTRUCCIONES PARA ACTUALIZAR layout.tsx:
+
+1. Abrir: src/app/layout.tsx
+
+2. Agregar import al inicio (después de otros imports):
+   import GoogleAnalytics from './_components/GoogleAnalytics';
+
+3. Dentro del <body>, ANTES de <AuthProvider>, agregar:
+   <GoogleAnalytics />
+
+4. Debería quedar así:
+   <body className={inter.className}>
+     <GoogleAnalytics />
+     <AuthProvider>
+       {children}
+     </AuthProvider>
+   </body>

@@ -1,0 +1,78 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    // Activities (para logging)
+    match /activities/{activityId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if false; // Logs son inmutables
+    }
+    
+    // Tool Results
+    match /tool_results/{resultId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+    
+    // Users
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId);
+    }
+    
+    // Goals
+    match /goals/{goalId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Sessions
+    match /sessions/{sessionId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Reflections
+    match /reflections/{reflectionId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // GROW Sessions
+    match /grow_sessions/{sessionId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Tool assignments
+    match /tool_assignments/{assignmentId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Wheel of Life
+    match /wheel_of_life/{assessmentId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // DISC Results
+    match /disc_results/{resultId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Coaches
+    match /coaches/{coachId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Coachees
+    match /coachees/{coacheeId} {
+      allow read, write: if isAuthenticated();
+    }
+  }
+}
