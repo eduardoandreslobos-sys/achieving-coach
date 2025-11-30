@@ -4,47 +4,46 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import NotificationBell from '@/components/NotificationBell';
 import DashboardSidebar from '@/components/DashboardSidebar';
+import CoachSidebar from '@/components/CoachSidebar';
 import { NotificationProvider } from '@/contexts/NotificationContext';
-import { usePathname } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
+
+function DashboardContent({ children }: { children: React.ReactNode }) {
+  const { userProfile } = useAuth();
+
+  // Show appropriate sidebar based on user role
+  const isCoach = userProfile?.role === 'coach';
+
+  return (
+    <div className="flex h-screen bg-gray-50">
+      {/* Show correct sidebar based on role */}
+      {isCoach ? <CoachSidebar /> : <DashboardSidebar />}
+      
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Floating notification bell */}
+        <div className="fixed top-6 right-6 z-50">
+          <NotificationBell />
+        </div>
+        
+        {/* Main content */}
+        <main className="flex-1 overflow-y-auto">
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+}
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
-  
-  // Don't show DashboardSidebar for coach routes
-  const isCoachRoute = pathname?.startsWith('/coach');
-
   return (
     <AuthProvider>
       <NotificationProvider>
         <ProtectedRoute>
-          {isCoachRoute ? (
-            // Coach routes - no sidebar here (handled by /coach/layout.tsx)
-            <div className="relative">
-              <div className="fixed top-6 right-6 z-50">
-                <NotificationBell />
-              </div>
-              {children}
-            </div>
-          ) : (
-            // Coachee routes - show DashboardSidebar
-            <div className="flex h-screen bg-gray-50">
-              <DashboardSidebar />
-              
-              <div className="flex-1 flex flex-col overflow-hidden">
-                <div className="fixed top-6 right-6 z-50">
-                  <NotificationBell />
-                </div>
-                
-                <main className="flex-1 overflow-y-auto">
-                  {children}
-                </main>
-              </div>
-            </div>
-          )}
+          <DashboardContent>{children}</DashboardContent>
         </ProtectedRoute>
       </NotificationProvider>
     </AuthProvider>
