@@ -1,31 +1,36 @@
 {
   "indexes": [
     {
-      "collectionGroup": "sessions",
+      "collectionGroup": "tool_assignments",
       "queryScope": "COLLECTION",
       "fields": [
-        {
-          "fieldPath": "coacheeId",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "scheduledDate",
-          "order": "ASCENDING"
-        }
+        { "fieldPath": "coacheeId", "order": "ASCENDING" },
+        { "fieldPath": "toolId", "order": "ASCENDING" }
       ]
     },
     {
       "collectionGroup": "sessions",
       "queryScope": "COLLECTION",
       "fields": [
-        {
-          "fieldPath": "coachId",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "scheduledDate",
-          "order": "ASCENDING"
-        }
+        { "fieldPath": "coachId", "order": "ASCENDING" },
+        { "fieldPath": "scheduledDate", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "sessions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "coacheeId", "order": "ASCENDING" },
+        { "fieldPath": "scheduledDate", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "tool_results",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "userId", "order": "ASCENDING" },
+        { "fieldPath": "toolId", "order": "ASCENDING" },
+        { "fieldPath": "completedAt", "order": "DESCENDING" }
       ]
     }
   ],
