@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
-import { collection, addDoc, query, where, getDocs, serverTimestamp, orderBy, limit } from 'firebase/firestore';
+import { collection, addDoc, query, where, getDocs, serverTimestamp, orderBy, limit, updateDoc, doc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
-import { AlertCircle, CheckCircle, Lightbulb } from 'lucide-react';
+import { AlertCircle, CheckCircle, Lightbulb, CheckCircle2 } from 'lucide-react';
 
 interface Belief {
   limiting: string;
@@ -21,6 +21,8 @@ export default function LimitingBeliefsPage() {
   const [saving, setSaving] = useState(false);
   const [hasAccess, setHasAccess] = useState(false);
   const [lastResult, setLastResult] = useState<any>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [assignmentId, setAssignmentId] = useState<string | null>(null);
 
   useEffect(() => {
     const checkAccess = async () => {
@@ -46,6 +48,8 @@ export default function LimitingBeliefsPage() {
           return;
         }
 
+        // Guardar el ID del assignment para actualizarlo después
+        setAssignmentId(snapshot.docs[0].id);
         setHasAccess(true);
 
         const resultsQuery = query(
@@ -96,7 +100,18 @@ export default function LimitingBeliefsPage() {
 
     const validBeliefs = beliefs.filter(b => b.limiting.trim() && b.empowering.trim());
     if (validBeliefs.length === 0) {
-      alert('Please complete at least one belief transformation');
+      setShowSuccess(false);
+      // Mostrar error toast
+      const errorToast = document.createElement('div');
+      errorToast.className = 'fixed top-4 right-4 bg-red-50 border-2 border-red-500 text-red-900 px-6 py-4 rounded-lg shadow-lg z-50 flex items-center gap-3';
+      errorToast.innerHTML = `
+        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span class="font-medium">Please complete at least one belief transformation</span>
+      `;
+      document.body.appendChild(errorToast);
+      setTimeout(() => errorToast.remove(), 3000);
       return;
     }
 
@@ -106,6 +121,7 @@ export default function LimitingBeliefsPage() {
         ? userProfile.coacheeInfo?.coachId 
         : user.uid;
 
+      // Guardar los resultados
       await addDoc(collection(db, 'tool_results'), {
         userId: user.uid,
         toolId: 'limiting-beliefs',
@@ -118,10 +134,51 @@ export default function LimitingBeliefsPage() {
         completedAt: serverTimestamp(),
       });
 
-      alert('Results saved successfully!');
+      // Marcar el assignment como completado
+      if (assignmentId) {
+        const assignmentRef = doc(db, 'tool_assignments', assignmentId);
+        await updateDoc(assignmentRef, {
+          completed: true,
+          completedAt: serverTimestamp()
+        });
+      }
+
+      // Crear notificación para el coach
+      if (coachId && userProfile.role === 'coachee') {
+        await addDoc(collection(db, 'notifications'), {
+          userId: coachId,
+          type: 'tool_completed',
+          title: 'Tool Completed',
+          message: `${userProfile.name || user.email} has completed the Limiting Beliefs tool`,
+          data: {
+            coacheeId: user.uid,
+            coacheeName: userProfile.name || user.email,
+            toolId: 'limiting-beliefs',
+            toolName: 'Limiting Beliefs',
+            totalTransformed: validBeliefs.length
+          },
+          read: false,
+          createdAt: serverTimestamp()
+        });
+      }
+
+      // Mostrar toast de éxito
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+
     } catch (error) {
       console.error('Error saving results:', error);
-      alert('Error saving results. Please try again.');
+      // Mostrar error toast
+      const errorToast = document.createElement('div');
+      errorToast.className = 'fixed top-4 right-4 bg-red-50 border-2 border-red-500 text-red-900 px-6 py-4 rounded-lg shadow-lg z-50 flex items-center gap-3';
+      errorToast.innerHTML = `
+        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span class="font-medium">Error saving results. Please try again.</span>
+      `;
+      document.body.appendChild(errorToast);
+      setTimeout(() => errorToast.remove(), 3000);
     } finally {
       setSaving(false);
     }
@@ -157,6 +214,17 @@ export default function LimitingBeliefsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
+      {/* Toast de éxito */}
+      {showSuccess && (
+        <div className="fixed top-4 right-4 bg-green-50 border-2 border-green-500 text-green-900 px-6 py-4 rounded-lg shadow-lg z-50 flex items-center gap-3 animate-slide-in">
+          <CheckCircle2 className="text-green-500" size={24} />
+          <div>
+            <p className="font-bold">Success!</p>
+            <p className="text-sm">Your results have been saved and your coach has been notified.</p>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-5xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Limiting Beliefs Transformation</h1>
