@@ -3,9 +3,11 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
-import { collection, addDoc, query, where, getDocs, serverTimestamp, orderBy, limit } from 'firebase/firestore';
+import { collection, addDoc, query, where, getDocs, serverTimestamp, orderBy, limit, updateDoc, doc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
-import { Heart, Award, Users, TrendingUp, Lightbulb } from 'lucide-react';
+import { Heart, Award, Users, TrendingUp, Lightbulb, CheckCircle2 } from 'lucide-react';
+import { toast, Toaster } from 'sonner';
+import Link from 'next/link';
 
 const coreValues = [
   { id: 'achievement', name: 'Achievement', description: 'Accomplishing goals and excelling', icon: Award },
@@ -39,6 +41,7 @@ export default function ValuesClarificationPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [hasAccess, setHasAccess] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
   const [lastResult, setLastResult] = useState<any>(null);
 
   useEffect(() => {
@@ -55,11 +58,28 @@ export default function ValuesClarificationPage() {
         const q = query(
           collection(db, 'tool_assignments'),
           where('coacheeId', '==', user.uid),
-          where('toolId', '==', 'values-clarification')
+          where('toolId', '==', 'values-clarification'),
+          where('completed', '==', false)
         );
         const snapshot = await getDocs(q);
         
         if (snapshot.empty) {
+          // Check if already completed
+          const completedQuery = query(
+            collection(db, 'tool_assignments'),
+            where('coacheeId', '==', user.uid),
+            where('toolId', '==', 'values-clarification'),
+            where('completed', '==', true)
+          );
+          const completedSnapshot = await getDocs(completedQuery);
+          
+          if (!completedSnapshot.empty) {
+            setIsCompleted(true);
+            setHasAccess(true);
+            setLoading(false);
+            return;
+          }
+          
           setHasAccess(false);
           setLoading(false);
           return;
@@ -99,21 +119,23 @@ export default function ValuesClarificationPage() {
     }
   };
 
-  const handleContinue = () => {
-    if (selectedValues.length >= 5) {
-      setTopValues(selectedValues.slice(0, 5));
-      setStep('rank');
+  const proceedToRanking = () => {
+    if (selectedValues.length < 5) {
+      toast.error('Please select at least 5 values to continue');
+      return;
     }
+    setTopValues([...selectedValues]);
+    setStep('rank');
   };
 
   const moveValue = (index: number, direction: 'up' | 'down') => {
-    const newValues = [...topValues];
+    const newTopValues = [...topValues];
     if (direction === 'up' && index > 0) {
-      [newValues[index], newValues[index - 1]] = [newValues[index - 1], newValues[index]];
-    } else if (direction === 'down' && index < newValues.length - 1) {
-      [newValues[index], newValues[index + 1]] = [newValues[index + 1], newValues[index]];
+      [newTopValues[index - 1], newTopValues[index]] = [newTopValues[index], newTopValues[index - 1]];
+    } else if (direction === 'down' && index < topValues.length - 1) {
+      [newTopValues[index], newTopValues[index + 1]] = [newTopValues[index + 1], newTopValues[index]];
     }
-    setTopValues(newValues);
+    setTopValues(newTopValues);
   };
 
   const handleSave = async () => {
@@ -136,15 +158,50 @@ export default function ValuesClarificationPage() {
             name: coreValues.find(v => v.id === id)?.name,
             rank: index + 1,
           })),
-          allSelectedValues: selectedValues,
+          allSelected: selectedValues,
         },
         completedAt: serverTimestamp(),
       });
 
+      // Update tool_assignment to completed
+      if (userProfile.role === 'coachee') {
+        const assignmentQuery = query(
+          collection(db, 'tool_assignments'),
+          where('coacheeId', '==', user.uid),
+          where('toolId', '==', 'values-clarification'),
+          where('completed', '==', false)
+        );
+        const assignmentSnapshot = await getDocs(assignmentQuery);
+        
+        if (!assignmentSnapshot.empty) {
+          const assignmentDoc = assignmentSnapshot.docs[0];
+          await updateDoc(doc(db, 'tool_assignments', assignmentDoc.id), {
+            completed: true,
+            completedAt: serverTimestamp(),
+          });
+
+          // Create notification for coach
+          await addDoc(collection(db, 'notifications'), {
+            userId: coachId,
+            type: 'tool_completed',
+            title: 'Tool Completed',
+            message: `${userProfile.displayName || userProfile.email} completed Values Clarification`,
+            read: false,
+            createdAt: serverTimestamp(),
+            actionUrl: `/coach/clients/${user.uid}`,
+          });
+        }
+      }
+
+      toast.success('✅ Values Clarification completed successfully!', {
+        duration: 3000,
+      });
+      
+      setIsCompleted(true);
       setStep('complete');
     } catch (error) {
       console.error('Error saving results:', error);
-      alert('Error saving results. Please try again.');
+      toast.error('Error saving results. Please try again.');
     } finally {
       setSaving(false);
     }
@@ -160,126 +217,44 @@ export default function ValuesClarificationPage() {
 
   if (!hasAccess) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-8">
-        <div className="bg-white rounded-xl border-2 border-gray-200 p-8 max-w-md text-center">
-          <div className="text-6xl mb-4">🔒</div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Tool Not Assigned</h1>
-          <p className="text-gray-600 mb-6">
-            This tool hasn't been assigned to you yet. Please contact your coach to get access.
-          </p>
-          <button
-            onClick={() => router.push('/dashboard')}
-            className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
-          >
-            Back to Dashboard
-          </button>
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <p className="text-xl text-gray-600 mb-4">This tool has not been assigned to you yet.</p>
+          <Link href="/dashboard" className="text-primary-600 hover:text-primary-700">
+            Return to Dashboard
+          </Link>
         </div>
       </div>
     );
   }
 
-  if (step === 'complete') {
+  if (isCompleted) {
     return (
-      <div className="min-h-screen bg-gray-50 p-8">
-        <div className="max-w-3xl mx-auto">
-          <div className="bg-white rounded-xl border-2 border-gray-200 p-8 text-center">
-            <div className="text-6xl mb-4">✨</div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">Values Identified!</h1>
-            <p className="text-gray-600 mb-8">Here are your top 5 core values in order of importance:</p>
-            
-            <div className="space-y-3 mb-8">
-              {topValues.map((id, index) => {
-                const value = coreValues.find(v => v.id === id);
-                const Icon = value?.icon || Heart;
-                return (
-                  <div key={id} className="flex items-center gap-4 p-4 bg-primary-50 rounded-lg">
-                    <div className="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                      {index + 1}
-                    </div>
-                    <Icon className="text-primary-600" size={24} />
-                    <div className="text-left">
-                      <p className="font-bold text-gray-900">{value?.name}</p>
-                      <p className="text-sm text-gray-600">{value?.description}</p>
-                    </div>
-                  </div>
-                );
-              })}
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+        <Toaster position="top-center" richColors />
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle2 className="w-8 h-8 text-green-600" />
             </div>
-
-            <button
-              onClick={() => router.push('/dashboard')}
-              className="px-8 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700"
-            >
-              Back to Dashboard
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (step === 'rank') {
-    return (
-      <div className="min-h-screen bg-gray-50 p-8">
-        <div className="max-w-3xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Rank Your Top 5 Values</h1>
-            <p className="text-gray-600">
-              Arrange these values in order of importance (1 = most important)
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Tool Completed!</h2>
+            <p className="text-gray-600 mb-6">
+              You've successfully completed the Values Clarification exercise. Your coach has been notified and can review your results.
             </p>
-          </div>
-
-          <div className="space-y-3 mb-8">
-            {topValues.map((id, index) => {
-              const value = coreValues.find(v => v.id === id);
-              const Icon = value?.icon || Heart;
-              return (
-                <div key={id} className="bg-white rounded-xl border-2 border-gray-200 p-4 flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center text-primary-600 font-bold">
-                      {index + 1}
-                    </div>
-                    <Icon className="text-primary-600" size={24} />
-                    <div>
-                      <p className="font-bold text-gray-900">{value?.name}</p>
-                      <p className="text-sm text-gray-600">{value?.description}</p>
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => moveValue(index, 'up')}
-                      disabled={index === 0}
-                      className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 disabled:opacity-30"
-                    >
-                      ↑
-                    </button>
-                    <button
-                      onClick={() => moveValue(index, 'down')}
-                      disabled={index === topValues.length - 1}
-                      className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 disabled:opacity-30"
-                    >
-                      ↓
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="flex gap-4">
-            <button
-              onClick={() => setStep('select')}
-              className="px-8 py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50"
-            >
-              Back
-            </button>
-            <button
-              onClick={handleSave}
-              disabled={saving}
-              className="flex-1 px-8 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 disabled:opacity-50"
-            >
-              {saving ? 'Saving...' : 'Save My Values'}
-            </button>
+            <div className="flex gap-4 justify-center">
+              <Link
+                href="/dashboard"
+                className="px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
+              >
+                Return to Dashboard
+              </Link>
+              <Link
+                href="/tools"
+                className="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+              >
+                Explore More Tools
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -287,54 +262,126 @@ export default function ValuesClarificationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-5xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Values Clarification</h1>
-          <p className="text-gray-600">
-            Select 5-10 values that resonate most with you ({selectedValues.length} selected)
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+      <Toaster position="top-center" richColors />
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Values Clarification</h1>
+          <p className="text-xl text-gray-600">
+            Discover and prioritize your core values to guide your decisions and actions
           </p>
         </div>
 
-        {lastResult && (
-          <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 mb-6">
-            <p className="text-sm text-blue-900">
-              📊 Last completed: {lastResult.completedAt?.toDate?.()?.toLocaleDateString() || 'Recently'}
-            </p>
+        {step === 'select' && (
+          <div className="space-y-8">
+            <div className="bg-white rounded-2xl shadow-lg p-8">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Step 1: Select Your Values</h2>
+                <p className="text-gray-600">
+                  Choose up to 10 values that resonate most with you. Selected: {selectedValues.length}/10
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                {coreValues.map((value) => {
+                  const Icon = value.icon;
+                  const isSelected = selectedValues.includes(value.id);
+                  return (
+                    <button
+                      key={value.id}
+                      onClick={() => toggleValue(value.id)}
+                      className={`p-4 rounded-xl border-2 transition-all text-left ${
+                        isSelected
+                          ? 'border-primary-600 bg-primary-50'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <Icon className={`w-6 h-6 ${isSelected ? 'text-primary-600' : 'text-gray-400'}`} />
+                        <div>
+                          <h3 className="font-semibold text-gray-900">{value.name}</h3>
+                          <p className="text-sm text-gray-600">{value.description}</p>
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                onClick={proceedToRanking}
+                disabled={selectedValues.length < 5}
+                className="w-full py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+              >
+                Continue to Ranking
+              </button>
+            </div>
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-          {coreValues.map(value => {
-            const Icon = value.icon;
-            const isSelected = selectedValues.includes(value.id);
-            return (
-              <button
-                key={value.id}
-                onClick={() => toggleValue(value.id)}
-                className={`p-4 rounded-xl border-2 text-left transition-all ${
-                  isSelected
-                    ? 'border-primary-500 bg-primary-50'
-                    : 'border-gray-200 bg-white hover:border-gray-300'
-                }`}
-              >
-                <Icon className={isSelected ? 'text-primary-600' : 'text-gray-400'} size={24} />
-                <h3 className="font-bold text-gray-900 mt-2">{value.name}</h3>
-                <p className="text-sm text-gray-600">{value.description}</p>
-              </button>
-            );
-          })}
-        </div>
+        {step === 'rank' && (
+          <div className="space-y-8">
+            <div className="bg-white rounded-2xl shadow-lg p-8">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Step 2: Rank Your Values</h2>
+                <p className="text-gray-600">
+                  Arrange your selected values in order of importance (most important at the top)
+                </p>
+              </div>
 
-        <div className="flex justify-end">
-          <button
-            onClick={handleContinue}
-            disabled={selectedValues.length < 5}
-            className="px-8 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Continue to Ranking →
-          </button>
-        </div>
+              <div className="space-y-3 mb-6">
+                {topValues.map((valueId, index) => {
+                  const value = coreValues.find(v => v.id === valueId);
+                  if (!value) return null;
+                  const Icon = value.icon;
+                  
+                  return (
+                    <div key={valueId} className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+                      <span className="text-2xl font-bold text-primary-600 w-8">{index + 1}</span>
+                      <Icon className="w-6 h-6 text-gray-400" />
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900">{value.name}</h3>
+                        <p className="text-sm text-gray-600">{value.description}</p>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <button
+                          onClick={() => moveValue(index, 'up')}
+                          disabled={index === 0}
+                          className="p-1 hover:bg-gray-200 rounded disabled:opacity-30"
+                        >
+                          ▲
+                        </button>
+                        <button
+                          onClick={() => moveValue(index, 'down')}
+                          disabled={index === topValues.length - 1}
+                          className="p-1 hover:bg-gray-200 rounded disabled:opacity-30"
+                        >
+                          ▼
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="flex gap-4">
+                <button
+                  onClick={() => setStep('select')}
+                  className="flex-1 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+                >
+                  Back
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={saving}
+                  className="flex-1 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors disabled:bg-gray-300"
+                >
+                  {saving ? 'Saving...' : 'Save Results'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
