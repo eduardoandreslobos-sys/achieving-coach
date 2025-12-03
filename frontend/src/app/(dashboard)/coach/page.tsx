@@ -6,6 +6,8 @@ import { db } from '@/lib/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import Link from 'next/link';
 import { Users, Calendar, TrendingUp, Target, Download, BarChart3 } from 'lucide-react';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 interface AnalyticsData {
   totalCoachees: number;
@@ -152,6 +154,82 @@ export default function CoachAnalyticsDashboard() {
     loadAnalytics();
   }, [userProfile, timeRange]);
 
+  const exportToPDF = () => {
+    if (!analytics || !userProfile) return;
+
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    
+    // Header
+    doc.setFontSize(20);
+    doc.setTextColor(59, 130, 246);
+    doc.text('AchievingCoach', 14, 20);
+    
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Analytics Report', 14, 30);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.text(`Generated: ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}`, 14, 37);
+    doc.text(`Coach: ${userProfile.displayName || userProfile.email}`, 14, 42);
+    doc.text(`Period: Last ${timeRange} Days`, 14, 47);
+    
+    // Summary Stats
+    doc.setFontSize(14);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Summary Statistics', 14, 57);
+    
+    autoTable(doc, {
+      startY: 62,
+      head: [['Metric', 'Value', 'Change']],
+      body: [
+        ['Total Active Coachees', analytics.activeCoachees.toString(), `+${analytics.coacheesChange}%`],
+        ['Sessions This Month', analytics.sessionsThisMonth.toString(), `${analytics.sessionsChange >= 0 ? '+' : ''}${analytics.sessionsChange}%`],
+        ['Goal Completion Rate', `${analytics.goalCompletionRate}%`, `${analytics.goalCompletionChange}%`],
+        ['Avg. Engagement Score', `${analytics.avgEngagement}/100`, `+${analytics.engagementChange}`],
+      ],
+      theme: 'grid',
+      headStyles: { fillColor: [59, 130, 246] },
+      margin: { left: 14 },
+    });
+    
+    // Coachee Engagement
+    const finalY = (doc as any).lastAutoTable.finalY || 100;
+    doc.setFontSize(14);
+    doc.text('Coachee Engagement', 14, finalY + 10);
+    
+    autoTable(doc, {
+      startY: finalY + 15,
+      head: [['Coachee Name', 'Engagement Rate']],
+      body: analytics.coacheeEngagement.map(c => [c.name, `${c.rate}%`]),
+      theme: 'striped',
+      headStyles: { fillColor: [59, 130, 246] },
+      margin: { left: 14 },
+    });
+    
+    // Session Volume
+    const finalY2 = (doc as any).lastAutoTable.finalY || 150;
+    doc.setFontSize(14);
+    doc.text('Session Volume Trends', 14, finalY2 + 10);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.text(`Total Sessions: ${analytics.sessionVolume.reduce((a, b) => a + b, 0)}`, 14, finalY2 + 17);
+    doc.text(`Change: ${analytics.sessionsChange >= 0 ? '+' : ''}${analytics.sessionsChange}%`, 14, finalY2 + 22);
+    
+    // Footer
+    const pageHeight = doc.internal.pageSize.getHeight();
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text('AchievingCoach - Professional Coaching Platform', pageWidth / 2, pageHeight - 10, { align: 'center' });
+    doc.text('https://achievingcoach.com', pageWidth / 2, pageHeight - 6, { align: 'center' });
+    
+    // Save
+    const fileName = `analytics-report-${new Date().toISOString().split('T')[0]}.pdf`;
+    doc.save(fileName);
+  };
+
   if (loading || !analytics) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -205,7 +283,10 @@ export default function CoachAnalyticsDashboard() {
               </button>
             </div>
             
-            <button className="flex min-w-[84px] items-center justify-center gap-2 rounded-lg h-10 px-4 bg-white border border-gray-300 text-sm font-bold hover:bg-gray-50">
+            <button 
+              onClick={exportToPDF}
+              className="flex min-w-[84px] items-center justify-center gap-2 rounded-lg h-10 px-4 bg-primary-600 text-white text-sm font-bold hover:bg-primary-700 transition-colors"
+            >
               <Download className="w-4 h-4" />
               <span>Export</span>
             </button>
