@@ -138,7 +138,7 @@ export default function ClientAnalyticsPage() {
         where('userId', '==', clientId)
       );
       const goalsSnapshot = await getDocs(goalsQuery);
-      const goals = goalsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const goals = goalsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
       const completedGoals = goals.filter(g => g.status === 'completed').length;
 
       // Load Sessions
@@ -147,7 +147,7 @@ export default function ClientAnalyticsPage() {
         where('coacheeId', '==', clientId)
       );
       const sessionsSnapshot = await getDocs(sessionsQuery);
-      const sessions = sessionsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const sessions = sessionsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
       const completedSessions = sessions.filter(s => s.status === 'completed').length;
       const upcomingSessions = sessions.filter(s => s.status === 'scheduled').length;
 
@@ -157,7 +157,7 @@ export default function ClientAnalyticsPage() {
         where('coacheeId', '==', clientId)
       );
       const toolsSnapshot = await getDocs(toolsQuery);
-      const tools = toolsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const tools = toolsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
       const completedTools = tools.filter(t => t.completed === true).length;
 
       // Load Reflections
@@ -173,7 +173,7 @@ export default function ClientAnalyticsPage() {
         where('userId', '==', clientId)
       );
       const messagesSnapshot = await getDocs(messagesQuery);
-      const messages = messagesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const messages = messagesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
 
       // Calculate average response time (simplified)
       let avgResponseTime = 'N/A';
@@ -521,11 +521,11 @@ export default function ClientAnalyticsPage() {
         )}
 
         {/* Goals Section - PRESERVED FROM ORIGINAL */}
-        {client.coacheeInfo?.goals && client.coacheeInfo.goals.length > 0 && (
+        {(client as any).coacheeInfo?.goals && (client as any).coacheeInfo.goals.length > 0 && (
           <div className="bg-white rounded-xl border-2 border-gray-200 p-6 mt-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Client Goals</h2>
             <ul className="space-y-2">
-              {client.coacheeInfo.goals.map((goal: string, idx: number) => (
+              {(client as any).coacheeInfo.goals.map((goal: string, idx: number) => (
                 <li key={idx} className="flex items-start gap-2">
                   <Target className="text-green-600 flex-shrink-0 mt-1" size={18} />
                   <span className="text-gray-700">{goal}</span>
