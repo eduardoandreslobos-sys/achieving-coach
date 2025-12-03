@@ -5,6 +5,7 @@ import { db } from '@/lib/firebase';
 import { collection, addDoc, query, where, getDocs, serverTimestamp, updateDoc, doc } from 'firebase/firestore';
 import { Target, TrendingUp, Briefcase, DollarSign, Heart, Users, Smile, Home, Sprout, Sparkles, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
+import { toast, Toaster } from 'sonner';
 
 const lifeAreas = [
   { id: 'career', name: 'Career', icon: Briefcase, color: 'text-blue-600' },
@@ -23,66 +24,39 @@ export default function WheelOfLifePage() {
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
   const [hasAccess, setHasAccess] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
     const checkAccess = async () => {
       if (!user || !userProfile) return;
 
-      // Coaches siempre tienen acceso
       if (userProfile.role === 'coach') {
         setHasAccess(true);
         setLoading(false);
         return;
       }
 
-      // Coachees deben tener la herramienta asignada
-      try {
-        const q = query(
+      if (userProfile.role === 'coachee') {
+        const assignmentQuery = query(
           collection(db, 'tool_assignments'),
           where('coacheeId', '==', user.uid),
           where('toolId', '==', 'wheel-of-life')
         );
         
-        const snapshot = await getDocs(q);
+        const assignmentSnapshot = await getDocs(assignmentQuery);
         
-        if (snapshot.empty) {
-          setHasAccess(false);
-          setLoading(false);
-          return;
+        if (!assignmentSnapshot.empty) {
+          const assignment = assignmentSnapshot.docs[0].data();
+          setHasAccess(true);
+          setIsCompleted(assignment.completed || false);
         }
-
-        setHasAccess(true);
-
-        // Cargar último resultado si existe
-        const resultsQuery = query(
-          collection(db, 'tool_results'),
-          where('userId', '==', user.uid),
-          where('toolId', '==', 'wheel-of-life')
-        );
-        
-        const resultsSnapshot = await getDocs(resultsQuery);
-        
-        if (!resultsSnapshot.empty) {
-          const latestResult = resultsSnapshot.docs[0].data();
-          if (latestResult.results?.scores) {
-            setScores(latestResult.results.scores);
-          }
-        }
-      } catch (error) {
-        console.error('Error checking access:', error);
-        setHasAccess(false);
-      } finally {
-        setLoading(false);
       }
+      
+      setLoading(false);
     };
 
     checkAccess();
   }, [user, userProfile]);
-
-  const handleScoreChange = (areaId: string, value: number) => {
-    setScores(prev => ({ ...prev, [areaId]: value }));
-  };
 
   const handleSave = async () => {
     if (!user || !userProfile) return;
@@ -90,11 +64,12 @@ export default function WheelOfLifePage() {
     const allScored = lifeAreas.every(area => scores[area.id] !== undefined);
     
     if (!allScored) {
-      alert('Please rate all areas before saving');
+      toast.error('Please rate all areas before saving');
       return;
     }
 
     setSaving(true);
+
     try {
       const coachId = userProfile.role === 'coachee' 
         ? userProfile.coacheeInfo?.coachId 
@@ -147,14 +122,16 @@ export default function WheelOfLifePage() {
         }
       }
 
-      // Mostrar success
-      setShowSuccess(true);
-      setTimeout(() => {
-        setShowSuccess(false);
-      }, 3000);
+      toast.success('✅ Wheel of Life completed successfully!', {
+        description: 'Your coach has been notified.',
+        duration: 4000,
+      });
+      
+      setIsCompleted(true);
+      
     } catch (error) {
       console.error('Error saving results:', error);
-      alert('Error saving results. Please try again.');
+      toast.error('Error saving results. Please try again.');
     } finally {
       setSaving(false);
     }
@@ -162,34 +139,64 @@ export default function WheelOfLifePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
-        </div>
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex items-center justify-center">
+        <div className="text-gray-600">Loading...</div>
       </div>
     );
   }
 
   if (!hasAccess) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center">
-          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
+            <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Target className="w-8 h-8 text-yellow-600" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Access Required</h2>
+            <p className="text-gray-600 mb-6">
+              This tool needs to be assigned by your coach before you can access it.
+            </p>
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            >
+              Return to Dashboard
+            </Link>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Tool Not Assigned</h2>
-          <p className="text-gray-600 mb-6">
-            This tool hasn't been assigned to you yet. Please contact your coach to get access.
-          </p>
-          <Link
-            href="/dashboard"
-            className="inline-block px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-          >
-            Back to Dashboard
-          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (isCompleted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+        <Toaster position="top-center" richColors />
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle2 className="w-8 h-8 text-green-600" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Tool Completed!</h2>
+            <p className="text-gray-600 mb-6">
+              You've successfully completed the Wheel of Life assessment. Your coach has been notified and can review your results.
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+              >
+                Return to Dashboard
+              </Link>
+              <Link
+                href="/tools"
+                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                View Other Tools
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -200,54 +207,69 @@ export default function WheelOfLifePage() {
     : 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      {/* Success Toast */}
-      {showSuccess && (
-        <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 animate-slide-in">
-          <CheckCircle2 className="w-6 h-6" />
-          <div>
-            <p className="font-semibold">Success!</p>
-            <p className="text-sm">Your results have been saved</p>
-          </div>
-        </div>
-      )}
-
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+      <Toaster position="top-center" richColors />
+      <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Wheel of Life</h1>
-          <p className="text-gray-600">
-            Rate your satisfaction in each life area (0 = not satisfied, 10 = completely satisfied)
+          <Link 
+            href="/tools"
+            className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium mb-4"
+          >
+            ← Back to Tools
+          </Link>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+              <Target className="w-6 h-6 text-primary-600" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Wheel of Life</h1>
+              <p className="text-gray-600">Assess your life balance across key areas</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Instructions */}
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8">
+          <h2 className="text-lg font-semibold text-blue-900 mb-2">How to use this tool</h2>
+          <p className="text-blue-800">
+            Rate each area of your life on a scale from 0-10, where 0 is completely unsatisfied and 10 is completely satisfied.
+            Be honest with yourself - this assessment is about understanding where you are now, not where you think you should be.
           </p>
         </div>
 
         {/* Life Areas */}
-        <div className="space-y-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           {lifeAreas.map((area) => {
             const Icon = area.icon;
-            const score = scores[area.id] ?? 0;
-
             return (
-              <div key={area.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <div key={area.id} className="bg-white rounded-xl border-2 border-gray-200 p-6 hover:border-primary-300 transition-colors">
                 <div className="flex items-center gap-3 mb-4">
-                  <Icon className={`${area.color} w-6 h-6`} />
-                  <h3 className="text-lg font-bold text-gray-900">{area.name}</h3>
-                  <span className="ml-auto text-3xl font-bold text-primary-600">{score}</span>
+                  <div className={`w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center ${area.color}`}>
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900">{area.name}</h3>
                 </div>
-
-                <input
-                  type="range"
-                  min="0"
-                  max="10"
-                  value={score}
-                  onChange={(e) => handleScoreChange(area.id, parseInt(e.target.value))}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
-                />
-
-                <div className="flex justify-between text-xs text-gray-500 mt-2">
-                  <span>0</span>
-                  <span>5</span>
-                  <span>10</span>
+                
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>Unsatisfied</span>
+                    <span>Satisfied</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="10"
+                    value={scores[area.id] || 0}
+                    onChange={(e) => setScores({ ...scores, [area.id]: parseInt(e.target.value) })}
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
+                  />
+                  <div className="text-center">
+                    <span className="text-2xl font-bold text-primary-600">
+                      {scores[area.id] !== undefined ? scores[area.id] : '-'}
+                    </span>
+                    <span className="text-gray-500">/10</span>
+                  </div>
                 </div>
               </div>
             );
@@ -256,13 +278,16 @@ export default function WheelOfLifePage() {
 
         {/* Average Score */}
         {Object.keys(scores).length > 0 && (
-          <div className="bg-primary-50 rounded-xl p-6 mb-6">
+          <div className="bg-primary-50 border-2 border-primary-200 rounded-xl p-6 mb-8">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-1">Average Score</h3>
-                <p className="text-sm text-gray-600">Overall life satisfaction</p>
+                <p className="text-gray-600">Overall life satisfaction</p>
               </div>
-              <div className="text-4xl font-bold text-primary-600">{averageScore.toFixed(1)}</div>
+              <div className="text-right">
+                <div className="text-4xl font-bold text-primary-600">{averageScore.toFixed(1)}</div>
+                <div className="text-sm text-gray-500">out of 10</div>
+              </div>
             </div>
           </div>
         )}
