@@ -14,7 +14,7 @@ export const COACHING_TOOLS: Tool[] = [
     id: 'wheel-of-life',
     name: 'Wheel of Life',
     description: 'Assess balance across 8 key life areas',
-    category: 'Assessment',
+    category: 'Self-Awareness',
     icon: Target,
     color: 'bg-blue-600',
   },
@@ -22,7 +22,7 @@ export const COACHING_TOOLS: Tool[] = [
     id: 'values-clarification',
     name: 'Values Clarification',
     description: 'Identify and prioritize core values',
-    category: 'Self-Discovery',
+    category: 'Self-Awareness',
     icon: Brain,
     color: 'bg-purple-600',
   },
@@ -30,7 +30,7 @@ export const COACHING_TOOLS: Tool[] = [
     id: 'limiting-beliefs',
     name: 'Limiting Beliefs',
     description: 'Identify and challenge limiting beliefs',
-    category: 'Mindset',
+    category: 'Self-Awareness',
     icon: TrendingUp,
     color: 'bg-orange-600',
   },
@@ -38,7 +38,7 @@ export const COACHING_TOOLS: Tool[] = [
     id: 'habit-loop',
     name: 'Habit Loop',
     description: 'Build positive habits using cue-routine-reward',
-    category: 'Behavior Change',
+    category: 'Productivity',
     icon: Smile,
     color: 'bg-green-600',
   },
@@ -46,7 +46,7 @@ export const COACHING_TOOLS: Tool[] = [
     id: 'career-compass',
     name: 'Career Compass',
     description: 'Navigate career direction and goals',
-    category: 'Career',
+    category: 'Goal Setting',
     icon: Compass,
     color: 'bg-indigo-600',
   },
@@ -54,7 +54,7 @@ export const COACHING_TOOLS: Tool[] = [
     id: 'resilience-scale',
     name: 'Resilience Scale',
     description: 'Measure and build resilience',
-    category: 'Wellbeing',
+    category: 'Self-Awareness',
     icon: Shield,
     color: 'bg-pink-600',
   },
@@ -62,7 +62,7 @@ export const COACHING_TOOLS: Tool[] = [
     id: 'stakeholder-map',
     name: 'Stakeholder Map',
     description: 'Identify and analyze key stakeholders',
-    category: 'Relationships',
+    category: 'Communication',
     icon: Users,
     color: 'bg-teal-600',
   },
@@ -92,14 +92,11 @@ export const COACHING_TOOLS: Tool[] = [
   },
 ];
 
-// Helper function to get tool by id
 export function getToolById(id: string): Tool | undefined {
   return COACHING_TOOLS.find(tool => tool.id === id);
 }
 
-// Helper function to get formatted tool name for display
 export function getToolDisplayName(id: string): string {
   const tool = getToolById(id);
   return tool ? `${tool.name} - ${tool.category}` : id;
 }
-
