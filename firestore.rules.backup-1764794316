@@ -1,73 +1,77 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Helper functions
     function isAuthenticated() {
       return request.auth != null;
     }
     
     function isOwner(userId) {
-      return isAuthenticated() && request.auth.uid == userId;
+      return request.auth.uid == userId;
     }
     
-    // Users collection
+    // Users
     match /users/{userId} {
-      // Allow public read for coaches (for invitation links)
-      allow read: if resource.data.role == 'coach';
-      // Allow authenticated users to read
       allow read: if isAuthenticated();
       allow update: if isOwner(userId);
       allow create: if request.auth != null && request.auth.uid == userId;
     }
     
-    // Sessions
+    // Coaching Programs
+    match /coaching_programs/{programId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Sessions - allow all authenticated reads
     match /sessions/{sessionId} {
       allow read: if isAuthenticated();
       allow write: if isAuthenticated();
     }
     
-    // Goals
+    // Goals - allow all authenticated reads
     match /goals/{goalId} {
       allow read: if isAuthenticated();
       allow write: if isAuthenticated();
     }
     
-    // Reflections
+    // Reflections - allow all authenticated reads  
     match /reflections/{reflectionId} {
       allow read: if isAuthenticated();
       allow write: if isAuthenticated();
     }
     
-    // Messages
-    match /messages/{messageId} {
-      allow read: if isAuthenticated();
-      allow write: if isAuthenticated();
-    }
-    
-    // Tool assignments
-    match /tool_assignments/{assignmentId} {
-      allow read: if isAuthenticated();
-      allow write: if isAuthenticated();
-    }
-    
-    // Tool results
+    // Tool Results
     match /tool_results/{resultId} {
       allow read: if isAuthenticated();
-      allow write: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
     }
     
     // Notifications
     match /notifications/{notificationId} {
       allow read: if isAuthenticated();
-      allow write: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAuthenticated();
+    }
+    
+    // Tool Assignments - allow all authenticated reads
+    match /tool_assignments/{assignmentId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
     }
     
     // ICF Questions
     match /icf_questions/{questionId} {
       allow read: if isAuthenticated();
       allow write: if false;
+    }
+    
+    // Messages - allow all authenticated reads
+    match /messages/{messageId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
     }
   }
 }

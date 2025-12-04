@@ -1,0 +1,102 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    // Users
+    match /users/{userId} {
+      allow read: if isAuthenticated() || resource.data.role == 'coach';
+      allow update: if isOwner(userId);
+      allow create: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Coaching Programs
+    match /coaching_programs/{programId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Sessions
+    match /sessions/{sessionId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Goals
+    match /goals/{goalId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Reflections
+    match /reflections/{reflectionId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Tool Results
+    match /tool_results/{resultId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // GROW Sessions
+    match /grow_sessions/{sessionId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Tool Assignments
+    match /tool_assignments/{assignmentId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Wheel of Life
+    match /wheel_of_life/{assessmentId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // DISC Results
+    match /disc_results/{resultId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Activities
+    match /activities/{activityId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+    }
+    
+    // Notifications
+    match /notifications/{notificationId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+  }
+}
+
+// Notifications
+match /notifications/{notificationId} {
+  allow read: if isAuthenticated() && 
+                 resource.data.userId == request.auth.uid;
+  allow create: if isAuthenticated();
+  allow update: if isAuthenticated() && 
+                   resource.data.userId == request.auth.uid &&
+                   request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read']);
+  allow delete: if isAuthenticated() && 
+                   resource.data.userId == request.auth.uid;
+}
+
+// Tool Assignments
+match /tool_assignments/{assignmentId} {
+  allow read: if isAuthenticated() && 
+                 (resource.data.coachId == request.auth.uid || 
+                  resource.data.coacheeId == request.auth.uid);
+  allow create: if isAuthenticated() && 
+                   request.resource.data.coachId == request.auth.uid;
+  allow update: if isAuthenticated() && 
+                   (resource.data.coachId == request.auth.uid || 
+                    resource.data.coacheeId == request.auth.uid);
+}
