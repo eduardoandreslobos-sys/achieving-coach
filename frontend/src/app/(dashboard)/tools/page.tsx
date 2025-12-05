@@ -94,7 +94,7 @@ export default function CoacheeToolsPage() {
         </div>
 
         {assignments.length === 0 ? (
-          <div className="bg-white rounded-xl border-2 border-gray-200 p-12 text-center">
+          <div className="bg-white rounded-2xl p-12 text-center shadow-sm">
             <Wrench className="w-16 h-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-bold text-gray-900 mb-2">No tools assigned yet</h3>
             <p className="text-gray-600">
@@ -102,13 +102,11 @@ export default function CoacheeToolsPage() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {assignments.map((assignment, index) => {
-              // Find the tool details from COACHING_TOOLS
               const toolDetails = COACHING_TOOLS.find(t => t.id === assignment.toolId);
               if (!toolDetails) return null;
 
-              // Use category from assignment (new data) or fallback to COACHING_TOOLS (old data)
               const category = assignment.category || toolDetails.category;
               const gradientClass = TOOL_GRADIENTS[index % TOOL_GRADIENTS.length];
               const Icon = toolDetails.icon;
@@ -117,7 +115,7 @@ export default function CoacheeToolsPage() {
                 <Link
                   key={assignment.id}
                   href={`/tools/${assignment.toolId}`}
-                  className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group"
+                  className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden group"
                 >
                   {/* Gradient Header */}
                   <div className={`h-32 ${gradientClass} relative flex items-center justify-center`}>
@@ -126,12 +124,12 @@ export default function CoacheeToolsPage() {
                     
                     {/* Status Badge */}
                     {assignment.completed ? (
-                      <div className="absolute top-3 right-3 flex items-center gap-1 bg-green-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg">
+                      <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-green-600 text-white text-xs font-medium px-3 py-1.5 rounded-full shadow-sm">
                         <CheckCircle2 size={14} />
                         <span>Completed</span>
                       </div>
                     ) : (
-                      <div className="absolute top-3 right-3 flex items-center gap-1 bg-orange-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg">
+                      <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-orange-600 text-white text-xs font-medium px-3 py-1.5 rounded-full shadow-sm">
                         <Clock size={14} />
                         <span>Pending</span>
                       </div>
@@ -139,9 +137,9 @@ export default function CoacheeToolsPage() {
                   </div>
 
                   {/* Content */}
-                  <div className="p-5">
-                    <div className="mb-3">
-                      <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors">
+                  <div className="p-6">
+                    <div className="mb-4">
+                      <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
                         {toolDetails.name}
                       </h3>
                       <p className="text-sm text-gray-600 line-clamp-2">
@@ -150,7 +148,7 @@ export default function CoacheeToolsPage() {
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <span className={`text-xs font-semibold px-3 py-1 rounded-full ${getCategoryBadge(category)}`}>
+                      <span className={`text-xs font-medium px-3 py-1 rounded-full ${getCategoryBadge(category)}`}>
                         {category}
                       </span>
                       <span className="text-primary-600 text-sm font-medium">
