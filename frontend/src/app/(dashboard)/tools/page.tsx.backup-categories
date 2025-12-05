@@ -12,26 +12,9 @@ interface ToolAssignment {
   id: string;
   toolId: string;
   toolName: string;
-  category?: string;
   assignedAt: any;
   completed: boolean;
 }
-
-const CATEGORY_COLORS: Record<string, string> = {
-  'Goal Setting': 'bg-purple-100 text-purple-700',
-  'Self-Awareness': 'bg-green-100 text-green-700',
-  'Communication': 'bg-blue-100 text-blue-700',
-  'Productivity': 'bg-orange-100 text-orange-700',
-};
-
-const TOOL_GRADIENTS = [
-  'bg-gradient-to-br from-amber-200 to-amber-400',
-  'bg-gradient-to-br from-emerald-200 to-emerald-400',
-  'bg-gradient-to-br from-cyan-200 to-cyan-400',
-  'bg-gradient-to-br from-rose-200 to-rose-400',
-  'bg-gradient-to-br from-violet-200 to-violet-400',
-  'bg-gradient-to-br from-teal-200 to-teal-400',
-];
 
 export default function CoacheeToolsPage() {
   const { userProfile } = useAuth();
@@ -67,10 +50,6 @@ export default function CoacheeToolsPage() {
     }
   };
 
-  const getCategoryBadge = (category: string) => {
-    return CATEGORY_COLORS[category] || 'bg-gray-100 text-gray-700';
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 p-8">
@@ -103,60 +82,50 @@ export default function CoacheeToolsPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {assignments.map((assignment, index) => {
+            {assignments.map((assignment) => {
               // Find the tool details from COACHING_TOOLS
               const toolDetails = COACHING_TOOLS.find(t => t.id === assignment.toolId);
               if (!toolDetails) return null;
 
-              // Use category from assignment (new data) or fallback to COACHING_TOOLS (old data)
-              const category = assignment.category || toolDetails.category;
-              const gradientClass = TOOL_GRADIENTS[index % TOOL_GRADIENTS.length];
               const Icon = toolDetails.icon;
               
               return (
                 <Link
                   key={assignment.id}
                   href={`/tools/${assignment.toolId}`}
-                  className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group"
+                  className="bg-white rounded-xl border-2 border-gray-200 p-6 hover:border-primary-300 hover:shadow-lg transition-all"
                 >
-                  {/* Gradient Header */}
-                  <div className={`h-32 ${gradientClass} relative flex items-center justify-center`}>
-                    <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
-                    <Icon className="relative text-white/80 drop-shadow-lg" size={48} />
-                    
-                    {/* Status Badge */}
+                  <div className="flex items-start justify-between mb-4">
+                    <div className={`w-12 h-12 ${toolDetails.color} rounded-lg flex items-center justify-center`}>
+                      <Icon className="text-white" size={24} />
+                    </div>
                     {assignment.completed ? (
-                      <div className="absolute top-3 right-3 flex items-center gap-1 bg-green-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg">
-                        <CheckCircle2 size={14} />
+                      <div className="flex items-center gap-1 text-green-600 text-sm font-medium">
+                        <CheckCircle2 size={16} />
                         <span>Completed</span>
                       </div>
                     ) : (
-                      <div className="absolute top-3 right-3 flex items-center gap-1 bg-orange-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg">
-                        <Clock size={14} />
+                      <div className="flex items-center gap-1 text-orange-600 text-sm font-medium">
+                        <Clock size={16} />
                         <span>Pending</span>
                       </div>
                     )}
                   </div>
 
-                  {/* Content */}
-                  <div className="p-5">
-                    <div className="mb-3">
-                      <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors">
-                        {toolDetails.name}
-                      </h3>
-                      <p className="text-sm text-gray-600 line-clamp-2">
-                        {toolDetails.description}
-                      </p>
-                    </div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">
+                    {toolDetails.name}
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-3">
+                    {toolDetails.description}
+                  </p>
 
-                    <div className="flex items-center justify-between">
-                      <span className={`text-xs font-semibold px-3 py-1 rounded-full ${getCategoryBadge(category)}`}>
-                        {category}
-                      </span>
-                      <span className="text-primary-600 text-sm font-medium">
-                        {assignment.completed ? 'View Results' : 'Start Tool'} →
-                      </span>
-                    </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                      {toolDetails.category}
+                    </span>
+                    <span className="text-primary-600 text-sm font-medium">
+                      {assignment.completed ? 'View Results' : 'Start Tool'} →
+                    </span>
                   </div>
                 </Link>
               );
