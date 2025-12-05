@@ -6,7 +6,7 @@ import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import { COACHING_TOOLS } from '@/data/tools';
-import { Users, X, CheckCircle2, Search, Plus, Filter } from 'lucide-react';
+import { Users, X, CheckCircle2, Search, Plus } from 'lucide-react';
 
 interface Client {
   id: string;
@@ -126,7 +126,7 @@ export default function CoachToolsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto p-6 lg:p-8">
+      <div className="max-w-7xl mx-auto p-8">
         
         {/* Header */}
         <div className="flex items-start justify-between mb-8">
@@ -136,14 +136,14 @@ export default function CoachToolsPage() {
               Browse our curated library of tools to assign to your clients and enhance your coaching sessions.
             </p>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium">
+          <button className="flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-full hover:bg-primary-700 transition-colors font-medium shadow-sm">
             <Plus size={20} />
             New...
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-6 border-b border-gray-200 mb-6">
+        <div className="flex gap-6 border-b border-gray-200 mb-8">
           <button
             onClick={() => setActiveTab('tools')}
             className={`pb-3 px-1 font-medium transition-colors relative ${
@@ -178,8 +178,8 @@ export default function CoachToolsPage() {
           </button>
         </div>
 
-        {/* Filters & Search */}
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
+        {/* Search & Filters */}
+        <div className="flex flex-col md:flex-row gap-4 mb-8">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
             <input
@@ -187,31 +187,31 @@ export default function CoachToolsPage() {
               placeholder="Search for tools..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             />
           </div>
           <div className="flex gap-3">
-            <select className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white">
+            <select className="px-6 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white font-medium">
               <option>Category: All</option>
               <option>Category: Goal Setting</option>
               <option>Category: Self-Awareness</option>
             </select>
-            <select className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white">
+            <select className="px-6 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white font-medium">
               <option>Type: All</option>
             </select>
-            <select className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white">
+            <select className="px-6 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white font-medium">
               <option>Sort by: Popularity</option>
             </select>
           </div>
         </div>
 
-        {/* Category Badges */}
-        <div className="flex gap-2 mb-8 flex-wrap">
+        {/* Category Pills */}
+        <div className="flex gap-3 mb-8 flex-wrap">
           {CATEGORIES.map(category => (
             <button
               key={category.id}
               onClick={() => setSelectedCategory(category.id)}
-              className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
+              className={`px-4 py-2 rounded-full font-medium text-sm transition-all ${
                 selectedCategory === category.id
                   ? category.color + ' ring-2 ring-offset-2 ring-current'
                   : category.color + ' opacity-60 hover:opacity-100'
@@ -223,7 +223,7 @@ export default function CoachToolsPage() {
         </div>
 
         {/* Tools Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredTools.map((tool, index) => {
             const gradientClass = TOOL_GRADIENTS[index % TOOL_GRADIENTS.length];
             const Icon = tool.icon;
@@ -231,7 +231,7 @@ export default function CoachToolsPage() {
             return (
               <div
                 key={tool.id}
-                className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group"
+                className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden group"
               >
                 {/* Gradient Header */}
                 <div className={`h-32 ${gradientClass} relative flex items-center justify-center`}>
@@ -240,31 +240,31 @@ export default function CoachToolsPage() {
                 </div>
 
                 {/* Content */}
-                <div className="p-5">
-                  <div className="mb-3">
-                    <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors">
+                <div className="p-6">
+                  <div className="mb-4">
+                    <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
                       {tool.name}
                     </h3>
                     <p className="text-sm text-gray-600 line-clamp-2">{tool.description}</p>
                   </div>
 
                   <div className="mb-4">
-                    <span className={`text-xs font-semibold px-3 py-1 rounded-full ${getCategoryBadge(tool.category)}`}>
+                    <span className={`text-xs font-medium px-3 py-1 rounded-full ${getCategoryBadge(tool.category)}`}>
                       {tool.category}
                     </span>
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className="flex gap-3">
                     <button
                       onClick={() => setPreviewTool(tool)}
-                      className="flex-1 px-4 py-2.5 text-primary-600 hover:bg-primary-50 border-2 border-primary-200 rounded-lg text-sm font-semibold transition-all"
+                      className="flex-1 px-4 py-2.5 text-primary-600 hover:bg-primary-50 border border-primary-200 rounded-full text-sm font-medium transition-all"
                     >
                       Preview
                     </button>
                     <button
                       onClick={() => setAssignTool(tool)}
                       disabled={clients.length === 0}
-                      className="flex-1 px-4 py-2.5 bg-primary-600 text-white rounded-lg text-sm font-semibold hover:bg-primary-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-sm hover:shadow-md"
+                      className="flex-1 px-4 py-2.5 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-sm hover:shadow-md"
                     >
                       Assign
                     </button>
@@ -282,7 +282,7 @@ export default function CoachToolsPage() {
         )}
 
         {clients.length === 0 && (
-          <div className="mt-8 bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-8 text-center">
+          <div className="mt-8 bg-yellow-50 rounded-2xl p-8 text-center">
             <Users className="mx-auto text-yellow-600 mb-4" size={48} />
             <h3 className="text-lg font-bold text-yellow-900 mb-2">No clients yet</h3>
             <p className="text-yellow-800 mb-4">
@@ -290,7 +290,7 @@ export default function CoachToolsPage() {
             </p>
             <Link
               href="/coach/invite"
-              className="inline-block px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700"
+              className="inline-block px-6 py-3 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 shadow-sm"
             >
               Invite Coachees
             </Link>
@@ -298,13 +298,13 @@ export default function CoachToolsPage() {
         )}
       </div>
 
-      {/* Preview Modal - Same as before */}
+      {/* Preview Modal */}
       {previewTool && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-start justify-between">
+          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-md">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-start justify-between rounded-t-2xl">
               <div className="flex items-center gap-3">
-                <div className={`w-12 h-12 ${previewTool.color} rounded-lg flex items-center justify-center`}>
+                <div className={`w-12 h-12 ${previewTool.color} rounded-xl flex items-center justify-center`}>
                   {(() => {
                     const Icon = previewTool.icon;
                     return <Icon className="text-white" size={24} />;
@@ -333,13 +333,13 @@ export default function CoachToolsPage() {
                 <Link
                   href={`/tools/${previewTool.id}`}
                   target="_blank"
-                  className="flex-1 px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 text-center transition-colors"
+                  className="flex-1 px-6 py-3 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 text-center transition-colors shadow-sm"
                 >
                   Try it yourself
                 </Link>
                 <button
                   onClick={() => setPreviewTool(null)}
-                  className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+                  className="px-6 py-3 bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors"
                 >
                   Close
                 </button>
@@ -349,10 +349,10 @@ export default function CoachToolsPage() {
         </div>
       )}
 
-      {/* Assign Modal - Same as before */}
+      {/* Assign Modal */}
       {assignTool && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl">
+          <div className="bg-white rounded-2xl max-w-md w-full shadow-md">
             {showSuccess ? (
               <div className="p-8 text-center">
                 <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
@@ -363,7 +363,7 @@ export default function CoachToolsPage() {
               <>
                 <div className="p-6 border-b border-gray-200 flex items-start justify-between">
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 ${assignTool.color} rounded-lg flex items-center justify-center`}>
+                    <div className={`w-10 h-10 ${assignTool.color} rounded-xl flex items-center justify-center`}>
                       {(() => {
                         const Icon = assignTool.icon;
                         return <Icon className="text-white" size={20} />;
@@ -389,7 +389,7 @@ export default function CoachToolsPage() {
                   <select
                     value={selectedClient}
                     onChange={(e) => setSelectedClient(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   >
                     <option value="">Choose a client...</option>
                     {clients.map((client) => (
@@ -402,14 +402,14 @@ export default function CoachToolsPage() {
                   <div className="mt-6 flex gap-3">
                     <button
                       onClick={() => setAssignTool(null)}
-                      className="flex-1 px-4 py-2.5 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+                      className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200"
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleAssignTool}
                       disabled={!selectedClient || assigning}
-                      className="flex-1 px-4 py-2.5 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                      className="flex-1 px-4 py-3 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 disabled:bg-gray-300 disabled:cursor-not-allowed shadow-sm"
                     >
                       {assigning ? 'Assigning...' : 'Assign Tool'}
                     </button>
