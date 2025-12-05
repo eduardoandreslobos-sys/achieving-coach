@@ -17,7 +17,7 @@ interface Client {
 const CATEGORIES = [
   { id: 'all', name: 'All', color: 'bg-gray-100 text-gray-700' },
   { id: 'Goal Setting', name: 'Goal Setting', color: 'bg-purple-100 text-purple-700' },
-  { id: 'Self Awareness', name: 'Self-Awareness', color: 'bg-green-100 text-green-700' },
+  { id: 'Self-Awareness', name: 'Self-Awareness', color: 'bg-green-100 text-green-700' },
   { id: 'Communication', name: 'Communication', color: 'bg-blue-100 text-blue-700' },
   { id: 'Productivity', name: 'Productivity', color: 'bg-orange-100 text-orange-700' },
 ];
