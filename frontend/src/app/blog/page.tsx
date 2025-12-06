@@ -1,56 +1,69 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Target, Search, BookOpen, FileText, Video } from 'lucide-react';
-import { useState } from 'react';
+import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import type { BlogPost } from '@/types/blog';
 
 const CATEGORIES = ['All', 'Blog Posts', 'Guides', 'Webinars', 'Coaching Skills', 'Leadership Development', 'ICF Preparation'];
 
-const RESOURCES = [
-  {
-    id: 1,
-    type: 'Blog Post',
-    readTime: '8 min read',
-    title: '5 Ways to Track Client Progress Effectively',
-    description: 'A deep dive into effective methods to monitor and report on client development.',
-    author: 'Jane Doe',
-    role: 'Coaching Expert',
-    category: 'Coaching Skills',
-    color: 'bg-orange-100'
-  },
-  {
-    id: 2,
-    type: 'Guide',
-    readTime: 'PDF Download',
-    title: 'The Ultimate ICF Competency Checklist',
-    description: 'A comprehensive, downloadable PDF to ensure you\'re aligned with ICF standards.',
-    author: 'John Smith',
-    role: 'ICF Master Coach',
-    category: 'ICF Preparation',
-    color: 'bg-yellow-100'
-  },
-  {
-    id: 3,
-    type: 'Webinar',
-    readTime: '60 min',
-    title: 'Live Webinar: How to Build a Six-Figure Coaching Business',
-    description: 'Join our live session on scaling your coaching practice to six figures and beyond.',
-    author: 'Emily White',
-    role: 'Business Strategist',
-    category: 'Leadership Development',
-    color: 'bg-blue-100'
-  },
-];
-
 export default function BlogPage() {
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
-  const filteredResources = RESOURCES.filter(resource => {
-    const matchesSearch = resource.title.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || resource.category === selectedCategory;
+  useEffect(() => {
+    loadPosts();
+  }, []);
+
+  const loadPosts = async () => {
+    try {
+      setLoading(true);
+      const q = query(
+        collection(db, 'blog_posts'),
+        where('published', '==', true),
+        orderBy('createdAt', 'desc')
+      );
+      const snapshot = await getDocs(q);
+      const postsData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate(),
+        updatedAt: doc.data().updatedAt?.toDate(),
+      })) as BlogPost[];
+      setPosts(postsData);
+    } catch (error) {
+      console.error('Error loading posts:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filteredPosts = posts.filter(post => {
+    const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         post.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === 'All' || 
+                           post.category === selectedCategory ||
+                           post.type === selectedCategory;
     return matchesSearch && matchesCategory;
   });
+
+  const typeIcons: any = {
+    'Blog Post': <BookOpen className="w-4 h-4" />,
+    'Guide': <FileText className="w-4 h-4" />,
+    'Webinar': <Video className="w-4 h-4" />
+  };
+
+  const colorMap: any = {
+    'Coaching Skills': 'bg-orange-100',
+    'Leadership Development': 'bg-blue-100',
+    'ICF Preparation': 'bg-yellow-100',
+    'Business Growth': 'bg-green-100',
+    'Tools & Technology': 'bg-purple-100',
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -85,7 +98,7 @@ export default function BlogPage() {
         </div>
       </section>
 
-      {/* Search */}
+      {/* Search & Filters */}
       <section className="py-8 px-6 border-b border-gray-200">
         <div className="max-w-7xl mx-auto">
           <div className="relative max-w-2xl mx-auto mb-6">
@@ -114,33 +127,53 @@ export default function BlogPage() {
         </div>
       </section>
 
-      {/* Resources Grid */}
+      {/* Posts Grid */}
       <section className="py-16 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredResources.map((resource) => (
-              <div key={resource.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all">
-                <div className={`h-48 ${resource.color}`}></div>
-                <div className="p-6">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-xs font-medium">
-                      {resource.type}
-                    </span>
-                    <span className="text-xs text-gray-500">{resource.readTime}</span>
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{resource.title}</h3>
-                  <p className="text-gray-600 text-sm mb-4">{resource.description}</p>
-                  <div className="flex items-center gap-3 pt-4 border-t">
-                    <div className="w-10 h-10 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-full"></div>
-                    <div>
-                      <div className="font-semibold text-gray-900 text-sm">{resource.author}</div>
-                      <div className="text-xs text-gray-500">{resource.role}</div>
+          {loading ? (
+            <div className="text-center py-16">
+              <div className="inline-block w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
+              <p className="text-gray-600 mt-4">Loading posts...</p>
+            </div>
+          ) : filteredPosts.length === 0 ? (
+            <div className="text-center py-16">
+              <p className="text-gray-600 text-lg">
+                {posts.length === 0 ? 'No blog posts published yet.' : 'No posts found matching your criteria.'}
+              </p>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredPosts.map((post) => (
+                <Link
+                  key={post.id}
+                  href={`/blog/${post.slug}`}
+                  className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all group"
+                >
+                  <div className={`h-48 ${colorMap[post.category] || 'bg-gray-100'}`}></div>
+                  <div className="p-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-xs font-medium">
+                        {typeIcons[post.type]}
+                        {post.type}
+                      </span>
+                      <span className="text-xs text-gray-500">{post.readTime}</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
+                      {post.title}
+                    </h3>
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">{post.description}</p>
+                    <div className="flex items-center gap-3 pt-4 border-t">
+                      <div className="w-10 h-10 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-full"></div>
+                      <div>
+                        <div className="font-semibold text-gray-900 text-sm">{post.author.name}</div>
+                        <div className="text-xs text-gray-500">{post.author.role}</div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
