@@ -1,36 +1,85 @@
-export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_ID;
+// Google Analytics 4 Event Tracking
 
-const isGALoaded = () => typeof window !== 'undefined' && typeof window.gtag !== 'undefined';
+export const GA_ID = 'G-9J43WG4NL7';
 
+// Page view
 export const pageview = (url: string) => {
-  if (!isGALoaded() || !GA_TRACKING_ID) return;
-  window.gtag('config', GA_TRACKING_ID, { page_path: url });
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('config', GA_ID, {
+      page_path: url,
+    });
+  }
 };
 
+// Custom events
 export const event = ({ action, category, label, value }: {
   action: string;
   category: string;
   label?: string;
   value?: number;
 }) => {
-  if (!isGALoaded()) return;
-  window.gtag('event', action, {
-    event_category: category,
-    event_label: label,
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', action, {
+      event_category: category,
+      event_label: label,
+      value: value,
+    });
+  }
+};
+
+// Conversion events
+export const trackSignUp = () => {
+  event({
+    action: 'sign_up',
+    category: 'engagement',
+    label: 'User Registration',
+  });
+};
+
+export const trackFreeTrial = () => {
+  event({
+    action: 'begin_trial',
+    category: 'conversion',
+    label: 'Free Trial Started',
+  });
+};
+
+export const trackPurchase = (value: number, plan: string) => {
+  event({
+    action: 'purchase',
+    category: 'conversion',
+    label: plan,
     value: value,
   });
 };
 
-export const trackSignUp = (method: string = 'email') => {
-  event({ action: 'sign_up', category: 'engagement', label: method });
+export const trackBlogRead = (title: string) => {
+  event({
+    action: 'blog_read',
+    category: 'engagement',
+    label: title,
+  });
 };
 
-export const trackToolUsage = (toolName: string) => {
-  event({ action: 'use_tool', category: 'engagement', label: toolName });
+export const trackToolUsed = (toolName: string) => {
+  event({
+    action: 'tool_used',
+    category: 'engagement',
+    label: toolName,
+  });
 };
 
+export const trackContactForm = () => {
+  event({
+    action: 'contact_form_submit',
+    category: 'lead',
+    label: 'Contact Form',
+  });
+};
+
+// Declare gtag for TypeScript
 declare global {
   interface Window {
-    gtag: (command: string, targetId: string, config?: Record<string, any>) => void;
+    gtag: (...args: any[]) => void;
   }
 }
