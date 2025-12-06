@@ -2,14 +2,14 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Target, CheckCircle } from 'lucide-react';
+import { Target } from 'lucide-react';
 import { LANDING_IMAGES } from '@/data/landing-images';
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="border-b border-gray-200" role="navigation" aria-label="Main navigation">
+      {/* Navigation - Clean */}
+      <nav className="border-b border-gray-100" role="navigation" aria-label="Main navigation">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2" aria-label="AchievingCoach Home">
@@ -19,11 +19,11 @@ export default function HomePage() {
               <span className="text-lg font-semibold text-gray-900">AchievingCoach</span>
             </Link>
             <div className="hidden md:flex items-center gap-8">
-              <Link href="/features" className="text-sm text-gray-700 hover:text-gray-900">Features</Link>
-              <Link href="/pricing" className="text-sm text-gray-700 hover:text-gray-900">Pricing</Link>
-              <Link href="/about" className="text-sm text-gray-700 hover:text-gray-900">About</Link>
-              <Link href="/sign-in" className="text-sm text-gray-700 hover:text-gray-900">Log In</Link>
-              <Link href="/sign-up" className="px-5 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors">
+              <Link href="/features" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">Features</Link>
+              <Link href="/pricing" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">Pricing</Link>
+              <Link href="/about" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">About</Link>
+              <Link href="/sign-in" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">Log In</Link>
+              <Link href="/sign-up" className="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors">
                 Start Free Trial
               </Link>
             </div>
@@ -31,62 +31,59 @@ export default function HomePage() {
         </div>
       </nav>
 
-      {/* Hero */}
-      <section className="py-20 px-6" aria-labelledby="hero-heading">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 id="hero-heading" className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 tracking-tight">
+      {/* Hero - FONDO BLANCO como Stitch */}
+      <section className="py-24 px-6 bg-white" aria-labelledby="hero-heading">
+        <div className="max-w-3xl mx-auto text-center">
+          <h1 id="hero-heading" className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             Elevate Your Coaching Practice
           </h1>
-          <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto">
             An end-to-end platform for professional coaches to manage coaching practices, track client progress, and acquire structured development exercises.
           </p>
-          <Link href="/sign-up" className="inline-block px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors">
-            Start Your 14-day Free Trial →
+          <Link href="/sign-up" className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors">
+            Start Your 14-day Free Trial
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
           </Link>
         </div>
       </section>
 
-      {/* Product Mockup */}
-      <section className="py-12 px-6" aria-label="Platform preview">
-        <div className="max-w-5xl mx-auto">
-          <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 border border-gray-300 shadow-xl">
-            <div className="aspect-video relative">
-              <Image
-                src={LANDING_IMAGES.analytics.src}
-                alt={LANDING_IMAGES.analytics.alt}
-                width={LANDING_IMAGES.analytics.width}
-                height={LANDING_IMAGES.analytics.height}
-                className="object-cover opacity-90"
-                priority
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <button className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform" aria-label="Play video">
-                  <svg className="w-6 h-6 text-primary-600 ml-1" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </button>
-              </div>
-            </div>
+      {/* Product Screenshot - SIN play button si no es video */}
+      <section className="py-12 px-6 bg-gray-50" aria-label="Platform preview">
+        <div className="max-w-6xl mx-auto">
+          <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-200">
+            <Image
+              src={LANDING_IMAGES.analytics.src}
+              alt={LANDING_IMAGES.analytics.alt}
+              width={LANDING_IMAGES.analytics.width}
+              height={LANDING_IMAGES.analytics.height}
+              className="w-full h-auto"
+              priority
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+            />
           </div>
         </div>
       </section>
 
-      {/* Features */}
-      <section className="py-20 px-6 bg-gray-50" aria-labelledby="features-heading">
+      {/* Features - ÍCONOS OUTLINE SUTILES como Stitch */}
+      <section className="py-24 px-6 bg-white" aria-labelledby="features-heading">
         <div className="max-w-6xl mx-auto">
           <header className="text-center mb-16">
-            <h2 id="features-heading" className="text-4xl font-bold text-gray-900 mb-4">A Smarter Way to Coach</h2>
+            <h2 id="features-heading" className="text-4xl font-bold text-gray-900 mb-4">
+              A Smarter Way to Coach
+            </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               AchievingCoach provides the tools you need to deliver exceptional results, maintain professional standards, and grow your practice.
             </p>
           </header>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
+            {/* Feature 1 */}
             <article className="text-center">
-              <div className="w-12 h-12 mx-auto mb-4 flex items-center justify-center" aria-hidden="true">
-                <svg className="w-8 h-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+              <div className="mb-4 flex justify-center">
+                <svg className="w-12 h-12 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
               </div>
               <h3 className="text-base font-semibold text-gray-900 mb-2">Client Progress Tracking</h3>
@@ -95,10 +92,11 @@ export default function HomePage() {
               </p>
             </article>
 
+            {/* Feature 2 */}
             <article className="text-center">
-              <div className="w-12 h-12 mx-auto mb-4 flex items-center justify-center" aria-hidden="true">
-                <svg className="w-8 h-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+              <div className="mb-4 flex justify-center">
+                <svg className="w-12 h-12 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
               <h3 className="text-base font-semibold text-gray-900 mb-2">ICF Competency Evaluation</h3>
@@ -107,10 +105,11 @@ export default function HomePage() {
               </p>
             </article>
 
+            {/* Feature 3 */}
             <article className="text-center">
-              <div className="w-12 h-12 mx-auto mb-4 flex items-center justify-center" aria-hidden="true">
-                <svg className="w-8 h-8 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+              <div className="mb-4 flex justify-center">
+                <svg className="w-12 h-12 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
               </div>
               <h3 className="text-base font-semibold text-gray-900 mb-2">Development Library</h3>
@@ -119,10 +118,11 @@ export default function HomePage() {
               </p>
             </article>
 
+            {/* Feature 4 */}
             <article className="text-center">
-              <div className="w-12 h-12 mx-auto mb-4 flex items-center justify-center" aria-hidden="true">
-                <svg className="w-8 h-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+              <div className="mb-4 flex justify-center">
+                <svg className="w-12 h-12 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                 </svg>
               </div>
               <h3 className="text-base font-semibold text-gray-900 mb-2">Seamless Session Management</h3>
@@ -134,10 +134,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Why Choose */}
-      <section className="py-20 px-6" aria-labelledby="why-choose-heading">
+      {/* Why Choose - Con imagen REAL WebP */}
+      <section className="py-24 px-6 bg-gray-50" aria-labelledby="why-choose-heading">
         <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="rounded-2xl overflow-hidden">
               <Image
                 src={LANDING_IMAGES.trust.src}
@@ -157,9 +157,11 @@ export default function HomePage() {
                 We're more than just a tool; we're a partner in your professional journey. Save time on admin, focus on what you do best, and deliver results your clients will love.
               </p>
 
-              <ul className="space-y-6">
+              <ul className="space-y-6" role="list">
                 <li className="flex gap-3">
-                  <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                  <svg className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Maintain Professional Standards</h3>
                     <p className="text-sm text-gray-600">Stay ICF-compliant with tools that keep you aligned with industry best practices.</p>
@@ -167,7 +169,9 @@ export default function HomePage() {
                 </li>
 
                 <li className="flex gap-3">
-                  <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                  <svg className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Improve Client Outcomes</h3>
                     <p className="text-sm text-gray-600">Structured exercises and real-time insights help you track and improve results.</p>
@@ -175,7 +179,9 @@ export default function HomePage() {
                 </li>
 
                 <li className="flex gap-3">
-                  <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                  <svg className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Save Hours Every Week</h3>
                     <p className="text-sm text-gray-600">Automate scheduling, notes, and follow-ups to reclaim your valuable time.</p>
@@ -187,20 +193,24 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-20 px-6 bg-gray-50" aria-labelledby="testimonials-heading">
+      {/* Testimonials - Clean cards */}
+      <section className="py-24 px-6 bg-white" aria-labelledby="testimonials-heading">
         <div className="max-w-6xl mx-auto">
           <header className="text-center mb-16">
-            <h2 id="testimonials-heading" className="text-3xl font-bold text-gray-900 mb-4">Loved by Coaches Worldwide</h2>
+            <h2 id="testimonials-heading" className="text-3xl font-bold text-gray-900 mb-4">
+              Loved by Coaches Worldwide
+            </h2>
             <p className="text-gray-600">
               Don't just take our word for it. Here's what certified professionals are saying about our platform.
             </p>
           </header>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <article className="bg-white rounded-xl p-6 border border-gray-200">
+            <article className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-primary-400 to-purple-400 rounded-full" aria-hidden="true"></div>
+                <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
+                  <span className="text-primary-700 font-semibold text-lg">MS</span>
+                </div>
                 <div>
                   <div className="font-semibold text-gray-900">Maria S., PCC</div>
                   <div className="text-sm text-gray-600">Executive Coach</div>
@@ -211,9 +221,11 @@ export default function HomePage() {
               </p>
             </article>
 
-            <article className="bg-white rounded-xl p-6 border border-gray-200">
+            <article className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full" aria-hidden="true"></div>
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                  <span className="text-blue-700 font-semibold text-lg">DL</span>
+                </div>
                 <div>
                   <div className="font-semibold text-gray-900">David L., ACC</div>
                   <div className="text-sm text-gray-600">Career Coach</div>
@@ -224,9 +236,11 @@ export default function HomePage() {
               </p>
             </article>
 
-            <article className="bg-white rounded-xl p-6 border-gray-200">
+            <article className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-orange-400 rounded-full" aria-hidden="true"></div>
+                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                  <span className="text-purple-700 font-semibold text-lg">CR</span>
+                </div>
                 <div>
                   <div className="font-semibold text-gray-900">Chloe R., MCC</div>
                   <div className="text-sm text-gray-600">Leadership Coach</div>
@@ -240,25 +254,28 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-20 px-6 bg-gradient-to-br from-purple-600 to-primary-600" aria-labelledby="cta-heading">
+      {/* CTA - Puede tener gradiente aquí */}
+      <section className="py-24 px-6 bg-gradient-to-br from-purple-600 via-primary-600 to-primary-700" aria-labelledby="cta-heading">
         <div className="max-w-3xl mx-auto text-center text-white">
           <h2 id="cta-heading" className="text-4xl font-bold mb-6">
             Ready to Transform Your Coaching Business?
           </h2>
-          <p className="text-lg mb-8 text-white/90">
+          <p className="text-lg mb-8 text-white/90 leading-relaxed">
             Join hundreds of coaches using our AI-powered tools to deliver exceptional results and grow their practice.
           </p>
-          <Link href="/sign-up" className="inline-block px-6 py-3 bg-white text-primary-600 font-semibold rounded-lg hover:shadow-xl transition-all">
-            Start Your 14-Day Free Trial →
+          <Link href="/sign-up" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary-600 font-semibold rounded-lg hover:shadow-2xl transition-all">
+            Start Your 14-Day Free Trial
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
           </Link>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12 px-6" role="contentinfo">
+      <footer className="bg-gray-900 text-gray-400 py-16 px-6" role="contentinfo">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
+          <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-7 h-7 bg-primary-600 rounded-lg flex items-center justify-center">
@@ -266,31 +283,39 @@ export default function HomePage() {
                 </div>
                 <span className="font-semibold text-white">AchievingCoach</span>
               </div>
-              <p className="text-sm text-gray-500">Professional coaching platform for certified coaches</p>
+              <p className="text-sm text-gray-500 leading-relaxed">
+                Professional coaching platform for certified coaches worldwide.
+              </p>
             </div>
+            
             <nav aria-label="Product links">
-              <h3 className="font-semibold text-white mb-3 text-sm">Product</h3>
-              <ul className="space-y-2 text-sm">
+              <h3 className="font-semibold text-white mb-4 text-sm">Product</h3>
+              <ul className="space-y-3 text-sm">
                 <li><Link href="/features" className="hover:text-white transition-colors">Features</Link></li>
                 <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
+                <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
               </ul>
             </nav>
+
             <nav aria-label="Company links">
-              <h3 className="font-semibold text-white mb-3 text-sm">Company</h3>
-              <ul className="space-y-2 text-sm">
+              <h3 className="font-semibold text-white mb-4 text-sm">Company</h3>
+              <ul className="space-y-3 text-sm">
                 <li><Link href="/about" className="hover:text-white transition-colors">About</Link></li>
                 <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+                <li><Link href="/organizations" className="hover:text-white transition-colors">For Organizations</Link></li>
               </ul>
             </nav>
+
             <nav aria-label="Legal links">
-              <h3 className="font-semibold text-white mb-3 text-sm">Legal</h3>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link></li>
-                <li><Link href="/terms" className="hover:text-white transition-colors">Terms</Link></li>
+              <h3 className="font-semibold text-white mb-4 text-sm">Legal</h3>
+              <ul className="space-y-3 text-sm">
+                <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
               </ul>
             </nav>
           </div>
-          <div className="border-t border-gray-800 pt-8 text-center text-sm">
+
+          <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
             <p>© 2024 AchievingCoach. All rights reserved.</p>
           </div>
         </div>
