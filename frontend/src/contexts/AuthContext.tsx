@@ -1,112 +1,63 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { User, onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
-import { auth, db } from '@/lib/firebase';
-import { useRouter, usePathname } from 'next/navigation';
-
-interface UserProfile {
-  uid: string;
-  email: string;
-  role: 'coach' | 'coachee';
-  firstName?: string;
-  lastName?: string;
-  displayName?: string;
-  photoURL?: string;
-  [key: string]: any;
-}
+import { 
+  User,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 interface AuthContextType {
   user: User | null;
-  userProfile: UserProfile | null;
   loading: boolean;
-  signOut: () => Promise<void>;
-  refreshUserProfile: () => Promise<void>;
+  signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
-  userProfile: null,
   loading: true,
-  signOut: async () => {},
-  refreshUserProfile: async () => {},
+  signIn: async () => {},
+  signUp: async () => {},
+  logout: async () => {},
 });
-
-export const useAuth = () => useContext(AuthContext);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const fetchUserProfile = async (uid: string) => {
-    try {
-      const userDoc = await getDoc(doc(db, 'users', uid));
-      if (userDoc.exists()) {
-        const profile = { uid, ...userDoc.data() } as UserProfile;
-        setUserProfile(profile);
-        return profile;
-      }
-      return null;
-    } catch (error) {
-      console.error('Error fetching user profile:', error);
-      return null;
-    }
-  };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
-      
-      if (user) {
-        const profile = await fetchUserProfile(user.uid);
-        
-        // Only redirect if:
-        // 1. No profile exists and not on onboarding page
-        // 2. Has profile and is on homepage
-        const currentPath = window.location.pathname;
-        
-        if (!profile && !currentPath.includes('/onboarding')) {
-          router.push('/onboarding');
-        } else if (profile && currentPath === '/') {
-          if (profile.role === 'coach') {
-            router.push('/coach');
-          } else {
-            router.push('/dashboard');
-          }
-        }
-      } else {
-        setUserProfile(null);
-      }
-      
       setLoading(false);
     });
 
-    return () => unsubscribe();
-  }, []); // ✅ Empty dependency array - only run once
+    return unsubscribe;
+  }, []);
 
-  const refreshUserProfile = async () => {
-    if (user) {
-      await fetchUserProfile(user.uid);
-    }
+  const signIn = async (email: string, password: string) => {
+    await signInWithEmailAndPassword(auth, email, password);
   };
 
-  const signOut = async () => {
-    try {
-      await auth.signOut();
-      setUserProfile(null);
-      router.push('/sign-in');
-    } catch (error) {
-      console.error('Error signing out:', error);
-    }
+  const signUp = async (email: string, password: string) => {
+    await createUserWithEmailAndPassword(auth, email, password);
+  };
+
+  const logout = async () => {
+    await signOut(auth);
   };
 
   return (
-    <AuthContext.Provider value={{ user, userProfile, loading, signOut, refreshUserProfile }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signUp, logout }}>
       {children}
     </AuthContext.Provider>
   );
+}
+
+export function useAuth() {
+  return useContext(AuthContext);
 }
