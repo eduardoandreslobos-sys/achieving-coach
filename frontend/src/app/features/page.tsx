@@ -111,10 +111,10 @@ export default function FeaturesPage() {
                 </p>
               </div>
               <Image
-                src={LANDING_IMAGES.icfTool.src}
-                alt={LANDING_IMAGES.icfTool.alt}
-                width={LANDING_IMAGES.icfTool.width}
-                height={LANDING_IMAGES.icfTool.height}
+                src={LANDING_IMAGES.icfEvaluation.src}
+                alt={LANDING_IMAGES.icfEvaluation.alt}
+                width={LANDING_IMAGES.icfEvaluation.width}
+                height={LANDING_IMAGES.icfEvaluation.height}
                 className="rounded-xl shadow-lg border border-gray-200"
                 loading="lazy"
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -157,10 +157,10 @@ export default function FeaturesPage() {
                 </p>
               </div>
               <Image
-                src={LANDING_IMAGES.stakeholder.src}
-                alt={LANDING_IMAGES.stakeholder.alt}
-                width={LANDING_IMAGES.stakeholder.width}
-                height={LANDING_IMAGES.stakeholder.height}
+                src={LANDING_IMAGES.stakeholderMap.src}
+                alt={LANDING_IMAGES.stakeholderMap.alt}
+                width={LANDING_IMAGES.stakeholderMap.width}
+                height={LANDING_IMAGES.stakeholderMap.height}
                 className="rounded-xl shadow-lg border border-gray-200"
                 loading="lazy"
                 sizes="(max-width: 768px) 100vw, 50vw"

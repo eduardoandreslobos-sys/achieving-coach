@@ -18,7 +18,7 @@ const navigation = [
 export default function DashboardSidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { userProfile, signOut } = useAuth();
+  const { userProfile, logout } = useAuth();
 
   const getInitials = () => {
     if (userProfile?.firstName && userProfile?.lastName) {
@@ -35,7 +35,7 @@ export default function DashboardSidebar() {
   };
 
   const handleSignOut = async () => {
-    await signOut();
+    await logout();
     router.push('/sign-in');
   };
 

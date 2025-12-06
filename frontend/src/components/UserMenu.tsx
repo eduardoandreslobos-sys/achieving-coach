@@ -5,11 +5,11 @@ import { useRouter } from 'next/navigation';
 import { LogOut } from 'lucide-react';
 
 export default function UserMenu() {
-  const { userProfile, signOut } = useAuth();
+  const { userProfile, logout } = useAuth();
   const router = useRouter();
 
   const handleSignOut = async () => {
-    await signOut();
+    await logout();
     router.push('/sign-in');
   };
 
