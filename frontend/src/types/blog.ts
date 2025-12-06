@@ -4,15 +4,20 @@ export interface BlogPost {
   slug: string;
   description: string;
   content: string;
+  featuredImage?: {
+    url: string;
+    alt: string;
+    width: number;
+    height: number;
+  };
   author: {
     name: string;
     role: string;
     avatar?: string;
   };
-  category: string;
+  category: BlogCategory;
   type: 'Blog Post' | 'Guide' | 'Webinar';
   readTime: string;
-  coverImage?: string;
   published: boolean;
   createdAt: Date;
   updatedAt: Date;
