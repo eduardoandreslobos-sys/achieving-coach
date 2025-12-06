@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Target, Search, BookOpen, FileText, Video } from 'lucide-react';
+import { Target, Search } from 'lucide-react';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import type { BlogPost } from '@/types/blog';
@@ -51,54 +51,37 @@ export default function BlogPage() {
     return matchesSearch && matchesCategory;
   });
 
-  const typeIcons: any = {
-    'Blog Post': <BookOpen className="w-4 h-4" />,
-    'Guide': <FileText className="w-4 h-4" />,
-    'Webinar': <Video className="w-4 h-4" />
-  };
-
-  const colorMap: any = {
-    'Coaching Skills': 'bg-orange-100',
-    'Leadership Development': 'bg-blue-100',
-    'ICF Preparation': 'bg-yellow-100',
-    'Business Growth': 'bg-green-100',
-    'Tools & Technology': 'bg-purple-100',
-  };
-
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-200 z-50">
+      <nav className="border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-600 to-secondary-600 rounded-lg flex items-center justify-center">
-                <Target className="w-6 h-6 text-white" />
+              <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
+                <Target className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-gray-900">AchievingCoach</span>
+              <span className="text-lg font-semibold text-gray-900">AchievingCoach</span>
             </Link>
             <div className="hidden md:flex items-center gap-8">
-              <Link href="/features" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">Features</Link>
-              <Link href="/pricing" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">Pricing</Link>
-              <Link href="/blog" className="text-gray-900 font-semibold">Blog</Link>
-              <Link href="/sign-in" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">Log In</Link>
-              <Link href="/sign-up" className="px-6 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-all font-medium shadow-sm">
-                Get Started
+              <Link href="/features" className="text-sm text-gray-600 hover:text-gray-900">Features</Link>
+              <Link href="/pricing" className="text-sm text-gray-600 hover:text-gray-900">Pricing</Link>
+              <Link href="/blog" className="text-sm text-gray-900 font-semibold">Blog</Link>
+              <Link href="/sign-in" className="text-sm text-gray-600 hover:text-gray-900">Log In</Link>
+              <Link href="/sign-up" className="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700">
+                Start Free Trial
               </Link>
             </div>
           </div>
         </div>
       </nav>
 
-      {/* Hero */}
-      <section className="pt-32 pb-12 px-6 bg-gradient-to-br from-primary-600 to-secondary-600">
+      <section className="py-20 px-6 bg-gradient-to-br from-primary-600 to-secondary-600">
         <div className="max-w-4xl mx-auto text-center text-white">
-          <h1 className="text-5xl lg:text-6xl font-bold mb-6">Resources to Master Your Coaching Craft</h1>
-          <p className="text-xl text-white/90">Explore expert articles, guides, and webinars designed to help you grow your practice.</p>
+          <h1 className="text-5xl font-bold mb-6">Coaching Resources & Best Practices</h1>
+          <p className="text-xl text-white/90">Expert guides to help you grow your coaching practice</p>
         </div>
       </section>
 
-      {/* Search & Filters */}
       <section className="py-8 px-6 border-b border-gray-200">
         <div className="max-w-7xl mx-auto">
           <div className="relative max-w-2xl mx-auto mb-6">
@@ -127,7 +110,6 @@ export default function BlogPage() {
         </div>
       </section>
 
-      {/* Posts Grid */}
       <section className="py-16 px-6">
         <div className="max-w-7xl mx-auto">
           {loading ? (
@@ -149,11 +131,10 @@ export default function BlogPage() {
                   href={`/blog/${post.slug}`}
                   className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all group"
                 >
-                  <div className={`h-48 ${colorMap[post.category] || 'bg-gray-100'}`}></div>
+                  <div className="h-48 bg-gray-100"></div>
                   <div className="p-6">
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-xs font-medium">
-                        {typeIcons[post.type]}
+                      <span className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-xs font-medium">
                         {post.type}
                       </span>
                       <span className="text-xs text-gray-500">{post.readTime}</span>
@@ -177,43 +158,9 @@ export default function BlogPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-12">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-primary-600 to-secondary-600 rounded-lg flex items-center justify-center">
-                  <Target className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-lg font-bold text-white">AchievingCoach</span>
-              </div>
-            </div>
-            <div>
-              <h3 className="font-semibold text-white mb-3">Product</h3>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/features" className="hover:text-white transition-colors">Features</Link></li>
-                <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-white mb-3">Company</h3>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/about" className="hover:text-white transition-colors">About</Link></li>
-                <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-white mb-3">Legal</h3>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white transition-colors">Privacy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Terms</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 pt-8 text-sm text-center">
-            <p>© 2024 AchievingCoach. All rights reserved.</p>
-          </div>
+      <footer className="bg-gray-900 text-gray-400 py-12 px-6">
+        <div className="max-w-6xl mx-auto text-center">
+          <p className="text-sm">© 2024 AchievingCoach. All rights reserved.</p>
         </div>
       </footer>
     </div>
