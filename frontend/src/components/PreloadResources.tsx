@@ -9,15 +9,6 @@ export default function PreloadResources() {
       {/* DNS prefetch for faster lookups */}
       <link rel="dns-prefetch" href="https://analytics.google.com" />
       <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-      
-      {/* Preload critical fonts */}
-      <link
-        rel="preload"
-        href="/fonts/inter-var.woff2"
-        as="font"
-        type="font/woff2"
-        crossOrigin="anonymous"
-      />
     </>
   );
 }
