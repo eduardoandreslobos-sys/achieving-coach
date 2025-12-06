@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Target, Users, TrendingUp, Award, ArrowRight, CheckCircle, Star, BarChart3, FileText } from 'lucide-react';
+import { Target, Users, TrendingUp, Award, ArrowRight, CheckCircle, Play, BarChart3, FileText, Clock, Shield } from 'lucide-react';
 import { LANDING_IMAGES } from '@/data/landing-images';
 
 export default function HomePage() {
@@ -12,19 +12,19 @@ export default function HomePage() {
       <nav className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-200 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-600 to-purple-600 rounded-xl flex items-center justify-center">
+            <Link href="/" className="flex items-center gap-2">
+              <div className="w-10 h-10 bg-gradient-to-br from-primary-600 to-secondary-600 rounded-lg flex items-center justify-center">
                 <Target className="w-6 h-6 text-white" />
               </div>
               <span className="text-xl font-bold text-gray-900">AchievingCoach</span>
-            </div>
+            </Link>
             <div className="hidden md:flex items-center gap-8">
-              <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">Features</a>
-              <a href="#platform" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">Platform</a>
-              <a href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">Pricing</a>
-              <Link href="/sign-in" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">Sign In</Link>
-              <Link href="/sign-up" className="px-6 py-2.5 bg-primary-600 text-white rounded-full hover:bg-primary-700 transition-all font-medium shadow-sm">
-                Get Started Free
+              <Link href="/features" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">Features</Link>
+              <Link href="/pricing" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">Pricing</Link>
+              <Link href="/about" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">About</Link>
+              <Link href="/sign-in" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">Log In</Link>
+              <Link href="/sign-up" className="px-6 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-all font-medium shadow-sm hover:shadow-md">
+                Start Free Trial
               </Link>
             </div>
           </div>
@@ -32,212 +32,83 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-24 px-6 overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src={LANDING_IMAGES.hero.src}
-            alt={LANDING_IMAGES.hero.alt}
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-primary-900/95 via-primary-800/90 to-purple-900/95"></div>
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto">
-          <div className="max-w-4xl mx-auto text-center text-white">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-sm font-medium mb-6">
-              <Star className="w-4 h-4 fill-current" />
-              Trusted by 2,500+ Professional Coaches
-            </div>
-            <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-              Elevate Your Coaching Practice with Professional Tools
+      <section className="relative pt-32 pb-20 px-6 overflow-hidden bg-gradient-to-br from-primary-600 via-primary-700 to-secondary-600">
+        <div className="max-w-7xl mx-auto">
+          <div className="max-w-4xl mx-auto text-center text-white mb-12">
+            <h1 className="text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+              Elevate Your Coaching Practice
             </h1>
             <p className="text-xl lg:text-2xl mb-8 leading-relaxed text-white/90">
-              The complete platform for ICF-certified coaches to manage clients, track progress, and deliver transformational coaching experiences.
+              An end-to-end platform for professional coaches to manage coaching practices, track client progress, and acquire structured development exercises.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/sign-up" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-primary-600 rounded-full hover:shadow-xl transition-all text-lg font-semibold">
-                Start Free Trial
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-              <a href="#platform" className="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-white/30 text-white rounded-full hover:bg-white/10 backdrop-blur-sm transition-all text-lg font-semibold">
-                See Platform
-              </a>
+            <Link href="/sign-up" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-primary-600 rounded-lg hover:shadow-xl transition-all text-lg font-semibold">
+              Start Your 14-day Free Trial
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+
+          {/* Video/Demo Preview */}
+          <div className="max-w-5xl mx-auto">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20 bg-gray-100 aspect-video">
+              <Image
+                src={LANDING_IMAGES.analytics.src}
+                alt="Platform demo preview"
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-black/20 flex items-center justify-center group cursor-pointer hover:bg-black/30 transition-all">
+                <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+                  <Play className="w-8 h-8 text-primary-600 ml-1" />
+                </div>
+              </div>
             </div>
-            <p className="text-sm text-white/70 mt-6">No credit card required • 14-day free trial • Cancel anytime</p>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-24 bg-gray-50">
+      {/* A Smarter Way to Coach */}
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Everything You Need to Scale Your Practice</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">Professional coaching tools, client management, and analytics built for modern coaches</p>
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">A Smarter Way to Coach</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              AchievingCoach provides the tools you need to deliver exceptional results, maintain professional standards, and grow your practice.
+            </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <FeatureCard
-              icon={<Users className="w-7 h-7" />}
-              title="Client Management"
-              description="Manage unlimited clients, track progress, schedule sessions, and maintain detailed coaching records in one centralized platform."
-              color="from-blue-500 to-blue-600"
+              icon={<BarChart3 className="w-6 h-6" />}
+              title="Client Progress Tracking"
+              description="Monitor client growth with real-time analytics and visual progress reports."
+              iconColor="bg-blue-500"
             />
             <FeatureCard
-              icon={<Target className="w-7 h-7" />}
-              title="Professional Tools"
-              description="GROW Model, DISC Assessment, Wheel of Life, Stakeholder Map, and 10+ proven coaching frameworks ready to use."
-              color="from-purple-500 to-purple-600"
+              icon={<Award className="w-6 h-6" />}
+              title="ICF Competency Evaluation"
+              description="Assess and track your coaching against all ICF core competencies."
+              iconColor="bg-purple-500"
             />
             <FeatureCard
-              icon={<TrendingUp className="w-7 h-7" />}
-              title="Growth Analytics"
-              description="Track progress, measure impact, and demonstrate ROI with comprehensive analytics and exportable reports."
-              color="from-pink-500 to-pink-600"
+              icon={<FileText className="w-6 h-6" />}
+              title="Development Library"
+              description="Access a curated library of coaching tools and frameworks."
+              iconColor="bg-pink-500"
+            />
+            <FeatureCard
+              icon={<Clock className="w-6 h-6" />}
+              title="Seamless Session Management"
+              description="Organize session notes, files, and communications all in one place."
+              iconColor="bg-indigo-500"
             />
           </div>
         </div>
       </section>
 
-      {/* Platform Showcase */}
-      <section id="platform" className="py-24">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">A Platform Built for Professional Coaches</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">Powerful features that help you deliver better coaching outcomes</p>
-          </div>
-
-          {/* Analytics Dashboard */}
-          <div className="mb-24">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-medium mb-4">
-                  <BarChart3 className="w-4 h-4" />
-                  Analytics & Reporting
-                </div>
-                <h3 className="text-3xl font-bold text-gray-900 mb-4">Track Progress with Comprehensive Analytics</h3>
-                <p className="text-lg text-gray-600 mb-6">
-                  Monitor engagement rates, goal completion, and client progress with intuitive dashboards. Export professional reports to demonstrate ROI.
-                </p>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700">Real-time session volume and engagement metrics</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700">Goal completion tracking across all clients</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700">Exportable PDF reports for stakeholders</span>
-                  </li>
-                </ul>
-              </div>
-              <div className="relative">
-                <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-200">
-                  <Image
-                    src={LANDING_IMAGES.analytics.src}
-                    alt={LANDING_IMAGES.analytics.alt}
-                    width={LANDING_IMAGES.analytics.width}
-                    height={LANDING_IMAGES.analytics.height}
-                    className="w-full h-auto"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* ICF Standards */}
-          <div className="mb-24">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div className="order-2 lg:order-1">
-                <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-200">
-                  <Image
-                    src={LANDING_IMAGES.icfEvaluation.src}
-                    alt={LANDING_IMAGES.icfEvaluation.alt}
-                    width={LANDING_IMAGES.icfEvaluation.width}
-                    height={LANDING_IMAGES.icfEvaluation.height}
-                    className="w-full h-auto"
-                  />
-                </div>
-              </div>
-              <div className="order-1 lg:order-2">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-50 text-purple-700 rounded-full text-sm font-medium mb-4">
-                  <Award className="w-4 h-4" />
-                  ICF Standards
-                </div>
-                <h3 className="text-3xl font-bold text-gray-900 mb-4">Built on ICF Core Competencies</h3>
-                <p className="text-lg text-gray-600 mb-6">
-                  Practice and track all 8 ICF core competencies. Get personalized development recommendations based on your coaching patterns.
-                </p>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700">Competency evaluation matrix with progress tracking</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700">ICF Simulator for practice and skill development</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700">Suggested development plans based on assessments</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          {/* Session Management */}
-          <div>
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-full text-sm font-medium mb-4">
-                  <FileText className="w-4 h-4" />
-                  Session Management
-                </div>
-                <h3 className="text-3xl font-bold text-gray-900 mb-4">Seamless Session & File Management</h3>
-                <p className="text-lg text-gray-600 mb-6">
-                  Manage coaching sessions with live notes, time-stamped highlights, and organized file attachments. Everything in one place.
-                </p>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700">Live session notes with timestamp highlights</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700">File attachments with drag & drop support</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700">Coach reflection and action planning tools</span>
-                  </li>
-                </ul>
-              </div>
-              <div className="relative">
-                <div className="rounded-2xl overflow-hidden shadow-2xl border border-gray-200">
-                  <Image
-                    src={LANDING_IMAGES.sessionManagement.src}
-                    alt={LANDING_IMAGES.sessionManagement.alt}
-                    width={LANDING_IMAGES.sessionManagement.width}
-                    height={LANDING_IMAGES.sessionManagement.height}
-                    className="w-full h-auto"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Trust Section */}
-      <section className="py-24 bg-gray-50">
+      {/* Why Professionals Choose AchievingCoach */}
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+            <div className="relative rounded-2xl overflow-hidden">
               <Image
                 src={LANDING_IMAGES.trust.src}
                 alt={LANDING_IMAGES.trust.alt}
@@ -247,92 +118,89 @@ export default function HomePage() {
               />
             </div>
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Trusted by Professional Coaches Worldwide</h2>
-              <p className="text-xl text-gray-600 mb-8">
-                Join thousands of ICF-certified coaches who trust AchievingCoach to manage their practice and deliver exceptional results.
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">
+                Why Professionals Choose AchievingCoach
+              </h2>
+              <p className="text-lg text-gray-600 mb-8">
+                We're more than just a tool; we're a partner in your professional journey. Save time on admin, focus on what you do best, and deliver results your clients will love.
               </p>
-              <div className="grid grid-cols-2 gap-8">
-                <StatCard value="2,500+" label="Active Coaches" />
-                <StatCard value="50,000+" label="Sessions Completed" />
-                <StatCard value="98%" label="Satisfaction Rate" />
-                <StatCard value="4.9/5" label="Average Rating" />
-              </div>
+              <ul className="space-y-4">
+                <li className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <CheckCircle className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Maintain Professional Standards</h3>
+                    <p className="text-gray-600">Stay ICF-compliant with tools that keep you aligned with industry best practices.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <CheckCircle className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Improve Client Outcomes</h3>
+                    <p className="text-gray-600">Structured exercises and real-time insights help you track and improve results.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <CheckCircle className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Save Hours Every Week</h3>
+                    <p className="text-gray-600">Automate scheduling, notes, and follow-ups to reclaim your valuable time.</p>
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section id="pricing" className="py-24">
+      {/* Testimonials */}
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h2>
-            <p className="text-xl text-gray-600">Choose the plan that fits your coaching practice</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Loved by Coaches Worldwide</h2>
+            <p className="text-xl text-gray-600">Don't just take our word for it. Here's what certified professionals are saying about our platform.</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <PricingCard
-              name="Starter"
-              price="Free"
-              description="Perfect for trying out"
-              features={[
-                'Up to 5 clients',
-                'GROW Model & Basic Tools',
-                'Basic progress tracking',
-                'Email support'
-              ]}
-              cta="Start Free"
-              link="/sign-up"
+          <div className="grid md:grid-cols-3 gap-8">
+            <TestimonialCard
+              name="Maria S., PCC"
+              role="Executive Coach"
+              image={LANDING_IMAGES.hero.src}
+              quote="This platform significantly improved how I manage my coaching practice. The ICF competency tools are outstanding."
             />
-            <PricingCard
-              name="Professional"
-              price="$29"
-              period="/month"
-              description="For serious coaches"
-              features={[
-                'Unlimited clients',
-                'All coaching tools & frameworks',
-                'Advanced analytics & reports',
-                'Priority support',
-                'Custom branding',
-                'ICF Simulator access'
-              ]}
-              cta="Start Trial"
-              link="/sign-up"
-              popular
+            <TestimonialCard
+              name="David L., ACC"
+              role="Career Coach"
+              image={LANDING_IMAGES.hero.src}
+              quote="Finally, a coaching platform that gets it right. My clients love the structured exercises and I love the analytics."
             />
-            <PricingCard
-              name="Enterprise"
-              price="Custom"
-              description="For coaching organizations"
-              features={[
-                'Everything in Professional',
-                'Multi-coach accounts',
-                'White-label solution',
-                'Dedicated support',
-                'Custom integrations',
-                'SLA guarantee'
-              ]}
-              cta="Contact Sales"
-              link="/sign-up"
+            <TestimonialCard
+              name="Chloe R., MCC"
+              role="Leadership Coach"
+              image={LANDING_IMAGES.hero.src}
+              quote="The analytics dashboard and client portal are incredibly intuitive. This has truly transformed my practice."
             />
           </div>
         </div>
       </section>
 
       {/* Final CTA */}
-      <section className="py-24 bg-gradient-to-br from-primary-600 to-purple-600">
+      <section className="py-20 bg-gradient-to-br from-secondary-600 to-primary-600">
         <div className="max-w-4xl mx-auto px-6 text-center text-white">
           <h2 className="text-4xl lg:text-5xl font-bold mb-6">
             Ready to Transform Your Coaching Business?
           </h2>
           <p className="text-xl mb-8 text-white/90">
-            Join 2,500+ coaches who are already using AchievingCoach to deliver better results
+            Join hundreds of coaches using our AI-powered tools to deliver exceptional results and grow their practice.
           </p>
-          <Link href="/sign-up" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-primary-600 rounded-full hover:shadow-2xl transition-all text-lg font-semibold">
-            Start Your Free Trial
+          <Link href="/sign-up" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-primary-600 rounded-lg hover:shadow-2xl transition-all text-lg font-semibold">
+            Start Your 14-day Free Trial
             <ArrowRight className="w-5 h-5" />
           </Link>
-          <p className="text-sm text-white/70 mt-6">No credit card required • 14-day free trial • Cancel anytime</p>
         </div>
       </section>
 
@@ -342,7 +210,7 @@ export default function HomePage() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-primary-600 to-purple-600 rounded-xl flex items-center justify-center">
+                <div className="w-8 h-8 bg-gradient-to-br from-primary-600 to-secondary-600 rounded-lg flex items-center justify-center">
                   <Target className="w-5 h-5 text-white" />
                 </div>
                 <span className="text-lg font-bold text-white">AchievingCoach</span>
@@ -352,16 +220,16 @@ export default function HomePage() {
             <div>
               <h3 className="font-semibold text-white mb-3">Product</h3>
               <ul className="space-y-2 text-sm">
-                <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
-                <li><a href="#pricing" className="hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#platform" className="hover:text-white transition-colors">Platform</a></li>
+                <li><Link href="/features" className="hover:text-white transition-colors">Features</Link></li>
+                <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
+                <li><Link href="/resources" className="hover:text-white transition-colors">Resources</Link></li>
               </ul>
             </div>
             <div>
               <h3 className="font-semibold text-white mb-3">Company</h3>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+                <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
+                <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
                 <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
               </ul>
             </div>
@@ -374,7 +242,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="border-t border-gray-800 pt-8 text-sm text-center">
-            <p>© 2025 AchievingCoach. All rights reserved.</p>
+            <p>© 2024 AchievingCoach. All rights reserved.</p>
           </div>
         </div>
       </footer>
@@ -383,58 +251,31 @@ export default function HomePage() {
 }
 
 // Helper Components
-function FeatureCard({ icon, title, description, color }: any) {
+function FeatureCard({ icon, title, description, iconColor }: any) {
   return (
-    <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-all h-full">
-      <div className={`w-14 h-14 bg-gradient-to-br ${color} rounded-2xl flex items-center justify-center text-white mb-6`}>
+    <div className="bg-white rounded-xl p-6 hover:shadow-lg transition-all">
+      <div className={`w-12 h-12 ${iconColor} rounded-lg flex items-center justify-center text-white mb-4`}>
         {icon}
       </div>
-      <h3 className="text-xl font-bold text-gray-900 mb-3">{title}</h3>
-      <p className="text-gray-600 leading-relaxed">{description}</p>
+      <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
+      <p className="text-gray-600 text-sm leading-relaxed">{description}</p>
     </div>
   );
 }
 
-function StatCard({ value, label }: any) {
+function TestimonialCard({ name, role, image, quote }: any) {
   return (
-    <div>
-      <div className="text-3xl font-bold text-gray-900 mb-1">{value}</div>
-      <div className="text-sm text-gray-600">{label}</div>
-    </div>
-  );
-}
-
-function PricingCard({ name, price, period, description, features, cta, link, popular }: any) {
-  return (
-    <div className={`bg-white rounded-2xl p-8 ${popular ? 'ring-2 ring-primary-600 shadow-xl scale-105' : 'shadow-sm'} relative transition-all hover:shadow-md`}>
-      {popular && (
-        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-primary-600 to-purple-600 text-white text-sm font-semibold rounded-full">
-          Most Popular
+    <div className="bg-white rounded-xl p-6 shadow-sm">
+      <div className="flex items-center gap-4 mb-4">
+        <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden">
+          <div className="w-full h-full bg-gradient-to-br from-primary-400 to-secondary-400"></div>
         </div>
-      )}
-      <div className="text-center mb-6">
-        <h3 className="text-2xl font-bold text-gray-900 mb-2">{name}</h3>
-        <div className="mb-2">
-          <span className="text-4xl font-bold text-gray-900">{price}</span>
-          {period && <span className="text-gray-600">{period}</span>}
+        <div>
+          <h4 className="font-bold text-gray-900">{name}</h4>
+          <p className="text-sm text-gray-600">{role}</p>
         </div>
-        <p className="text-gray-600">{description}</p>
       </div>
-      <ul className="space-y-3 mb-8">
-        {features.map((feature: string, i: number) => (
-          <li key={i} className="flex items-start gap-3">
-            <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-            <span className="text-gray-700">{feature}</span>
-          </li>
-        ))}
-      </ul>
-      <Link href={link} className={`block text-center px-6 py-3 rounded-full font-semibold transition-all ${
-        popular
-          ? 'bg-gradient-to-r from-primary-600 to-purple-600 text-white hover:shadow-lg'
-          : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
-      }`}>
-        {cta}
-      </Link>
+      <p className="text-gray-700 italic">"{quote}"</p>
     </div>
   );
 }
