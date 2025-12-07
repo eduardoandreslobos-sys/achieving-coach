@@ -228,8 +228,8 @@ export default function HomePage() {
             <div className="grid md:grid-cols-3 gap-8">
               <article className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
-                    <span className="text-primary-700 font-semibold text-lg">MS</span>
+                  <div className="w-12 h-12 rounded-full overflow-hidden">
+                    <img src="/images/testimonials/maria-s.webp" alt="Maria S." className="w-full h-full object-cover" />
                   </div>
                   <div>
                     <div className="font-semibold text-gray-900">Maria S., PCC</div>
@@ -243,8 +243,8 @@ export default function HomePage() {
 
               <article className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-blue-700 font-semibold text-lg">DL</span>
+                  <div className="w-12 h-12 rounded-full overflow-hidden">
+                    <img src="/images/testimonials/david-l.webp" alt="David L." className="w-full h-full object-cover" />
                   </div>
                   <div>
                     <div className="font-semibold text-gray-900">David L., ACC</div>
@@ -258,8 +258,8 @@ export default function HomePage() {
 
               <article className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                    <span className="text-purple-700 font-semibold text-lg">CR</span>
+                  <div className="w-12 h-12 rounded-full overflow-hidden">
+                    <img src="/images/testimonials/chloe-r.webp" alt="Chloe R." className="w-full h-full object-cover" />
                   </div>
                   <div>
                     <div className="font-semibold text-gray-900">Chloe R., MCC</div>
