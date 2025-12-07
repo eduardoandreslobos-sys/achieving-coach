@@ -30,7 +30,6 @@ async function compress() {
       .webp({ quality })
       .toFile(outputPath);
     
-    // Reemplazar original
     fs.unlinkSync(inputPath);
     fs.renameSync(outputPath, inputPath);
     
