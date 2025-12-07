@@ -1,8 +1,10 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import Image from 'next/image';
-import { Target, Heart, Users, Zap, Shield, Lightbulb, Award } from 'lucide-react';
+import Link from 'next/link';
+import { Heart, Users, Shield, Lightbulb, Award } from 'lucide-react';
 import { generateMetadata as genMeta } from '@/lib/metadata';
+import { Navbar } from '@/components/layout/Navbar';
+import { Footer } from '@/components/layout/Footer';
 
 export const metadata: Metadata = genMeta({
   title: 'About Us - Professional Coaching Platform',
@@ -17,12 +19,7 @@ const jsonLd = {
   name: 'About AchievingCoach',
   description: 'Learn about AchievingCoach: our mission to empower professional coaches with world-class tools.',
   url: 'https://achievingcoach.com/about',
-  mainEntity: {
-    '@type': 'Organization',
-    name: 'AchievingCoach',
-    url: 'https://achievingcoach.com',
-    foundingDate: '2021',
-  },
+  mainEntity: { '@type': 'Organization', name: 'AchievingCoach', url: 'https://achievingcoach.com', foundingDate: '2021' },
 };
 
 const founders = [
@@ -43,24 +40,7 @@ export default function AboutPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="min-h-screen bg-white">
-        {/* Navigation */}
-        <nav className="border-b border-gray-100" role="navigation" aria-label="Main navigation">
-          <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2" aria-label="AchievingCoach Home">
-              <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                <Target className="w-5 h-5 text-white" aria-hidden="true" />
-              </div>
-              <span className="text-lg font-semibold text-gray-900">AchievingCoach</span>
-            </Link>
-            <div className="hidden md:flex items-center gap-8">
-              <Link href="/features" className="text-sm text-gray-600 hover:text-gray-900">Features</Link>
-              <Link href="/pricing" className="text-sm text-gray-600 hover:text-gray-900">Pricing</Link>
-              <Link href="/about" className="text-sm text-gray-900 font-semibold" aria-current="page">About</Link>
-              <Link href="/sign-in" className="text-sm text-gray-600 hover:text-gray-900">Log In</Link>
-              <Link href="/sign-up" className="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700">Start Free Trial</Link>
-            </div>
-          </div>
-        </nav>
+        <Navbar />
 
         <main role="main">
           {/* Hero */}
@@ -78,7 +58,7 @@ export default function AboutPage() {
                 <div>
                   <h2 id="why-heading" className="text-3xl font-bold text-gray-900 mb-6">Why We Built AchievingCoach</h2>
                   <p className="text-gray-600 mb-4 leading-relaxed">AchievingCoach was born from a simple observation: the world&apos;s best coaches were overwhelmed by inefficient tools—juggling spreadsheets, managing appointments, and compiling notes—instead of focusing on what they do best: transforming lives.</p>
-                  <p className="text-gray-600 mb-4 leading-relaxed">We envisioned a single, elegant platform that would not only streamline the business of coaching but elevate the practice itself. A system designed to foster deeper client connections, provide clear visibility into progress, and align every engagement with ICF standards.</p>
+                  <p className="text-gray-600 mb-4 leading-relaxed">We envisioned a single, elegant platform that would not only streamline the business of coaching but elevate the practice itself.</p>
                   <p className="text-gray-600 leading-relaxed">We built AchievingCoach to give coaches back their time and amplify their impact.</p>
                 </div>
                 <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100">
@@ -174,7 +154,7 @@ export default function AboutPage() {
             </div>
           </section>
 
-          {/* Founders con fotos reales */}
+          {/* Founders */}
           <section className="py-20 px-6 bg-white" aria-labelledby="team-heading">
             <div className="max-w-5xl mx-auto">
               <header className="text-center mb-16">
@@ -185,14 +165,7 @@ export default function AboutPage() {
                 {founders.map((founder, index) => (
                   <article key={index} className="text-center">
                     <div className="w-32 h-32 mx-auto mb-6 relative">
-                      <Image 
-                        src={founder.image} 
-                        alt={`${founder.name}, ${founder.role} at AchievingCoach`}
-                        width={128}
-                        height={128}
-                        className="rounded-full object-cover shadow-lg"
-                        loading="lazy"
-                      />
+                      <Image src={founder.image} alt={`${founder.name}, ${founder.role}`} width={128} height={128} className="rounded-full object-cover shadow-lg" loading="lazy" />
                     </div>
                     <h3 className="text-xl font-bold text-gray-900 mb-1">{founder.name}</h3>
                     <p className="text-primary-600 text-sm font-medium mb-3">{founder.role}</p>
@@ -216,12 +189,7 @@ export default function AboutPage() {
           </section>
         </main>
 
-        {/* Footer */}
-        <footer className="bg-gray-900 text-gray-400 py-12 px-6" role="contentinfo">
-          <div className="max-w-6xl mx-auto text-center">
-            <p className="text-sm">© 2024 AchievingCoach. All rights reserved.</p>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </>
   );
