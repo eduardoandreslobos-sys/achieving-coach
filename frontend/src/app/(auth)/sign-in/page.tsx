@@ -27,7 +27,9 @@ export default function SignIn() {
       const userDoc = await getDoc(doc(db, 'users', uid));
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        if (userData.role === 'coach') {
+        if (userData.role === 'admin') {
+          router.push('/admin');
+        } else if (userData.role === 'coach') {
           router.push('/coach');
         } else {
           router.push('/dashboard');
