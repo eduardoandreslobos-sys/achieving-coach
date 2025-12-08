@@ -1,5 +1,5 @@
 import { db } from './firebase';
-import { collection, getDocs, addDoc, doc, getDoc, query, where, orderBy, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, getDoc, query, where, orderBy, Timestamp, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { DISCQuestionGroup, DISCResponse, DISCProfile, DISCResult, DISCScores, DISCCoordinates, DISCProfileInfo } from '@/types/disc';
 
 // Perfil definitions siguiendo el modelo de 16 estilos
@@ -195,6 +195,78 @@ export async function saveDISCResult(
   };
   
   const docRef = await addDoc(collection(db, 'discResults'), result);
+  return docRef.id;
+}
+
+
+export async function saveDISCResultComplete(
+  userId: string,
+  userProfile: any,
+  responses: DISCResponse[],
+  profile: DISCProfile
+): Promise<string> {
+  const coachId = userProfile?.role === 'coachee' 
+    ? userProfile?.coacheeInfo?.coachId 
+    : userId;
+
+  // 1. Guardar en discResults (mantener compatibilidad)
+  const result: Omit<DISCResult, 'id'> = {
+    userId,
+    coachId,
+    responses,
+    profile,
+    completedAt: Timestamp.now(),
+    createdAt: Timestamp.now(),
+  };
+  
+  const docRef = await addDoc(collection(db, 'discResults'), result);
+
+  // 2. Guardar en tool_results (para consistencia con otras tools)
+  await addDoc(collection(db, 'tool_results'), {
+    userId,
+    toolId: 'disc',
+    toolName: 'DISC Assessment',
+    coachId,
+    results: {
+      primaryStyle: profile.primaryStyle,
+      percentages: profile.percentages,
+      profileInfo: profile.profileInfo,
+      discResultId: docRef.id,
+    },
+    completedAt: serverTimestamp(),
+  });
+
+  // 3. Si es coachee, actualizar assignment y notificar al coach
+  if (userProfile?.role === 'coachee' && coachId) {
+    const assignmentQuery = query(
+      collection(db, 'tool_assignments'),
+      where('coacheeId', '==', userId),
+      where('toolId', '==', 'disc'),
+      where('completed', '==', false)
+    );
+    
+    const assignmentSnapshot = await getDocs(assignmentQuery);
+    
+    if (!assignmentSnapshot.empty) {
+      const assignmentDoc = assignmentSnapshot.docs[0];
+      
+      await updateDoc(doc(db, 'tool_assignments', assignmentDoc.id), {
+        completed: true,
+        completedAt: serverTimestamp(),
+      });
+
+      await addDoc(collection(db, 'notifications'), {
+        userId: coachId,
+        type: 'tool_completed',
+        title: 'Tool Completed',
+        message: `${userProfile.displayName || userProfile.email} completed DISC Assessment`,
+        read: false,
+        createdAt: serverTimestamp(),
+        actionUrl: `/coach/clients/${userId}`,
+      });
+    }
+  }
+
   return docRef.id;
 }
 

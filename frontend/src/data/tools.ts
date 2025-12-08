@@ -1,4 +1,4 @@
-import { Target, Brain, TrendingUp, Smile, Compass, Shield, Users, MessageSquare, Heart } from 'lucide-react';
+import { Target, Brain, TrendingUp, Smile, Compass, Shield, Users, MessageSquare, Heart, CircleDot } from 'lucide-react';
 
 export interface Tool {
   id: string;
@@ -89,6 +89,14 @@ export const COACHING_TOOLS: Tool[] = [
     category: 'Goal Setting',
     icon: Target,
     color: 'bg-green-600',
+  },
+  {
+    id: 'disc',
+    name: 'DISC Assessment',
+    description: 'Discover your behavioral profile and communication style',
+    category: 'Self-Awareness',
+    icon: CircleDot,
+    color: 'bg-amber-600',
   },
 ];
 

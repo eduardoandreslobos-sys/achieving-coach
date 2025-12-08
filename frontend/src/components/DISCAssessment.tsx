@@ -3,12 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { loadDISCQuestions, calculateDISCProfile, saveDISCResult } from '@/lib/discService';
+import { loadDISCQuestions, calculateDISCProfile, saveDISCResultComplete } from '@/lib/discService';
 import { DISCQuestionGroup, DISCResponse, DISCStatement } from '@/types/disc';
 import { Loader2, CheckCircle2, ArrowLeft, ArrowRight } from 'lucide-react';
 
 export function DISCAssessment() {
-  const { user } = useAuth();
+  const { user, userProfile } = useAuth();
   const router = useRouter();
   const [questions, setQuestions] = useState<DISCQuestionGroup[]>([]);
   const [currentGroup, setCurrentGroup] = useState(0);
@@ -82,7 +82,7 @@ export function DISCAssessment() {
     try {
       setSaving(true);
       const profile = calculateDISCProfile(finalResponses);
-      const resultId = await saveDISCResult(user!.uid, undefined, finalResponses, profile);
+      const resultId = await saveDISCResultComplete(user!.uid, userProfile, finalResponses, profile);
       router.push(`/tools/disc/result/${resultId}`);
     } catch (err) {
       setError('Error al guardar los resultados. Por favor intenta de nuevo.');
