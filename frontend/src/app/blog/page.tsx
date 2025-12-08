@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { Footer } from '@/components/layout/Footer';
 import { Target, Search } from 'lucide-react';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -158,11 +159,7 @@ export default function BlogPage() {
         </div>
       </section>
 
-      <footer className="bg-gray-900 text-gray-400 py-12 px-6">
-        <div className="max-w-6xl mx-auto text-center">
-          <p className="text-sm">© 2024 AchievingCoach. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

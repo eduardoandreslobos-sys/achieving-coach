@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Target, Check, X } from 'lucide-react';
 import { generateMetadata as genMeta } from '@/lib/metadata';
+import { Footer } from '@/components/layout/Footer' from '@/lib/metadata';
 
 export const metadata: Metadata = genMeta({
   title: 'Pricing Plans - Start at $29/month',
@@ -282,11 +283,7 @@ export default function PricingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12 px-6" role="contentinfo">
-        <div className="max-w-6xl mx-auto text-center">
-          <p className="text-sm">© 2024 AchievingCoach. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
