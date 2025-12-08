@@ -19,10 +19,10 @@ interface Stats {
 
 interface RecentUser {
   id: string;
-  email: string;
+  email?: string;
   displayName?: string;
   firstName?: string;
-  role: string;
+  role?: string;
   createdAt: Date;
 }
 
