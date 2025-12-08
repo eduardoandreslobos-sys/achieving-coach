@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Target, Check, X } from 'lucide-react';
 import { generateMetadata as genMeta } from '@/lib/metadata';
-import { Footer } from '@/components/layout/Footer' from '@/lib/metadata';
+import { Footer } from '@/components/layout/Footer';
 
 export const metadata: Metadata = genMeta({
   title: 'Pricing Plans - Start at $29/month',
