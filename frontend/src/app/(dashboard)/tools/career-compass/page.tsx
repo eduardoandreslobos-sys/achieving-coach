@@ -1,19 +1,115 @@
 'use client';
-
-import React, { useState } from 'react';
-import { Compass, ArrowLeft } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { db } from '@/lib/firebase';
+import { collection, addDoc, query, where, getDocs, serverTimestamp, updateDoc, doc } from 'firebase/firestore';
+import { Compass, ArrowLeft, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
+import { toast, Toaster } from 'sonner';
 import CareerCompassForm from '@/components/tools/CareerCompassForm';
 import CareerCompassResults from '@/components/tools/CareerCompassResults';
 import { CareerCompass } from '@/types/career';
 
 export default function CareerCompassPage() {
+  const { user, userProfile } = useAuth();
   const [compass, setCompass] = useState<CareerCompass | null>(null);
   const [showResults, setShowResults] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [hasAccess, setHasAccess] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
 
-  const handleComplete = (completedCompass: CareerCompass) => {
+  useEffect(() => {
+    const checkAccess = async () => {
+      if (!user || !userProfile) return;
+
+      if (userProfile.role === 'coach') {
+        setHasAccess(true);
+        setLoading(false);
+        return;
+      }
+
+      if (userProfile.role === 'coachee') {
+        const assignmentQuery = query(
+          collection(db, 'tool_assignments'),
+          where('coacheeId', '==', user.uid),
+          where('toolId', '==', 'career-compass')
+        );
+        
+        const assignmentSnapshot = await getDocs(assignmentQuery);
+        
+        if (!assignmentSnapshot.empty) {
+          const assignment = assignmentSnapshot.docs[0].data();
+          setHasAccess(true);
+          setIsCompleted(assignment.completed || false);
+        }
+      }
+      
+      setLoading(false);
+    };
+    checkAccess();
+  }, [user, userProfile]);
+
+  const handleComplete = async (completedCompass: CareerCompass) => {
     setCompass(completedCompass);
     setShowResults(true);
+
+    // Guardar resultado
+    if (user && userProfile) {
+      try {
+        const coachId = userProfile.role === 'coachee' 
+          ? userProfile.coacheeInfo?.coachId 
+          : user.uid;
+
+        await addDoc(collection(db, 'tool_results'), {
+          userId: user.uid,
+          toolId: 'career-compass',
+          toolName: 'Career Compass',
+          coachId: coachId,
+          results: completedCompass,
+          completedAt: serverTimestamp(),
+        });
+
+        if (userProfile.role === 'coachee' && coachId) {
+          const assignmentQuery = query(
+            collection(db, 'tool_assignments'),
+            where('coacheeId', '==', user.uid),
+            where('toolId', '==', 'career-compass'),
+            where('completed', '==', false)
+          );
+          
+          const assignmentSnapshot = await getDocs(assignmentQuery);
+          
+          if (!assignmentSnapshot.empty) {
+            const assignmentDoc = assignmentSnapshot.docs[0];
+            
+            await updateDoc(doc(db, 'tool_assignments', assignmentDoc.id), {
+              completed: true,
+              completedAt: serverTimestamp(),
+            });
+
+            await addDoc(collection(db, 'notifications'), {
+              userId: coachId,
+              type: 'tool_completed',
+              title: 'Tool Completed',
+              message: `${userProfile.displayName || userProfile.email} completed Career Compass`,
+              read: false,
+              createdAt: serverTimestamp(),
+              actionUrl: `/coach/clients/${user.uid}`,
+            });
+          }
+        }
+
+        toast.success('✅ Career Compass saved!', {
+          description: 'Your coach has been notified.',
+          duration: 4000,
+        });
+        
+        setIsCompleted(true);
+      } catch (error) {
+        console.error('Error saving:', error);
+        toast.error('Error saving. Please try again.');
+      }
+    }
   };
 
   const handleReset = () => {
@@ -21,9 +117,75 @@ export default function CareerCompassPage() {
     setShowResults(false);
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex items-center justify-center">
+        <div className="text-gray-600">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!hasAccess) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
+            <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Compass className="w-8 h-8 text-yellow-600" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Access Required</h2>
+            <p className="text-gray-600 mb-6">
+              This tool needs to be assigned by your coach before you can access it.
+            </p>
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            >
+              Return to Dashboard
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isCompleted && !showResults) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+        <Toaster position="top-center" richColors />
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle2 className="w-8 h-8 text-green-600" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Tool Completed!</h2>
+            <p className="text-gray-600 mb-6">
+              You've successfully completed Career Compass. Your coach has been notified.
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+              >
+                Return to Dashboard
+              </Link>
+              <Link
+                href="/tools"
+                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                View Other Tools
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (showResults && compass) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+        <Toaster position="top-center" richColors />
         <div className="max-w-6xl mx-auto mb-8">
           <Link 
             href="/tools"
@@ -43,9 +205,8 @@ export default function CareerCompassPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+      <Toaster position="top-center" richColors />
       <div className="max-w-4xl mx-auto">
-        
-        {/* Header */}
         <div className="mb-8">
           <Link 
             href="/tools"
@@ -54,7 +215,6 @@ export default function CareerCompassPage() {
             <ArrowLeft size={20} />
             Back to Tools
           </Link>
-
           <div className="flex items-center gap-4 mb-4">
             <div className="bg-indigo-100 p-4 rounded-xl">
               <Compass className="w-10 h-10 text-indigo-600" />
@@ -70,7 +230,6 @@ export default function CareerCompassPage() {
           </div>
         </div>
 
-        {/* Instructions */}
         <div className="bg-indigo-50 border-2 border-indigo-200 rounded-xl p-6 mb-8">
           <h2 className="text-lg font-bold text-indigo-900 mb-3">
             Navigate Your Career Path
@@ -97,9 +256,7 @@ export default function CareerCompassPage() {
           </div>
         </div>
 
-        {/* Form */}
         <CareerCompassForm onComplete={handleComplete} />
-
       </div>
     </div>
   );
