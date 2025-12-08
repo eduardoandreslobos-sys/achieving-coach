@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Navbar } from '@/components/layout';
 import Image from 'next/image';
 import { Target } from 'lucide-react';
 import { LANDING_IMAGES } from '@/data/landing-images';
