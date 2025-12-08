@@ -102,7 +102,7 @@ export default function JoinCoachPage() {
         displayName: `${formData.firstName} ${formData.lastName}`,
         coacheeInfo: {
           coachId: coachId,
-          coachName: coachInfo.displayName,
+          coachName: coachInfo?.displayName || coachInfo?.firstName || `${coachInfo?.firstName || ""} ${coachInfo?.lastName || ""}`.trim() || "Coach",
           onboardingCompleted: true,
           goals: [],
         },
