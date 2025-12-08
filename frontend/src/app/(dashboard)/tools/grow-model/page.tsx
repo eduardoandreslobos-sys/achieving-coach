@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { saveToolResult } from '@/lib/activityLogger';
+import { saveToolResultComplete } from '@/lib/activityLogger';
 import { CheckCircle } from 'lucide-react';
 
 interface GROWData {
@@ -26,12 +26,11 @@ export default function GROWWorksheetPage() {
     if (!userProfile) return;
 
     try {
-      await saveToolResult(
-        userProfile.uid,
-        userProfile.displayName || 'Unknown User',
-        'grow-worksheet',
+      await saveToolResultComplete(
+        userProfile,
+        'grow-model',
         'GROW Worksheet',
-        'grow-worksheet',
+        'Goal Setting',
         data
       );
       setSaved(true);

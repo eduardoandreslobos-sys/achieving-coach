@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { saveToolResult } from '@/lib/activityLogger';
+import { saveToolResultComplete } from '@/lib/activityLogger';
 import { CheckCircle, Users, Plus, Trash2 } from 'lucide-react';
 
 interface Stakeholder {
@@ -52,12 +52,11 @@ export default function StakeholderMapPage() {
     if (!userProfile || stakeholders.length === 0) return;
 
     try {
-      await saveToolResult(
-        userProfile.uid,
-        userProfile.displayName || 'Unknown User',
+      await saveToolResultComplete(
+        userProfile,
         'stakeholder-map',
         'Stakeholder Map',
-        'relationships',
+        'Communication',
         { stakeholders }
       );
       setSaved(true);

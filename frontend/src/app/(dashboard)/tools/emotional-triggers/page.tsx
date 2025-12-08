@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { saveToolResult } from '@/lib/activityLogger';
+import { saveToolResultComplete } from '@/lib/activityLogger';
 import { CheckCircle, Heart, AlertCircle, Lightbulb, TrendingUp } from 'lucide-react';
 
 interface TriggerEntry {
@@ -62,12 +62,11 @@ export default function EmotionalTriggersPage() {
     if (!userProfile || entries.length === 0) return;
 
     try {
-      await saveToolResult(
-        userProfile.uid,
-        userProfile.displayName || 'Unknown User',
+      await saveToolResultComplete(
+        userProfile,
         'emotional-triggers',
         'Emotional Triggers Journal',
-        'self-awareness',
+        'Self-Awareness',
         { entries }
       );
       setSaved(true);

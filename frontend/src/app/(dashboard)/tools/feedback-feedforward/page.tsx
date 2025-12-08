@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { saveToolResult } from '@/lib/activityLogger';
+import { saveToolResultComplete } from '@/lib/activityLogger';
 import { CheckCircle, ArrowRight, ArrowLeft, Lightbulb } from 'lucide-react';
 
 interface FeedbackItem {
@@ -52,12 +52,11 @@ export default function FeedbackFeedForwardPage() {
     if (!userProfile || items.length === 0) return;
 
     try {
-      await saveToolResult(
-        userProfile.uid,
-        userProfile.displayName || 'Unknown User',
+      await saveToolResultComplete(
+        userProfile,
         'feedback-feedforward',
-        'Feedback Feed-Forward Planner',
-        'communication',
+        'Feedback Feed-Forward',
+        'Communication',
         { items }
       );
       setSaved(true);
