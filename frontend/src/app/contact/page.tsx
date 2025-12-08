@@ -242,11 +242,7 @@ export default function ContactPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12 px-6" role="contentinfo">
-        <div className="max-w-6xl mx-auto text-center">
-          <p className="text-sm">© 2024 AchievingCoach. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Target } from "lucide-react";
+import { Navbar, Footer } from "@/components/layout";
 
 export const metadata: Metadata = {
   title: "Terms of Service | AchievingCoach",
@@ -139,11 +140,7 @@ export default function TermsPage() {
           </section>
         </main>
 
-        <footer className="bg-gray-900 text-gray-400 py-12 px-6" role="contentinfo">
-          <div className="max-w-6xl mx-auto text-center">
-            <p className="text-sm">© 2024 AchievingCoach. All rights reserved.</p>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </>
   );
