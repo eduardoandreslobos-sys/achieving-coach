@@ -57,7 +57,7 @@ export default function AdminDashboardPage() {
       // Load users
       const usersSnapshot = await getDocs(collection(db, 'users'));
       const users = usersSnapshot.docs.map(doc => ({
-        ...doc.data(),
+        ...(doc.data() as { role?: string; email?: string; displayName?: string; firstName?: string }),
         id: doc.id,
         createdAt: doc.data().createdAt?.toDate() || new Date(),
       }));
