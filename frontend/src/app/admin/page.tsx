@@ -122,8 +122,8 @@ export default function AdminDashboardPage() {
 
       // Add recent tool completions
       const toolResults = toolResultsSnapshot.docs.map(doc => ({
+        ...(doc.data() as { toolId?: string }),
         id: doc.id,
-        ...doc.data(),
         completedAt: doc.data().completedAt?.toDate() || new Date(),
       }));
       toolResults.slice(0, 3).forEach(t => {
@@ -147,7 +147,7 @@ export default function AdminDashboardPage() {
   };
 
   const calculateGrowth = (current: number, previous: number) => {
-    if (previous === 0) return current > 0 ? 100 : 0;
+    if (previous === 0) return current > 0 ? '100' : '0';
     return ((current - previous) / previous * 100).toFixed(1);
   };
 

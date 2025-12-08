@@ -216,7 +216,7 @@ export default function AdminUsersPage() {
                 </td>
                 <td className="px-6 py-4">
                   <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(user.subscriptionStatus)}`}>
-                    {user.subscriptionStatus?.charAt(0).toUpperCase() + user.subscriptionStatus?.slice(1) || 'Active'}
+                    {(user.subscriptionStatus || 'Active').charAt(0).toUpperCase() + (user.subscriptionStatus || 'Active').slice(1)}
                   </span>
                 </td>
                 <td className="px-6 py-4 text-gray-500 text-sm">
