@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Target, Check, X } from 'lucide-react';
 import { generateMetadata as genMeta } from '@/lib/metadata';
-import { Footer } from '@/components/layout/Footer';
+import { Navbar, Footer } from '@/components/layout';
 
 export const metadata: Metadata = genMeta({
   title: 'Pricing Plans - Start at $29/month',
@@ -22,27 +22,7 @@ export default function PricingPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="border-b border-gray-100" role="navigation" aria-label="Main navigation">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2" aria-label="AchievingCoach Home">
-              <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                <Target className="w-5 h-5 text-white" aria-hidden="true" />
-              </div>
-              <span className="text-lg font-semibold text-gray-900">AchievingCoach</span>
-            </Link>
-            <div className="hidden md:flex items-center gap-8">
-              <Link href="/features" className="text-sm text-gray-600 hover:text-gray-900">Features</Link>
-              <Link href="/pricing" className="text-sm text-gray-900 font-semibold" aria-current="page">Pricing</Link>
-              <Link href="/about" className="text-sm text-gray-600 hover:text-gray-900">About</Link>
-              <Link href="/sign-in" className="text-sm text-gray-600 hover:text-gray-900">Log In</Link>
-              <Link href="/sign-up" className="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700" aria-label="Start free trial">
-                Start Free Trial
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero */}
       <section className="py-20 px-6 bg-white" aria-labelledby="hero-heading">
