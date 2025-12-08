@@ -13,7 +13,8 @@ import {
   LogOut, 
   Bell,
   ChevronDown,
-  HelpCircle
+  HelpCircle,
+  TrendingUp
 } from 'lucide-react';
 import { doc, getDoc, collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -110,6 +111,7 @@ export default function AdminLayout({
     { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
     { name: 'User Management', href: '/admin/users', icon: Users },
     { name: 'Content', href: '/admin/blog', icon: FileText },
+    { name: 'SEO Analytics', href: '/admin/seo', icon: TrendingUp },
     { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
     { name: 'Settings', href: '/admin/settings', icon: Settings },
   ];
