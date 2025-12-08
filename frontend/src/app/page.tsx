@@ -33,27 +33,7 @@ export default function HomePage() {
 
       <div className="min-h-screen bg-white">
         {/* Navigation */}
-        <nav className="border-b border-gray-100" role="navigation" aria-label="Main navigation">
-          <div className="max-w-7xl mx-auto px-6 py-4">
-            <div className="flex items-center justify-between">
-              <Link href="/" className="flex items-center gap-2" aria-label="AchievingCoach Home">
-                <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                  <Target className="w-5 h-5 text-white" aria-hidden="true" />
-                </div>
-                <span className="text-lg font-semibold text-gray-900">AchievingCoach</span>
-              </Link>
-              <div className="hidden md:flex items-center gap-8">
-                <Link href="/features" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">Features</Link>
-                <Link href="/pricing" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">Pricing</Link>
-                <Link href="/about" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">About</Link>
-                <Link href="/sign-in" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">Log In</Link>
-                <Link href="/sign-up" className="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors">
-                  Start Free Trial
-                </Link>
-              </div>
-            </div>
-          </div>
-        </nav>
+        <Navbar />
 
         {/* Hero */}
         <section className="py-24 px-6 bg-white" aria-labelledby="hero-heading">
