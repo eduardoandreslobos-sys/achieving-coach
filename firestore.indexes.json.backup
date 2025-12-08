@@ -25,15 +25,6 @@
       ]
     },
     {
-      "collectionGroup": "goals",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "coacheeId", "order": "ASCENDING" },
-        { "fieldPath": "status", "order": "ASCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
-      ]
-    },
-    {
       "collectionGroup": "sessions",
       "queryScope": "COLLECTION",
       "fields": [
@@ -47,30 +38,6 @@
       "fields": [
         { "fieldPath": "coacheeId", "order": "ASCENDING" },
         { "fieldPath": "scheduledDate", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "sessions",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "coachId", "order": "ASCENDING" },
-        { "fieldPath": "scheduledAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "sessions",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "coacheeId", "order": "ASCENDING" },
-        { "fieldPath": "scheduledAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "reflections",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "userId", "order": "ASCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
       ]
     },
     {

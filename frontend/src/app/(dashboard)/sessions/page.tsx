@@ -85,6 +85,12 @@ export default function SessionsPage() {
   const handleSaveSession = async () => {
     if (!user?.uid || !newSession.title.trim() || !newSession.date || !newSession.time) return;
 
+    // Coachees need a coach assigned to create sessions
+    if (!isCoach && !userProfile?.coacheeInfo?.coachId) {
+      alert('You need to be assigned to a coach before scheduling sessions.');
+      return;
+    }
+
     setSaving(true);
     try {
       const scheduledAt = new Date(`${newSession.date}T${newSession.time}`);
