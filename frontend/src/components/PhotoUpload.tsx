@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { doc, updateDoc } from 'firebase/firestore';
 import { storage, db } from '@/lib/firebase';
@@ -17,6 +17,13 @@ export default function PhotoUpload({ userId, currentPhotoURL, onUploadComplete 
   const [preview, setPreview] = useState<string | null>(currentPhotoURL || null);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Update preview when currentPhotoURL changes (e.g., after page reload)
+  useEffect(() => {
+    if (currentPhotoURL) {
+      setPreview(currentPhotoURL);
+    }
+  }, [currentPhotoURL]);
 
   const validateFile = (file: File): string | null => {
     // Check file type
