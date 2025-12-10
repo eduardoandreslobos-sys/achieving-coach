@@ -26,6 +26,9 @@ interface AnalyticsData {
 export default function CoachAnalyticsDashboard() {
   const { userProfile } = useAuth();
   const [timeRange, setTimeRange] = useState<'30' | '90' | 'custom'>('30');
+  const [showCustomPicker, setShowCustomPicker] = useState(false);
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -42,9 +45,19 @@ export default function CoachAnalyticsDashboard() {
         if (timeRange === '30') {
           startDate.setDate(now.getDate() - 30);
           prevStartDate.setDate(now.getDate() - 60);
-        } else {
+        } else if (timeRange === '90') {
           startDate.setDate(now.getDate() - 90);
           prevStartDate.setDate(now.getDate() - 180);
+        } else if (timeRange === 'custom' && customStartDate && customEndDate) {
+          const customStart = new Date(customStartDate);
+          const customEnd = new Date(customEndDate);
+          const rangeDays = Math.ceil((customEnd.getTime() - customStart.getTime()) / (1000 * 60 * 60 * 24));
+          startDate.setTime(customStart.getTime());
+          now.setTime(customEnd.getTime());
+          prevStartDate.setDate(customStart.getDate() - rangeDays);
+        } else {
+          startDate.setDate(now.getDate() - 30);
+          prevStartDate.setDate(now.getDate() - 60);
         }
 
         // Load coachees
@@ -152,7 +165,7 @@ export default function CoachAnalyticsDashboard() {
     };
 
     loadAnalytics();
-  }, [userProfile, timeRange]);
+  }, [userProfile, timeRange, customStartDate, customEndDate]);
 
   const exportToPDF = () => {
     if (!analytics || !userProfile) return;
@@ -276,11 +289,55 @@ export default function CoachAnalyticsDashboard() {
               >
                 Last 90 Days
               </button>
-              <button
-                className="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg px-4 text-sm font-medium bg-white border border-gray-300 hover:bg-gray-50"
-              >
-                Custom Range
-              </button>
+              <div className="relative">
+                <button
+                  onClick={() => setShowCustomPicker(!showCustomPicker)}
+                  className={`flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg px-4 text-sm font-medium transition-colors ${
+                    timeRange === 'custom'
+                      ? 'bg-primary-600/10 text-primary-600'
+                      : 'bg-white border border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  <Calendar className="w-4 h-4" />
+                  Custom Range
+                </button>
+                {showCustomPicker && (
+                  <div className="absolute right-0 top-12 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-4 min-w-[280px]">
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                        <input
+                          type="date"
+                          value={customStartDate}
+                          onChange={(e) => setCustomStartDate(e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                        <input
+                          type="date"
+                          value={customEndDate}
+                          onChange={(e) => setCustomEndDate(e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                        />
+                      </div>
+                      <button
+                        onClick={() => {
+                          if (customStartDate && customEndDate) {
+                            setTimeRange('custom');
+                            setShowCustomPicker(false);
+                          }
+                        }}
+                        disabled={!customStartDate || !customEndDate}
+                        className="w-full px-4 py-2 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Apply
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
             
             <button 

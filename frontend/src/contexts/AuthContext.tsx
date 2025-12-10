@@ -1,6 +1,5 @@
 'use client';
-
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
 import { 
   User,
   signInWithEmailAndPassword,
@@ -19,6 +18,7 @@ interface UserProfile {
   displayName?: string;
   firstName?: string;
   lastName?: string;
+  photoURL?: string;
   coachProfile?: {
     bio: string;
     specialties: string[];
@@ -28,6 +28,8 @@ interface UserProfile {
     coachId?: string;
   };
   valueProposition?: any;
+  createdAt?: any;
+  updatedAt?: any;
   [key: string]: any;
 }
 
@@ -38,6 +40,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  refreshProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -47,6 +50,7 @@ const AuthContext = createContext<AuthContextType>({
   signIn: async () => {},
   signUp: async () => {},
   logout: async () => {},
+  refreshProfile: async () => {},
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -54,36 +58,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const loadUserProfile = useCallback(async (currentUser: User) => {
+    try {
+      const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+      if (userDoc.exists()) {
+        setUserProfile({
+          uid: currentUser.uid,
+          email: currentUser.email || '',
+          ...userDoc.data(),
+        } as UserProfile);
+      } else {
+        setUserProfile({
+          uid: currentUser.uid,
+          email: currentUser.email || '',
+          role: 'coachee',
+        });
+      }
+    } catch (error) {
+      console.error('Error loading user profile:', error);
+      setUserProfile({
+        uid: currentUser.uid,
+        email: currentUser.email || '',
+        role: 'coachee',
+      });
+    }
+  }, []);
+
+  const refreshProfile = useCallback(async () => {
+    if (user) {
+      await loadUserProfile(user);
+    }
+  }, [user, loadUserProfile]);
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setUser(user);
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
       
-      if (user) {
-        // Load user profile from Firestore
-        try {
-          const userDoc = await getDoc(doc(db, 'users', user.uid));
-          if (userDoc.exists()) {
-            setUserProfile({
-              uid: user.uid,
-              email: user.email || '',
-              ...userDoc.data(),
-            } as UserProfile);
-          } else {
-            // User doesn't have profile yet
-            setUserProfile({
-              uid: user.uid,
-              email: user.email || '',
-              role: 'coachee', // Default
-            });
-          }
-        } catch (error) {
-          console.error('Error loading user profile:', error);
-          setUserProfile({
-            uid: user.uid,
-            email: user.email || '',
-            role: 'coachee',
-          });
-        }
+      if (currentUser) {
+        await loadUserProfile(currentUser);
       } else {
         setUserProfile(null);
       }
@@ -92,7 +104,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     return unsubscribe;
-  }, []);
+  }, [loadUserProfile]);
 
   const signIn = async (email: string, password: string) => {
     await signInWithEmailAndPassword(auth, email, password);
@@ -108,7 +120,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, userProfile, loading, signIn, signUp, logout }}>
+    <AuthContext.Provider value={{ user, userProfile, loading, signIn, signUp, logout, refreshProfile }}>
       {children}
     </AuthContext.Provider>
   );
