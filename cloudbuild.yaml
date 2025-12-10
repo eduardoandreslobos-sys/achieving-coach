@@ -10,7 +10,7 @@ steps:
       - '--build-arg'
       - 'NEXT_PUBLIC_FIREBASE_PROJECT_ID=achieving-coach-dev-1763154191'
       - '--build-arg'
-      - 'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=achieving-coach-dev-1763154191.firebasestorage.app'
+      - 'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=triple-shift-478220-b2.firebasestorage.app'
       - '--build-arg'
       - 'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=360022789814'
       - '--build-arg'
