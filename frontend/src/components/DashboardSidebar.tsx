@@ -12,7 +12,8 @@ import {
   FileText, 
   LogOut,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Settings
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -24,6 +25,7 @@ const navigation = [
   { name: 'Sessions', href: '/sessions', icon: Calendar },
   { name: 'Reflections', href: '/reflections', icon: BookOpen },
   { name: 'Resources', href: '/resources', icon: FileText },
+  { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
 export default function DashboardSidebar() {
