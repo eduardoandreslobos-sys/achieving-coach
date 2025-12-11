@@ -11,6 +11,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'achievingcoach.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+      },
     ],
   },
   
@@ -58,5 +62,4 @@ const nextConfig = {
     ];
   },
 };
-
 module.exports = nextConfig;
