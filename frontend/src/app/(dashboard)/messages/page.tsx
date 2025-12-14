@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
 import { collection, query, where, getDocs, addDoc, orderBy, serverTimestamp, or } from 'firebase/firestore';
 import { Send, MessageSquare } from 'lucide-react';
+import Image from 'next/image';
 
 interface Message {
   id: string;
@@ -21,6 +22,7 @@ interface Contact {
   uid: string;
   displayName: string;
   email: string;
+  photoURL?: string;
 }
 
 export default function MessagesPage() {
@@ -201,9 +203,21 @@ export default function MessagesPage() {
               }`}
             >
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold">
-                  {contact.displayName?.charAt(0) || 'U'}
-                </div>
+                {contact.photoURL ? (
+                  <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+                    <Image
+                      src={contact.photoURL}
+                      alt={contact.displayName || 'Contact'}
+                      width={48}
+                      height={48}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold">
+                    {contact.displayName?.charAt(0) || 'U'}
+                  </div>
+                )}
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-gray-900 truncate">{contact.displayName}</p>
                   <p className="text-sm text-gray-500 truncate">{contact.email}</p>
@@ -221,9 +235,21 @@ export default function MessagesPage() {
             {/* Header */}
             <div className="p-4 bg-white border-b border-gray-200">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold">
-                  {selectedContact.displayName?.charAt(0) || 'U'}
-                </div>
+                {selectedContact.photoURL ? (
+                  <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                    <Image
+                      src={selectedContact.photoURL}
+                      alt={selectedContact.displayName || 'Contact'}
+                      width={40}
+                      height={40}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold">
+                    {selectedContact.displayName?.charAt(0) || 'U'}
+                  </div>
+                )}
                 <div>
                   <p className="font-medium text-gray-900">{selectedContact.displayName}</p>
                   <p className="text-sm text-gray-500">{selectedContact.email}</p>

@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Users, Mail, Calendar } from 'lucide-react';
 
 interface Client {
@@ -13,6 +14,7 @@ interface Client {
   email: string;
   createdAt: any;
   organization?: string;
+  photoURL?: string;
 }
 
 export default function CoachClientsPage() {
@@ -96,9 +98,21 @@ export default function CoachClientsPage() {
                 className="bg-white rounded-xl border-2 border-gray-200 p-6 hover:border-primary-300 hover:shadow-lg transition-all"
               >
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold text-2xl">
-                    {client.displayName?.charAt(0) || 'C'}
-                  </div>
+                  {client.photoURL ? (
+                    <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+                      <Image
+                        src={client.photoURL}
+                        alt={client.displayName || 'Client'}
+                        width={64}
+                        height={64}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold text-2xl">
+                      {client.displayName?.charAt(0) || 'C'}
+                    </div>
+                  )}
                   <div className="flex-1 min-w-0">
                     <h3 className="font-bold text-gray-900 text-lg truncate">{client.displayName}</h3>
                     {client.organization && (

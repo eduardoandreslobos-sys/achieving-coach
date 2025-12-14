@@ -16,6 +16,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import Image from 'next/image';
 
 const navigation = [
   { name: 'Dashboard', href: '/coach', icon: LayoutDashboard },
@@ -116,9 +117,21 @@ export default function CoachSidebar() {
         <div className="border-t border-gray-200">
           <div className={`p-4 ${collapsed ? 'flex flex-col items-center' : ''}`}>
             <div className={`flex items-center ${collapsed ? 'flex-col' : 'gap-3'}`}>
-              <div className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold">
-                {getInitials()}
-              </div>
+              {userProfile.photoURL ? (
+                <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                  <Image
+                    src={userProfile.photoURL}
+                    alt="Profile"
+                    width={40}
+                    height={40}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold">
+                  {getInitials()}
+                </div>
+              )}
               {!collapsed && (
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900 truncate">
