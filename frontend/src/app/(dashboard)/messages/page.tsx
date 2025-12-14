@@ -59,7 +59,8 @@ export default function MessagesPage() {
               setContacts([{
                 uid: coachDoc.docs[0].id,
                 displayName: coachData.displayName || 'Coach',
-                email: coachData.email
+                email: coachData.email,
+                photoURL: coachData.photoURL
               }]);
             }
           }
@@ -71,7 +72,8 @@ export default function MessagesPage() {
         const contactsData = snapshot.docs.map(doc => ({
           uid: doc.id,
           displayName: doc.data().displayName,
-          email: doc.data().email
+          email: doc.data().email,
+          photoURL: doc.data().photoURL
         })) as Contact[];
         
         setContacts(contactsData);
