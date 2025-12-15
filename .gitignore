@@ -51,3 +51,4 @@ venv/
 *.swo
 proyecto.tar.gz
 estado_proyecto.txt
+ga4-credentials.json
