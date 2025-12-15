@@ -17,6 +17,7 @@
     "build:prod": "NODE_ENV=production next build"
   },
   "dependencies": {
+    "@google-analytics/data": "^5.2.1",
     "browser-image-compression": "^2.0.2",
     "chart.js": "^4.5.1",
     "clsx": "^2.1.0",
