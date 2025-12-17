@@ -13,6 +13,7 @@ import {
   getDocs,
   updateDoc,
   doc,
+  getDoc,
   serverTimestamp,
   Timestamp 
 } from 'firebase/firestore';
@@ -32,9 +33,16 @@ interface Session {
   meetingLink?: string;
 }
 
+interface Coachee {
+  uid: string;
+  displayName: string;
+  email: string;
+}
+
 export default function SessionsPage() {
   const { user, userProfile } = useAuth();
   const [sessions, setSessions] = useState<Session[]>([]);
+  const [coachees, setCoachees] = useState<Coachee[]>([]);
   const [loading, setLoading] = useState(true);
   const [showNewSession, setShowNewSession] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -45,6 +53,7 @@ export default function SessionsPage() {
     duration: 60,
     type: 'video' as const,
     notes: '',
+    coacheeId: '',
   });
 
   const isCoach = userProfile?.role === 'coach';
@@ -52,8 +61,33 @@ export default function SessionsPage() {
   useEffect(() => {
     if (user?.uid) {
       loadSessions();
+      if (isCoach) {
+        loadCoachees();
+      }
     }
-  }, [user]);
+  }, [user, isCoach]);
+
+  const loadCoachees = async () => {
+    if (!user?.uid) return;
+    
+    try {
+      const q = query(
+        collection(db, 'users'),
+        where('role', '==', 'coachee'),
+        where('coacheeInfo.coachId', '==', user.uid)
+      );
+      const snapshot = await getDocs(q);
+      const data = snapshot.docs.map(doc => ({
+        uid: doc.id,
+        displayName: doc.data().displayName || doc.data().email?.split('@')[0] || 'Coachee',
+        email: doc.data().email,
+      })) as Coachee[];
+      
+      setCoachees(data);
+    } catch (error) {
+      console.error('Error loading coachees:', error);
+    }
+  };
 
   const loadSessions = async () => {
     if (!user?.uid) return;
@@ -85,6 +119,12 @@ export default function SessionsPage() {
   const handleSaveSession = async () => {
     if (!user?.uid || !newSession.title.trim() || !newSession.date || !newSession.time) return;
 
+    // Coach must select a coachee
+    if (isCoach && !newSession.coacheeId) {
+      alert('Please select a coachee for this session.');
+      return;
+    }
+
     // Coachees need a coach assigned to create sessions
     if (!isCoach && !userProfile?.coacheeInfo?.coachId) {
       alert('You need to be assigned to a coach before scheduling sessions.');
@@ -94,6 +134,31 @@ export default function SessionsPage() {
     setSaving(true);
     try {
       const scheduledAt = new Date(`${newSession.date}T${newSession.time}`);
+      
+      let coachName = '';
+      let coacheeName = '';
+      let coachId = '';
+      let coacheeId = '';
+
+      if (isCoach) {
+        coachId = user.uid;
+        coacheeId = newSession.coacheeId;
+        coachName = userProfile?.displayName || userProfile?.email?.split('@')[0] || 'Coach';
+        const selectedCoachee = coachees.find(c => c.uid === newSession.coacheeId);
+        coacheeName = selectedCoachee?.displayName || '';
+      } else {
+        coacheeId = user.uid;
+        coachId = userProfile?.coacheeInfo?.coachId || '';
+        coacheeName = userProfile?.displayName || userProfile?.email?.split('@')[0] || 'Coachee';
+        // Fetch coach name
+        if (coachId) {
+          const coachDoc = await getDoc(doc(db, 'users', coachId));
+          if (coachDoc.exists()) {
+            const coachData = coachDoc.data();
+            coachName = coachData.displayName || coachData.email?.split('@')[0] || 'Coach';
+          }
+        }
+      }
 
       await addDoc(collection(db, 'sessions'), {
         title: newSession.title.trim(),
@@ -101,15 +166,15 @@ export default function SessionsPage() {
         duration: newSession.duration,
         type: newSession.type,
         status: 'scheduled',
-        coachId: isCoach ? user.uid : userProfile?.coacheeInfo?.coachId || '',
-        coacheeId: isCoach ? '' : user.uid,
-        coachName: isCoach ? userProfile?.displayName : '',
-        coacheeName: !isCoach ? userProfile?.displayName : '',
+        coachId,
+        coacheeId,
+        coachName,
+        coacheeName,
         notes: newSession.notes,
         createdAt: serverTimestamp(),
       });
 
-      setNewSession({ title: '', date: '', time: '', duration: 60, type: 'video', notes: '' });
+      setNewSession({ title: '', date: '', time: '', duration: 60, type: 'video', notes: '', coacheeId: '' });
       setShowNewSession(false);
       await loadSessions();
     } catch (error) {
@@ -183,6 +248,31 @@ export default function SessionsPage() {
           <div className="bg-white rounded-xl border-2 border-primary-200 p-6 mb-6">
             <h3 className="text-xl font-bold text-gray-900 mb-4">Schedule New Session</h3>
             <div className="space-y-4">
+              {/* Coachee selector for coaches */}
+              {isCoach && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Select Coachee *</label>
+                  {coachees.length === 0 ? (
+                    <p className="text-sm text-gray-500 p-3 bg-gray-50 rounded-lg">
+                      No coachees assigned yet. Invite coachees first from the "Invite Coachees" page.
+                    </p>
+                  ) : (
+                    <select
+                      value={newSession.coacheeId}
+                      onChange={(e) => setNewSession({ ...newSession, coacheeId: e.target.value })}
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    >
+                      <option value="">-- Select a coachee --</option>
+                      {coachees.map(coachee => (
+                        <option key={coachee.uid} value={coachee.uid}>
+                          {coachee.displayName} ({coachee.email})
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
+              )}
+              
               <input
                 type="text"
                 placeholder="Session title (e.g., Weekly Check-in, Goal Review)"
@@ -233,7 +323,7 @@ export default function SessionsPage() {
               <div className="flex gap-3">
                 <button
                   onClick={handleSaveSession}
-                  disabled={saving || !newSession.title.trim() || !newSession.date || !newSession.time}
+                  disabled={saving || !newSession.title.trim() || !newSession.date || !newSession.time || (isCoach && !newSession.coacheeId)}
                   className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {saving ? 'Saving...' : 'Schedule Session'}
@@ -241,7 +331,7 @@ export default function SessionsPage() {
                 <button
                   onClick={() => {
                     setShowNewSession(false);
-                    setNewSession({ title: '', date: '', time: '', duration: 60, type: 'video', notes: '' });
+                    setNewSession({ title: '', date: '', time: '', duration: 60, type: 'video', notes: '', coacheeId: '' });
                   }}
                   className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"
                 >
@@ -277,6 +367,10 @@ export default function SessionsPage() {
                         {getStatusBadge(session.status)}
                       </div>
                       <div className="space-y-2 text-sm text-gray-600">
+                        <div className="flex items-center gap-2">
+                          <User className="w-4 h-4" />
+                          <span>{isCoach ? session.coacheeName : session.coachName}</span>
+                        </div>
                         <div className="flex items-center gap-2">
                           <Calendar className="w-4 h-4" />
                           <span>{session.scheduledAt.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</span>
@@ -323,6 +417,10 @@ export default function SessionsPage() {
                         {getStatusBadge(session.status)}
                       </div>
                       <div className="flex items-center gap-4 text-sm text-gray-500">
+                        <div className="flex items-center gap-1">
+                          <User className="w-4 h-4" />
+                          <span>{isCoach ? session.coacheeName : session.coachName}</span>
+                        </div>
                         <div className="flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
                           <span>{session.scheduledAt.toLocaleDateString()}</span>
