@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, Video, Plus, CheckCircle, XCircle, User } from 'lucide-react';
+import { Calendar, Clock, Video, Plus, CheckCircle, XCircle, User, Eye } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { 
   collection, 
@@ -57,6 +58,7 @@ export default function SessionsPage() {
   });
 
   const isCoach = userProfile?.role === 'coach';
+  const router = useRouter();
 
   useEffect(() => {
     if (user?.uid) {
@@ -359,7 +361,7 @@ export default function SessionsPage() {
           ) : (
             <div className="grid gap-4">
               {upcomingSessions.map((session) => (
-                <div key={session.id} className="bg-white rounded-xl border-2 border-gray-200 p-6 hover:border-primary-300 transition-colors">
+                <div key={session.id} onClick={() => router.push(`/sessions/${session.id}`)} className="bg-white rounded-xl border-2 border-gray-200 p-6 hover:border-primary-300 transition-colors cursor-pointer">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">

@@ -13,7 +13,8 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
-  Settings
+  Settings,
+  FileSignature
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import Image from 'next/image';
@@ -23,6 +24,7 @@ const navigation = [
   { name: 'Goals', href: '/goals', icon: Target },
   { name: 'My Tools', href: '/tools', icon: Wrench },
   { name: 'Messages', href: '/messages', icon: MessageSquare },
+  { name: 'My Programs', href: '/programs', icon: FileSignature },
   { name: 'Sessions', href: '/sessions', icon: Calendar },
   { name: 'Reflections', href: '/reflections', icon: BookOpen },
   { name: 'Resources', href: '/resources', icon: FileText },
@@ -35,7 +37,6 @@ export default function DashboardSidebar() {
   const { userProfile, logout } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
 
-  // Load collapsed state from localStorage
   useEffect(() => {
     const saved = localStorage.getItem('dashboardSidebarCollapsed');
     if (saved !== null) {
@@ -43,7 +44,6 @@ export default function DashboardSidebar() {
     }
   }, []);
 
-  // Save collapsed state to localStorage
   const toggleCollapse = () => {
     const newState = !collapsed;
     setCollapsed(newState);
