@@ -12,7 +12,102 @@ import {
   Timestamp 
 } from 'firebase/firestore';
 import { db } from './firebase';
-import { CoachingProgram, Session, SessionType } from '@/types/coaching';
+import { 
+  CoachingProgram, 
+  Session, 
+  SessionType,
+  BackgroundInfo,
+  TripartiteMeeting,
+  CoachingAgreement,
+  SessionCalendarEntry,
+  SessionAgreement,
+  SessionReport,
+  ObservedMeetingReport,
+  ProcessReport,
+  FinalReport,
+  DigitalSignature,
+  TRIPARTITE_QUESTIONS
+} from '@/types/coaching';
+
+// ============ DIGITAL SIGNATURE ============
+
+export async function generateSignatureHash(
+  userId: string,
+  programId: string,
+  role: string
+): Promise<string> {
+  const timestamp = Date.now();
+  const data = `${userId}|${programId}|${timestamp}|${role}`;
+  
+  // Generate SHA-256 hash
+  const encoder = new TextEncoder();
+  const dataBuffer = encoder.encode(data);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  
+  return hashHex;
+}
+
+export async function signAgreement(
+  programId: string,
+  userId: string,
+  userName: string,
+  userEmail: string,
+  role: 'coachee' | 'sponsor' | 'hr' | 'coach',
+  acceptedTerms: string[]
+): Promise<DigitalSignature> {
+  const signatureHash = await generateSignatureHash(userId, programId, role);
+  
+  const signature: DigitalSignature = {
+    oduid: userId,
+    name: userName,
+    email: userEmail,
+    role,
+    signedAt: Timestamp.now(),
+    signatureHash,
+    acceptedTerms,
+  };
+  
+  // Update program with new signature
+  const programRef = doc(db, 'coaching_programs', programId);
+  const programDoc = await getDoc(programRef);
+  
+  if (programDoc.exists()) {
+    const program = programDoc.data() as CoachingProgram;
+    const existingSignatures = program.agreement?.signatures || [];
+    
+    // Check if already signed by this role
+    const alreadySigned = existingSignatures.some(s => s.role === role);
+    if (alreadySigned) {
+      throw new Error(`Ya existe una firma para el rol ${role}`);
+    }
+    
+    const updatedSignatures = [...existingSignatures, signature];
+    
+    await updateDoc(programRef, {
+      'agreement.signatures': updatedSignatures,
+      updatedAt: serverTimestamp(),
+    });
+    
+    // Check if all required signatures are complete
+    const requiredRoles: Array<'coach' | 'coachee' | 'sponsor' | 'hr'> = ['coach', 'coachee', 'sponsor'];
+    const signedRoles = updatedSignatures.map(s => s.role);
+    const allSigned = requiredRoles.every(r => signedRoles.includes(r));
+    
+    if (allSigned) {
+      await updateDoc(programRef, {
+        'agreement.status': 'signed',
+        'agreement.completedAt': serverTimestamp(),
+        status: 'active',
+        currentPhase: 4,
+        phasesCompleted: [...(program.phasesCompleted || []), 3],
+      });
+    }
+  }
+  
+  return signature;
+}
 
 // ============ COACHING PROGRAMS ============
 
@@ -40,10 +135,12 @@ export async function createCoachingProgram(
     overallGoals: data.overallGoals,
     duration: data.duration,
     sessionsPlanned: data.sessionsPlanned,
-    status: 'active',
+    status: 'draft',
     startDate: Timestamp.fromDate(data.startDate),
     createdAt: serverTimestamp() as Timestamp,
     updatedAt: serverTimestamp() as Timestamp,
+    currentPhase: 1,
+    phasesCompleted: [],
   };
 
   await setDoc(programRef, program);
@@ -56,10 +153,7 @@ export async function getCoachingProgram(programId: string): Promise<CoachingPro
   
   if (!docSnap.exists()) return null;
   
-  return {
-    id: docSnap.id,
-    ...docSnap.data(),
-  } as CoachingProgram;
+  return { id: docSnap.id, ...docSnap.data() } as CoachingProgram;
 }
 
 export async function getCoacheeProgram(
@@ -70,18 +164,14 @@ export async function getCoacheeProgram(
     collection(db, 'coaching_programs'),
     where('coachId', '==', coachId),
     where('coacheeId', '==', coacheeId),
-    where('status', '==', 'active')
+    where('status', 'in', ['draft', 'pending_acceptance', 'active'])
   );
   
   const snapshot = await getDocs(q);
-  
   if (snapshot.empty) return null;
   
   const doc = snapshot.docs[0];
-  return {
-    id: doc.id,
-    ...doc.data(),
-  } as CoachingProgram;
+  return { id: doc.id, ...doc.data() } as CoachingProgram;
 }
 
 export async function getCoachPrograms(coachId: string): Promise<CoachingProgram[]> {
@@ -92,11 +182,18 @@ export async function getCoachPrograms(coachId: string): Promise<CoachingProgram
   );
   
   const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as CoachingProgram));
+}
+
+export async function getCoacheePrograms(coacheeId: string): Promise<CoachingProgram[]> {
+  const q = query(
+    collection(db, 'coaching_programs'),
+    where('coacheeId', '==', coacheeId),
+    orderBy('createdAt', 'desc')
+  );
   
-  return snapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data(),
-  } as CoachingProgram));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as CoachingProgram));
 }
 
 export async function updateCoachingProgram(
@@ -106,6 +203,77 @@ export async function updateCoachingProgram(
   const docRef = doc(db, 'coaching_programs', programId);
   await updateDoc(docRef, {
     ...updates,
+    updatedAt: serverTimestamp(),
+  });
+}
+
+// ============ PHASE UPDATES ============
+
+export async function saveBackgroundInfo(
+  programId: string,
+  backgroundInfo: BackgroundInfo
+): Promise<void> {
+  const docRef = doc(db, 'coaching_programs', programId);
+  await updateDoc(docRef, {
+    backgroundInfo: {
+      ...backgroundInfo,
+      completedAt: serverTimestamp(),
+    },
+    currentPhase: 2,
+    phasesCompleted: [1],
+    updatedAt: serverTimestamp(),
+  });
+}
+
+export async function saveTripartiteMeeting(
+  programId: string,
+  tripartiteMeeting: TripartiteMeeting
+): Promise<void> {
+  const docRef = doc(db, 'coaching_programs', programId);
+  const programDoc = await getDoc(docRef);
+  const program = programDoc.data() as CoachingProgram;
+  
+  await updateDoc(docRef, {
+    tripartiteMeeting: {
+      ...tripartiteMeeting,
+      completedAt: serverTimestamp(),
+    },
+    currentPhase: 3,
+    phasesCompleted: [...(program.phasesCompleted || []), 2],
+    updatedAt: serverTimestamp(),
+  });
+}
+
+export async function saveCoachingAgreement(
+  programId: string,
+  agreement: Omit<CoachingAgreement, 'signatures' | 'status'>
+): Promise<void> {
+  const docRef = doc(db, 'coaching_programs', programId);
+  
+  await updateDoc(docRef, {
+    agreement: {
+      ...agreement,
+      signatures: [],
+      status: 'pending_signatures',
+      createdAt: serverTimestamp(),
+    },
+    status: 'pending_acceptance',
+    updatedAt: serverTimestamp(),
+  });
+}
+
+export async function saveSessionCalendar(
+  programId: string,
+  calendar: SessionCalendarEntry[]
+): Promise<void> {
+  const docRef = doc(db, 'coaching_programs', programId);
+  const programDoc = await getDoc(docRef);
+  const program = programDoc.data() as CoachingProgram;
+  
+  await updateDoc(docRef, {
+    sessionCalendar: calendar,
+    currentPhase: 5,
+    phasesCompleted: [...(program.phasesCompleted || []), 4],
     updatedAt: serverTimestamp(),
   });
 }
@@ -125,6 +293,7 @@ export async function createSession(
     duration: number;
     objective: string;
     type?: SessionType;
+    location?: string;
   }
 ): Promise<string> {
   const sessionRef = doc(collection(db, 'sessions'));
@@ -135,11 +304,12 @@ export async function createSession(
     coacheeId,
     coacheeName,
     sessionNumber: data.sessionNumber,
-    type: data.type || 'regular',
+    type: data.type || (data.sessionNumber === 4 ? 'observed' : 'regular'),
     title: data.title,
     scheduledDate: Timestamp.fromDate(data.scheduledDate),
     scheduledTime: data.scheduledTime,
     duration: data.duration,
+    location: data.location,
     status: 'scheduled',
     goal: data.objective,
     objective: data.objective,
@@ -159,11 +329,7 @@ export async function getSession(sessionId: string): Promise<Session | null> {
   const docSnap = await getDoc(docRef);
   
   if (!docSnap.exists()) return null;
-  
-  return {
-    id: docSnap.id,
-    ...docSnap.data(),
-  } as Session;
+  return { id: docSnap.id, ...docSnap.data() } as Session;
 }
 
 export async function getProgramSessions(programId: string): Promise<Session[]> {
@@ -174,11 +340,7 @@ export async function getProgramSessions(programId: string): Promise<Session[]> 
   );
   
   const snapshot = await getDocs(q);
-  
-  return snapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data(),
-  } as Session));
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Session));
 }
 
 export async function getCoachSessions(
@@ -203,11 +365,7 @@ export async function getCoachSessions(
   }
   
   const snapshot = await getDocs(q);
-  
-  return snapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data(),
-  } as Session));
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Session));
 }
 
 export async function updateSession(
@@ -220,6 +378,242 @@ export async function updateSession(
     updatedAt: serverTimestamp(),
   });
 }
+
+// ============ SESSION AGREEMENT & REPORT ============
+
+export async function saveSessionAgreement(
+  sessionId: string,
+  agreement: SessionAgreement
+): Promise<void> {
+  const docRef = doc(db, 'sessions', sessionId);
+  await updateDoc(docRef, {
+    sessionAgreement: {
+      ...agreement,
+      completedAt: serverTimestamp(),
+    },
+    status: 'in-progress',
+    startedAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
+}
+
+export async function saveSessionReport(
+  sessionId: string,
+  report: SessionReport
+): Promise<void> {
+  const docRef = doc(db, 'sessions', sessionId);
+  await updateDoc(docRef, {
+    sessionReport: {
+      ...report,
+      completedAt: serverTimestamp(),
+    },
+    status: 'completed',
+    completedAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
+  
+  // Check if we need to generate process report (after session 3)
+  const sessionDoc = await getDoc(docRef);
+  const session = sessionDoc.data() as Session;
+  
+  if (session.sessionNumber === 3) {
+    await generateProcessReport(session.programId);
+  }
+}
+
+export async function saveObservedMeetingReport(
+  sessionId: string,
+  report: ObservedMeetingReport
+): Promise<void> {
+  const docRef = doc(db, 'sessions', sessionId);
+  await updateDoc(docRef, {
+    observedMeetingReport: {
+      ...report,
+      completedAt: serverTimestamp(),
+    },
+    status: 'completed',
+    completedAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
+}
+
+// ============ AUTO-GENERATED REPORTS ============
+
+export async function generateProcessReport(programId: string): Promise<ProcessReport> {
+  const program = await getCoachingProgram(programId);
+  if (!program) throw new Error('Programa no encontrado');
+  
+  const sessions = await getProgramSessions(programId);
+  const completedSessions = sessions.filter(s => s.status === 'completed' && s.sessionNumber <= 3);
+  
+  // Extract themes from session reports
+  const themes: string[] = [];
+  const practices: { name: string; context: string }[] = [];
+  const discoveries: string[] = [];
+  
+  completedSessions.forEach(session => {
+    if (session.sessionReport) {
+      if (session.sessionReport.sessionTopic) {
+        themes.push(session.sessionReport.sessionTopic);
+      }
+      if (session.sessionReport.practicesWorked) {
+        practices.push({
+          name: session.sessionReport.practicesWorked,
+          context: session.sessionReport.practiceContext || '',
+        });
+      }
+      if (session.sessionReport.discoveriesAndLearnings) {
+        discoveries.push(session.sessionReport.discoveriesAndLearnings);
+      }
+    }
+  });
+  
+  // Get data from tripartite meeting
+  const conservativeForces = program.tripartiteMeeting?.responses
+    ?.find(r => r.questionId === 6)?.coacheeResponse || '';
+  const transformativeForces = program.tripartiteMeeting?.responses
+    ?.find(r => r.questionId === 5)?.coacheeResponse || '';
+  
+  const processReport: ProcessReport = {
+    autoGenerated: true,
+    generatedAt: Timestamp.now(),
+    centralThemes: themes.join('\n\n'),
+    coacheeAspects: {
+      conservativeForces: conservativeForces,
+      transformativeForces: transformativeForces,
+    },
+    organizationalContext: {
+      conservativeForces: program.tripartiteMeeting?.responses
+        ?.find(r => r.questionId === 6)?.hrResponse || '',
+      transformativeForces: program.tripartiteMeeting?.responses
+        ?.find(r => r.questionId === 5)?.hrResponse || '',
+    },
+    newPractices: practices,
+    relevantDiscoveries: discoveries.join('\n\n'),
+    observations: '',
+    editedByCoach: false,
+  };
+  
+  // Save to program
+  const docRef = doc(db, 'coaching_programs', programId);
+  await updateDoc(docRef, {
+    processReport,
+    currentPhase: 6,
+    updatedAt: serverTimestamp(),
+  });
+  
+  return processReport;
+}
+
+export async function updateProcessReport(
+  programId: string,
+  updates: Partial<ProcessReport>
+): Promise<void> {
+  const docRef = doc(db, 'coaching_programs', programId);
+  const programDoc = await getDoc(docRef);
+  const program = programDoc.data() as CoachingProgram;
+  
+  await updateDoc(docRef, {
+    processReport: {
+      ...program.processReport,
+      ...updates,
+      editedByCoach: true,
+      editedAt: serverTimestamp(),
+    },
+    updatedAt: serverTimestamp(),
+  });
+}
+
+export async function generateFinalReport(programId: string): Promise<FinalReport> {
+  const program = await getCoachingProgram(programId);
+  if (!program) throw new Error('Programa no encontrado');
+  
+  const sessions = await getProgramSessions(programId);
+  const completedSessions = sessions.filter(s => s.status === 'completed');
+  
+  // Extract data from tripartite (starting point)
+  const startingPoints = program.tripartiteMeeting?.responses
+    ?.find(r => r.questionId === 8)?.coacheeResponse || '';
+  
+  // Extract incorporated practices from all sessions
+  const practices: string[] = [];
+  completedSessions.forEach(session => {
+    if (session.sessionReport?.practicesWorked) {
+      practices.push(session.sessionReport.practicesWorked);
+    }
+  });
+  
+  // Extract discoveries as closing aspects
+  const closingAspects: string[] = [];
+  completedSessions.slice(-3).forEach(session => {
+    if (session.sessionReport?.discoveriesAndLearnings) {
+      closingAspects.push(session.sessionReport.discoveriesAndLearnings);
+    }
+  });
+  
+  // Get process report data
+  const processReport = program.processReport;
+  
+  const finalReport: FinalReport = {
+    autoGenerated: true,
+    generatedAt: Timestamp.now(),
+    startingPointData: startingPoints,
+    closingAspects: closingAspects.join('\n\n'),
+    incorporatedPractices: practices.join('\n\n'),
+    gapsToReinforce: processReport?.coacheeAspects?.conservativeForces || '',
+    sustainabilityRecommendations: '',
+    finalObservations: '',
+    editedByCoach: false,
+  };
+  
+  // Save to program
+  const docRef = doc(db, 'coaching_programs', programId);
+  await updateDoc(docRef, {
+    finalReport,
+    currentPhase: 9,
+    updatedAt: serverTimestamp(),
+  });
+  
+  return finalReport;
+}
+
+export async function updateFinalReport(
+  programId: string,
+  updates: Partial<FinalReport>
+): Promise<void> {
+  const docRef = doc(db, 'coaching_programs', programId);
+  const programDoc = await getDoc(docRef);
+  const program = programDoc.data() as CoachingProgram;
+  
+  await updateDoc(docRef, {
+    finalReport: {
+      ...program.finalReport,
+      ...updates,
+      editedByCoach: true,
+      editedAt: serverTimestamp(),
+    },
+    updatedAt: serverTimestamp(),
+  });
+}
+
+export async function completeFinalReport(programId: string): Promise<void> {
+  const docRef = doc(db, 'coaching_programs', programId);
+  const programDoc = await getDoc(docRef);
+  const program = programDoc.data() as CoachingProgram;
+  
+  await updateDoc(docRef, {
+    finalReport: {
+      ...program.finalReport,
+      completedAt: serverTimestamp(),
+    },
+    status: 'completed',
+    phasesCompleted: [...(program.phasesCompleted || []), 9],
+    endDate: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
+}
+
+// ============ LEGACY SUPPORT ============
 
 export async function startSession(sessionId: string): Promise<void> {
   await updateSession(sessionId, {
