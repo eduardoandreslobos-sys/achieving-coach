@@ -502,6 +502,9 @@ export async function generateProcessReport(programId: string): Promise<ProcessR
     updatedAt: serverTimestamp(),
   });
   
+  
+  // Notificar al coach
+  await notifyCoachOfAutoReport(program.coachId, programId, 'process', program.coacheeName);
   return processReport;
 }
 
@@ -574,6 +577,9 @@ export async function generateFinalReport(programId: string): Promise<FinalRepor
     updatedAt: serverTimestamp(),
   });
   
+  
+  // Notificar al coach
+  await notifyCoachOfAutoReport(program.coachId, programId, 'final', program.coacheeName);
   return finalReport;
 }
 
@@ -636,4 +642,52 @@ export async function completeSession(
     completedAt: serverTimestamp() as Timestamp,
     ...data,
   });
+}
+
+// ============ NOTIFICATIONS ============
+
+export async function createNotification(
+  userId: string,
+  type: 'message' | 'session' | 'program' | 'file' | 'general',
+  title: string,
+  message: string,
+  actionUrl?: string
+): Promise<string> {
+  const notificationRef = doc(collection(db, 'notifications'));
+  
+  await setDoc(notificationRef, {
+    userId,
+    type,
+    title,
+    message,
+    read: false,
+    actionUrl,
+    createdAt: serverTimestamp(),
+  });
+  
+  return notificationRef.id;
+}
+
+// Notificar al coach cuando se genera un reporte automático
+export async function notifyCoachOfAutoReport(
+  coachId: string,
+  programId: string,
+  reportType: 'process' | 'final',
+  coacheeName: string
+): Promise<void> {
+  const title = reportType === 'process' 
+    ? '📋 Reporte de Proceso Generado'
+    : '🏆 Informe Final Generado';
+    
+  const message = reportType === 'process'
+    ? `Se ha generado automáticamente el reporte de seguimiento del proceso para ${coacheeName}. Revisa y edita según sea necesario.`
+    : `Se ha generado el informe final para ${coacheeName}. Revisa, edita y completa el proceso.`;
+    
+  await createNotification(
+    coachId,
+    'program',
+    title,
+    message,
+    `/coach/programs/${programId}`
+  );
 }
