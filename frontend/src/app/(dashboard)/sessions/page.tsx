@@ -199,8 +199,15 @@ export default function SessionsPage() {
     }
   };
 
-  const upcomingSessions = sessions.filter(s => s.status === 'scheduled' && s.scheduledAt > new Date());
-  const pastSessions = sessions.filter(s => s.status !== 'scheduled' || s.scheduledAt <= new Date());
+  const now = new Date();
+  const upcomingSessions = sessions.filter(s => {
+    const sessionDate = s.scheduledAt instanceof Date ? s.scheduledAt : (s.scheduledAt as any)?.toDate?.() || new Date(0);
+    return s.status === 'scheduled' && sessionDate > now;
+  });
+  const pastSessions = sessions.filter(s => {
+    const sessionDate = s.scheduledAt instanceof Date ? s.scheduledAt : (s.scheduledAt as any)?.toDate?.() || new Date(0);
+    return s.status !== 'scheduled' || sessionDate <= now;
+  });
 
   const getStatusBadge = (status: string) => {
     switch (status) {
