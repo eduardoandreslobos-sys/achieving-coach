@@ -11,9 +11,9 @@ import {
   saveTripartiteMeeting,
   saveCoachingAgreement,
   saveSessionCalendar,
-  generateProcessReport,
+  generateProcessReportWithAI,
   updateProcessReport,
-  generateFinalReport,
+  generateFinalReportWithAI,
   updateFinalReport,
   completeFinalReport,
   createSession
@@ -293,7 +293,7 @@ export default function ProgramDetailPage() {
                 onGenerate={async () => {
                   setSaving(true);
                   try {
-                    await generateProcessReport(programId);
+                    await generateProcessReportWithAI(programId);
                     await loadData();
                   } finally {
                     setSaving(false);
@@ -335,7 +335,7 @@ export default function ProgramDetailPage() {
                 onGenerate={async () => {
                   setSaving(true);
                   try {
-                    await generateFinalReport(programId);
+                    await generateFinalReportWithAI(programId);
                     await loadData();
                   } finally {
                     setSaving(false);

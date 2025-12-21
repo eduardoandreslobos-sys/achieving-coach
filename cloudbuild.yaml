@@ -42,7 +42,7 @@ steps:
       - 'managed'
       - '--allow-unauthenticated'
       - '--set-secrets'
-      - 'GA4_CREDENTIALS=ga4-credentials:latest'
+      - 'GA4_CREDENTIALS=ga4-credentials:latest,GEMINI_API_KEY=GEMINI_API_KEY:latest'
 images:
   - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:$COMMIT_SHA'
   - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:latest'
