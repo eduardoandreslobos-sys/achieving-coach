@@ -15,10 +15,10 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL('https://achievingcoach.com'),
   title: {
-    default: "AchievingCoach - Professional Coaching Platform",
+    default: "AchievingCoach – Executive Coaching Platform & AI Coaching Tools",
     template: "%s | AchievingCoach",
   },
-  description: "End-to-end platform for professional coaches to manage practices, track client progress, and deliver exceptional results.",
+  description: "All-in-one executive coaching platform with 9-phase methodology, AI-powered insights, and 12+ professional tools. Start your free trial today.",
   keywords: ["coaching platform", "professional coaching", "ICF coaching", "client progress tracking", "coaching software", "coaching tools", "DISC assessment", "wheel of life"],
   authors: [{ name: "AchievingCoach" }],
   creator: "AchievingCoach",
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "AchievingCoach - Professional Coaching Platform",
-    description: "End-to-end platform for professional coaches to manage practices, track client progress, and deliver exceptional results.",
+    title: "AchievingCoach – Executive Coaching Platform & AI Coaching Tools",
+    description: "All-in-one executive coaching platform with 9-phase methodology, AI-powered insights, and 12+ professional tools. Start your free trial today.",
     url: "https://achievingcoach.com",
     siteName: "AchievingCoach",
     locale: "en_US",
@@ -52,8 +52,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "AchievingCoach - Professional Coaching Platform",
-    description: "End-to-end platform for professional coaches to manage practices, track client progress, and deliver exceptional results.",
+    title: "AchievingCoach – Executive Coaching Platform & AI Coaching Tools",
+    description: "All-in-one executive coaching platform with 9-phase methodology, AI-powered insights, and 12+ professional tools. Start your free trial today.",
     images: ["/og-image.png"],
   },
   verification: {

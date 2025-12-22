@@ -1,5 +1,4 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
     
@@ -12,11 +11,14 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == userId;
     }
     
+    function isAdmin() {
+      return isAuthenticated() && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
     // Users collection
     match /users/{userId} {
-      // Allow public read for coaches (for invitation links)
       allow read: if resource.data.role == 'coach';
-      // Allow authenticated users to read
       allow read: if isAuthenticated();
       allow update: if isOwner(userId);
       allow create: if request.auth != null && request.auth.uid == userId;
@@ -68,6 +70,18 @@ service cloud.firestore {
     match /icf_questions/{questionId} {
       allow read: if isAuthenticated();
       allow write: if false;
+    }
+    
+    // Blog Posts - Public read, admin write
+    match /blog_posts/{postId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // Coaching Programs
+    match /coaching_programs/{programId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
     }
   }
 }
