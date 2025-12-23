@@ -41,9 +41,9 @@ import { Timestamp } from 'firebase/firestore';
 import { 
   FileText, Users, FileSignature, Calendar, Play, Eye, 
   ClipboardList, Award, ChevronRight, Check, Clock, Bell,
-  Save, Plus, Trash2, ArrowLeft, AlertCircle
+  Save, Plus, Trash2, ArrowLeft, AlertCircle, Download
 } from 'lucide-react';
-
+import { generateProcessReportPDF, generateFinalReportPDF, generateAgreementPDF, downloadPDF } from '@/lib/pdfService';
 const ICON_MAP: Record<string, any> = {
   FileText, Users, FileSignature, Calendar, Play, Eye, ClipboardList, Award
 };
@@ -289,6 +289,7 @@ export default function ProgramDetailPage() {
 
             {activeTab === 6 && (
               <ProcessReportTab
+                coachName={userProfile?.displayName || "Coach"}
                 program={program}
                 onGenerate={async () => {
                   setSaving(true);
@@ -331,6 +332,7 @@ export default function ProgramDetailPage() {
 
             {activeTab === 9 && (
               <FinalReportTab
+                coachName={userProfile?.displayName || "Coach"}
                 program={program}
                 onGenerate={async () => {
                   setSaving(true);
@@ -1162,11 +1164,13 @@ function SessionsTab({
 }
 
 function ProcessReportTab({ 
+  coachName,
   program, 
   onGenerate,
   onUpdate, 
   saving 
 }: { 
+  coachName: string;
   program: CoachingProgram;
   onGenerate: () => Promise<void>;
   onUpdate: (data: Partial<ProcessReport>) => Promise<void>;
@@ -1292,15 +1296,27 @@ function ProcessReportTab({
           />
         </div>
       </div>
-
-      <div className="flex justify-end pt-4 border-t">
+      <div className="flex justify-end gap-3 pt-4 border-t">
+        <button
+          onClick={() => {
+            const doc = generateProcessReportPDF(
+              { title: program.title, coacheeName: program.coacheeName || "", coachName: coachName, organizationName: program.backgroundInfo?.organizationName },
+              { centralThemes: form.centralThemes, coacheeAspects: form.coacheeAspects, organizationalContext: form.organizationalContext, newPractices: form.newPractices, relevantDiscoveries: form.relevantDiscoveries, observations: form.observations, aiGenerated: report.aiGenerated },
+            );
+            downloadPDF(doc, `reporte-proceso-${program.title.replace(/\s+/g, "-")}.pdf`);
+          }}
+          className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+        >
+          <Download size={18} />
+          Exportar PDF
+        </button>
         <button
           onClick={() => onUpdate(form)}
           disabled={saving}
           className="flex items-center gap-2 px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
         >
           <Save size={18} />
-          {saving ? 'Guardando...' : 'Guardar Cambios'}
+          {saving ? "Guardando..." : "Guardar Cambios"}
         </button>
       </div>
     </div>
@@ -1308,14 +1324,16 @@ function ProcessReportTab({
 }
 
 function FinalReportTab({ 
+  coachName,
   program, 
   onGenerate,
   onUpdate,
   onComplete,
   saving 
 }: { 
-  program: CoachingProgram;
+  coachName: string;
   onGenerate: () => Promise<void>;
+  program: CoachingProgram;
   onUpdate: (data: Partial<FinalReport>) => Promise<void>;
   onComplete: () => Promise<void>;
   saving: boolean;
@@ -1424,8 +1442,20 @@ function FinalReportTab({
           />
         </div>
       </div>
-
       <div className="flex justify-end gap-3 pt-4 border-t">
+        <button
+          onClick={() => {
+            const doc = generateFinalReportPDF(
+              { title: program.title, coacheeName: program.coacheeName || "", coachName: coachName, organizationName: program.backgroundInfo?.organizationName },
+              { startingPointData: form.startingPointData, closingAspects: form.closingAspects, incorporatedPractices: form.incorporatedPractices, gapsToReinforce: form.gapsToReinforce, sustainabilityRecommendations: form.sustainabilityRecommendations, finalObservations: form.finalObservations, aiGenerated: report.aiGenerated }
+            );
+            downloadPDF(doc, `informe-final-${program.title.replace(/\s+/g, "-")}.pdf`);
+          }}
+          className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+        >
+          <Download size={18} />
+          Exportar PDF
+        </button>
         <button
           onClick={() => onUpdate(form)}
           disabled={saving}
@@ -1441,7 +1471,7 @@ function FinalReportTab({
             className="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
           >
             <Check size={18} />
-            {saving ? 'Completando...' : 'Completar Proceso'}
+            {saving ? "Completando..." : "Completar Proceso"}
           </button>
         )}
       </div>
