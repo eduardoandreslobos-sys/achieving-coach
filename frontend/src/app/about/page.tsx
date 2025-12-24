@@ -4,7 +4,7 @@ import { Target, Shield, Award, Users, Lightbulb, Heart, Rocket, Calendar } from
 import { Navbar, Footer } from '@/components/layout';
 
 export const metadata: Metadata = {
-  title: 'About Us – Our Mission, Vision & Team | AchievingCoach',
+  title: 'About Us – Our Mission, Vision & Team',
   description: 'Learn about AchievingCoach\'s mission to empower coaches worldwide. Discover our story, values, and the team behind the platform.',
   keywords: ['about achievingcoach', 'coaching platform company', 'coaching software team'],
   openGraph: {

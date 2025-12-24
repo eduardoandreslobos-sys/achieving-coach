@@ -4,7 +4,7 @@ import { Check, HelpCircle, Sparkles } from 'lucide-react';
 import { Navbar, Footer } from '@/components/layout';
 
 export const metadata: Metadata = {
-  title: 'Pricing – Plans for Coaches, Teams & Enterprises | AchievingCoach',
+  title: 'Pricing – Plans for Coaches, Teams & Enterprises',
   description: 'Compare AchievingCoach pricing. Free 14-day trial, no credit card. Core $29/mo, Pro $59/mo, custom Enterprise plans. No long-term contracts.',
   keywords: ['coaching software pricing', 'coaching platform cost', 'coaching software free trial', 'coaching platform plans'],
   openGraph: {

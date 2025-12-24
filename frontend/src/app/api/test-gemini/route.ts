@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
     const prompt = 'Responde en una sola línea: ¿Cuál es el objetivo principal del coaching ejecutivo?';
     

@@ -4,7 +4,7 @@ import { Users, BarChart3, Shield, Palette, Settings, HeadphonesIcon, CheckCircl
 import { Navbar, Footer } from '@/components/layout';
 
 export const metadata: Metadata = {
-  title: 'For Organizations – Enterprise Coaching Platform | AchievingCoach',
+  title: 'For Organizations – Enterprise Coaching Platform',
   description: 'Enterprise coaching platform for HR and L&D leaders. Manage coaches at scale, track ROI, ensure security (SOC 2, GDPR, HIPAA).',
   keywords: ['enterprise coaching platform', 'corporate coaching software', 'coaching ROI', 'leadership development platform'],
   openGraph: {

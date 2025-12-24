@@ -6,7 +6,7 @@ import { BookOpen, ArrowRight, Calendar, User, Clock } from 'lucide-react';
 import { Navbar, Footer } from '@/components/layout';
 
 export const metadata: Metadata = {
-  title: 'Blog – Coaching Resources & Best Practices | AchievingCoach',
+  title: 'Blog – Coaching Resources & Best Practices',
   description: 'Expert coaching insights: guides, how-tos, leadership development tips, and ICF certification prep to elevate your coaching game.',
   keywords: ['coaching blog', 'coaching resources', 'ICF certification', 'leadership development', 'coaching tips'],
   openGraph: {

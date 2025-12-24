@@ -8,7 +8,7 @@ import { Footer } from '@/components/layout/Footer';
 import { GoogleCalendarLogo, ZoomLogo, SlackLogo, MicrosoftTeamsLogo } from '@/components/icons/IntegrationLogos';
 
 export const metadata: Metadata = {
-  title: 'Features – Coaching Tools, Analytics & AI Insights | AchievingCoach',
+  title: 'Features – Coaching Tools, Analytics & AI Insights',
   description: 'Explore AchievingCoach features: client dashboards, ICF simulator, 12+ coaching tools, real-time analytics, AI reports, and secure integrations.',
   keywords: ['coaching tools', 'ICF competency evaluation', 'client progress tracking', 'coaching session management', 'coaching analytics', 'AI coaching reports'],
   openGraph: {
