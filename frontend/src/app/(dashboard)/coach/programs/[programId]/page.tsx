@@ -44,6 +44,7 @@ import {
   Save, Plus, Trash2, ArrowLeft, AlertCircle, Download
 } from 'lucide-react';
 import { generateProcessReportPDF, generateFinalReportPDF, generateAgreementPDF, downloadPDF } from '@/lib/pdfService';
+import StakeholderManager from '@/components/Stakeholders/StakeholderManager';
 const ICON_MAP: Record<string, any> = {
   FileText, Users, FileSignature, Calendar, Play, Eye, ClipboardList, Award
 };
@@ -145,6 +146,17 @@ export default function ProgramDetailPage() {
               />
             ))}
           </div>
+        </div>
+
+        {/* Stakeholder Manager */}
+        <div className="mb-6">
+          <StakeholderManager
+            programId={programId}
+            coacheeId={program.coacheeId}
+            coachId={userProfile?.uid || ''}
+            coacheeName={program.coacheeName || 'Coachee'}
+            programTitle={program.title || 'Programa de Coaching'}
+          />
         </div>
 
         {/* Tabs */}
