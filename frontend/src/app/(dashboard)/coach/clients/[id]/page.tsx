@@ -13,7 +13,10 @@ import {
   Calendar, 
   Target,
   CheckCircle2,
+  ClipboardList,
   Clock,
+  FileText,
+  ChevronDown,
   Activity,
   BarChart3,
   Mail,
@@ -69,6 +72,8 @@ export default function ClientAnalyticsPage() {
   const [client, setClient] = useState<CoacheeData | null>(null);
   const [program, setProgram] = useState<any>(null);
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
+  const [sessions, setSessions] = useState<any[]>([]);
+  const [expandedSession, setExpandedSession] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState<'30' | '90' | 'all'>('30');
   const [showMetricSelector, setShowMetricSelector] = useState(false);
@@ -147,7 +152,9 @@ export default function ClientAnalyticsPage() {
         where('coacheeId', '==', clientId)
       );
       const sessionsSnapshot = await getDocs(sessionsQuery);
-      const sessions = sessionsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
+      const sessionsData = sessionsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
+      setSessions(sessionsData);
+      const sessions = sessionsData;
       const completedSessions = sessions.filter(s => s.status === 'completed').length;
       const upcomingSessions = sessions.filter(s => s.status === 'scheduled').length;
 
@@ -521,6 +528,123 @@ export default function ClientAnalyticsPage() {
         )}
 
         {/* Goals Section - PRESERVED FROM ORIGINAL */}
+        
+        {/* Session Notes Section */}
+        {sessions.length > 0 && (
+          <div className="bg-white rounded-xl border-2 border-gray-200 p-6 mt-8">
+            <div className="flex items-center gap-2 mb-4">
+              <FileText className="text-primary-600" size={24} />
+              <h2 className="text-2xl font-bold text-gray-900">Session Notes</h2>
+              <span className="text-sm text-gray-500 ml-2">
+                ({sessions.filter(s => s.sessionReport || s.sessionAgreement).length} with notes)
+              </span>
+            </div>
+            
+            {sessions.filter(s => s.sessionReport || s.sessionAgreement).length === 0 ? (
+              <p className="text-gray-500 text-center py-6">No session notes recorded yet</p>
+            ) : (
+              <div className="space-y-3">
+                {sessions
+                  .filter(s => s.sessionReport || s.sessionAgreement)
+                  .sort((a, b) => (b.scheduledDate?.seconds || 0) - (a.scheduledDate?.seconds || 0))
+                  .map((session) => (
+                  <div key={session.id} className="border border-gray-200 rounded-lg overflow-hidden">
+                    <button
+                      onClick={() => setExpandedSession(expandedSession === session.id ? null : session.id)}
+                      className="w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 flex items-center justify-between transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="font-medium text-gray-900">
+                          {session.title || `Sesión ${session.sessionNumber || ''}`}
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          {session.scheduledDate?.toDate?.()?.toLocaleDateString('es-CL') || 'Sin fecha'}
+                        </span>
+                        {session.status === 'completed' && (
+                          <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded-full">Completada</span>
+                        )}
+                      </div>
+                      <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform ${expandedSession === session.id ? 'rotate-180' : ''}`} />
+                    </button>
+                    
+                    {expandedSession === session.id && (
+                      <div className="p-4 space-y-4 bg-white border-t border-gray-100">
+                        {session.sessionAgreement && (
+                          <div className="bg-blue-50 rounded-lg p-4">
+                            <h4 className="font-semibold text-blue-900 mb-3 flex items-center gap-2">
+                              <ClipboardList size={16} />
+                              Acuerdo de Sesión
+                            </h4>
+                            <div className="space-y-2 text-sm text-blue-800">
+                              {session.sessionAgreement.previousSessionLink && (
+                                <div><strong>Enganche con sesión anterior:</strong> {session.sessionAgreement.previousSessionLink}</div>
+                              )}
+                              {session.sessionAgreement.sessionFocus && (
+                                <div><strong>Foco de la sesión:</strong> {session.sessionAgreement.sessionFocus}</div>
+                              )}
+                              {session.sessionAgreement.relevanceToProcess && (
+                                <div><strong>Relevancia:</strong> {session.sessionAgreement.relevanceToProcess}</div>
+                              )}
+                              {session.sessionAgreement.practicesOrCompetencies && (
+                                <div><strong>Prácticas/Competencias:</strong> {session.sessionAgreement.practicesOrCompetencies}</div>
+                              )}
+                              {session.sessionAgreement.sessionIndicators && (
+                                <div><strong>Indicadores:</strong> {session.sessionAgreement.sessionIndicators}</div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {session.sessionReport && (
+                          <div className="bg-green-50 rounded-lg p-4">
+                            <h4 className="font-semibold text-green-900 mb-3 flex items-center gap-2">
+                              <CheckCircle2 size={16} />
+                              Tabla de Seguimiento
+                            </h4>
+                            <div className="space-y-2 text-sm text-green-800">
+                              {session.sessionReport.sessionTopic && (
+                                <div><strong>Tema:</strong> {session.sessionReport.sessionTopic}</div>
+                              )}
+                              {session.sessionReport.practicesWorked && (
+                                <div><strong>Prácticas trabajadas:</strong> {session.sessionReport.practicesWorked}</div>
+                              )}
+                              {session.sessionReport.practiceContext && (
+                                <div><strong>Contexto:</strong> {session.sessionReport.practiceContext}</div>
+                              )}
+                              {session.sessionReport.progressIndicators && (
+                                <div><strong>Indicadores de avance:</strong> {session.sessionReport.progressIndicators}</div>
+                              )}
+                              {session.sessionReport.discoveriesAndLearnings && (
+                                <div><strong>Descubrimientos y aprendizajes:</strong> {session.sessionReport.discoveriesAndLearnings}</div>
+                              )}
+                              {session.sessionReport.tasksForNextSession && (
+                                <div><strong>Tareas próxima sesión:</strong> {session.sessionReport.tasksForNextSession}</div>
+                              )}
+                              {session.sessionReport.observations && (
+                                <div><strong>Observaciones:</strong> {session.sessionReport.observations}</div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                        
+                        <div className="flex justify-end pt-2">
+                          <Link
+                            href={`/sessions/${session.id}`}
+                            className="text-primary-600 hover:text-primary-700 text-sm font-medium flex items-center gap-1"
+                          >
+                            Ver sesión completa
+                            <ExternalLink size={14} />
+                          </Link>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         {(client as any).coacheeInfo?.goals && (client as any).coacheeInfo.goals.length > 0 && (
           <div className="bg-white rounded-xl border-2 border-gray-200 p-6 mt-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Client Goals</h2>
