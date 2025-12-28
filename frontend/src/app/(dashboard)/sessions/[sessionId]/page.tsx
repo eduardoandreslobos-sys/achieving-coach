@@ -122,7 +122,7 @@ export default function SessionDetailPage() {
                 <SessionStatusBadge status={session.status} />
               </div>
               <p className="text-gray-600">
-                {session.coacheeName} • Sesión {session.sessionNumber}
+                {session.coacheeName} • Sesión {session.sessionNumber || 1}
               </p>
               <p className="text-sm text-gray-500 mt-1">
                 {session.scheduledDate?.toDate?.()?.toLocaleDateString('es-CL')} - {session.scheduledTime}
@@ -395,10 +395,11 @@ function SessionAgreementTab({
   );
 
   const getPreviousSessionHint = () => {
-    if (session.sessionNumber === 1) {
+    const num = session.sessionNumber || 1;
+    if (num === 1) {
       return 'Enganche con la reunión tripartita inicial';
     }
-    return `Enganche con la sesión ${session.sessionNumber - 1}`;
+    return `Enganche con la sesión ${num - 1}`;
   };
 
   return (
@@ -540,7 +541,7 @@ function SessionReportTab({
       <div className="bg-purple-50 rounded-lg p-4 mb-6">
         <h3 className="font-semibold text-purple-900 mb-2 flex items-center gap-2">
           <ClipboardList size={18} />
-          Tabla de Seguimiento - Sesión {session.sessionNumber}
+          Tabla de Seguimiento - Sesión {session.sessionNumber || 1}
         </h3>
         <p className="text-sm text-purple-800">
           Complete esta tabla al finalizar la sesión para documentar el progreso.

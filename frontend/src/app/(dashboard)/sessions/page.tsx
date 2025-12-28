@@ -162,12 +162,17 @@ export default function SessionsPage() {
         }
       }
 
+      // Calcular el número de sesión
+      const existingSessions = sessions.filter(s => s.coacheeId === coacheeId);
+      const sessionNumber = existingSessions.length + 1;
+      
       await addDoc(collection(db, 'sessions'), {
         title: newSession.title.trim(),
         scheduledAt: Timestamp.fromDate(scheduledAt),
         duration: newSession.duration,
         type: newSession.type,
         status: 'scheduled',
+        sessionNumber,
         coachId,
         coacheeId,
         coachName,
