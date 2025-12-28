@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, Video, Plus, CheckCircle, XCircle, User, Eye } from 'lucide-react';
+import { Calendar, Clock, Video, Plus, CheckCircle, XCircle, User, Eye, Play } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
@@ -443,18 +443,25 @@ export default function SessionsPage() {
                     {session.status === 'scheduled' && (
                       <div className="flex gap-2">
                         <button
+                          onClick={() => router.push(`/sessions/${session.id}`)}
+                          className="flex items-center gap-1 px-3 py-1 bg-primary-600 text-white hover:bg-primary-700 rounded-lg transition-colors"
+                        >
+                          <Play size={16} />
+                          <span className="text-sm">Iniciar</span>
+                        </button>
+                        <button
                           onClick={() => handleUpdateStatus(session.id, 'completed')}
                           className="flex items-center gap-1 px-3 py-1 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                         >
                           <CheckCircle size={16} />
-                          <span className="text-sm">Completed</span>
+                          <span className="text-sm">Completada</span>
                         </button>
                         <button
                           onClick={() => handleUpdateStatus(session.id, 'no-show')}
                           className="flex items-center gap-1 px-3 py-1 text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
                         >
                           <XCircle size={16} />
-                          <span className="text-sm">No Show</span>
+                          <span className="text-sm">No Apareció</span>
                         </button>
                       </div>
                     )}

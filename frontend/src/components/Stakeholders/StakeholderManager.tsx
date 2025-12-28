@@ -88,7 +88,36 @@ export default function StakeholderManager({
       setForm({ name: '', email: '', phone: '', position: '', role: 'sponsor' });
       setShowAddForm(false);
       
-      // TODO: Enviar email de invitación
+      // Enviar email de invitación automáticamente
+      const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+      const portalUrl = `${baseUrl}/portal/${newStakeholder.accessToken}`;
+      
+      try {
+        const emailResponse = await fetch('/api/send-invitation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            stakeholderName: form.name,
+            stakeholderEmail: form.email,
+            stakeholderRole: STAKEHOLDER_ROLE_LABELS[form.role],
+            coacheeName,
+            coachName: 'Tu Coach', // TODO: obtener nombre real
+            programTitle,
+            portalUrl,
+            expiresAt: newStakeholder.tokenExpiresAt.toDate().toLocaleDateString('es-CL'),
+          }),
+        });
+        
+        if (emailResponse.ok) {
+          await markInvitationSent(newStakeholder.id);
+          alert('Stakeholder agregado e invitación enviada por email');
+        } else {
+          alert('Stakeholder agregado. Error al enviar email, usa el botón para reenviar.');
+        }
+      } catch (emailError) {
+        console.error('Error sending invitation email:', emailError);
+        alert('Stakeholder agregado. Error al enviar email, usa el botón para reenviar.');
+      }
       
     } catch (error) {
       console.error('Error creating stakeholder:', error);
