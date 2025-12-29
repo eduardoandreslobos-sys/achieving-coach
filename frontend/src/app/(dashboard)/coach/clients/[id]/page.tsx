@@ -290,7 +290,7 @@ export default function ClientAnalyticsPage() {
                   <p className="text-gray-600">{program.description}</p>
                 </div>
                 <Link
-                  href={`/coach/programs/${program.id}`}
+                  href={"/coach/programs/" + program.id}
                   className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
                 >
                   <ExternalLink size={18} />
@@ -333,7 +333,7 @@ export default function ClientAnalyticsPage() {
                 Create a coaching program to define goals and schedule sessions
               </p>
               <Link
-                href={`/coach/programs/new?coacheeId=${clientId}`}
+                href={"/coach/programs/new?coacheeId=" + clientId}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 font-medium"
               >
                 <Plus size={20} />
