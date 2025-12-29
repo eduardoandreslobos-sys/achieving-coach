@@ -1,39 +1,37 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { Target, Shield, Award, Users, Lightbulb, Heart, Rocket, Calendar } from 'lucide-react';
-import { Navbar, Footer } from '@/components/layout';
+import { Target, Shield, Award, Users, Heart, Rocket, Lightbulb, Globe, ArrowRight, CheckCircle } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'About Us – Our Mission, Vision & Team',
-  description: 'Learn about AchievingCoach\'s mission to empower coaches worldwide. Discover our story, values, and the team behind the platform.',
-  keywords: ['about achievingcoach', 'coaching platform company', 'coaching software team'],
-  openGraph: {
-    title: 'About AchievingCoach – Our Mission, Vision & Team',
-    description: 'Learn about AchievingCoach\'s mission to empower coaches worldwide. Discover our story, values, and the team behind the platform.',
-    url: 'https://achievingcoach.com/about',
-  },
+  title: 'Nosotros – Nuestra Misión, Visión y Equipo',
+  description: 'Conoce la misión de AchievingCoach: empoderar coaches en todo el mundo. Descubre nuestra historia, valores y el equipo detrás de la plataforma.',
 };
 
 const timeline = [
   {
     year: '2021',
-    title: 'Foundation & Research',
-    description: 'Interviewed 100+ ICF-certified coaches to understand challenges and needs.',
+    title: 'Investigación y Fundación',
+    description: 'Entrevistamos a más de 100 coaches certificados ICF para entender sus desafíos y necesidades.',
   },
   {
     year: '2022',
-    title: 'Product Launch',
-    description: 'Delivered core features for session scheduling, client management, and progress tracking.',
+    title: 'Lanzamiento del Producto',
+    description: 'Entregamos las funciones principales: agendamiento, gestión de clientes y seguimiento de progreso.',
   },
   {
     year: '2023',
-    title: 'First Organizations Onboard',
-    description: 'Added multi-coach support and enhanced security for enterprise needs.',
+    title: 'Primeras Organizaciones',
+    description: 'Agregamos soporte multi-coach y seguridad enterprise para necesidades organizacionales.',
   },
   {
     year: '2024',
-    title: 'Platform Evolution',
-    description: 'Introduced ICF competency tools, expanded coaching library, AI-powered reporting, and advanced analytics.',
+    title: 'Evolución de la Plataforma',
+    description: 'Introdujimos herramientas ICF, biblioteca expandida, reportes con IA y analytics avanzados.',
+  },
+  {
+    year: '2025',
+    title: 'Expansión Global',
+    description: 'Alcanzamos coaches en 30+ países con soporte multiidioma y nuevas integraciones.',
   },
 ];
 
@@ -41,180 +39,121 @@ const values = [
   {
     icon: Heart,
     title: 'Coach-First',
-    description: 'Every decision starts by asking, "How will this serve coaches and coachees?"',
-    color: 'bg-red-100 text-red-600',
+    description: 'Cada decisión comienza preguntando: "¿Cómo servirá esto a coaches y coachees?"',
+    color: 'bg-red-500/10 text-red-400',
   },
   {
     icon: Award,
-    title: 'Excellence',
-    description: 'Committed to the highest quality, aligned with ICF standards.',
-    color: 'bg-yellow-100 text-yellow-600',
+    title: 'Excelencia',
+    description: 'Comprometidos con la más alta calidad, alineados con estándares ICF.',
+    color: 'bg-amber-500/10 text-amber-400',
   },
   {
-    icon: Users,
-    title: 'Community',
-    description: 'We actively listen to feedback and foster knowledge-sharing among coaches worldwide.',
-    color: 'bg-blue-100 text-blue-600',
+    icon: Shield,
+    title: 'Confianza',
+    description: 'La confidencialidad y seguridad de datos es nuestra prioridad absoluta.',
+    color: 'bg-blue-500/10 text-blue-400',
   },
   {
     icon: Lightbulb,
-    title: 'Innovation',
-    description: 'We embrace innovation – from AI-powered insights to new coaching methodologies.',
-    color: 'bg-purple-100 text-purple-600',
+    title: 'Innovación',
+    description: 'Continuamente mejorando con IA y tecnología de vanguardia.',
+    color: 'bg-violet-500/10 text-violet-400',
+  },
+  {
+    icon: Users,
+    title: 'Comunidad',
+    description: 'Construyendo una red global de coaches que se apoyan mutuamente.',
+    color: 'bg-emerald-500/10 text-emerald-400',
+  },
+  {
+    icon: Globe,
+    title: 'Impacto',
+    description: 'Midiendo nuestro éxito por las vidas transformadas a través del coaching.',
+    color: 'bg-cyan-500/10 text-cyan-400',
   },
 ];
 
-const founders = [
+const team = [
   {
-    name: 'James Mitchell',
-    role: 'Co-Founder & CEO',
-    bio: 'ICF Master Certified Coach (MCC) with 15+ years of experience helping leaders unlock their potential.',
-    initials: 'JM',
-    color: 'bg-primary-600',
+    name: 'Eduardo Lobos',
+    role: 'Founder & CEO',
+    bio: 'Ex-consultor de transformación digital con pasión por el desarrollo humano.',
   },
   {
-    name: 'Sarah Chen',
-    role: 'Co-Founder & CTO',
-    bio: 'Former senior tech lead who has built enterprise software products used by thousands.',
-    initials: 'SC',
-    color: 'bg-green-600',
+    name: 'María González',
+    role: 'Head of Product',
+    bio: 'Coach PCC con 10+ años de experiencia en coaching ejecutivo.',
   },
   {
-    name: 'Michael Torres',
-    role: 'Co-Founder & CPO',
-    bio: 'Executive coach and product designer dedicated to creating intuitive user experiences.',
-    initials: 'MT',
-    color: 'bg-purple-600',
+    name: 'Carlos Mendez',
+    role: 'CTO',
+    bio: 'Ingeniero de software con experiencia en startups de alto crecimiento.',
   },
 ];
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar />
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">A</span>
+              </div>
+              <span className="font-semibold text-white">AchievingCoach</span>
+            </Link>
+            <div className="hidden md:flex items-center gap-8">
+              <Link href="/features" className="text-gray-400 hover:text-white text-sm transition-colors">Características</Link>
+              <Link href="/pricing" className="text-gray-400 hover:text-white text-sm transition-colors">Precios</Link>
+              <Link href="/about" className="text-white text-sm font-medium">Nosotros</Link>
+              <Link href="/blog" className="text-gray-400 hover:text-white text-sm transition-colors">Blog</Link>
+            </div>
+            <div className="flex items-center gap-4">
+              <Link href="/sign-in" className="text-gray-400 hover:text-white text-sm transition-colors">Iniciar Sesión</Link>
+              <Link href="/sign-up" className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
+                Comenzar Gratis
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
 
       {/* Hero */}
-      <section className="py-24 px-6 bg-gradient-to-b from-primary-50 to-white">
+      <section className="pt-32 pb-20 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl font-bold text-gray-900 mb-6">
-            The Future of Professional Coaching
+          <h1 className="text-4xl lg:text-6xl font-bold mb-6">
+            Empoderando la Próxima<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-violet-400">Generación de Coaches</span>
           </h1>
-          <p className="text-xl text-gray-600">
-            Empowering coaches and their clients through a unified platform designed for growth, clarity, and success.
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+            Nuestra misión es proporcionar a los coaches las herramientas que necesitan para crear impacto transformador en las vidas de sus clientes.
           </p>
         </div>
       </section>
 
-      {/* Mission */}
-      <section className="py-20 px-6 bg-white">
+      {/* Mission & Vision */}
+      <section className="py-20 px-6 bg-[#080808]">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Why We Built AchievingCoach</h2>
-              <p className="text-lg text-gray-600 mb-6">
-                AchievingCoach was born from a simple observation: even the world's best coaches were overwhelmed by inefficient tools and administrative burdens. Coaches were juggling spreadsheets, manual calendars, and disparate apps – spending hours on logistics instead of transforming lives.
-              </p>
-              <p className="text-lg text-gray-600 mb-6">
-                We envisioned a single, elegant platform that would streamline the business of coaching and elevate the coaching process itself.
-              </p>
-              <div className="bg-primary-50 p-6 rounded-xl">
-                <p className="text-primary-800 font-semibold text-lg">
-                  "Our mission: Give coaches back their time and amplify their impact."
-                </p>
+          <div className="grid md:grid-cols-2 gap-12">
+            <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8">
+              <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-6">
+                <Target className="w-6 h-6 text-blue-400" />
               </div>
-            </div>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="bg-gray-50 p-6 rounded-xl text-center">
-                <p className="text-4xl font-bold text-primary-600 mb-2">500+</p>
-                <p className="text-gray-600">Active Coaches</p>
-              </div>
-              <div className="bg-gray-50 p-6 rounded-xl text-center">
-                <p className="text-4xl font-bold text-green-600 mb-2">30+</p>
-                <p className="text-gray-600">Countries</p>
-              </div>
-              <div className="bg-gray-50 p-6 rounded-xl text-center">
-                <p className="text-4xl font-bold text-purple-600 mb-2">10,000+</p>
-                <p className="text-gray-600">Sessions Tracked</p>
-              </div>
-              <div className="bg-gray-50 p-6 rounded-xl text-center">
-                <p className="text-4xl font-bold text-orange-600 mb-2">98%</p>
-                <p className="text-gray-600">Satisfaction Rate</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Timeline */}
-      <section className="py-20 px-6 bg-gray-50">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Journey</h2>
-            <p className="text-lg text-gray-600">
-              From a simple idea to a comprehensive platform.
-            </p>
-          </div>
-
-          <div className="relative">
-            {/* Timeline line */}
-            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-primary-200 hidden md:block"></div>
-
-            <div className="space-y-8">
-              {timeline.map((item, i) => (
-                <div key={i} className="flex gap-6 items-start">
-                  <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center flex-shrink-0 text-white font-bold z-10">
-                    {item.year.slice(2)}
-                  </div>
-                  <div className="bg-white p-6 rounded-xl shadow-sm flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="text-sm font-medium text-primary-600">{item.year}</span>
-                      <h3 className="text-lg font-semibold text-gray-900">{item.title}</h3>
-                    </div>
-                    <p className="text-gray-600">{item.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Trust Section */}
-      <section className="py-20 px-6 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Built on a Foundation of Trust</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              The coach–client relationship is sacred. We honor that by embedding security, ethics, and privacy into everything we do.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center p-8">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="w-8 h-8 text-green-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Robust Data Security</h3>
-              <p className="text-gray-600">
-                Bank-level encryption and regular security audits. Your data is safe with us.
+              <h2 className="text-2xl font-bold mb-4">Nuestra Misión</h2>
+              <p className="text-gray-400 leading-relaxed">
+                Democratizar el acceso a herramientas de coaching de clase mundial, permitiendo que cada coach —independiente o parte de una organización— entregue resultados excepcionales y medibles a sus clientes.
               </p>
             </div>
-            <div className="text-center p-8">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Award className="w-8 h-8 text-blue-600" />
+            <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8">
+              <div className="w-12 h-12 bg-violet-500/10 rounded-xl flex items-center justify-center mb-6">
+                <Rocket className="w-6 h-6 text-violet-400" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Ethical by Design</h3>
-              <p className="text-gray-600">
-                Built to support ICF ethical guidelines and uphold the highest standards of professional conduct.
-              </p>
-            </div>
-            <div className="text-center p-8">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Target className="w-8 h-8 text-purple-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Privacy-First Approach</h3>
-              <p className="text-gray-600">
-                Your data is yours. We never sell your information. Full control to export or delete anytime.
+              <h2 className="text-2xl font-bold mb-4">Nuestra Visión</h2>
+              <p className="text-gray-400 leading-relaxed">
+                Ser la plataforma preferida de coaches ejecutivos en todo el mundo, reconocida por innovación, calidad y compromiso con el desarrollo humano. Queremos que cada sesión de coaching sea más efectiva gracias a nuestra tecnología.
               </p>
             </div>
           </div>
@@ -222,48 +161,100 @@ export default function AboutPage() {
       </section>
 
       {/* Values */}
-      <section className="py-20 px-6 bg-gray-50">
+      <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Core Values</h2>
-            <p className="text-lg text-gray-600">
-              Our values keep us grounded in our mission and guide how we build our product.
-            </p>
+            <h2 className="text-3xl font-bold mb-4">Nuestros Valores</h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">Los principios que guían cada decisión que tomamos.</p>
           </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {values.map((value, i) => (
-              <div key={i} className="bg-white p-6 rounded-xl">
-                <div className={`w-12 h-12 ${value.color} rounded-lg flex items-center justify-center mb-4`}>
-                  <value.icon className="w-6 h-6" />
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {values.map((value, index) => {
+              const Icon = value.icon;
+              return (
+                <div key={index} className="bg-[#111111] border border-gray-800 rounded-xl p-6 hover:border-gray-700 transition-colors">
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${value.color.split(' ')[0]}`}>
+                    <Icon className={`w-6 h-6 ${value.color.split(' ')[1]}`} />
+                  </div>
+                  <h3 className="text-white font-semibold text-lg mb-2">{value.title}</h3>
+                  <p className="text-gray-500 text-sm">{value.description}</p>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{value.title}</h3>
-                <p className="text-gray-600 text-sm">{value.description}</p>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Timeline */}
+      <section className="py-20 px-6 bg-[#080808]">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold mb-4">Nuestra Historia</h2>
+            <p className="text-gray-400">El camino que nos trajo hasta aquí.</p>
+          </div>
+          <div className="space-y-8">
+            {timeline.map((item, index) => (
+              <div key={index} className="flex gap-6">
+                <div className="flex flex-col items-center">
+                  <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                    {item.year.slice(2)}
+                  </div>
+                  {index < timeline.length - 1 && (
+                    <div className="w-0.5 h-full bg-gray-800 mt-2"></div>
+                  )}
+                </div>
+                <div className="flex-1 pb-8">
+                  <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+                    <p className="text-blue-400 text-sm font-medium mb-1">{item.year}</p>
+                    <h3 className="text-white font-semibold text-lg mb-2">{item.title}</h3>
+                    <p className="text-gray-500 text-sm">{item.description}</p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Founders */}
-      <section className="py-20 px-6 bg-white">
+      {/* Stats */}
+      <section className="py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-6">
+            <div className="bg-[#111111] border border-gray-800 rounded-xl p-6 text-center">
+              <p className="text-4xl font-bold text-white mb-2">500+</p>
+              <p className="text-gray-500 text-sm">Coaches Activos</p>
+            </div>
+            <div className="bg-[#111111] border border-gray-800 rounded-xl p-6 text-center">
+              <p className="text-4xl font-bold text-white mb-2">30+</p>
+              <p className="text-gray-500 text-sm">Países</p>
+            </div>
+            <div className="bg-[#111111] border border-gray-800 rounded-xl p-6 text-center">
+              <p className="text-4xl font-bold text-white mb-2">10K+</p>
+              <p className="text-gray-500 text-sm">Sesiones Facilitadas</p>
+            </div>
+            <div className="bg-[#111111] border border-gray-800 rounded-xl p-6 text-center">
+              <p className="text-4xl font-bold text-white mb-2">98%</p>
+              <p className="text-gray-500 text-sm">Satisfacción</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Team */}
+      <section className="py-20 px-6 bg-[#080808]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Meet the Founders</h2>
-            <p className="text-lg text-gray-600">
-              Combining decades of expertise in professional coaching and software engineering.
-            </p>
+            <h2 className="text-3xl font-bold mb-4">Nuestro Equipo</h2>
+            <p className="text-gray-400">Las personas detrás de AchievingCoach.</p>
           </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {founders.map((founder, i) => (
-              <div key={i} className="text-center">
-                <div className={`w-24 h-24 ${founder.color} rounded-full flex items-center justify-center mx-auto mb-4`}>
-                  <span className="text-3xl font-bold text-white">{founder.initials}</span>
+          <div className="grid md:grid-cols-3 gap-6">
+            {team.map((member, index) => (
+              <div key={index} className="bg-[#111111] border border-gray-800 rounded-xl p-6 text-center">
+                <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-violet-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-white">{member.name.split(' ').map(n => n[0]).join('')}</span>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900">{founder.name}</h3>
-                <p className="text-primary-600 font-medium mb-3">{founder.role}</p>
-                <p className="text-gray-600 text-sm">{founder.bio}</p>
+                <h3 className="text-white font-semibold text-lg">{member.name}</h3>
+                <p className="text-blue-400 text-sm mb-3">{member.role}</p>
+                <p className="text-gray-500 text-sm">{member.bio}</p>
               </div>
             ))}
           </div>
@@ -271,32 +262,33 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-6 bg-primary-600">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-white mb-4">
-            Join Our Mission
-          </h2>
-          <p className="text-xl text-primary-100 mb-8">
-            Ready to streamline your coaching practice and deliver exceptional results?
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/sign-up"
-              className="inline-flex items-center justify-center px-8 py-4 bg-white text-primary-600 font-semibold rounded-xl hover:bg-primary-50 transition-all"
-            >
-              Get Started for Free
+      <section className="py-20 px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-4">¿Listo para Unirte a Nosotros?</h2>
+          <p className="text-gray-400 mb-8">Forma parte de la comunidad de coaches que están transformando vidas con AchievingCoach.</p>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Link href="/sign-up" className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+              Comenzar Gratis
+              <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center px-8 py-4 bg-primary-500 text-white font-semibold rounded-xl hover:bg-primary-400 transition-all"
-            >
-              Talk to Sales
+            <Link href="/contact" className="inline-flex items-center gap-2 px-8 py-4 bg-[#1a1a1a] border border-gray-700 text-white rounded-lg font-medium hover:bg-[#222] transition-colors">
+              Contactar
             </Link>
           </div>
         </div>
       </section>
 
-      <Footer />
+      {/* Footer */}
+      <footer className="py-12 px-6 border-t border-white/5">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-gray-600 text-sm">© 2026 AchievingCoach Inc. Todos los derechos reservados.</p>
+          <div className="flex gap-6">
+            <Link href="/privacy" className="text-gray-500 hover:text-white text-sm transition-colors">Privacidad</Link>
+            <Link href="/terms" className="text-gray-500 hover:text-white text-sm transition-colors">Términos</Link>
+            <Link href="/contact" className="text-gray-500 hover:text-white text-sm transition-colors">Contacto</Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

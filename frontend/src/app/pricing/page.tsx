@@ -1,168 +1,178 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { Check, HelpCircle, Sparkles } from 'lucide-react';
-import { Navbar, Footer } from '@/components/layout';
+import { Check, Sparkles, ArrowRight, HelpCircle, Zap } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Pricing – Plans for Coaches, Teams & Enterprises',
-  description: 'Compare AchievingCoach pricing. Free 14-day trial, no credit card. Core $29/mo, Pro $59/mo, custom Enterprise plans. No long-term contracts.',
-  keywords: ['coaching software pricing', 'coaching platform cost', 'coaching software free trial', 'coaching platform plans'],
-  openGraph: {
-    title: 'AchievingCoach Pricing – Plans for Coaches, Teams & Enterprises',
-    description: 'Compare AchievingCoach pricing. Free 14-day trial, no credit card. Core $29/mo, Pro $59/mo, custom Enterprise plans.',
-    url: 'https://achievingcoach.com/pricing',
-  },
+  title: 'Precios – Planes para Coaches, Equipos y Empresas',
+  description: 'Compara los planes de AchievingCoach. Prueba gratuita de 14 días. Core $29/mes, Pro $59/mes, planes Enterprise personalizados.',
 };
 
 const plans = [
   {
     name: 'Core',
     price: '$29',
-    period: '/month',
-    description: 'Essential tools for solo coaches',
+    period: '/mes',
+    description: 'Herramientas esenciales para coaches independientes',
     features: [
-      'Up to 15 active coaching clients',
-      'Session scheduling & management',
-      '10 coaching tools included',
-      'Basic progress analytics dashboard',
-      'Email support',
+      'Hasta 15 clientes activos',
+      'Agendamiento de sesiones',
+      '10 herramientas de coaching',
+      'Dashboard de analytics básico',
+      'Soporte por email',
     ],
-    cta: 'Start Free Trial',
+    cta: 'Comenzar Prueba',
     href: '/sign-up?plan=core',
     popular: false,
   },
   {
     name: 'Pro',
     price: '$59',
-    period: '/month',
-    description: 'Advanced features for growing practices',
+    period: '/mes',
+    description: 'Para prácticas en crecimiento',
     features: [
-      'Unlimited clients',
-      'All Core features',
-      '12+ coaching tools (full library)',
-      'ICF Competency Simulator access',
-      'Advanced analytics & AI-powered reporting',
-      'Priority email & chat support',
-      'Custom branding for client portal',
+      'Clientes ilimitados',
+      'Todas las funciones Core',
+      '12+ herramientas (biblioteca completa)',
+      'Simulador ICF incluido',
+      'Analytics avanzados con IA',
+      'Soporte prioritario',
+      'Branding personalizado',
     ],
-    cta: 'Start Free Trial',
+    cta: 'Comenzar Prueba',
     href: '/sign-up?plan=pro',
     popular: true,
   },
   {
-    name: 'Organization',
-    price: 'Custom',
+    name: 'Enterprise',
+    price: 'Personalizado',
     period: '',
-    description: 'For coaching firms and enterprises',
+    description: 'Para organizaciones y equipos de coaches',
     features: [
-      'All Pro features',
-      'Multi-coach team management',
-      'Team-wide analytics & reporting',
-      'Single Sign-On (SSO)',
-      'Dedicated Customer Success Manager',
-      'Custom integrations (HRIS/CRM)',
-      'Service Level Agreement (SLA)',
+      'Todo en Pro',
+      'Multi-coach / Multi-tenant',
+      'SSO y controles de seguridad',
+      'Integraciones personalizadas',
+      'Onboarding dedicado',
+      'SLA garantizado',
+      'Account manager asignado',
     ],
-    cta: 'Contact Sales',
-    href: '/contact?type=enterprise',
+    cta: 'Contactar Ventas',
+    href: '/contact?subject=enterprise',
     popular: false,
   },
 ];
 
 const faqs = [
   {
-    question: 'Can I change plans later?',
-    answer: 'Yes. Upgrade or downgrade your plan at any time with no penalty. Changes take effect immediately, and we prorate any difference.',
+    question: '¿Puedo cambiar de plan en cualquier momento?',
+    answer: 'Sí, puedes actualizar o bajar tu plan en cualquier momento. Los cambios se aplican en tu próximo ciclo de facturación.',
   },
   {
-    question: 'What payment methods do you accept?',
-    answer: 'All major credit cards (Visa, MasterCard, American Express) and PayPal. For Organization plans, we can accommodate invoicing.',
+    question: '¿Qué métodos de pago aceptan?',
+    answer: 'Aceptamos todas las tarjetas de crédito principales, PayPal y transferencia bancaria para planes Enterprise.',
   },
   {
-    question: 'Is there a long-term contract?',
-    answer: 'No. All plans are month-to-month subscription. Cancel online at any time, and you will not be billed for the next cycle.',
+    question: '¿Hay descuento por pago anual?',
+    answer: 'Sí, ofrecemos 2 meses gratis cuando pagas anualmente (equivalente a 17% de descuento).',
   },
   {
-    question: 'Do you offer refunds?',
-    answer: 'Yes. We offer a 30-day money-back guarantee. If you\'re not satisfied, cancel within 30 days and request a full refund – no questions asked.',
+    question: '¿Qué pasa con mis datos si cancelo?',
+    answer: 'Tienes 30 días para exportar tus datos después de cancelar. Después de ese período, los datos se eliminan de forma segura.',
   },
 ];
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar />
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">A</span>
+              </div>
+              <span className="font-semibold text-white">AchievingCoach</span>
+            </Link>
+            <div className="hidden md:flex items-center gap-8">
+              <Link href="/features" className="text-gray-400 hover:text-white text-sm transition-colors">Características</Link>
+              <Link href="/pricing" className="text-white text-sm font-medium">Precios</Link>
+              <Link href="/about" className="text-gray-400 hover:text-white text-sm transition-colors">Nosotros</Link>
+              <Link href="/blog" className="text-gray-400 hover:text-white text-sm transition-colors">Blog</Link>
+            </div>
+            <div className="flex items-center gap-4">
+              <Link href="/sign-in" className="text-gray-400 hover:text-white text-sm transition-colors">Iniciar Sesión</Link>
+              <Link href="/sign-up" className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
+                Comenzar Gratis
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
 
       {/* Hero */}
-      <section className="py-20 px-6 bg-gradient-to-b from-primary-50 to-white">
+      <section className="pt-32 pb-16 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl font-bold text-gray-900 mb-6">
-            Simple, Transparent Pricing
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-xs mb-6">
+            <Zap className="w-3 h-3" />
+            14 DÍAS GRATIS
+          </div>
+          <h1 className="text-4xl lg:text-6xl font-bold mb-6">
+            Planes que Escalan<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-violet-400">con tu Práctica</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Choose a plan that fits your coaching needs. All plans include a 14-day free trial with no credit card required.
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+            Elige el plan que mejor se adapte a tus necesidades. Sin contratos a largo plazo. Sin sorpresas.
           </p>
         </div>
       </section>
 
       {/* Pricing Cards */}
-      <section className="py-16 px-6 bg-white">
+      <section className="py-12 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8">
-            {plans.map((plan) => (
+          <div className="grid md:grid-cols-3 gap-6">
+            {plans.map((plan, index) => (
               <div
                 key={plan.name}
-                className={`relative rounded-2xl p-8 ${
-                  plan.popular
-                    ? 'bg-primary-600 text-white ring-4 ring-primary-600 ring-offset-2'
-                    : 'bg-white border-2 border-gray-200'
+                className={`relative bg-[#111111] border rounded-2xl p-8 ${
+                  plan.popular 
+                    ? 'border-blue-500 ring-1 ring-blue-500' 
+                    : 'border-gray-800'
                 }`}
               >
                 {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <span className="inline-flex items-center gap-1 px-4 py-1 bg-yellow-400 text-yellow-900 text-sm font-semibold rounded-full">
-                      <Sparkles className="w-4 h-4" />
-                      Most Popular
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <span className="px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded-full">
+                      MÁS POPULAR
                     </span>
                   </div>
                 )}
 
-                <div className="text-center mb-8">
-                  <h3 className={`text-2xl font-bold mb-2 ${plan.popular ? 'text-white' : 'text-gray-900'}`}>
-                    {plan.name}
-                  </h3>
-                  <p className={`text-sm mb-4 ${plan.popular ? 'text-primary-100' : 'text-gray-500'}`}>
-                    {plan.description}
-                  </p>
-                  <div className="flex items-baseline justify-center">
-                    <span className={`text-5xl font-bold ${plan.popular ? 'text-white' : 'text-gray-900'}`}>
-                      {plan.price}
-                    </span>
-                    {plan.period && (
-                      <span className={`text-lg ml-1 ${plan.popular ? 'text-primary-200' : 'text-gray-500'}`}>
-                        {plan.period}
-                      </span>
-                    )}
-                  </div>
+                <div className="mb-6">
+                  <h3 className="text-xl font-bold text-white mb-2">{plan.name}</h3>
+                  <p className="text-gray-500 text-sm">{plan.description}</p>
                 </div>
 
-                <ul className="space-y-4 mb-8">
+                <div className="mb-6">
+                  <span className="text-4xl font-bold text-white">{plan.price}</span>
+                  <span className="text-gray-500">{plan.period}</span>
+                </div>
+
+                <ul className="space-y-3 mb-8">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-start gap-3">
-                      <Check className={`w-5 h-5 flex-shrink-0 mt-0.5 ${plan.popular ? 'text-primary-200' : 'text-green-500'}`} />
-                      <span className={plan.popular ? 'text-primary-50' : 'text-gray-600'}>
-                        {feature}
-                      </span>
+                      <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                      <span className="text-gray-300 text-sm">{feature}</span>
                     </li>
                   ))}
                 </ul>
 
                 <Link
                   href={plan.href}
-                  className={`block w-full py-3 px-6 text-center font-semibold rounded-xl transition-all ${
+                  className={`block w-full py-3 rounded-lg font-medium text-center transition-colors ${
                     plan.popular
-                      ? 'bg-white text-primary-600 hover:bg-primary-50'
-                      : 'bg-primary-600 text-white hover:bg-primary-700'
+                      ? 'bg-blue-600 text-white hover:bg-blue-700'
+                      : 'bg-[#1a1a1a] border border-gray-700 text-white hover:bg-[#222]'
                   }`}
                 >
                   {plan.cta}
@@ -170,33 +180,48 @@ export default function PricingPage() {
               </div>
             ))}
           </div>
-
-          <p className="text-center text-gray-500 mt-8">
-            All plans include: 14-day free trial • No credit card required • Cancel anytime
-          </p>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="py-20 px-6 bg-gray-50">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
-            <p className="text-gray-600">
-              Not sure which plan is right for you? Here are answers to common questions.
-            </p>
+      {/* Features Comparison */}
+      <section className="py-20 px-6 bg-[#080808]">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-2xl font-bold mb-4">Todos los Planes Incluyen</h2>
+          <div className="grid md:grid-cols-3 gap-6 mt-12">
+            <div className="text-center">
+              <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="w-6 h-6 text-blue-400" />
+              </div>
+              <h3 className="text-white font-semibold mb-2">Actualizaciones Gratis</h3>
+              <p className="text-gray-500 text-sm">Acceso a todas las nuevas funciones sin costo adicional.</p>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <Check className="w-6 h-6 text-emerald-400" />
+              </div>
+              <h3 className="text-white font-semibold mb-2">Sin Contratos</h3>
+              <p className="text-gray-500 text-sm">Cancela cuando quieras, sin penalidades.</p>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 bg-violet-500/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <HelpCircle className="w-6 h-6 text-violet-400" />
+              </div>
+              <h3 className="text-white font-semibold mb-2">Soporte Incluido</h3>
+              <p className="text-gray-500 text-sm">Ayuda cuando la necesites, en todos los planes.</p>
+            </div>
           </div>
+        </div>
+      </section>
 
-          <div className="space-y-6">
-            {faqs.map((faq, i) => (
-              <div key={i} className="bg-white rounded-xl p-6 shadow-sm">
-                <div className="flex items-start gap-3">
-                  <HelpCircle className="w-6 h-6 text-primary-500 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-2">{faq.question}</h3>
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                </div>
+      {/* FAQs */}
+      <section className="py-20 px-6">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl font-bold text-center mb-12">Preguntas Frecuentes</h2>
+          <div className="space-y-4">
+            {faqs.map((faq, index) => (
+              <div key={index} className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+                <h3 className="text-white font-semibold mb-2">{faq.question}</h3>
+                <p className="text-gray-500 text-sm">{faq.answer}</p>
               </div>
             ))}
           </div>
@@ -204,24 +229,28 @@ export default function PricingPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-6 bg-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Ready to Get Started?
-          </h2>
-          <p className="text-xl text-gray-600 mb-8">
-            Hundreds of coaches have transformed their practice with AchievingCoach. Join them today.
-          </p>
-          <Link
-            href="/sign-up"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition-all shadow-lg"
-          >
-            Start Your 14-Day Free Trial
+      <section className="py-20 px-6 bg-[#080808]">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-4">¿Listo para Empezar?</h2>
+          <p className="text-gray-400 mb-8">Únete a cientos de coaches que ya transforman sus prácticas con AchievingCoach.</p>
+          <Link href="/sign-up" className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+            Comenzar Prueba Gratuita
+            <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </section>
 
-      <Footer />
+      {/* Footer */}
+      <footer className="py-12 px-6 border-t border-white/5">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-gray-600 text-sm">© 2026 AchievingCoach Inc. Todos los derechos reservados.</p>
+          <div className="flex gap-6">
+            <Link href="/privacy" className="text-gray-500 hover:text-white text-sm transition-colors">Privacidad</Link>
+            <Link href="/terms" className="text-gray-500 hover:text-white text-sm transition-colors">Términos</Link>
+            <Link href="/contact" className="text-gray-500 hover:text-white text-sm transition-colors">Contacto</Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
