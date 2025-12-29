@@ -2,247 +2,222 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Navbar, Footer } from '@/components/layout';
-import { Target, Mail, Clock, ChevronDown } from 'lucide-react';
+import { Mail, MapPin, ArrowRight, Linkedin, Twitter, Youtube, ChevronDown } from 'lucide-react';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    name: '',
     email: '',
-    subject: 'General Inquiry',
+    subject: 'Interés en Demo',
     message: '',
   });
   const [submitted, setSubmitted] = useState(false);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Integrate with backend
+    setLoading(true);
+    // TODO: Integrate with backend/email service
+    await new Promise(resolve => setTimeout(resolve, 1000));
     setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    setLoading(false);
+    setTimeout(() => {
+      setSubmitted(false);
+      setFormData({ name: '', email: '', subject: 'Interés en Demo', message: '' });
+    }, 3000);
   };
 
-  const faqs = [
-    {
-      question: 'How quickly will I receive a response?',
-      answer: 'We typically respond to all inquiries within 24 hours during business days. For urgent matters, please mention it in your message.',
-    },
-    {
-      question: 'Can I schedule a demo?',
-      answer: 'Yes! Mention in your message that you\'d like a demo, and we\'ll send you a calendar link to book a time that works for you.',
-    },
-    {
-      question: 'Do you offer implementation support?',
-      answer: 'Absolutely. We provide onboarding assistance for all new customers and dedicated support for Organization plan customers.',
-    },
-    {
-      question: 'What if I have a technical issue?',
-      answer: 'For technical support, please include as much detail as possible about the issue. Screenshots are helpful. Our support team will prioritize your request.',
-    },
-  ];
-
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
       {/* Navigation */}
-      <Navbar />
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold">A</span>
+              </div>
+              <span className="font-semibold text-white">AchievingCoach</span>
+            </Link>
+            
+            <div className="hidden md:flex items-center gap-8">
+              <Link href="/features" className="text-gray-400 hover:text-white text-sm transition-colors">Características</Link>
+              <Link href="/pricing" className="text-gray-400 hover:text-white text-sm transition-colors">Precios</Link>
+              <Link href="/about" className="text-gray-400 hover:text-white text-sm transition-colors">Acerca de</Link>
+              <Link href="/blog" className="text-gray-400 hover:text-white text-sm transition-colors">Blog</Link>
+            </div>
 
-      {/* Hero */}
-      <section className="py-20 px-6 bg-white" aria-labelledby="hero-heading">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 id="hero-heading" className="text-5xl font-bold text-gray-900 mb-6">
-            Get in Touch
-          </h1>
-          <p className="text-lg text-gray-600">
-            Have questions? We're here to help. Send us a message and we'll respond as soon as possible.
-          </p>
+            <div className="flex items-center gap-4">
+              <Link href="/sign-in" className="text-gray-400 hover:text-white text-sm transition-colors">Iniciar Sesión</Link>
+              <Link href="/sign-up" className="px-4 py-2 bg-white text-black text-sm font-medium rounded-lg hover:bg-gray-100 transition-colors">
+                Empezar Prueba Gratuita
+              </Link>
+            </div>
+          </div>
         </div>
-      </section>
+      </nav>
 
-      {/* Contact Form & Sidebar */}
-      <section className="py-12 px-6 bg-gray-50" aria-labelledby="contact-form-heading">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-3 gap-12">
-            {/* Form */}
-            <div className="lg:col-span-2">
-              <div className="bg-white rounded-xl border border-gray-200 p-8">
-                <h2 id="contact-form-heading" className="text-2xl font-bold text-gray-900 mb-6">Send us a message</h2>
-                
-                {submitted && (
-                  <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                    <p className="text-green-700 font-medium">Message sent successfully! We'll get back to you soon.</p>
+      {/* Main Content */}
+      <main className="pt-24 pb-12 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-start py-12">
+            {/* Left Side - Info */}
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-xs mb-8">
+                <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full"></span>
+                SISTEMA OPERATIVO
+              </div>
+
+              <h1 className="text-5xl lg:text-6xl font-bold mb-4 leading-tight">
+                Hablemos de<br />tu<br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-blue-400">evolución.</span>
+              </h1>
+
+              <p className="text-gray-400 text-lg mb-12 max-w-md leading-relaxed">
+                Estamos aquí para ayudarte a desbloquear el siguiente nivel de liderazgo ejecutivo con inteligencia artificial.
+              </p>
+
+              {/* Contact Info */}
+              <div className="space-y-4 mb-12">
+                <div className="flex items-center gap-4 p-4 bg-[#111111] border border-gray-800 rounded-xl">
+                  <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center">
+                    <Mail className="w-5 h-5 text-gray-400" />
                   </div>
-                )}
+                  <div>
+                    <p className="text-gray-500 text-xs uppercase tracking-wider">Correo Electrónico</p>
+                    <p className="text-white font-medium">info@achievingcoach.com</p>
+                  </div>
+                </div>
 
+                <div className="flex items-center gap-4 p-4 bg-[#111111] border border-gray-800 rounded-xl">
+                  <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center">
+                    <MapPin className="w-5 h-5 text-gray-400" />
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-xs uppercase tracking-wider">Sede Central</p>
+                    <p className="text-white font-medium">Santiago, Chile. LATAM</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Social Links */}
+              <div>
+                <p className="text-gray-500 text-xs uppercase tracking-wider mb-4">Síguenos</p>
+                <div className="flex gap-3">
+                  <a href="#" className="w-10 h-10 bg-[#111111] border border-gray-800 rounded-lg flex items-center justify-center hover:bg-white/10 transition-colors">
+                    <Linkedin className="w-4 h-4 text-gray-400" />
+                  </a>
+                  <a href="#" className="w-10 h-10 bg-[#111111] border border-gray-800 rounded-lg flex items-center justify-center hover:bg-white/10 transition-colors">
+                    <Twitter className="w-4 h-4 text-gray-400" />
+                  </a>
+                  <a href="#" className="w-10 h-10 bg-[#111111] border border-gray-800 rounded-lg flex items-center justify-center hover:bg-white/10 transition-colors">
+                    <Youtube className="w-4 h-4 text-gray-400" />
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Side - Form */}
+            <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8">
+              <h2 className="text-2xl font-semibold text-white mb-2">Envíanos un mensaje</h2>
+              <p className="text-gray-400 text-sm mb-8">Nuestro equipo te responderá en menos de 24 horas hábiles.</p>
+
+              {submitted ? (
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-semibold text-white mb-2">¡Mensaje Enviado!</h3>
+                  <p className="text-gray-400">Te contactaremos pronto.</p>
+                </div>
+              ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <label htmlFor="firstName" className="block text-sm font-medium text-gray-900 mb-2">
-                        First Name *
-                      </label>
+                      <label className="block text-gray-400 text-xs uppercase tracking-wider mb-2">Nombre Completo</label>
                       <input
                         type="text"
-                        id="firstName"
-                        value={formData.firstName}
-                        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         required
-                        aria-required="true"
+                        className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-colors"
                       />
                     </div>
-
                     <div>
-                      <label htmlFor="lastName" className="block text-sm font-medium text-gray-900 mb-2">
-                        Last Name *
-                      </label>
+                      <label className="block text-gray-400 text-xs uppercase tracking-wider mb-2">Email Profesional</label>
                       <input
-                        type="text"
-                        id="lastName"
-                        value={formData.lastName}
-                        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         required
-                        aria-required="true"
+                        className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-colors"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-2">
-                      Work Email *
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-                      required
-                      aria-required="true"
-                    />
+                    <label className="block text-gray-400 text-xs uppercase tracking-wider mb-2">Asunto</label>
+                    <div className="relative">
+                      <select
+                        value={formData.subject}
+                        onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                        className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white appearance-none focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-colors cursor-pointer"
+                      >
+                        <option value="Interés en Demo">Interés en Demo</option>
+                        <option value="Consulta General">Consulta General</option>
+                        <option value="Soporte Técnico">Soporte Técnico</option>
+                        <option value="Partnership">Partnership</option>
+                        <option value="Facturación">Facturación</option>
+                      </select>
+                      <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+                    </div>
                   </div>
 
                   <div>
-                    <label htmlFor="subject" className="block text-sm font-medium text-gray-900 mb-2">
-                      Subject *
-                    </label>
-                    <select
-                      id="subject"
-                      value={formData.subject}
-                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-                      required
-                      aria-required="true"
-                    >
-                      <option>General Inquiry</option>
-                      <option>Sales Question</option>
-                      <option>Technical Support</option>
-                      <option>Partnership Opportunity</option>
-                      <option>Other</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-900 mb-2">
-                      Message *
-                    </label>
+                    <label className="block text-gray-400 text-xs uppercase tracking-wider mb-2">Mensaje</label>
                     <textarea
-                      id="message"
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      rows={6}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      placeholder="Cuéntanos sobre tus objetivos y cómo podemos ayudarte..."
+                      rows={5}
                       required
-                      aria-required="true"
+                      className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-colors resize-none"
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
-                    aria-label="Send message"
+                    disabled={loading}
+                    className="w-full bg-white text-black font-medium py-3 px-4 rounded-lg hover:bg-gray-100 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Send Message
+                    {loading ? (
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
+                    ) : (
+                      <>
+                        Enviar Mensaje
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
                   </button>
                 </form>
-              </div>
+              )}
             </div>
-
-            {/* Sidebar */}
-            <aside className="space-y-6" aria-label="Contact information">
-              <div className="bg-white rounded-xl border border-gray-200 p-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">Contact Support</h3>
-                
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <Mail className="w-5 h-5 text-primary-600 flex-shrink-0 mt-1" aria-hidden="true" />
-                    <div>
-                      <div className="font-medium text-gray-900 text-sm mb-1">Email</div>
-                      <a href="mailto:support@achievingcoach.com" className="text-primary-600 text-sm hover:underline">
-                        support@achievingcoach.com
-                      </a>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <Clock className="w-5 h-5 text-primary-600 flex-shrink-0 mt-1" aria-hidden="true" />
-                    <div>
-                      <div className="font-medium text-gray-900 text-sm mb-1">Response Time</div>
-                      <p className="text-gray-600 text-sm">Within 24 hours</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-primary-50 rounded-xl border border-primary-200 p-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Need immediate help?</h3>
-                <p className="text-gray-600 text-sm mb-4">
-                  Check out our documentation and video tutorials for quick answers.
-                </p>
-                <Link href="/blog" className="text-primary-600 font-medium text-sm hover:underline">
-                  Visit Help Center →
-                </Link>
-              </div>
-            </aside>
           </div>
         </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="py-20 px-6 bg-white" aria-labelledby="faq-heading">
-        <div className="max-w-3xl mx-auto">
-          <header className="text-center mb-12">
-            <h2 id="faq-heading" className="text-3xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
-          </header>
-
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <article key={index} className="border border-gray-200 rounded-lg">
-                <button
-                  onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                  className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
-                  aria-expanded={openFaq === index}
-                  aria-controls={`faq-answer-${index}`}
-                >
-                  <span className="font-semibold text-gray-900">{faq.question}</span>
-                  <ChevronDown 
-                    className={`w-5 h-5 text-gray-600 transition-transform ${openFaq === index ? 'rotate-180' : ''}`}
-                    aria-hidden="true"
-                  />
-                </button>
-                {openFaq === index && (
-                  <div id={`faq-answer-${index}`} className="px-6 pb-4">
-                    <p className="text-gray-600">{faq.answer}</p>
-                  </div>
-                )}
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      </main>
 
       {/* Footer */}
-      <Footer />
+      <footer className="py-8 px-6 border-t border-white/5">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-gray-600 text-sm">© 2026 AchievingCoach. Todos los derechos reservados.</p>
+          <div className="flex items-center gap-6 text-sm text-gray-500">
+            <Link href="/privacy" className="hover:text-white transition-colors">Política de Privacidad</Link>
+            <Link href="/terms" className="hover:text-white transition-colors">Términos de Servicio</Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

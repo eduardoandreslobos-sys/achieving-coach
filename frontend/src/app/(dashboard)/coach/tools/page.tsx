@@ -6,7 +6,7 @@ import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import { COACHING_TOOLS } from '@/data/tools';
-import { Users, X, CheckCircle2, Search, Plus } from 'lucide-react';
+import { Users, X, CheckCircle2, Search, Plus, Upload, Clock, ArrowRight, Grid, List, ChevronDown, RefreshCw, Lightbulb, TrendingUp, Smile, Compass, Shield, MessageSquare, Target, Brain } from 'lucide-react';
 
 interface Client {
   id: string;
@@ -14,31 +14,64 @@ interface Client {
   email: string;
 }
 
-const CATEGORIES = [
-  { id: 'all', name: 'All', color: 'bg-gray-100 text-gray-700' },
-  { id: 'Goal Setting', name: 'Goal Setting', color: 'bg-purple-100 text-purple-700' },
-  { id: 'Self-Awareness', name: 'Self-Awareness', color: 'bg-green-100 text-green-700' },
-  { id: 'Communication', name: 'Communication', color: 'bg-blue-100 text-blue-700' },
-  { id: 'Productivity', name: 'Productivity', color: 'bg-orange-100 text-orange-700' },
+const TABS = [
+  { id: 'all', name: 'Todas las Herramientas' },
+  { id: 'favorites', name: 'Mis Favoritos' },
+  { id: 'exercises', name: 'Ejercicios' },
+  { id: 'templates', name: 'Plantillas' },
+  { id: 'archived', name: 'Archivados' },
 ];
 
-const TOOL_GRADIENTS = [
-  'bg-gradient-to-br from-amber-200 to-amber-400',
-  'bg-gradient-to-br from-emerald-200 to-emerald-400',
-  'bg-gradient-to-br from-cyan-200 to-cyan-400',
-  'bg-gradient-to-br from-rose-200 to-rose-400',
-  'bg-gradient-to-br from-violet-200 to-violet-400',
-  'bg-gradient-to-br from-teal-200 to-teal-400',
+const CATEGORIES = [
+  { id: 'all', name: 'Todos' },
+  { id: 'self-awareness', name: 'Autoconocimiento' },
+  { id: 'goals', name: 'Metas SMART' },
+  { id: 'emotional', name: 'Inteligencia Emocional' },
+  { id: 'feedback', name: 'Feedback' },
+];
+
+const CATEGORY_COLORS: Record<string, { bg: string; text: string }> = {
+  'EVALUACIÓN': { bg: 'bg-emerald-500/20', text: 'text-emerald-400' },
+  'REFLEXIÓN': { bg: 'bg-orange-500/20', text: 'text-orange-400' },
+  'COGNITIVO': { bg: 'bg-blue-500/20', text: 'text-blue-400' },
+  'HÁBITOS': { bg: 'bg-pink-500/20', text: 'text-pink-400' },
+  'CARRERA': { bg: 'bg-amber-500/20', text: 'text-amber-400' },
+  'RESILIENCIA': { bg: 'bg-emerald-500/20', text: 'text-emerald-400' },
+  'ESTRATÉGICO': { bg: 'bg-violet-500/20', text: 'text-violet-400' },
+  'COMUNICACIÓN': { bg: 'bg-cyan-500/20', text: 'text-cyan-400' },
+};
+
+const TOOL_ICONS: Record<string, any> = {
+  'wheel-of-life': RefreshCw,
+  'values-clarification': Lightbulb,
+  'limiting-beliefs': TrendingUp,
+  'habits': Smile,
+  'career': Compass,
+  'resilience': Shield,
+  'stakeholders': Users,
+  'feedback': MessageSquare,
+};
+
+const DARK_TOOLS = [
+  { id: 'wheel-of-life', name: 'Rueda de la Vida', description: 'Herramienta visual clásica para evaluar el nivel de...', category: 'EVALUACIÓN', time: 15, icon: RefreshCw, color: 'bg-emerald-500/20', iconColor: 'text-emerald-400' },
+  { id: 'values-clarification', name: 'Clarificación de Valores', description: 'Ejercicio fundamental para identificar los valores...', category: 'REFLEXIÓN', time: 20, icon: Lightbulb, color: 'bg-orange-500/20', iconColor: 'text-orange-400' },
+  { id: 'limiting-beliefs', name: 'Creencias Limitantes', description: 'Guía estructurada para desafiar y reformular...', category: 'COGNITIVO', time: 30, icon: TrendingUp, color: 'bg-blue-500/20', iconColor: 'text-blue-400' },
+  { id: 'habits-loop', name: 'Loop de Hábitos', description: 'Framework basado en la ciencia del comportamiento...', category: 'HÁBITOS', time: 45, icon: Smile, color: 'bg-pink-500/20', iconColor: 'text-pink-400' },
+  { id: 'career-compass', name: 'Brújula de Carrera', description: 'Herramienta de exploración profesional para...', category: 'CARRERA', time: 25, icon: Compass, color: 'bg-amber-500/20', iconColor: 'text-amber-400' },
+  { id: 'resilience-scale', name: 'Escala de Resiliencia', description: 'Evaluación basada en investigación para medir...', category: 'RESILIENCIA', time: 20, icon: Shield, color: 'bg-emerald-500/20', iconColor: 'text-emerald-400' },
+  { id: 'stakeholder-map', name: 'Mapa de Stakeholders', description: 'Análisis visual de relaciones profesionales...', category: 'ESTRATÉGICO', time: 35, icon: Users, color: 'bg-violet-500/20', iconColor: 'text-violet-400' },
+  { id: 'feedback-feedforward', name: 'Feedback Feed-Forward', description: 'Metodología moderna para dar y recibir...', category: 'COMUNICACIÓN', time: 30, icon: MessageSquare, color: 'bg-cyan-500/20', iconColor: 'text-cyan-400' },
 ];
 
 export default function CoachToolsPage() {
   const { userProfile } = useAuth();
-  const [activeTab, setActiveTab] = useState<'tools' | 'my-tools'>('tools');
+  const [activeTab, setActiveTab] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [clients, setClients] = useState<Client[]>([]);
-  const [previewTool, setPreviewTool] = useState<typeof COACHING_TOOLS[0] | null>(null);
-  const [assignTool, setAssignTool] = useState<typeof COACHING_TOOLS[0] | null>(null);
+  const [previewTool, setPreviewTool] = useState<typeof DARK_TOOLS[0] | null>(null);
+  const [assignTool, setAssignTool] = useState<typeof DARK_TOOLS[0] | null>(null);
   const [selectedClient, setSelectedClient] = useState<string>('');
   const [assigning, setAssigning] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -51,21 +84,18 @@ export default function CoachToolsPage() {
 
   const loadClients = async () => {
     if (!userProfile?.uid) return;
-
     try {
       const q = query(
         collection(db, 'users'),
         where('role', '==', 'coachee'),
         where('coacheeInfo.coachId', '==', userProfile.uid)
       );
-      
       const snapshot = await getDocs(q);
       const clientsData = snapshot.docs.map(doc => ({
         id: doc.id,
         name: doc.data().displayName || doc.data().email || 'Unknown',
         email: doc.data().email,
       }));
-      
       setClients(clientsData);
     } catch (error) {
       console.error('Error loading clients:', error);
@@ -74,7 +104,6 @@ export default function CoachToolsPage() {
 
   const handleAssignTool = async () => {
     if (!selectedClient || !assignTool || !userProfile) return;
-
     setAssigning(true);
     try {
       await addDoc(collection(db, 'tool_assignments'), {
@@ -87,12 +116,11 @@ export default function CoachToolsPage() {
         completed: false,
       });
 
-      const client = clients.find(c => c.id === selectedClient);
       await addDoc(collection(db, 'notifications'), {
         userId: selectedClient,
         type: 'program',
-        title: 'New Tool Assigned',
-        message: `${userProfile.displayName || userProfile.email || 'Your coach'} assigned you ${assignTool.name}`,
+        title: 'Nueva Herramienta Asignada',
+        message: `${userProfile.displayName || userProfile.email || 'Tu coach'} te asignó ${assignTool.name}`,
         read: false,
         createdAt: serverTimestamp(),
         actionUrl: `/tools/${assignTool.id}`,
@@ -106,115 +134,119 @@ export default function CoachToolsPage() {
       }, 2000);
     } catch (error) {
       console.error('Error assigning tool:', error);
-      alert('Failed to assign tool. Please try again.');
     } finally {
       setAssigning(false);
     }
   };
 
-  const filteredTools = COACHING_TOOLS.filter(tool => {
-    const matchesCategory = selectedCategory === 'all' || tool.category === selectedCategory;
+  const filteredTools = DARK_TOOLS.filter(tool => {
     const matchesSearch = tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          tool.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    return matchesSearch;
   });
 
-  const getCategoryBadge = (category: string) => {
-    const cat = CATEGORIES.find(c => c.id === category);
-    return cat ? cat.color : 'bg-gray-100 text-gray-700';
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto p-8">
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
+      <div className="max-w-7xl mx-auto p-6 lg:p-8">
         
         {/* Header */}
         <div className="flex items-start justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Tools & Exercises Library</h1>
-            <p className="text-gray-600">
-              Browse our curated library of tools to assign to your clients and enhance your coaching sessions.
+            <h1 className="text-3xl font-bold mb-2">Biblioteca de Herramientas</h1>
+            <p className="text-gray-400 max-w-2xl">
+              Accede a una colección curada de recursos, ejercicios y plantillas diseñados para potenciar el proceso de coaching y maximizar el impacto en tus clientes.
             </p>
           </div>
-          <button className="flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-full hover:bg-primary-700 transition-colors font-medium shadow-sm">
-            <Plus size={20} />
-            New...
-          </button>
+          <div className="flex gap-3">
+            <button className="flex items-center gap-2 px-4 py-2 bg-[#1a1a1a] border border-gray-700 text-white rounded-lg hover:bg-[#222] transition-colors">
+              <Upload className="w-4 h-4" />
+              Importar
+            </button>
+            <button className="flex items-center gap-2 px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+              <Plus className="w-4 h-4" />
+              Crear Herramienta
+            </button>
+          </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-6 border-b border-gray-200 mb-8">
-          <button
-            onClick={() => setActiveTab('tools')}
-            className={`pb-3 px-1 font-medium transition-colors relative ${
-              activeTab === 'tools' 
-                ? 'text-primary-600' 
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
-          >
-            Tools
-            {activeTab === 'tools' && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-600"></div>
-            )}
-          </button>
-          <button className="pb-3 px-1 font-medium text-gray-400 cursor-not-allowed">
-            Exercises
-          </button>
-          <button className="pb-3 px-1 font-medium text-gray-400 cursor-not-allowed">
-            Templates
-          </button>
-          <button
-            onClick={() => setActiveTab('my-tools')}
-            className={`pb-3 px-1 font-medium transition-colors relative ${
-              activeTab === 'my-tools' 
-                ? 'text-primary-600' 
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
-          >
-            My Tools
-            {activeTab === 'my-tools' && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-600"></div>
-            )}
-          </button>
+        <div className="flex gap-6 border-b border-gray-800 mb-6">
+          {TABS.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`pb-3 px-1 text-sm font-medium transition-colors relative ${
+                activeTab === tab.id 
+                  ? 'text-white' 
+                  : 'text-gray-500 hover:text-gray-300'
+              }`}
+            >
+              {tab.name}
+              {activeTab === tab.id && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500"></div>
+              )}
+            </button>
+          ))}
         </div>
 
         {/* Search & Filters */}
-        <div className="flex flex-col md:flex-row gap-4 mb-8">
+        <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
             <input
               type="text"
-              placeholder="Search for tools..."
+              placeholder="Buscar por nombre, categoría o etiqueta..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full pl-10 pr-4 py-2.5 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
             />
           </div>
           <div className="flex gap-3">
-            <select className="px-6 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white font-medium">
-              <option>Category: All</option>
-              <option>Category: Goal Setting</option>
-              <option>Category: Self-Awareness</option>
-            </select>
-            <select className="px-6 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white font-medium">
-              <option>Type: All</option>
-            </select>
-            <select className="px-6 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white font-medium">
-              <option>Sort by: Popularity</option>
-            </select>
+            <div className="relative">
+              <select className="appearance-none px-4 py-2.5 pr-10 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500 cursor-pointer">
+                <option>Categoría</option>
+                <option>Evaluación</option>
+                <option>Reflexión</option>
+                <option>Cognitivo</option>
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+            </div>
+            <div className="relative">
+              <select className="appearance-none px-4 py-2.5 pr-10 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500 cursor-pointer">
+                <option>Tipo</option>
+                <option>Herramienta</option>
+                <option>Ejercicio</option>
+                <option>Plantilla</option>
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+            </div>
+            <div className="flex bg-[#1a1a1a] border border-gray-700 rounded-lg">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`p-2.5 ${viewMode === 'grid' ? 'text-white bg-[#2a2a2a]' : 'text-gray-500'} rounded-l-lg transition-colors`}
+              >
+                <Grid className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                className={`p-2.5 ${viewMode === 'list' ? 'text-white bg-[#2a2a2a]' : 'text-gray-500'} rounded-r-lg transition-colors`}
+              >
+                <List className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Category Pills */}
-        <div className="flex gap-3 mb-8 flex-wrap">
+        <div className="flex gap-2 mb-8 flex-wrap">
           {CATEGORIES.map(category => (
             <button
               key={category.id}
               onClick={() => setSelectedCategory(category.id)}
-              className={`px-4 py-2 rounded-full font-medium text-sm transition-all ${
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
                 selectedCategory === category.id
-                  ? category.color + ' ring-2 ring-offset-2 ring-current'
-                  : category.color + ' opacity-60 hover:opacity-100'
+                  ? 'bg-white text-black'
+                  : 'bg-[#1a1a1a] text-gray-400 border border-gray-700 hover:border-gray-600'
               }`}
             >
               {category.name}
@@ -223,51 +255,46 @@ export default function CoachToolsPage() {
         </div>
 
         {/* Tools Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredTools.map((tool, index) => {
-            const gradientClass = TOOL_GRADIENTS[index % TOOL_GRADIENTS.length];
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {filteredTools.map((tool) => {
             const Icon = tool.icon;
+            const catColor = CATEGORY_COLORS[tool.category] || { bg: 'bg-gray-500/20', text: 'text-gray-400' };
             
             return (
               <div
                 key={tool.id}
-                className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden group"
+                className="bg-[#111111] border border-gray-800 rounded-xl overflow-hidden hover:border-gray-700 transition-colors group"
               >
-                {/* Gradient Header */}
-                <div className={`h-32 ${gradientClass} relative flex items-center justify-center`}>
-                  <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
-                  <Icon className="relative text-white/80 drop-shadow-lg" size={48} />
+                {/* Header with icon */}
+                <div className="h-28 bg-[#0d0d0d] flex items-center justify-center relative">
+                  <div className={`w-14 h-14 ${tool.color} rounded-xl flex items-center justify-center`}>
+                    <Icon className={`w-7 h-7 ${tool.iconColor}`} />
+                  </div>
                 </div>
 
                 {/* Content */}
-                <div className="p-6">
-                  <div className="mb-4">
-                    <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
-                      {tool.name}
-                    </h3>
-                    <p className="text-sm text-gray-600 line-clamp-2">{tool.description}</p>
-                  </div>
-
-                  <div className="mb-4">
-                    <span className={`text-xs font-medium px-3 py-1 rounded-full ${getCategoryBadge(tool.category)}`}>
+                <div className="p-4">
+                  <div className="mb-3">
+                    <span className={`text-xs font-medium px-2 py-1 rounded ${catColor.bg} ${catColor.text}`}>
                       {tool.category}
                     </span>
                   </div>
+                  
+                  <h3 className="text-white font-semibold mb-1">{tool.name}</h3>
+                  <p className="text-gray-500 text-sm line-clamp-2 mb-4">{tool.description}</p>
 
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => setPreviewTool(tool)}
-                      className="flex-1 px-4 py-2.5 text-primary-600 hover:bg-primary-50 border border-primary-200 rounded-full text-sm font-medium transition-all"
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1 text-gray-500 text-sm">
+                      <Clock className="w-4 h-4" />
+                      {tool.time} min
+                    </div>
+                    <Link
+                      href={`/tools/${tool.id}`}
+                      className="flex items-center gap-1 text-blue-400 text-sm font-medium hover:text-blue-300 transition-colors"
                     >
-                      Preview
-                    </button>
-                    <button
-                      onClick={() => setAssignTool(tool)}
-                      disabled={clients.length === 0}
-                      className="flex-1 px-4 py-2.5 bg-primary-600 text-white rounded-full text-sm font-medium hover:bg-primary-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-sm hover:shadow-md"
-                    >
-                      Assign
-                    </button>
+                      Ver Detalles
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -277,71 +304,46 @@ export default function CoachToolsPage() {
 
         {filteredTools.length === 0 && (
           <div className="text-center py-16">
-            <p className="text-gray-500 text-lg">No tools found matching your criteria.</p>
-          </div>
-        )}
-
-        {clients.length === 0 && (
-          <div className="mt-8 bg-yellow-50 rounded-2xl p-8 text-center">
-            <Users className="mx-auto text-yellow-600 mb-4" size={48} />
-            <h3 className="text-lg font-bold text-yellow-900 mb-2">No clients yet</h3>
-            <p className="text-yellow-800 mb-4">
-              Invite coachees to start assigning tools
-            </p>
-            <Link
-              href="/coach/invite"
-              className="inline-block px-6 py-3 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 shadow-sm"
-            >
-              Invite Coachees
-            </Link>
+            <p className="text-gray-500 text-lg">No se encontraron herramientas.</p>
           </div>
         )}
       </div>
 
       {/* Preview Modal */}
       {previewTool && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-md">
-            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-start justify-between rounded-t-2xl">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-[#111111] border border-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-[#111111] border-b border-gray-800 p-6 flex items-start justify-between">
               <div className="flex items-center gap-3">
                 <div className={`w-12 h-12 ${previewTool.color} rounded-xl flex items-center justify-center`}>
                   {(() => {
                     const Icon = previewTool.icon;
-                    return <Icon className="text-white" size={24} />;
+                    return <Icon className={`w-6 h-6 ${previewTool.iconColor}`} />;
                   })()}
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">{previewTool.name}</h2>
-                  <p className="text-sm text-gray-600">{previewTool.category}</p>
+                  <h2 className="text-xl font-bold text-white">{previewTool.name}</h2>
+                  <p className="text-sm text-gray-500">{previewTool.category}</p>
                 </div>
               </div>
-              <button
-                onClick={() => setPreviewTool(null)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
-              >
-                <X size={24} />
+              <button onClick={() => setPreviewTool(null)} className="text-gray-500 hover:text-white transition-colors">
+                <X className="w-6 h-6" />
               </button>
             </div>
-
             <div className="p-6">
-              <div className="mb-6">
-                <h3 className="font-bold text-gray-900 mb-2">Description</h3>
-                <p className="text-gray-700">{previewTool.description}</p>
-              </div>
-
+              <p className="text-gray-300 mb-6">{previewTool.description}</p>
               <div className="flex gap-3">
                 <Link
                   href={`/tools/${previewTool.id}`}
-                  target="_blank"
-                  className="flex-1 px-6 py-3 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 text-center transition-colors shadow-sm"
+                  className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 text-center transition-colors"
                 >
-                  Try it yourself
+                  Probar Herramienta
                 </Link>
                 <button
                   onClick={() => setPreviewTool(null)}
-                  className="px-6 py-3 bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors"
+                  className="px-6 py-3 bg-[#1a1a1a] text-gray-300 rounded-lg font-medium hover:bg-[#222] transition-colors"
                 >
-                  Close
+                  Cerrar
                 </button>
               </div>
             </div>
@@ -351,67 +353,58 @@ export default function CoachToolsPage() {
 
       {/* Assign Modal */}
       {assignTool && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full shadow-md">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-[#111111] border border-gray-800 rounded-2xl max-w-md w-full">
             {showSuccess ? (
               <div className="p-8 text-center">
-                <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Tool Assigned!</h3>
-                <p className="text-gray-600">The coachee has been notified</p>
+                <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto mb-4" />
+                <h3 className="text-xl font-bold text-white mb-2">¡Herramienta Asignada!</h3>
+                <p className="text-gray-400">El coachee ha sido notificado</p>
               </div>
             ) : (
               <>
-                <div className="p-6 border-b border-gray-200 flex items-start justify-between">
+                <div className="p-6 border-b border-gray-800 flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 ${assignTool.color} rounded-xl flex items-center justify-center`}>
                       {(() => {
                         const Icon = assignTool.icon;
-                        return <Icon className="text-white" size={20} />;
+                        return <Icon className={`w-5 h-5 ${assignTool.iconColor}`} />;
                       })()}
                     </div>
                     <div>
-                      <h2 className="text-xl font-bold text-gray-900">Assign Tool</h2>
-                      <p className="text-sm text-gray-600">{assignTool.name}</p>
+                      <h2 className="text-lg font-bold text-white">Asignar Herramienta</h2>
+                      <p className="text-sm text-gray-500">{assignTool.name}</p>
                     </div>
                   </div>
-                  <button
-                    onClick={() => setAssignTool(null)}
-                    className="text-gray-400 hover:text-gray-600"
-                  >
-                    <X size={24} />
+                  <button onClick={() => setAssignTool(null)} className="text-gray-500 hover:text-white">
+                    <X className="w-6 h-6" />
                   </button>
                 </div>
-
                 <div className="p-6">
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
-                    Select Client
-                  </label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Seleccionar Cliente</label>
                   <select
                     value={selectedClient}
                     onChange={(e) => setSelectedClient(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
                   >
-                    <option value="">Choose a client...</option>
+                    <option value="">Elegir cliente...</option>
                     {clients.map((client) => (
-                      <option key={client.id} value={client.id}>
-                        {client.name}
-                      </option>
+                      <option key={client.id} value={client.id}>{client.name}</option>
                     ))}
                   </select>
-
                   <div className="mt-6 flex gap-3">
                     <button
                       onClick={() => setAssignTool(null)}
-                      className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200"
+                      className="flex-1 px-4 py-3 bg-[#1a1a1a] text-gray-300 rounded-lg font-medium hover:bg-[#222]"
                     >
-                      Cancel
+                      Cancelar
                     </button>
                     <button
                       onClick={handleAssignTool}
                       disabled={!selectedClient || assigning}
-                      className="flex-1 px-4 py-3 bg-primary-600 text-white rounded-full font-medium hover:bg-primary-700 disabled:bg-gray-300 disabled:cursor-not-allowed shadow-sm"
+                      className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-700 disabled:cursor-not-allowed"
                     >
-                      {assigning ? 'Assigning...' : 'Assign Tool'}
+                      {assigning ? 'Asignando...' : 'Asignar'}
                     </button>
                   </div>
                 </div>
