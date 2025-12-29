@@ -1,132 +1,176 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import { Target } from "lucide-react";
-import { Navbar, Footer } from "@/components/layout";
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { Shield, Lock, Eye, Database, UserCheck, Globe, Mail, ArrowLeft } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | AchievingCoach",
-  description: "Learn how AchievingCoach collects, uses, and protects your personal information. Our commitment to your privacy and data security.",
-  keywords: ["privacy policy", "data protection", "coaching platform privacy", "GDPR", "data security"],
-  authors: [{ name: "AchievingCoach" }],
-  openGraph: {
-    title: "Privacy Policy | AchievingCoach",
-    description: "Learn how AchievingCoach collects, uses, and protects your personal information.",
-    url: "https://achievingcoach.com/privacy",
-    siteName: "AchievingCoach",
-    images: [{ url: "https://achievingcoach.com/images/og-image.png", width: 1200, height: 630 }],
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Privacy Policy | AchievingCoach",
-    description: "Learn how AchievingCoach collects, uses, and protects your personal information.",
-    images: ["https://achievingcoach.com/images/og-image.png"],
-  },
-  alternates: { canonical: "https://achievingcoach.com/privacy" },
-  robots: { index: true, follow: true },
-};
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  name: "Privacy Policy",
-  description: "Learn how AchievingCoach collects, uses, and protects your personal information.",
-  url: "https://achievingcoach.com/privacy",
-  publisher: { "@type": "Organization", name: "AchievingCoach", url: "https://achievingcoach.com" },
+  title: 'Política de Privacidad – AchievingCoach',
+  description: 'Conoce cómo AchievingCoach protege tu información personal y la de tus clientes.',
 };
 
 export default function PrivacyPage() {
   return (
-    <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div className="min-h-screen bg-white">
-        {/* Nav */}
-        <Navbar />
-
-        <main role="main">
-          <section className="bg-gradient-to-br from-blue-50 to-white py-16" aria-labelledby="privacy-heading">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-              <h1 id="privacy-heading" className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">Privacy Policy</h1>
-              <p className="mt-4 text-lg text-gray-600">Last updated: December 6, 2025</p>
-            </div>
-          </section>
-
-          <section className="py-16" aria-label="Privacy policy content">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-              <article className="prose prose-lg max-w-none">
-                <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">1. Introduction</h2>
-                <p className="text-gray-600 mb-6">Welcome to AchievingCoach. We respect your privacy and are committed to protecting your personal data. This privacy policy explains how we collect, use, disclose, and safeguard your information when you use our coaching platform.</p>
-
-                <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">2. Information We Collect</h2>
-                <p className="text-gray-600 mb-4">We collect information that you provide directly to us, including:</p>
-                <ul className="list-disc pl-6 text-gray-600 mb-6 space-y-2" role="list">
-                  <li>Account information (name, email address, password)</li>
-                  <li>Profile information (professional credentials, biography)</li>
-                  <li>Coaching session data and notes</li>
-                  <li>Assessment results and progress tracking data</li>
-                  <li>Communications between coaches and coachees</li>
-                  <li>Payment information (processed securely through third-party providers)</li>
-                </ul>
-
-                <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">3. How We Use Your Information</h2>
-                <p className="text-gray-600 mb-4">We use the information we collect to:</p>
-                <ul className="list-disc pl-6 text-gray-600 mb-6 space-y-2" role="list">
-                  <li>Provide, maintain, and improve our coaching platform</li>
-                  <li>Process transactions and send related information</li>
-                  <li>Send you technical notices, updates, and support messages</li>
-                  <li>Respond to your comments, questions, and customer service requests</li>
-                  <li>Monitor and analyze trends, usage, and activities</li>
-                  <li>Detect, investigate, and prevent fraudulent transactions and abuse</li>
-                </ul>
-
-                <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">4. Data Security</h2>
-                <p className="text-gray-600 mb-6">We implement appropriate technical and organizational security measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction. This includes encryption of data in transit and at rest, regular security assessments, and strict access controls.</p>
-
-                <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">5. Data Sharing</h2>
-                <p className="text-gray-600 mb-4">We do not sell your personal information. We may share your data with:</p>
-                <ul className="list-disc pl-6 text-gray-600 mb-6 space-y-2" role="list">
-                  <li>Your assigned coach or coachees (based on your role and relationships)</li>
-                  <li>Service providers who assist in operating our platform</li>
-                  <li>Legal authorities when required by law</li>
-                </ul>
-
-                <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">6. Your Rights</h2>
-                <p className="text-gray-600 mb-4">You have the right to:</p>
-                <ul className="list-disc pl-6 text-gray-600 mb-6 space-y-2" role="list">
-                  <li>Access your personal data</li>
-                  <li>Correct inaccurate data</li>
-                  <li>Request deletion of your data</li>
-                  <li>Export your data in a portable format</li>
-                  <li>Withdraw consent at any time</li>
-                </ul>
-
-                <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">7. Cookies</h2>
-                <p className="text-gray-600 mb-6">We use cookies and similar tracking technologies to enhance your experience on our platform. You can control cookie preferences through your browser settings.</p>
-
-                <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">8. Children&apos;s Privacy</h2>
-                <p className="text-gray-600 mb-6">Our platform is not intended for individuals under 18 years of age. We do not knowingly collect personal information from children.</p>
-
-                <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">9. Changes to This Policy</h2>
-                <p className="text-gray-600 mb-6">We may update this privacy policy from time to time. We will notify you of any changes by posting the new policy on this page and updating the &quot;Last updated&quot; date.</p>
-
-                <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">10. Contact Us</h2>
-                <p className="text-gray-600 mb-6">If you have any questions about this privacy policy or our data practices, please contact us at:</p>
-                <div className="bg-gray-50 rounded-xl p-6 mb-8">
-                  <p className="text-gray-700 font-medium">AchievingCoach</p>
-                  <p className="text-gray-600">Email: privacy@achievingcoach.com</p>
-                </div>
-              </article>
-
-              <div className="mt-12 text-center">
-                <Link href="/" className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium transition-colors" aria-label="Return to homepage">← Back to Home</Link>
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">A</span>
               </div>
+              <span className="font-semibold text-white">AchievingCoach</span>
+            </Link>
+            <div className="flex items-center gap-4">
+              <Link href="/sign-in" className="text-gray-400 hover:text-white text-sm transition-colors">Iniciar Sesión</Link>
+              <Link href="/sign-up" className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
+                Comenzar Gratis
+              </Link>
             </div>
-          </section>
-        </main>
+          </div>
+        </div>
+      </nav>
 
-        <Footer />
+      {/* Content */}
+      <div className="pt-32 pb-20 px-6">
+        <div className="max-w-4xl mx-auto">
+          <Link href="/" className="inline-flex items-center gap-1 text-gray-500 hover:text-white text-sm mb-8 transition-colors">
+            <ArrowLeft className="w-4 h-4" />
+            Volver al inicio
+          </Link>
+
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center">
+              <Shield className="w-6 h-6 text-blue-400" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold">Política de Privacidad</h1>
+              <p className="text-gray-500 text-sm">Última actualización: Diciembre 2024</p>
+            </div>
+          </div>
+
+          <div className="bg-[#111111] border border-gray-800 rounded-xl p-8 mb-8">
+            <p className="text-gray-400 leading-relaxed">
+              En AchievingCoach, nos tomamos muy en serio la privacidad de nuestros usuarios. Esta política describe cómo recopilamos, usamos, almacenamos y protegemos tu información personal y la de tus clientes.
+            </p>
+          </div>
+
+          {/* Sections */}
+          <div className="space-y-8">
+            <section className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
+                  <Database className="w-5 h-5 text-emerald-400" />
+                </div>
+                <h2 className="text-xl font-semibold">1. Información que Recopilamos</h2>
+              </div>
+              <div className="text-gray-400 space-y-4">
+                <p><strong className="text-white">Información de cuenta:</strong> Nombre, correo electrónico, contraseña encriptada, foto de perfil opcional.</p>
+                <p><strong className="text-white">Información de coaching:</strong> Notas de sesión, objetivos de clientes, evaluaciones y documentos que subas a la plataforma.</p>
+                <p><strong className="text-white">Datos de uso:</strong> Cómo interactúas con la plataforma, funciones que utilizas, y métricas de rendimiento.</p>
+                <p><strong className="text-white">Información de pago:</strong> Procesada de forma segura por Stripe. No almacenamos números de tarjeta completos.</p>
+              </div>
+            </section>
+
+            <section className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-violet-500/10 rounded-lg flex items-center justify-center">
+                  <Eye className="w-5 h-5 text-violet-400" />
+                </div>
+                <h2 className="text-xl font-semibold">2. Cómo Usamos tu Información</h2>
+              </div>
+              <ul className="text-gray-400 space-y-2">
+                <li>• Proporcionar y mejorar nuestros servicios de coaching</li>
+                <li>• Personalizar tu experiencia en la plataforma</li>
+                <li>• Procesar pagos y gestionar tu suscripción</li>
+                <li>• Enviarte actualizaciones importantes sobre el servicio</li>
+                <li>• Generar analytics y reportes para tu práctica</li>
+                <li>• Cumplir con obligaciones legales</li>
+              </ul>
+            </section>
+
+            <section className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-amber-500/10 rounded-lg flex items-center justify-center">
+                  <Lock className="w-5 h-5 text-amber-400" />
+                </div>
+                <h2 className="text-xl font-semibold">3. Seguridad de Datos</h2>
+              </div>
+              <div className="text-gray-400 space-y-4">
+                <p>Implementamos medidas de seguridad de nivel enterprise:</p>
+                <ul className="space-y-2">
+                  <li>• <strong className="text-white">Encriptación AES-256</strong> para datos en reposo</li>
+                  <li>• <strong className="text-white">TLS 1.3</strong> para datos en tránsito</li>
+                  <li>• <strong className="text-white">Autenticación de dos factores</strong> disponible</li>
+                  <li>• <strong className="text-white">Backups automáticos</strong> con retención de 30 días</li>
+                  <li>• <strong className="text-white">Auditorías de seguridad</strong> regulares</li>
+                </ul>
+              </div>
+            </section>
+
+            <section className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-cyan-500/10 rounded-lg flex items-center justify-center">
+                  <UserCheck className="w-5 h-5 text-cyan-400" />
+                </div>
+                <h2 className="text-xl font-semibold">4. Tus Derechos</h2>
+              </div>
+              <div className="text-gray-400 space-y-4">
+                <p>Tienes derecho a:</p>
+                <ul className="space-y-2">
+                  <li>• <strong className="text-white">Acceder</strong> a tus datos personales</li>
+                  <li>• <strong className="text-white">Corregir</strong> información inexacta</li>
+                  <li>• <strong className="text-white">Eliminar</strong> tu cuenta y datos asociados</li>
+                  <li>• <strong className="text-white">Exportar</strong> tus datos en formato estándar</li>
+                  <li>• <strong className="text-white">Oponerte</strong> al procesamiento de tus datos</li>
+                </ul>
+              </div>
+            </section>
+
+            <section className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-pink-500/10 rounded-lg flex items-center justify-center">
+                  <Globe className="w-5 h-5 text-pink-400" />
+                </div>
+                <h2 className="text-xl font-semibold">5. Cumplimiento Internacional</h2>
+              </div>
+              <div className="text-gray-400 space-y-4">
+                <p>AchievingCoach cumple con las siguientes regulaciones:</p>
+                <ul className="space-y-2">
+                  <li>• <strong className="text-white">GDPR</strong> - Reglamento General de Protección de Datos (UE)</li>
+                  <li>• <strong className="text-white">CCPA</strong> - Ley de Privacidad del Consumidor de California</li>
+                  <li>• <strong className="text-white">Ley 19.628</strong> - Protección de datos personales (Chile)</li>
+                </ul>
+              </div>
+            </section>
+
+            <section className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
+                  <Mail className="w-5 h-5 text-blue-400" />
+                </div>
+                <h2 className="text-xl font-semibold">6. Contacto</h2>
+              </div>
+              <div className="text-gray-400">
+                <p className="mb-4">Para preguntas sobre privacidad o ejercer tus derechos, contáctanos:</p>
+                <p><strong className="text-white">Email:</strong> privacy@achievingcoach.com</p>
+                <p><strong className="text-white">Dirección:</strong> Santiago, Chile</p>
+              </div>
+            </section>
+          </div>
+        </div>
       </div>
-    </>
+
+      {/* Footer */}
+      <footer className="py-12 px-6 border-t border-white/5">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-gray-600 text-sm">© 2026 AchievingCoach Inc. Todos los derechos reservados.</p>
+          <div className="flex gap-6">
+            <Link href="/privacy" className="text-white text-sm">Privacidad</Link>
+            <Link href="/terms" className="text-gray-500 hover:text-white text-sm transition-colors">Términos</Link>
+            <Link href="/contact" className="text-gray-500 hover:text-white text-sm transition-colors">Contacto</Link>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }
