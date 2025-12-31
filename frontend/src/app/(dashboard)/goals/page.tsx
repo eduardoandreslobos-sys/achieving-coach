@@ -1,10 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { 
-  Target, Plus, CheckCircle, Clock, Calendar,
-  TrendingUp, MoreVertical, Edit, Trash2, Filter
-} from 'lucide-react';
+import Link from 'next/link';
+import { Target, Plus, CheckCircle, Flag, Star, Check } from 'lucide-react';
 import { collection, query, where, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
@@ -24,25 +22,16 @@ export default function GoalsPage() {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
-  const [editingGoal, setEditingGoal] = useState<Goal | null>(null);
-  const [newGoal, setNewGoal] = useState({
-    title: '',
-    description: '',
-    dueDate: '',
-  });
+  const [newGoal, setNewGoal] = useState({ title: '', description: '', dueDate: '' });
 
   useEffect(() => {
     loadGoals();
   }, [user]);
 
   const loadGoals = async () => {
-    if (!user?.uid) return;
+    if (!user?.uid) { setLoading(false); return; }
     try {
-      const q = query(
-        collection(db, 'goals'),
-        where('coacheeId', '==', user.uid)
-      );
+      const q = query(collection(db, 'goals'), where('coacheeId', '==', user.uid));
       const snapshot = await getDocs(q);
       const goalsData = snapshot.docs.map(doc => ({
         id: doc.id,
@@ -67,7 +56,7 @@ export default function GoalsPage() {
         description: newGoal.description,
         progress: 0,
         status: 'active',
-        dueDate: new Date(newGoal.dueDate),
+        dueDate: newGoal.dueDate ? new Date(newGoal.dueDate) : new Date(),
         createdAt: serverTimestamp(),
       });
       setShowModal(false);
@@ -78,227 +67,130 @@ export default function GoalsPage() {
     }
   };
 
-  const handleUpdateProgress = async (goalId: string, progress: number) => {
-    try {
-      const status = progress >= 100 ? 'completed' : 'active';
-      await updateDoc(doc(db, 'goals', goalId), { progress, status });
-      setGoals(goals.map(g => g.id === goalId ? { ...g, progress, status } : g));
-    } catch (error) {
-      console.error('Error updating progress:', error);
-    }
-  };
-
-  const handleDeleteGoal = async (goalId: string) => {
-    if (!confirm('¿Estás seguro de eliminar esta meta?')) return;
-    try {
-      await deleteDoc(doc(db, 'goals', goalId));
-      setGoals(goals.filter(g => g.id !== goalId));
-    } catch (error) {
-      console.error('Error deleting goal:', error);
-    }
-  };
-
-  const filteredGoals = goals.filter(goal => {
-    if (filter === 'all') return true;
-    return goal.status === filter;
-  });
-
-  const stats = {
-    total: goals.length,
-    active: goals.filter(g => g.status === 'active').length,
-    completed: goals.filter(g => g.status === 'completed').length,
-    avgProgress: goals.length > 0 
-      ? Math.round(goals.reduce((sum, g) => sum + g.progress, 0) / goals.length)
-      : 0,
-  };
-
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('es-CL', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    });
-  };
-
-  const isOverdue = (date: Date) => {
-    return new Date() > date;
-  };
-
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 bg-[#0a0a0a]">
+      <div className="flex items-center justify-center h-screen bg-[#0a0a0f]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="p-6 lg:p-8 bg-[#0a0a0a] min-h-screen">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-[#0a0a0f] p-8">
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-          <div>
-            <h1 className="text-2xl font-bold text-white mb-1">Mis Metas</h1>
-            <p className="text-gray-400">Define y rastrea tu progreso hacia tus objetivos.</p>
-          </div>
-          <button
-            onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            <Plus className="w-4 h-4" />
-            Nueva Meta
-          </button>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">Mis Objetivos</h1>
+          <p className="text-gray-400">Rastrea y gestiona tus objetivos de coaching</p>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-4">
-            <p className="text-gray-500 text-sm mb-1">Total</p>
-            <p className="text-2xl font-bold text-white">{stats.total}</p>
-          </div>
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-4">
-            <p className="text-gray-500 text-sm mb-1">Activas</p>
-            <p className="text-2xl font-bold text-blue-400">{stats.active}</p>
-          </div>
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-4">
-            <p className="text-gray-500 text-sm mb-1">Completadas</p>
-            <p className="text-2xl font-bold text-emerald-400">{stats.completed}</p>
-          </div>
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-4">
-            <p className="text-gray-500 text-sm mb-1">Progreso Promedio</p>
-            <p className="text-2xl font-bold text-violet-400">{stats.avgProgress}%</p>
-          </div>
-        </div>
+        {goals.length === 0 ? (
+          /* Empty State */
+          <div className="bg-[#12131a] border border-blue-900/30 rounded-2xl p-12">
+            <div className="flex flex-col items-center text-center">
+              {/* Stacked Icons Illustration */}
+              <div className="relative mb-8">
+                <div className="w-20 h-20 bg-blue-600/20 rounded-2xl flex items-center justify-center">
+                  <Flag className="w-10 h-10 text-blue-500" />
+                </div>
+                <div className="absolute -top-2 -right-4 w-8 h-8 bg-amber-500/20 rounded-lg flex items-center justify-center">
+                  <Star className="w-4 h-4 text-amber-400" />
+                </div>
+                <div className="absolute -bottom-2 -left-4 w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                  <Check className="w-4 h-4 text-emerald-400" />
+                </div>
+              </div>
 
-        {/* Filters */}
-        <div className="flex gap-2 mb-6">
-          {(['all', 'active', 'completed'] as const).map((f) => (
-            <button
-              key={f}
-              onClick={() => setFilter(f)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                filter === f
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-[#111111] border border-gray-800 text-gray-400 hover:text-white'
-              }`}
-            >
-              {f === 'all' ? 'Todas' : f === 'active' ? 'Activas' : 'Completadas'}
-            </button>
-          ))}
-        </div>
+              <h2 className="text-xl font-semibold text-white mb-3">No tienes objetivos aún</h2>
+              <p className="text-gray-400 mb-8 max-w-md">
+                Define tu camino hacia el éxito. Comienza creando tu primer objetivo claro y alcanzable para iniciar tu transformación.
+              </p>
 
-        {/* Goals List */}
-        {filteredGoals.length > 0 ? (
+              <button
+                onClick={() => setShowModal(true)}
+                className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors"
+              >
+                Crea tu Primer Objetivo
+                <Plus className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        ) : (
+          /* Goals List */
           <div className="space-y-4">
-            {filteredGoals.map((goal) => (
-              <div key={goal.id} className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+            <button
+              onClick={() => setShowModal(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors mb-6"
+            >
+              <Plus className="w-4 h-4" />
+              Nuevo Objetivo
+            </button>
+
+            {goals.map((goal) => (
+              <div key={goal.id} className="bg-[#12131a] border border-blue-900/30 rounded-xl p-6">
                 <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                      goal.status === 'completed' 
-                        ? 'bg-emerald-500/10' 
-                        : 'bg-violet-500/10'
+                      goal.status === 'completed' ? 'bg-emerald-500/20' : 'bg-blue-500/20'
                     }`}>
                       {goal.status === 'completed' ? (
                         <CheckCircle className="w-5 h-5 text-emerald-400" />
                       ) : (
-                        <Target className="w-5 h-5 text-violet-400" />
+                        <Target className="w-5 h-5 text-blue-400" />
                       )}
                     </div>
                     <div>
                       <h3 className="text-white font-semibold">{goal.title}</h3>
-                      {goal.description && (
-                        <p className="text-gray-500 text-sm mt-1">{goal.description}</p>
-                      )}
+                      {goal.description && <p className="text-gray-500 text-sm">{goal.description}</p>}
                     </div>
                   </div>
-                  <button
-                    onClick={() => handleDeleteGoal(goal.id)}
-                    className="p-2 text-gray-500 hover:text-red-400 transition-colors"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                    goal.status === 'completed' 
+                      ? 'bg-emerald-500/20 text-emerald-400' 
+                      : 'bg-blue-500/20 text-blue-400'
+                  }`}>
+                    {goal.status === 'completed' ? 'Completado' : `${goal.progress}%`}
+                  </span>
                 </div>
-
-                {/* Progress Bar */}
-                <div className="mb-4">
-                  <div className="flex justify-between text-sm mb-2">
-                    <span className="text-gray-400">Progreso</span>
-                    <span className="text-white font-medium">{goal.progress}%</span>
-                  </div>
-                  <div className="h-2 bg-[#1a1a1a] rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all ${
-                        goal.status === 'completed' ? 'bg-emerald-500' : 'bg-blue-500'
-                      }`}
+                
+                {goal.status !== 'completed' && (
+                  <div className="h-2 bg-[#1a1b23] rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-blue-500 rounded-full transition-all"
                       style={{ width: `${goal.progress}%` }}
                     />
                   </div>
-                </div>
-
-                {/* Progress Buttons */}
-                {goal.status !== 'completed' && (
-                  <div className="flex gap-2 mb-4">
-                    {[25, 50, 75, 100].map((p) => (
-                      <button
-                        key={p}
-                        onClick={() => handleUpdateProgress(goal.id, p)}
-                        className={`px-3 py-1 rounded text-xs transition-colors ${
-                          goal.progress >= p
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-[#1a1a1a] border border-gray-700 text-gray-400 hover:text-white'
-                        }`}
-                      >
-                        {p}%
-                      </button>
-                    ))}
-                  </div>
                 )}
-
-                {/* Due Date */}
-                <div className={`flex items-center gap-2 text-sm ${
-                  isOverdue(goal.dueDate) && goal.status !== 'completed'
-                    ? 'text-red-400'
-                    : 'text-gray-500'
-                }`}>
-                  <Calendar className="w-4 h-4" />
-                  <span>
-                    {isOverdue(goal.dueDate) && goal.status !== 'completed' ? 'Vencida: ' : 'Vence: '}
-                    {formatDate(goal.dueDate)}
-                  </span>
-                </div>
               </div>
             ))}
           </div>
-        ) : (
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-12 text-center">
-            <Target className="w-16 h-16 text-gray-700 mx-auto mb-4" />
-            <h3 className="text-white font-semibold mb-2">No tienes metas</h3>
-            <p className="text-gray-500 mb-4">Crea tu primera meta para empezar a rastrear tu progreso.</p>
-            <button
-              onClick={() => setShowModal(true)}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Crear Meta
-            </button>
-          </div>
         )}
+
+        {/* Footer Link */}
+        <div className="text-center mt-8">
+          <p className="text-gray-500 text-sm">
+            ¿Necesitas ayuda para definir tus objetivos?{' '}
+            <Link href="/messages" className="text-blue-400 hover:text-blue-300">
+              Consulta a tu coach
+            </Link>
+          </p>
+        </div>
 
         {/* Modal */}
         {showModal && (
           <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-            <div className="bg-[#111111] border border-gray-800 rounded-xl p-6 w-full max-w-md">
-              <h2 className="text-xl font-bold text-white mb-6">Nueva Meta</h2>
+            <div className="bg-[#12131a] border border-blue-900/30 rounded-2xl p-6 w-full max-w-md">
+              <h2 className="text-xl font-bold text-white mb-6">Nuevo Objetivo</h2>
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm text-gray-400 mb-2">Título</label>
+                  <label className="block text-sm text-gray-400 mb-2">Título del objetivo</label>
                   <input
                     type="text"
                     value={newGoal.title}
                     onChange={(e) => setNewGoal({ ...newGoal, title: e.target.value })}
-                    placeholder="Ej: Mejorar habilidades de comunicación"
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-blue-500"
+                    placeholder="Ej: Mejorar comunicación"
+                    className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500"
                   />
                 </div>
                 <div>
@@ -307,8 +199,8 @@ export default function GoalsPage() {
                     value={newGoal.description}
                     onChange={(e) => setNewGoal({ ...newGoal, description: e.target.value })}
                     rows={3}
-                    placeholder="Describe tu meta..."
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 resize-none"
+                    placeholder="Describe tu objetivo..."
+                    className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 resize-none"
                   />
                 </div>
                 <div>
@@ -317,7 +209,7 @@ export default function GoalsPage() {
                     type="date"
                     value={newGoal.dueDate}
                     onChange={(e) => setNewGoal({ ...newGoal, dueDate: e.target.value })}
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white focus:outline-none focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -325,16 +217,16 @@ export default function GoalsPage() {
               <div className="flex gap-3 mt-6">
                 <button
                   onClick={() => setShowModal(false)}
-                  className="flex-1 px-4 py-3 bg-[#1a1a1a] border border-gray-700 text-white rounded-lg hover:bg-[#222] transition-colors"
+                  className="flex-1 px-4 py-3 bg-[#1a1b23] border border-blue-900/30 text-white rounded-xl hover:bg-[#22232d] transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={handleCreateGoal}
                   disabled={!newGoal.title.trim()}
-                  className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
                 >
-                  Crear Meta
+                  Crear Objetivo
                 </button>
               </div>
             </div>
