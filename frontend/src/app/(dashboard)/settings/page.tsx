@@ -1,279 +1,130 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { User, Upload, Shield } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { 
-  User, Bell, Lock, Globe, Palette, CreditCard, 
-  Shield, LogOut, Save, Check, ChevronRight
-} from 'lucide-react';
 
 export default function SettingsPage() {
-  const { user, userProfile, logout } = useAuth();
-  const [activeTab, setActiveTab] = useState('profile');
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const { user, userProfile } = useAuth();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
 
-  const [notifications, setNotifications] = useState({
-    email: true,
-    push: true,
-    sessionReminders: true,
-    weeklyDigest: false,
-  });
-
-  const handleSave = async () => {
-    setSaving(true);
-    // Simulate save
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-  };
-
-  const tabs = [
-    { id: 'profile', name: 'Perfil', icon: User },
-    { id: 'notifications', name: 'Notificaciones', icon: Bell },
-    { id: 'security', name: 'Seguridad', icon: Lock },
-    { id: 'preferences', name: 'Preferencias', icon: Palette },
-  ];
+  useEffect(() => {
+    if (userProfile) {
+      setName(userProfile.displayName || user?.displayName || '');
+      setEmail(user?.email || '');
+    }
+  }, [userProfile, user]);
 
   return (
-    <div className="p-6 lg:p-8 bg-[#0a0a0a] min-h-screen">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-[#0a0a0f] p-8">
+      <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-white mb-2">Configuración</h1>
-          <p className="text-gray-400">Administra tu cuenta y preferencias.</p>
+          <h1 className="text-3xl font-bold text-white mb-2">Ajustes</h1>
+          <p className="text-gray-400">Gestiona la configuración de tu perfil y cuenta</p>
         </div>
 
-        <div className="grid lg:grid-cols-4 gap-6">
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="bg-[#111111] border border-gray-800 rounded-xl p-2">
-              {tabs.map((tab) => {
-                const Icon = tab.icon;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                      activeTab === tab.id
-                        ? 'bg-blue-600 text-white'
-                        : 'text-gray-400 hover:bg-[#1a1a1a] hover:text-white'
-                    }`}
-                  >
-                    <Icon className="w-5 h-5" />
-                    <span className="text-sm font-medium">{tab.name}</span>
-                  </button>
-                );
-              })}
-              
-              <hr className="border-gray-800 my-2" />
-              
-              <button
-                onClick={logout}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/10 transition-colors"
-              >
-                <LogOut className="w-5 h-5" />
-                <span className="text-sm font-medium">Cerrar Sesión</span>
+        {/* Profile Section */}
+        <div className="bg-[#12131a] border border-blue-900/30 rounded-xl p-6 mb-6">
+          <div className="flex items-center gap-2 mb-6">
+            <User className="w-5 h-5 text-blue-400" />
+            <h2 className="text-white font-semibold">Información de Perfil</h2>
+          </div>
+
+          {/* Profile Photo */}
+          <div className="flex items-start gap-6 mb-6">
+            <div className="relative">
+              <div className="w-20 h-20 bg-gray-700 rounded-full flex items-center justify-center text-white text-2xl font-medium overflow-hidden">
+                {userProfile?.photoURL ? (
+                  <img src={userProfile.photoURL} alt="Profile" className="w-full h-full object-cover" />
+                ) : (
+                  name.charAt(0) || 'U'
+                )}
+              </div>
+              <button className="absolute -bottom-1 -right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white text-xs">
+                ×
+              </button>
+            </div>
+            <div>
+              <h3 className="text-white font-medium mb-1">Foto de Perfil</h3>
+              <p className="text-gray-400 text-sm mb-3">Sube una foto profesional para ayudar a los clientes a reconocerte.</p>
+              <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                <Upload className="w-4 h-4" />
+                Cambiar Foto
               </button>
             </div>
           </div>
 
-          {/* Content */}
-          <div className="lg:col-span-3">
-            {/* Profile Tab */}
-            {activeTab === 'profile' && (
-              <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
-                <h2 className="text-lg font-semibold text-white mb-6">Información del Perfil</h2>
-                
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-violet-500 rounded-full flex items-center justify-center">
-                    <span className="text-2xl font-bold text-white">
-                      {userProfile?.displayName?.charAt(0) || user?.email?.charAt(0) || 'U'}
-                    </span>
-                  </div>
-                  <div>
-                    <button className="px-4 py-2 bg-[#1a1a1a] border border-gray-700 text-white text-sm rounded-lg hover:bg-[#222] transition-colors">
-                      Cambiar Foto
-                    </button>
-                  </div>
-                </div>
+          {/* Photo Requirements */}
+          <div className="bg-[#1a1b23] border border-blue-900/20 rounded-lg p-4 mb-6">
+            <p className="text-gray-400 text-xs font-medium uppercase tracking-wider mb-2">REQUISITOS DE LA FOTO:</p>
+            <ul className="text-gray-500 text-sm space-y-1">
+              <li>• Formato: JPG, PNG, o WebP</li>
+              <li>• Tamaño máximo: 2MB</li>
+              <li>• Recomendado: 400×400 píxeles (cuadrado)</li>
+            </ul>
+          </div>
 
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm text-gray-400 mb-2">Nombre Completo</label>
-                    <input
-                      type="text"
-                      defaultValue={userProfile?.displayName || ''}
-                      className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm text-gray-400 mb-2">Email</label>
-                    <input
-                      type="email"
-                      defaultValue={user?.email || ''}
-                      disabled
-                      className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-gray-500 cursor-not-allowed"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm text-gray-400 mb-2">Teléfono</label>
-                    <input
-                      type="tel"
-                      placeholder="+56 9 1234 5678"
-                      className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm text-gray-400 mb-2">Bio</label>
-                    <textarea
-                      rows={3}
-                      placeholder="Cuéntanos sobre ti..."
-                      className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 resize-none"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Notifications Tab */}
-            {activeTab === 'notifications' && (
-              <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
-                <h2 className="text-lg font-semibold text-white mb-6">Preferencias de Notificación</h2>
-                
-                <div className="space-y-4">
-                  {[
-                    { key: 'email', label: 'Notificaciones por Email', desc: 'Recibe actualizaciones importantes en tu correo' },
-                    { key: 'push', label: 'Notificaciones Push', desc: 'Alertas en tiempo real en tu navegador' },
-                    { key: 'sessionReminders', label: 'Recordatorios de Sesión', desc: 'Alertas antes de tus sesiones programadas' },
-                    { key: 'weeklyDigest', label: 'Resumen Semanal', desc: 'Un resumen de tu progreso cada semana' },
-                  ].map((item) => (
-                    <div key={item.key} className="flex items-center justify-between p-4 bg-[#1a1a1a] rounded-lg">
-                      <div>
-                        <p className="text-white font-medium">{item.label}</p>
-                        <p className="text-gray-500 text-sm">{item.desc}</p>
-                      </div>
-                      <button
-                        onClick={() => setNotifications(prev => ({ ...prev, [item.key]: !prev[item.key as keyof typeof prev] }))}
-                        className={`w-12 h-6 rounded-full transition-colors ${
-                          notifications[item.key as keyof typeof notifications] ? 'bg-blue-600' : 'bg-gray-700'
-                        }`}
-                      >
-                        <div className={`w-5 h-5 bg-white rounded-full transition-transform ${
-                          notifications[item.key as keyof typeof notifications] ? 'translate-x-6' : 'translate-x-1'
-                        }`} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Security Tab */}
-            {activeTab === 'security' && (
-              <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
-                <h2 className="text-lg font-semibold text-white mb-6">Seguridad</h2>
-                
-                <div className="space-y-4">
-                  <button className="w-full flex items-center justify-between p-4 bg-[#1a1a1a] rounded-lg hover:bg-[#222] transition-colors">
-                    <div className="flex items-center gap-3">
-                      <Lock className="w-5 h-5 text-gray-400" />
-                      <div className="text-left">
-                        <p className="text-white font-medium">Cambiar Contraseña</p>
-                        <p className="text-gray-500 text-sm">Actualiza tu contraseña regularmente</p>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-5 h-5 text-gray-500" />
-                  </button>
-
-                  <button className="w-full flex items-center justify-between p-4 bg-[#1a1a1a] rounded-lg hover:bg-[#222] transition-colors">
-                    <div className="flex items-center gap-3">
-                      <Shield className="w-5 h-5 text-gray-400" />
-                      <div className="text-left">
-                        <p className="text-white font-medium">Autenticación de Dos Factores</p>
-                        <p className="text-gray-500 text-sm">Añade una capa extra de seguridad</p>
-                      </div>
-                    </div>
-                    <span className="px-2 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs rounded">Próximamente</span>
-                  </button>
-
-                  <div className="p-4 bg-[#1a1a1a] rounded-lg">
-                    <p className="text-white font-medium mb-2">Sesiones Activas</p>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-400">Este dispositivo</span>
-                      <span className="text-emerald-400">Activo ahora</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Preferences Tab */}
-            {activeTab === 'preferences' && (
-              <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
-                <h2 className="text-lg font-semibold text-white mb-6">Preferencias</h2>
-                
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm text-gray-400 mb-2">Idioma</label>
-                    <select className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500">
-                      <option value="es">Español</option>
-                      <option value="en">English</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm text-gray-400 mb-2">Zona Horaria</label>
-                    <select className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500">
-                      <option value="America/Santiago">Santiago (GMT-3)</option>
-                      <option value="America/New_York">New York (GMT-5)</option>
-                      <option value="Europe/Madrid">Madrid (GMT+1)</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm text-gray-400 mb-2">Tema</label>
-                    <div className="flex gap-3">
-                      <button className="flex-1 p-4 bg-[#0a0a0a] border-2 border-blue-500 rounded-lg text-center">
-                        <Palette className="w-5 h-5 text-white mx-auto mb-1" />
-                        <span className="text-white text-sm">Oscuro</span>
-                      </button>
-                      <button className="flex-1 p-4 bg-[#1a1a1a] border border-gray-700 rounded-lg text-center opacity-50 cursor-not-allowed">
-                        <Palette className="w-5 h-5 text-gray-400 mx-auto mb-1" />
-                        <span className="text-gray-400 text-sm">Claro</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Save Button */}
-            <div className="mt-6 flex justify-end">
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
-              >
-                {saving ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Guardando...
-                  </>
-                ) : saved ? (
-                  <>
-                    <Check className="w-4 h-4" />
-                    Guardado
-                  </>
-                ) : (
-                  <>
-                    <Save className="w-4 h-4" />
-                    Guardar Cambios
-                  </>
-                )}
-              </button>
+          <div className="border-t border-blue-900/20 pt-6 space-y-5">
+            {/* Name */}
+            <div>
+              <label className="block text-gray-400 text-sm mb-2">Nombre Visible</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white focus:outline-none focus:border-blue-500"
+              />
             </div>
+
+            {/* Email */}
+            <div>
+              <label className="block text-gray-400 text-sm mb-2">Correo Electrónico</label>
+              <input
+                type="email"
+                value={email}
+                disabled
+                className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-gray-500 cursor-not-allowed"
+              />
+              <p className="text-gray-600 text-xs mt-1">El correo electrónico no se puede cambiar.</p>
+            </div>
+
+            {/* Role */}
+            <div>
+              <label className="block text-gray-400 text-sm mb-2">Rol</label>
+              <span className="inline-block px-3 py-1 bg-blue-600/20 text-blue-400 text-sm rounded-lg">
+                Coachee
+              </span>
+            </div>
+
+            {/* Coach Info */}
+            <div>
+              <label className="block text-gray-400 text-sm mb-2">Tu Coach</label>
+              <p className="text-gray-400 text-sm">
+                Estás conectado con un coach. Ver{' '}
+                <Link href="/dashboard" className="text-blue-400 hover:text-blue-300">dashboard</Link>
+                {' '}para más detalles.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Account Section */}
+        <div className="bg-[#12131a] border border-blue-900/30 rounded-xl p-6">
+          <div className="flex items-center gap-2 mb-6">
+            <Shield className="w-5 h-5 text-blue-400" />
+            <h2 className="text-white font-semibold">Cuenta</h2>
+          </div>
+
+          <div className="space-y-4">
+            <button className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 text-white rounded-xl text-left hover:bg-[#22232d] transition-colors">
+              Cambiar contraseña
+            </button>
+            <button className="w-full px-4 py-3 bg-red-600/10 border border-red-900/30 text-red-400 rounded-xl text-left hover:bg-red-600/20 transition-colors">
+              Cerrar sesión
+            </button>
           </div>
         </div>
       </div>
