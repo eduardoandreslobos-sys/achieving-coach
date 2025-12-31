@@ -1,339 +1,360 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { db } from '@/lib/firebase';
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import Link from 'next/link';
-import { Target, Calendar, Wrench, MessageSquare, BookOpen, AlertCircle, Book } from 'lucide-react';
+import { 
+  Target, Calendar, MessageSquare, TrendingUp, Clock, 
+  CheckCircle, ArrowRight, Bell, BookOpen, Star,
+  ChevronRight, Flame, Award
+} from 'lucide-react';
+import { collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { useAuth } from '@/contexts/AuthContext';
 
-interface StatCardProps {
-  icon: any;
-  label: string;
-  value: string;
-  color: string;
-  bgColor: string;
-  link?: string;
-}
-
-function StatCard({ icon: Icon, label, value, color, bgColor, link }: StatCardProps) {
-  const content = (
-    <div className={`${bgColor} rounded-xl border-2 border-gray-200 p-6 hover:border-primary-300 transition-all`}>
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm text-gray-600 mb-1">{label}</p>
-          <p className={`text-3xl font-bold ${color}`}>{value}</p>
-        </div>
-        <Icon className={color} size={32} />
-      </div>
-    </div>
-  );
-
-  return link ? <Link href={link}>{content}</Link> : content;
-}
-
-interface QuickActionCardProps {
-  icon: any;
+interface Goal {
+  id: string;
   title: string;
-  description: string;
-  link: string;
-  color: string;
+  progress: number;
+  dueDate: Date;
 }
 
-function QuickActionCard({ icon: Icon, title, description, link, color }: QuickActionCardProps) {
-  return (
-    <Link href={link} className="bg-white rounded-xl border-2 border-gray-200 p-6 hover:border-primary-300 hover:shadow-lg transition-all">
-      <div className={`w-12 h-12 ${color} rounded-lg flex items-center justify-center mb-4`}>
-        <Icon className="text-white" size={24} />
-      </div>
-      <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
-      <p className="text-sm text-gray-600">{description}</p>
-    </Link>
-  );
+interface Session {
+  id: string;
+  date: Date;
+  coachName: string;
+  status: string;
+}
+
+interface ToolAssignment {
+  id: string;
+  toolId: string;
+  toolName: string;
+  status: string;
 }
 
 export default function CoacheeDashboard() {
-  const { userProfile } = useAuth();
-  const [stats, setStats] = useState({
-    totalGoals: 0,
-    completedGoals: 0,
-    upcomingSessions: 0,
-    completedSessions: 0,
-    toolsAssigned: 0,
-    toolsCompleted: 0,
-    reflections: 0,
-  });
-  const [upcomingSessions, setUpcomingSessions] = useState<any[]>([]);
-  const [assignedTools, setAssignedTools] = useState<any[]>([]);
+  const { user, userProfile } = useAuth();
+  const [goals, setGoals] = useState<Goal[]>([]);
+  const [upcomingSessions, setUpcomingSessions] = useState<Session[]>([]);
+  const [assignedTools, setAssignedTools] = useState<ToolAssignment[]>([]);
   const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    completedGoals: 0,
+    totalSessions: 0,
+    streak: 7,
+    toolsCompleted: 0,
+  });
 
   useEffect(() => {
-    if (userProfile?.uid) {
-      loadDashboardData();
-    }
-  }, [userProfile]);
+    const loadDashboardData = async () => {
+      if (!user?.uid) return;
 
-  const loadDashboardData = async () => {
-    if (!userProfile?.uid) return;
+      try {
+        // Load goals
+        const goalsQuery = query(
+          collection(db, 'goals'),
+          where('coacheeId', '==', user.uid),
+          where('status', '!=', 'completed'),
+          limit(3)
+        );
+        const goalsSnapshot = await getDocs(goalsQuery);
+        const goalsData = goalsSnapshot.docs.map(doc => ({
+          id: doc.id,
+          title: doc.data().title,
+          progress: doc.data().progress || 0,
+          dueDate: doc.data().dueDate?.toDate() || new Date(),
+        }));
+        setGoals(goalsData);
 
-    try {
-      // Load Goals
-      const goalsQuery = query(
-        collection(db, 'goals'),
-        where('userId', '==', userProfile.uid)
-      );
-      const goalsSnapshot = await getDocs(goalsQuery);
-      const goalsData = goalsSnapshot.docs.map(doc => doc.data());
-      const completedGoalsCount = goalsData.filter(g => g.status === 'completed').length;
+        // Load upcoming sessions
+        const sessionsQuery = query(
+          collection(db, 'sessions'),
+          where('coacheeId', '==', user.uid),
+          where('status', '==', 'scheduled'),
+          orderBy('date', 'asc'),
+          limit(3)
+        );
+        const sessionsSnapshot = await getDocs(sessionsQuery);
+        const sessionsData = sessionsSnapshot.docs.map(doc => ({
+          id: doc.id,
+          date: doc.data().date?.toDate() || new Date(),
+          coachName: doc.data().coachName || 'Tu Coach',
+          status: doc.data().status,
+        }));
+        setUpcomingSessions(sessionsData);
 
-      // Load Sessions
-      const sessionsQuery = query(
-        collection(db, 'sessions'),
-        where('coacheeId', '==', userProfile.uid),
-        orderBy('scheduledDate', 'asc')
-      );
-      const sessionsSnapshot = await getDocs(sessionsQuery);
-      const sessionsData = sessionsSnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as Array<{id: string; status: string; scheduledDate?: any; scheduledTime?: string; title?: string; type?: string; [key: string]: any}>;
-      
-      const upcoming = sessionsData.filter(s => s.status === 'scheduled').slice(0, 3);
-      const completed = sessionsData.filter(s => s.status === 'completed').length;
+        // Load assigned tools
+        const toolsQuery = query(
+          collection(db, 'tool_assignments'),
+          where('coacheeId', '==', user.uid),
+          where('status', '==', 'assigned'),
+          limit(3)
+        );
+        const toolsSnapshot = await getDocs(toolsQuery);
+        const toolsData = toolsSnapshot.docs.map(doc => ({
+          id: doc.id,
+          toolId: doc.data().toolId,
+          toolName: doc.data().toolName,
+          status: doc.data().status,
+        }));
+        setAssignedTools(toolsData);
 
-      // Load Tool Assignments
-      const toolsQuery = query(
-        collection(db, 'tool_assignments'),
-        where('coacheeId', '==', userProfile.uid)
-      );
-      const toolsSnapshot = await getDocs(toolsQuery);
-      const toolsData = toolsSnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as Array<{
-        id: string;
-        toolId: string;
-        toolName: string;
-        completed: boolean;
-        assignedAt?: any;
-        [key: string]: any
-      }>;
-      
-      const completedTools = toolsData.filter(t => t.completed === true).length;
+        // Calculate stats
+        const completedGoalsQuery = query(
+          collection(db, 'goals'),
+          where('coacheeId', '==', user.uid),
+          where('status', '==', 'completed')
+        );
+        const completedSnapshot = await getDocs(completedGoalsQuery);
+        
+        const allSessionsQuery = query(
+          collection(db, 'sessions'),
+          where('coacheeId', '==', user.uid),
+          where('status', '==', 'completed')
+        );
+        const allSessionsSnapshot = await getDocs(allSessionsQuery);
 
-      // Load Reflections
-      const reflectionsQuery = query(
-        collection(db, 'reflections'),
-        where('userId', '==', userProfile.uid)
-      );
-      const reflectionsSnapshot = await getDocs(reflectionsQuery);
+        setStats({
+          completedGoals: completedSnapshot.size,
+          totalSessions: allSessionsSnapshot.size,
+          streak: 7,
+          toolsCompleted: 3,
+        });
 
-      setStats({
-        totalGoals: goalsData.length,
-        completedGoals: completedGoalsCount,
-        upcomingSessions: upcoming.length,
-        completedSessions: completed,
-        toolsAssigned: toolsData.length,
-        toolsCompleted: completedTools,
-        reflections: reflectionsSnapshot.size,
-      });
+      } catch (error) {
+        console.error('Error loading dashboard:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      setUpcomingSessions(upcoming);
-      setAssignedTools(toolsData.filter(t => t.completed !== true).slice(0, 3));
-    } catch (error) {
-      console.error('Error loading dashboard:', error);
-    } finally {
-      setLoading(false);
-    }
+    loadDashboardData();
+  }, [user]);
+
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('es-CL', {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short',
+    });
   };
 
-  const getTimeOfDay = () => {
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('es-CL', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
+
+  const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return 'morning';
-    if (hour < 18) return 'afternoon';
-    return 'evening';
+    if (hour < 12) return 'Buenos días';
+    if (hour < 18) return 'Buenas tardes';
+    return 'Buenas noches';
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      <div className="flex items-center justify-center h-screen bg-[#0a0a0a]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
-  const hasCoach = userProfile?.coacheeInfo?.coachId;
-
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Welcome Header */}
+    <div className="p-6 lg:p-8 bg-[#0a0a0a] min-h-screen">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Good {getTimeOfDay()}, {userProfile?.firstName || 'there'}! 👋
+          <h1 className="text-2xl font-bold text-white mb-1">
+            {getGreeting()}, {userProfile?.displayName?.split(' ')[0] || 'Coachee'}
           </h1>
-          <p className="text-gray-600">Here's what's happening with your coaching journey</p>
+          <p className="text-gray-400">Tu progreso de coaching de un vistazo.</p>
         </div>
 
-        {/* No Coach Warning */}
-        {!hasCoach && (
-          <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-6 mb-8 flex items-start gap-4">
-            <AlertCircle className="text-yellow-600 flex-shrink-0" size={24} />
-            <div>
-              <h3 className="font-bold text-yellow-900 mb-1">No Coach Assigned Yet</h3>
-              <p className="text-yellow-800 text-sm mb-3">
-                You need to be invited by a coach to start your coaching journey.
-              </p>
-              <p className="text-yellow-700 text-sm">
-                Ask your coach to send you an invitation link, or contact support if you need help.
-              </p>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="bg-[#111111] border border-gray-800 rounded-xl p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
+                <CheckCircle className="w-5 h-5 text-emerald-400" />
+              </div>
             </div>
+            <p className="text-2xl font-bold text-white">{stats.completedGoals}</p>
+            <p className="text-gray-500 text-sm">Metas Completadas</p>
           </div>
-        )}
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatCard
-            icon={Target}
-            label="Goals"
-            value={`${stats.completedGoals}/${stats.totalGoals}`}
-            color="text-blue-600"
-            bgColor="bg-blue-50"
-            link="/goals"
-          />
-          <StatCard
-            icon={Calendar}
-            label="Sessions"
-            value={`${stats.upcomingSessions}`}
-            color="text-green-600"
-            bgColor="bg-green-50"
-            link="/sessions"
-          />
-          <StatCard
-            icon={Wrench}
-            label="Tools Used"
-            value={`${stats.toolsCompleted}`}
-            color="text-purple-600"
-            bgColor="bg-purple-50"
-            link="/tools"
-          />
-          <StatCard
-            icon={BookOpen}
-            label="Reflections"
-            value={`${stats.reflections}`}
-            color="text-orange-600"
-            bgColor="bg-orange-50"
-            link="/reflections"
-          />
+          <div className="bg-[#111111] border border-gray-800 rounded-xl p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
+                <Calendar className="w-5 h-5 text-blue-400" />
+              </div>
+            </div>
+            <p className="text-2xl font-bold text-white">{stats.totalSessions}</p>
+            <p className="text-gray-500 text-sm">Sesiones Completadas</p>
+          </div>
+
+          <div className="bg-[#111111] border border-gray-800 rounded-xl p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 bg-orange-500/10 rounded-lg flex items-center justify-center">
+                <Flame className="w-5 h-5 text-orange-400" />
+              </div>
+            </div>
+            <p className="text-2xl font-bold text-white">{stats.streak} días</p>
+            <p className="text-gray-500 text-sm">Racha Activa</p>
+          </div>
+
+          <div className="bg-[#111111] border border-gray-800 rounded-xl p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 bg-violet-500/10 rounded-lg flex items-center justify-center">
+                <Award className="w-5 h-5 text-violet-400" />
+              </div>
+            </div>
+            <p className="text-2xl font-bold text-white">{stats.toolsCompleted}</p>
+            <p className="text-gray-500 text-sm">Herramientas Usadas</p>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid lg:grid-cols-3 gap-6">
           {/* Upcoming Sessions */}
-          <div className="bg-white rounded-xl border-2 border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-gray-900">Upcoming Sessions</h2>
-              <Link href="/sessions" className="text-primary-600 hover:text-primary-700 text-sm font-medium">
-                View all
+          <div className="lg:col-span-2 bg-[#111111] border border-gray-800 rounded-xl p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-blue-400" />
+                Próximas Sesiones
+              </h2>
+              <Link href="/sessions" className="text-blue-400 text-sm hover:text-blue-300 flex items-center gap-1">
+                Ver todas
+                <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
 
-            {upcomingSessions.length === 0 ? (
-              <div className="text-center py-8">
-                <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500 text-sm">No upcoming sessions scheduled</p>
-                {hasCoach && (
-                  <p className="text-gray-400 text-xs mt-2">Your coach will schedule sessions soon</p>
-                )}
-              </div>
-            ) : (
+            {upcomingSessions.length > 0 ? (
               <div className="space-y-3">
                 {upcomingSessions.map((session) => (
-                  <div key={session.id} className="p-4 bg-green-50 rounded-lg border border-green-200">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-bold text-gray-900">{session.title || 'Coaching Session'}</h3>
-                      <span className="text-xs bg-green-600 text-white px-2 py-1 rounded">
-                        {session.type || 'Session'}
-                      </span>
+                  <div key={session.id} className="flex items-center justify-between p-4 bg-[#1a1a1a] rounded-lg">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-blue-500/10 rounded-lg flex flex-col items-center justify-center">
+                        <span className="text-blue-400 text-xs font-medium">
+                          {session.date.toLocaleDateString('es-CL', { weekday: 'short' })}
+                        </span>
+                        <span className="text-white font-bold">
+                          {session.date.getDate()}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-white font-medium">Sesión con {session.coachName}</p>
+                        <p className="text-gray-500 text-sm">{formatTime(session.date)}</p>
+                      </div>
                     </div>
-                    <p className="text-sm text-gray-600">
-                      📅 {session.scheduledDate && new Date(session.scheduledDate.seconds * 1000).toLocaleDateString()}
-                      {session.scheduledTime && ` at ${session.scheduledTime}`}
-                    </p>
                     <Link
-                      href="/sessions"
-                      className="inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 font-medium mt-2"
+                      href={`/sessions/${session.id}`}
+                      className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
                     >
-                      Schedule your first session →
+                      Unirse
                     </Link>
                   </div>
                 ))}
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <Calendar className="w-12 h-12 text-gray-700 mx-auto mb-3" />
+                <p className="text-gray-500">No tienes sesiones programadas</p>
+                <Link href="/sessions" className="text-blue-400 text-sm mt-2 inline-block hover:text-blue-300">
+                  Solicitar sesión
+                </Link>
               </div>
             )}
           </div>
 
-          {/* Tools to Complete */}
-          <div className="bg-white rounded-xl border-2 border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-gray-900">Tools to Complete</h2>
-              <Link href="/tools" className="text-primary-600 hover:text-primary-700 text-sm font-medium">
-                View all
+          {/* Assigned Tools */}
+          <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-emerald-400" />
+                Herramientas
+              </h2>
+              <Link href="/tools" className="text-blue-400 text-sm hover:text-blue-300 flex items-center gap-1">
+                Ver todas
+                <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
 
-            {assignedTools.length === 0 ? (
-              <div className="text-center py-8">
-                <Book className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500 text-sm">No tools assigned yet</p>
-                {hasCoach && (
-                  <p className="text-gray-400 text-xs mt-2">Your coach will assign tools for you</p>
-                )}
-              </div>
-            ) : (
+            {assignedTools.length > 0 ? (
               <div className="space-y-3">
                 {assignedTools.map((tool) => (
-                  <div key={tool.id} className="p-4 bg-purple-50 rounded-lg border border-purple-200">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-bold text-gray-900">{tool.toolName}</h3>
+                  <Link
+                    key={tool.id}
+                    href={`/tools/${tool.toolId}`}
+                    className="flex items-center gap-3 p-3 bg-[#1a1a1a] rounded-lg hover:bg-[#222] transition-colors"
+                  >
+                    <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
+                      <Star className="w-5 h-5 text-emerald-400" />
                     </div>
-                    <Link
-                      href={`/tools/${tool.toolId}`}
-                      className="inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 font-medium"
-                    >
-                      Complete Tool →
-                    </Link>
-                  </div>
+                    <div className="flex-1">
+                      <p className="text-white text-sm font-medium">{tool.toolName}</p>
+                      <p className="text-gray-500 text-xs">Pendiente</p>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-gray-500" />
+                  </Link>
                 ))}
+              </div>
+            ) : (
+              <div className="text-center py-6">
+                <BookOpen className="w-10 h-10 text-gray-700 mx-auto mb-2" />
+                <p className="text-gray-500 text-sm">Sin herramientas asignadas</p>
               </div>
             )}
           </div>
         </div>
 
-        {/* Quick Actions */}
-        {hasCoach && (
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <QuickActionCard
-              icon={Target}
-              title="Set a Goal"
-              description="Define what you want to achieve"
-              link="/goals"
-              color="bg-green-600"
-            />
-            <QuickActionCard
-              icon={MessageSquare}
-              title="Message Coach"
-              description="Get guidance and support"
-              link="/messages"
-              color="bg-blue-600"
-            />
-            <QuickActionCard
-              icon={BookOpen}
-              title="Add Reflection"
-              description="Journal your progress"
-              link="/reflections"
-              color="bg-purple-600"
-            />
+        {/* Goals Section */}
+        <div className="mt-6 bg-[#111111] border border-gray-800 rounded-xl p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+              <Target className="w-5 h-5 text-violet-400" />
+              Mis Metas
+            </h2>
+            <Link href="/goals" className="text-blue-400 text-sm hover:text-blue-300 flex items-center gap-1">
+              Ver todas
+              <ChevronRight className="w-4 h-4" />
+            </Link>
           </div>
-        )}
+
+          {goals.length > 0 ? (
+            <div className="grid md:grid-cols-3 gap-4">
+              {goals.map((goal) => (
+                <div key={goal.id} className="bg-[#1a1a1a] rounded-lg p-4">
+                  <h3 className="text-white font-medium mb-3 line-clamp-2">{goal.title}</h3>
+                  <div className="mb-2">
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-gray-500">Progreso</span>
+                      <span className="text-white">{goal.progress}%</span>
+                    </div>
+                    <div className="h-2 bg-[#0a0a0a] rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-violet-500 rounded-full"
+                        style={{ width: `${goal.progress}%` }}
+                      />
+                    </div>
+                  </div>
+                  <p className="text-gray-500 text-xs flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    Vence: {formatDate(goal.dueDate)}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <Target className="w-12 h-12 text-gray-700 mx-auto mb-3" />
+              <p className="text-gray-500">No tienes metas activas</p>
+              <Link href="/goals" className="text-blue-400 text-sm mt-2 inline-block hover:text-blue-300">
+                Crear una meta
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

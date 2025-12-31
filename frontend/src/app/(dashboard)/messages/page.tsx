@@ -1,318 +1,327 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useState, useEffect, useRef } from 'react';
+import { 
+  Search, Send, Paperclip, MoreVertical, Phone, Video,
+  Check, CheckCheck, Image as ImageIcon, File, Smile
+} from 'lucide-react';
+import { collection, query, where, getDocs, addDoc, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { collection, query, where, getDocs, addDoc, orderBy, serverTimestamp, doc, getDoc } from 'firebase/firestore';
-import { Send, MessageSquare } from 'lucide-react';
-import Image from 'next/image';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface Message {
   id: string;
-  senderId: string;
-  senderName: string;
-  receiverId: string;
-  receiverName: string;
   text: string;
-  createdAt: any;
+  senderId: string;
+  timestamp: Date;
   read: boolean;
 }
 
-interface Contact {
-  uid: string;
-  displayName: string;
-  email: string;
-  photoURL?: string;
+interface Conversation {
+  id: string;
+  participantId: string;
+  participantName: string;
+  participantRole: string;
+  lastMessage: string;
+  lastMessageTime: Date;
+  unread: number;
 }
 
 export default function MessagesPage() {
   const { user, userProfile } = useAuth();
-  const [contacts, setContacts] = useState<Contact[]>([]);
-  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(true);
-  const [sending, setSending] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const fetchContacts = async () => {
-      if (!user || !userProfile) return;
-      
-      try {
-        // Coaches ven a sus coachees
-        if (userProfile.role === 'coach') {
-          const contactsQuery = query(
-            collection(db, 'users'),
-            where('role', '==', 'coachee'),
-            where('coacheeInfo.coachId', '==', user.uid)
-          );
-          const snapshot = await getDocs(contactsQuery);
-          const contactsData = snapshot.docs.map(doc => ({
-            uid: doc.id,
-            displayName: doc.data().displayName || doc.data().email?.split('@')[0] || 'Coachee',
-            email: doc.data().email,
-            photoURL: doc.data().photoURL
-          })) as Contact[];
-          
-          setContacts(contactsData);
-        } else {
-          // Coachees ven solo a su coach - usar getDoc con el ID directamente
-          const coachId = userProfile.coacheeInfo?.coachId;
-          if (coachId) {
-            const coachDocRef = doc(db, 'users', coachId);
-            const coachDoc = await getDoc(coachDocRef);
-            
-            if (coachDoc.exists()) {
-              const coachData = coachDoc.data();
-              setContacts([{
-                uid: coachDoc.id,
-                displayName: coachData.displayName || coachData.email?.split('@')[0] || 'Coach',
-                email: coachData.email,
-                photoURL: coachData.photoURL
-              }]);
-              // Auto-seleccionar al coach
-              setSelectedContact({
-                uid: coachDoc.id,
-                displayName: coachData.displayName || coachData.email?.split('@')[0] || 'Coach',
-                email: coachData.email,
-                photoURL: coachData.photoURL
-              });
-            }
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching contacts:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchContacts();
-  }, [user, userProfile]);
+    loadConversations();
+  }, [user]);
 
   useEffect(() => {
-    if (!selectedContact || !user) return;
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
-    const fetchMessages = async () => {
-      try {
-        const q = query(
-          collection(db, 'messages'),
-          orderBy('createdAt', 'asc')
-        );
-        
-        const snapshot = await getDocs(q);
-        const allMessages = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        })) as Message[];
-
-        // Filtrar mensajes entre el usuario actual y el contacto seleccionado
-        const filtered = allMessages.filter(msg => 
-          (msg.senderId === user.uid && msg.receiverId === selectedContact.uid) ||
-          (msg.senderId === selectedContact.uid && msg.receiverId === user.uid)
-        );
-
-        setMessages(filtered);
-      } catch (error) {
-        console.error('Error fetching messages:', error);
-      }
-    };
-
-    fetchMessages();
-    
-    // Refrescar cada 5 segundos
-    const interval = setInterval(fetchMessages, 5000);
-    return () => clearInterval(interval);
-  }, [selectedContact, user]);
-
-  const handleSend = async () => {
-    if (!newMessage.trim() || !selectedContact || !user || !userProfile) return;
-
-    setSending(true);
+  const loadConversations = async () => {
+    if (!user?.uid) return;
     try {
-      await addDoc(collection(db, 'messages'), {
-        senderId: user.uid,
-        senderName: userProfile.displayName || userProfile.email?.split('@')[0] || 'Unknown',
-        receiverId: selectedContact.uid,
-        receiverName: selectedContact.displayName,
-        text: newMessage,
-        createdAt: serverTimestamp(),
-        read: false
-      });
-
-      setNewMessage('');
-      
-      // Refrescar mensajes inmediatamente
-      const q = query(
-        collection(db, 'messages'),
-        orderBy('createdAt', 'asc')
-      );
-      const snapshot = await getDocs(q);
-      const allMessages = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Message[];
-
-      const filtered = allMessages.filter(msg => 
-        (msg.senderId === user.uid && msg.receiverId === selectedContact.uid) ||
-        (msg.senderId === selectedContact.uid && msg.receiverId === user.uid)
-      );
-
-      setMessages(filtered);
+      // Mock conversations - replace with Firebase query
+      const mockConversations: Conversation[] = [
+        {
+          id: '1',
+          participantId: 'coach1',
+          participantName: 'María García',
+          participantRole: 'Coach',
+          lastMessage: '¡Excelente progreso esta semana!',
+          lastMessageTime: new Date(Date.now() - 3600000),
+          unread: 2,
+        },
+        {
+          id: '2',
+          participantId: 'coach2',
+          participantName: 'Carlos López',
+          participantRole: 'Supervisor',
+          lastMessage: 'Recuerda preparar tu reflexión para la sesión.',
+          lastMessageTime: new Date(Date.now() - 86400000),
+          unread: 0,
+        },
+      ];
+      setConversations(mockConversations);
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('Error loading conversations:', error);
     } finally {
-      setSending(false);
+      setLoading(false);
     }
   };
 
+  const loadMessages = async (conversationId: string) => {
+    // Mock messages - replace with Firebase query
+    const mockMessages: Message[] = [
+      {
+        id: '1',
+        text: 'Hola, ¿cómo va tu semana?',
+        senderId: 'coach1',
+        timestamp: new Date(Date.now() - 7200000),
+        read: true,
+      },
+      {
+        id: '2',
+        text: 'Muy bien, he estado trabajando en mis metas.',
+        senderId: user?.uid || '',
+        timestamp: new Date(Date.now() - 7000000),
+        read: true,
+      },
+      {
+        id: '3',
+        text: '¡Excelente progreso esta semana!',
+        senderId: 'coach1',
+        timestamp: new Date(Date.now() - 3600000),
+        read: false,
+      },
+    ];
+    setMessages(mockMessages);
+  };
+
+  const handleSelectConversation = (conversation: Conversation) => {
+    setSelectedConversation(conversation);
+    loadMessages(conversation.id);
+  };
+
+  const handleSendMessage = async () => {
+    if (!newMessage.trim() || !selectedConversation) return;
+    
+    const message: Message = {
+      id: Date.now().toString(),
+      text: newMessage,
+      senderId: user?.uid || '',
+      timestamp: new Date(),
+      read: false,
+    };
+    
+    setMessages([...messages, message]);
+    setNewMessage('');
+    
+    // TODO: Save to Firebase
+  };
+
+  const formatTime = (date: Date) => {
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const days = Math.floor(diff / 86400000);
+    
+    if (days === 0) {
+      return date.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+    } else if (days === 1) {
+      return 'Ayer';
+    } else if (days < 7) {
+      return date.toLocaleDateString('es-CL', { weekday: 'short' });
+    } else {
+      return date.toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit' });
+    }
+  };
+
+  const filteredConversations = conversations.filter(c =>
+    c.participantName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
-  // Si es coachee y no tiene coach asignado
-  if (userProfile?.role === 'coachee' && contacts.length === 0) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-center">
-          <MessageSquare className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">No conversations yet</h2>
-          <p className="text-gray-500">Your coach will appear here once assigned</p>
-        </div>
+      <div className="flex items-center justify-center h-screen bg-[#0a0a0a]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-[calc(100vh-120px)] bg-white rounded-xl border border-gray-200 overflow-hidden">
-      {/* Contacts List */}
-      <div className="w-80 border-r border-gray-200 flex flex-col">
-        <div className="p-4 border-b border-gray-200">
-          <h2 className="font-semibold text-gray-900">Messages</h2>
+    <div className="h-[calc(100vh-64px)] bg-[#0a0a0a] flex">
+      {/* Conversations List */}
+      <div className={`w-full md:w-80 lg:w-96 border-r border-gray-800 flex flex-col ${
+        selectedConversation ? 'hidden md:flex' : 'flex'
+      }`}>
+        {/* Header */}
+        <div className="p-4 border-b border-gray-800">
+          <h1 className="text-xl font-bold text-white mb-4">Mensajes</h1>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <input
+              type="text"
+              placeholder="Buscar conversaciones..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-blue-500"
+            />
+          </div>
         </div>
+
+        {/* Conversations */}
         <div className="flex-1 overflow-y-auto">
-          {contacts.map(contact => (
-            <button
-              key={contact.uid}
-              onClick={() => setSelectedContact(contact)}
-              className={`w-full p-4 flex items-center gap-3 hover:bg-gray-50 transition-colors ${
-                selectedContact?.uid === contact.uid ? 'bg-primary-50 border-l-4 border-primary-600' : ''
-              }`}
-            >
-              {contact.photoURL ? (
-                <Image
-                  src={contact.photoURL}
-                  alt={contact.displayName}
-                  width={40}
-                  height={40}
-                  className="rounded-full object-cover"
-                />
-              ) : (
-                <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
-                  <span className="text-primary-600 font-medium">
-                    {contact.displayName?.charAt(0)?.toUpperCase() || 'U'}
+          {filteredConversations.length > 0 ? (
+            filteredConversations.map((conversation) => (
+              <button
+                key={conversation.id}
+                onClick={() => handleSelectConversation(conversation)}
+                className={`w-full p-4 flex items-start gap-3 hover:bg-[#111111] transition-colors border-b border-gray-800/50 ${
+                  selectedConversation?.id === conversation.id ? 'bg-[#111111]' : ''
+                }`}
+              >
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-violet-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span className="text-white font-semibold">
+                    {conversation.participantName.charAt(0)}
                   </span>
                 </div>
-              )}
-              <div className="text-left">
-                <p className="font-medium text-gray-900">{contact.displayName}</p>
-                <p className="text-sm text-gray-500">{contact.email}</p>
-              </div>
-            </button>
-          ))}
+                <div className="flex-1 min-w-0 text-left">
+                  <div className="flex items-center justify-between mb-1">
+                    <h3 className="text-white font-medium truncate">{conversation.participantName}</h3>
+                    <span className="text-gray-500 text-xs">{formatTime(conversation.lastMessageTime)}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <p className="text-gray-500 text-sm truncate">{conversation.lastMessage}</p>
+                    {conversation.unread > 0 && (
+                      <span className="ml-2 px-2 py-0.5 bg-blue-600 text-white text-xs rounded-full">
+                        {conversation.unread}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </button>
+            ))
+          ) : (
+            <div className="p-8 text-center">
+              <p className="text-gray-500">No hay conversaciones</p>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 flex flex-col">
-        {selectedContact ? (
+      <div className={`flex-1 flex flex-col ${
+        selectedConversation ? 'flex' : 'hidden md:flex'
+      }`}>
+        {selectedConversation ? (
           <>
             {/* Chat Header */}
-            <div className="p-4 border-b border-gray-200 flex items-center gap-3">
-              {selectedContact.photoURL ? (
-                <Image
-                  src={selectedContact.photoURL}
-                  alt={selectedContact.displayName}
-                  width={40}
-                  height={40}
-                  className="rounded-full object-cover"
-                />
-              ) : (
-                <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
-                  <span className="text-primary-600 font-medium">
-                    {selectedContact.displayName?.charAt(0)?.toUpperCase() || 'U'}
+            <div className="p-4 border-b border-gray-800 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setSelectedConversation(null)}
+                  className="md:hidden p-2 text-gray-400 hover:text-white"
+                >
+                  ←
+                </button>
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-violet-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-semibold">
+                    {selectedConversation.participantName.charAt(0)}
                   </span>
                 </div>
-              )}
-              <div>
-                <p className="font-medium text-gray-900">{selectedContact.displayName}</p>
-                <p className="text-sm text-gray-500">{selectedContact.email}</p>
+                <div>
+                  <h2 className="text-white font-medium">{selectedConversation.participantName}</h2>
+                  <p className="text-gray-500 text-xs">{selectedConversation.participantRole}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button className="p-2 text-gray-400 hover:text-white hover:bg-[#1a1a1a] rounded-lg transition-colors">
+                  <Phone className="w-5 h-5" />
+                </button>
+                <button className="p-2 text-gray-400 hover:text-white hover:bg-[#1a1a1a] rounded-lg transition-colors">
+                  <Video className="w-5 h-5" />
+                </button>
+                <button className="p-2 text-gray-400 hover:text-white hover:bg-[#1a1a1a] rounded-lg transition-colors">
+                  <MoreVertical className="w-5 h-5" />
+                </button>
               </div>
             </div>
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
-              {messages.length === 0 ? (
-                <div className="text-center text-gray-500 py-8">
-                  <MessageSquare className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                  <p>No messages yet. Start a conversation!</p>
-                </div>
-              ) : (
-                messages.map(msg => (
+              {messages.map((message) => {
+                const isOwn = message.senderId === user?.uid;
+                return (
                   <div
-                    key={msg.id}
-                    className={`flex ${msg.senderId === user?.uid ? 'justify-end' : 'justify-start'}`}
+                    key={message.id}
+                    className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}
                   >
-                    <div
-                      className={`max-w-[70%] rounded-lg px-4 py-2 ${
-                        msg.senderId === user?.uid
-                          ? 'bg-primary-600 text-white'
-                          : 'bg-gray-100 text-gray-900'
-                      }`}
-                    >
-                      <p>{msg.text}</p>
-                      <p className={`text-xs mt-1 ${
-                        msg.senderId === user?.uid ? 'text-primary-200' : 'text-gray-500'
+                    <div className={`max-w-[70%] ${
+                      isOwn 
+                        ? 'bg-blue-600 text-white rounded-2xl rounded-br-md' 
+                        : 'bg-[#1a1a1a] text-white rounded-2xl rounded-bl-md'
+                    } px-4 py-2`}>
+                      <p className="text-sm">{message.text}</p>
+                      <div className={`flex items-center justify-end gap-1 mt-1 ${
+                        isOwn ? 'text-blue-200' : 'text-gray-500'
                       }`}>
-                        {msg.createdAt?.toDate?.()?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) || ''}
-                      </p>
+                        <span className="text-xs">
+                          {message.timestamp.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                        {isOwn && (
+                          message.read ? (
+                            <CheckCheck className="w-3 h-3" />
+                          ) : (
+                            <Check className="w-3 h-3" />
+                          )
+                        )}
+                      </div>
                     </div>
                   </div>
-                ))
-              )}
+                );
+              })}
+              <div ref={messagesEndRef} />
             </div>
 
-            {/* Message Input */}
-            <div className="p-4 border-t border-gray-200">
-              <div className="flex gap-2">
+            {/* Input */}
+            <div className="p-4 border-t border-gray-800">
+              <div className="flex items-center gap-2">
+                <button className="p-2 text-gray-400 hover:text-white transition-colors">
+                  <Paperclip className="w-5 h-5" />
+                </button>
                 <input
                   type="text"
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                  placeholder="Type a message..."
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  placeholder="Escribe un mensaje..."
+                  className="flex-1 px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
                 />
                 <button
-                  onClick={handleSend}
-                  disabled={sending || !newMessage.trim()}
-                  className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 flex items-center gap-2"
+                  onClick={handleSendMessage}
+                  disabled={!newMessage.trim()}
+                  className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Send className="w-4 h-4" />
-                  Send
+                  <Send className="w-5 h-5" />
                 </button>
               </div>
             </div>
           </>
         ) : (
-          <div className="flex-1 flex items-center justify-center text-gray-500">
+          <div className="flex-1 flex items-center justify-center">
             <div className="text-center">
-              <MessageSquare className="w-16 h-16 mx-auto mb-4 opacity-50" />
-              <p>Select a contact to start messaging</p>
+              <div className="w-20 h-20 bg-[#1a1a1a] rounded-full flex items-center justify-center mx-auto mb-4">
+                <Send className="w-8 h-8 text-gray-600" />
+              </div>
+              <h2 className="text-white font-semibold mb-2">Tus Mensajes</h2>
+              <p className="text-gray-500 text-sm">Selecciona una conversación para empezar</p>
             </div>
           </div>
         )}

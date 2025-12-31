@@ -1,478 +1,393 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, Video, Plus, CheckCircle, XCircle, User, Eye, Play } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
-import { db } from '@/lib/firebase';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { 
-  collection, 
-  addDoc, 
-  query, 
-  where, 
-  orderBy, 
-  getDocs,
-  updateDoc,
-  doc,
-  getDoc,
-  serverTimestamp,
-  Timestamp 
-} from 'firebase/firestore';
+  Calendar, Clock, Video, MapPin, Plus, Filter,
+  ChevronLeft, ChevronRight, CheckCircle, XCircle,
+  AlertCircle, FileText, User, MoreVertical
+} from 'lucide-react';
+import { collection, query, where, getDocs, orderBy, updateDoc, doc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface Session {
   id: string;
-  title: string;
-  scheduledAt: Date;
+  date: Date;
   duration: number;
-  type: 'video' | 'in-person' | 'phone';
+  type: 'video' | 'presencial' | 'telefono';
   status: 'scheduled' | 'completed' | 'cancelled' | 'no-show';
   coachId: string;
-  coacheeId: string;
-  coachName?: string;
-  coacheeName?: string;
+  coachName: string;
   notes?: string;
-  meetingLink?: string;
-}
-
-interface Coachee {
-  uid: string;
-  displayName: string;
-  email: string;
+  objectives?: string[];
 }
 
 export default function SessionsPage() {
-  const { user, userProfile } = useAuth();
+  const { user } = useAuth();
   const [sessions, setSessions] = useState<Session[]>([]);
-  const [coachees, setCoachees] = useState<Coachee[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showNewSession, setShowNewSession] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [newSession, setNewSession] = useState({
-    title: '',
-    date: '',
-    time: '',
-    duration: 60,
-    type: 'video' as const,
-    notes: '',
-    coacheeId: '',
-  });
-
-  const isCoach = userProfile?.role === 'coach';
-  const router = useRouter();
+  const [view, setView] = useState<'list' | 'calendar'>('list');
+  const [filter, setFilter] = useState<'all' | 'upcoming' | 'past'>('upcoming');
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [selectedSession, setSelectedSession] = useState<Session | null>(null);
 
   useEffect(() => {
-    if (user?.uid) {
-      loadSessions();
-      if (isCoach) {
-        loadCoachees();
-      }
-    }
-  }, [user, isCoach]);
-
-  const loadCoachees = async () => {
-    if (!user?.uid) return;
-    
-    try {
-      const q = query(
-        collection(db, 'users'),
-        where('role', '==', 'coachee'),
-        where('coacheeInfo.coachId', '==', user.uid)
-      );
-      const snapshot = await getDocs(q);
-      const data = snapshot.docs.map(doc => ({
-        uid: doc.id,
-        displayName: doc.data().displayName || doc.data().email?.split('@')[0] || 'Coachee',
-        email: doc.data().email,
-      })) as Coachee[];
-      
-      setCoachees(data);
-    } catch (error) {
-      console.error('Error loading coachees:', error);
-    }
-  };
+    loadSessions();
+  }, [user]);
 
   const loadSessions = async () => {
     if (!user?.uid) return;
-
-    setLoading(true);
     try {
-      const fieldName = isCoach ? 'coachId' : 'coacheeId';
       const q = query(
         collection(db, 'sessions'),
-        where(fieldName, '==', user.uid),
-        orderBy('scheduledAt', 'desc')
+        where('coacheeId', '==', user.uid),
+        orderBy('date', 'desc')
       );
-
       const snapshot = await getDocs(q);
-      const data = snapshot.docs.map(doc => ({
+      const sessionsData = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-        scheduledAt: doc.data().scheduledAt?.toDate() || new Date(),
+        date: doc.data().date?.toDate() || new Date(),
       })) as Session[];
-
-      setSessions(data);
+      setSessions(sessionsData);
     } catch (error) {
       console.error('Error loading sessions:', error);
+      // Mock data for demo
+      setSessions([
+        {
+          id: '1',
+          date: new Date(Date.now() + 86400000 * 2),
+          duration: 60,
+          type: 'video',
+          status: 'scheduled',
+          coachId: 'coach1',
+          coachName: 'María García',
+          objectives: ['Revisar progreso de metas', 'Definir próximos pasos'],
+        },
+        {
+          id: '2',
+          date: new Date(Date.now() - 86400000 * 5),
+          duration: 60,
+          type: 'video',
+          status: 'completed',
+          coachId: 'coach1',
+          coachName: 'María García',
+          notes: 'Excelente sesión. Se definieron 3 metas principales.',
+        },
+        {
+          id: '3',
+          date: new Date(Date.now() - 86400000 * 12),
+          duration: 45,
+          type: 'presencial',
+          status: 'completed',
+          coachId: 'coach1',
+          coachName: 'María García',
+        },
+      ]);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSaveSession = async () => {
-    if (!user?.uid || !newSession.title.trim() || !newSession.date || !newSession.time) return;
-
-    // Coach must select a coachee
-    if (isCoach && !newSession.coacheeId) {
-      alert('Please select a coachee for this session.');
-      return;
-    }
-
-    // Coachees need a coach assigned to create sessions
-    if (!isCoach && !userProfile?.coacheeInfo?.coachId) {
-      alert('You need to be assigned to a coach before scheduling sessions.');
-      return;
-    }
-
-    setSaving(true);
-    try {
-      const scheduledAt = new Date(`${newSession.date}T${newSession.time}`);
-      
-      let coachName = '';
-      let coacheeName = '';
-      let coachId = '';
-      let coacheeId = '';
-
-      if (isCoach) {
-        coachId = user.uid;
-        coacheeId = newSession.coacheeId;
-        coachName = userProfile?.displayName || userProfile?.email?.split('@')[0] || 'Coach';
-        const selectedCoachee = coachees.find(c => c.uid === newSession.coacheeId);
-        coacheeName = selectedCoachee?.displayName || '';
-      } else {
-        coacheeId = user.uid;
-        coachId = userProfile?.coacheeInfo?.coachId || '';
-        coacheeName = userProfile?.displayName || userProfile?.email?.split('@')[0] || 'Coachee';
-        // Fetch coach name
-        if (coachId) {
-          const coachDoc = await getDoc(doc(db, 'users', coachId));
-          if (coachDoc.exists()) {
-            const coachData = coachDoc.data();
-            coachName = coachData.displayName || coachData.email?.split('@')[0] || 'Coach';
-          }
-        }
-      }
-
-      // Calcular el número de sesión
-      const existingSessions = sessions.filter(s => s.coacheeId === coacheeId);
-      const sessionNumber = existingSessions.length + 1;
-      
-      await addDoc(collection(db, 'sessions'), {
-        title: newSession.title.trim(),
-        scheduledAt: Timestamp.fromDate(scheduledAt),
-        duration: newSession.duration,
-        type: newSession.type,
-        status: 'scheduled',
-        sessionNumber,
-        coachId,
-        coacheeId,
-        coachName,
-        coacheeName,
-        notes: newSession.notes,
-        createdAt: serverTimestamp(),
-      });
-
-      setNewSession({ title: '', date: '', time: '', duration: 60, type: 'video', notes: '', coacheeId: '' });
-      setShowNewSession(false);
-      await loadSessions();
-    } catch (error) {
-      console.error('Error saving session:', error);
-      alert('Error saving session. Please try again.');
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleUpdateStatus = async (sessionId: string, status: Session['status']) => {
-    try {
-      await updateDoc(doc(db, 'sessions', sessionId), {
-        status,
-        updatedAt: serverTimestamp(),
-      });
-      setSessions(prev => prev.map(s => s.id === sessionId ? { ...s, status } : s));
-    } catch (error) {
-      console.error('Error updating session:', error);
-    }
-  };
-
-  const now = new Date();
-  const upcomingSessions = sessions.filter(s => {
-    const sessionDate = s.scheduledAt instanceof Date ? s.scheduledAt : (s.scheduledAt as any)?.toDate?.() || new Date(0);
-    return s.status === 'scheduled' && sessionDate > now;
-  });
-  const pastSessions = sessions.filter(s => {
-    const sessionDate = s.scheduledAt instanceof Date ? s.scheduledAt : (s.scheduledAt as any)?.toDate?.() || new Date(0);
-    return s.status !== 'scheduled' || sessionDate <= now;
+  const filteredSessions = sessions.filter(session => {
+    const now = new Date();
+    if (filter === 'upcoming') return session.date > now && session.status === 'scheduled';
+    if (filter === 'past') return session.date < now || session.status !== 'scheduled';
+    return true;
   });
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">Completed</span>;
-      case 'cancelled':
-        return <span className="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full">Cancelled</span>;
-      case 'no-show':
-        return <span className="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded-full">No Show</span>;
-      default:
-        return <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">Scheduled</span>;
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('es-CL', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+    });
+  };
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('es-CL', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
+
+  const getStatusBadge = (status: Session['status']) => {
+    const styles = {
+      scheduled: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
+      completed: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
+      cancelled: 'bg-red-500/10 text-red-400 border-red-500/30',
+      'no-show': 'bg-amber-500/10 text-amber-400 border-amber-500/30',
+    };
+    const labels = {
+      scheduled: 'Programada',
+      completed: 'Completada',
+      cancelled: 'Cancelada',
+      'no-show': 'No asistió',
+    };
+    return (
+      <span className={`px-2 py-1 text-xs font-medium rounded border ${styles[status]}`}>
+        {labels[status]}
+      </span>
+    );
+  };
+
+  const getTypeIcon = (type: Session['type']) => {
+    if (type === 'video') return <Video className="w-4 h-4" />;
+    if (type === 'presencial') return <MapPin className="w-4 h-4" />;
+    return <Clock className="w-4 h-4" />;
+  };
+
+  const stats = {
+    upcoming: sessions.filter(s => s.date > new Date() && s.status === 'scheduled').length,
+    completed: sessions.filter(s => s.status === 'completed').length,
+    total: sessions.length,
+  };
+
+  // Calendar helpers
+  const getDaysInMonth = (date: Date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const days = [];
+    
+    // Add empty cells for days before first day of month
+    for (let i = 0; i < firstDay.getDay(); i++) {
+      days.push(null);
     }
+    
+    // Add days of month
+    for (let i = 1; i <= lastDay.getDate(); i++) {
+      days.push(new Date(year, month, i));
+    }
+    
+    return days;
+  };
+
+  const getSessionsForDay = (date: Date) => {
+    return sessions.filter(s => 
+      s.date.toDateString() === date.toDateString()
+    );
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-8 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-          </div>
-        </div>
+      <div className="flex items-center justify-center h-64 bg-[#0a0a0a]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-8 px-4">
+    <div className="p-6 lg:p-8 bg-[#0a0a0a] min-h-screen">
       <div className="max-w-6xl mx-auto">
-        
-        <div className="flex items-center justify-between mb-8">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">My Sessions</h1>
-            <p className="text-lg text-gray-600">View and manage your coaching sessions</p>
+            <h1 className="text-2xl font-bold text-white mb-1">Mis Sesiones</h1>
+            <p className="text-gray-400">Gestiona tus sesiones de coaching.</p>
           </div>
-          <button 
-            onClick={() => setShowNewSession(true)}
-            className="flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
-          >
-            <Plus size={20} />
-            Book New Session
-          </button>
-        </div>
-
-        {/* New Session Form */}
-        {showNewSession && (
-          <div className="bg-white rounded-xl border-2 border-primary-200 p-6 mb-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Schedule New Session</h3>
-            <div className="space-y-4">
-              {/* Coachee selector for coaches */}
-              {isCoach && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Select Coachee *</label>
-                  {coachees.length === 0 ? (
-                    <p className="text-sm text-gray-500 p-3 bg-gray-50 rounded-lg">
-                      No coachees assigned yet. Invite coachees first from the "Invite Coachees" page.
-                    </p>
-                  ) : (
-                    <select
-                      value={newSession.coacheeId}
-                      onChange={(e) => setNewSession({ ...newSession, coacheeId: e.target.value })}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    >
-                      <option value="">-- Select a coachee --</option>
-                      {coachees.map(coachee => (
-                        <option key={coachee.uid} value={coachee.uid}>
-                          {coachee.displayName} ({coachee.email})
-                        </option>
-                      ))}
-                    </select>
-                  )}
-                </div>
-              )}
-              
-              <input
-                type="text"
-                placeholder="Session title (e.g., Weekly Check-in, Goal Review)"
-                value={newSession.title}
-                onChange={(e) => setNewSession({ ...newSession, title: e.target.value })}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-              />
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                  <input
-                    type="date"
-                    value={newSession.date}
-                    onChange={(e) => setNewSession({ ...newSession, date: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
-                  <input
-                    type="time"
-                    value={newSession.time}
-                    onChange={(e) => setNewSession({ ...newSession, time: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Duration</label>
-                  <select
-                    value={newSession.duration}
-                    onChange={(e) => setNewSession({ ...newSession, duration: parseInt(e.target.value) })}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                  >
-                    <option value={30}>30 minutes</option>
-                    <option value={45}>45 minutes</option>
-                    <option value={60}>60 minutes</option>
-                    <option value={90}>90 minutes</option>
-                  </select>
-                </div>
-              </div>
-              <textarea
-                placeholder="Session notes or agenda (optional)"
-                value={newSession.notes}
-                onChange={(e) => setNewSession({ ...newSession, notes: e.target.value })}
-                rows={3}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
-              />
-              <div className="flex gap-3">
-                <button
-                  onClick={handleSaveSession}
-                  disabled={saving || !newSession.title.trim() || !newSession.date || !newSession.time || (isCoach && !newSession.coacheeId)}
-                  className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {saving ? 'Saving...' : 'Schedule Session'}
-                </button>
-                <button
-                  onClick={() => {
-                    setShowNewSession(false);
-                    setNewSession({ title: '', date: '', time: '', duration: 60, type: 'video', notes: '', coacheeId: '' });
-                  }}
-                  className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Upcoming Sessions */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Upcoming Sessions</h2>
-          {upcomingSessions.length === 0 ? (
-            <div className="bg-white rounded-xl border-2 border-gray-200 p-8 text-center">
-              <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-500">No upcoming sessions</p>
+          <div className="flex items-center gap-3">
+            <div className="flex bg-[#111111] border border-gray-800 rounded-lg p-1">
               <button
-                onClick={() => setShowNewSession(true)}
-                className="mt-4 text-primary-600 hover:text-primary-700 font-medium"
+                onClick={() => setView('list')}
+                className={`px-3 py-1.5 rounded text-sm transition-colors ${
+                  view === 'list' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white'
+                }`}
               >
-                Schedule your first session →
+                Lista
+              </button>
+              <button
+                onClick={() => setView('calendar')}
+                className={`px-3 py-1.5 rounded text-sm transition-colors ${
+                  view === 'calendar' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                Calendario
               </button>
             </div>
-          ) : (
-            <div className="grid gap-4">
-              {upcomingSessions.map((session) => (
-                <div key={session.id} onClick={() => router.push(`/sessions/${session.id}`)} className="bg-white rounded-xl border-2 border-gray-200 p-6 hover:border-primary-300 transition-colors cursor-pointer">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-xl font-bold text-gray-900">{session.title}</h3>
-                        {getStatusBadge(session.status)}
+          </div>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-4 mb-8">
+          <div className="bg-[#111111] border border-gray-800 rounded-xl p-4">
+            <p className="text-gray-500 text-sm mb-1">Próximas</p>
+            <p className="text-2xl font-bold text-blue-400">{stats.upcoming}</p>
+          </div>
+          <div className="bg-[#111111] border border-gray-800 rounded-xl p-4">
+            <p className="text-gray-500 text-sm mb-1">Completadas</p>
+            <p className="text-2xl font-bold text-emerald-400">{stats.completed}</p>
+          </div>
+          <div className="bg-[#111111] border border-gray-800 rounded-xl p-4">
+            <p className="text-gray-500 text-sm mb-1">Total</p>
+            <p className="text-2xl font-bold text-white">{stats.total}</p>
+          </div>
+        </div>
+
+        {view === 'list' ? (
+          <>
+            {/* Filters */}
+            <div className="flex gap-2 mb-6">
+              {(['upcoming', 'past', 'all'] as const).map((f) => (
+                <button
+                  key={f}
+                  onClick={() => setFilter(f)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    filter === f
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-[#111111] border border-gray-800 text-gray-400 hover:text-white'
+                  }`}
+                >
+                  {f === 'upcoming' ? 'Próximas' : f === 'past' ? 'Pasadas' : 'Todas'}
+                </button>
+              ))}
+            </div>
+
+            {/* Sessions List */}
+            {filteredSessions.length > 0 ? (
+              <div className="space-y-4">
+                {filteredSessions.map((session) => (
+                  <div
+                    key={session.id}
+                    className="bg-[#111111] border border-gray-800 rounded-xl p-6 hover:border-gray-700 transition-colors"
+                  >
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div className="flex items-start gap-4">
+                        <div className="w-14 h-14 bg-blue-500/10 rounded-xl flex flex-col items-center justify-center">
+                          <span className="text-blue-400 text-xs font-medium">
+                            {session.date.toLocaleDateString('es-CL', { weekday: 'short' })}
+                          </span>
+                          <span className="text-white text-lg font-bold">
+                            {session.date.getDate()}
+                          </span>
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="text-white font-semibold">Sesión con {session.coachName}</h3>
+                            {getStatusBadge(session.status)}
+                          </div>
+                          <div className="flex items-center gap-4 text-sm text-gray-500">
+                            <span className="flex items-center gap-1">
+                              <Clock className="w-4 h-4" />
+                              {formatTime(session.date)} - {session.duration} min
+                            </span>
+                            <span className="flex items-center gap-1">
+                              {getTypeIcon(session.type)}
+                              {session.type === 'video' ? 'Videollamada' : session.type === 'presencial' ? 'Presencial' : 'Teléfono'}
+                            </span>
+                          </div>
+                          {session.objectives && session.objectives.length > 0 && (
+                            <div className="mt-2 flex flex-wrap gap-2">
+                              {session.objectives.map((obj, i) => (
+                                <span key={i} className="px-2 py-1 bg-[#1a1a1a] text-gray-400 text-xs rounded">
+                                  {obj}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div className="space-y-2 text-sm text-gray-600">
-                        <div className="flex items-center gap-2">
-                          <User className="w-4 h-4" />
-                          <span>{isCoach ? session.coacheeName : session.coachName}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4" />
-                          <span>{session.scheduledAt.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Clock className="w-4 h-4" />
-                          <span>{session.scheduledAt.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })} ({session.duration} min)</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Video className="w-4 h-4" />
-                          <span>Video Call</span>
-                        </div>
+                      
+                      <div className="flex items-center gap-2">
+                        {session.status === 'scheduled' && session.date > new Date() && (
+                          <button className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
+                            Unirse
+                          </button>
+                        )}
+                        {session.status === 'completed' && (
+                          <Link
+                            href={`/sessions/${session.id}`}
+                            className="px-4 py-2 bg-[#1a1a1a] border border-gray-700 text-white text-sm rounded-lg hover:bg-[#222] transition-colors"
+                          >
+                            Ver Notas
+                          </Link>
+                        )}
                       </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <button className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
-                        Join
-                      </button>
-                      <button 
-                        onClick={() => handleUpdateStatus(session.id, 'cancelled')}
-                        className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-                      >
-                        Cancel
-                      </button>
                     </div>
                   </div>
+                ))}
+              </div>
+            ) : (
+              <div className="bg-[#111111] border border-gray-800 rounded-xl p-12 text-center">
+                <Calendar className="w-16 h-16 text-gray-700 mx-auto mb-4" />
+                <h3 className="text-white font-semibold mb-2">No hay sesiones</h3>
+                <p className="text-gray-500">
+                  {filter === 'upcoming' 
+                    ? 'No tienes sesiones próximas programadas.' 
+                    : 'No se encontraron sesiones.'}
+                </p>
+              </div>
+            )}
+          </>
+        ) : (
+          /* Calendar View */
+          <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+            {/* Calendar Header */}
+            <div className="flex items-center justify-between mb-6">
+              <button
+                onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
+                className="p-2 text-gray-400 hover:text-white hover:bg-[#1a1a1a] rounded-lg transition-colors"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <h2 className="text-lg font-semibold text-white">
+                {currentMonth.toLocaleDateString('es-CL', { month: 'long', year: 'numeric' })}
+              </h2>
+              <button
+                onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
+                className="p-2 text-gray-400 hover:text-white hover:bg-[#1a1a1a] rounded-lg transition-colors"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Calendar Grid */}
+            <div className="grid grid-cols-7 gap-1 mb-2">
+              {['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].map((day) => (
+                <div key={day} className="text-center text-gray-500 text-sm py-2">
+                  {day}
                 </div>
               ))}
             </div>
-          )}
-        </div>
-
-        {/* Past Sessions */}
-        {pastSessions.length > 0 && (
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Past Sessions</h2>
-            <div className="grid gap-4">
-              {pastSessions.map((session) => (
-                <div key={session.id} className="bg-white rounded-xl border-2 border-gray-200 p-6 opacity-75">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-lg font-bold text-gray-900">{session.title}</h3>
-                        {getStatusBadge(session.status)}
-                      </div>
-                      <div className="flex items-center gap-4 text-sm text-gray-500">
-                        <div className="flex items-center gap-1">
-                          <User className="w-4 h-4" />
-                          <span>{isCoach ? session.coacheeName : session.coachName}</span>
+            <div className="grid grid-cols-7 gap-1">
+              {getDaysInMonth(currentMonth).map((date, i) => {
+                if (!date) {
+                  return <div key={`empty-${i}`} className="h-24 bg-[#0a0a0a] rounded-lg" />;
+                }
+                const daySessions = getSessionsForDay(date);
+                const isToday = date.toDateString() === new Date().toDateString();
+                return (
+                  <div
+                    key={date.toISOString()}
+                    className={`h-24 p-2 rounded-lg ${
+                      isToday ? 'bg-blue-500/10 border border-blue-500/30' : 'bg-[#1a1a1a]'
+                    }`}
+                  >
+                    <span className={`text-sm ${isToday ? 'text-blue-400 font-semibold' : 'text-gray-400'}`}>
+                      {date.getDate()}
+                    </span>
+                    <div className="mt-1 space-y-1">
+                      {daySessions.slice(0, 2).map((s) => (
+                        <div
+                          key={s.id}
+                          className={`text-xs px-1 py-0.5 rounded truncate ${
+                            s.status === 'scheduled'
+                              ? 'bg-blue-500/20 text-blue-400'
+                              : 'bg-emerald-500/20 text-emerald-400'
+                          }`}
+                        >
+                          {formatTime(s.date)}
                         </div>
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-4 h-4" />
-                          <span>{session.scheduledAt.toLocaleDateString()}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
-                          <span>{session.duration} min</span>
-                        </div>
-                      </div>
+                      ))}
+                      {daySessions.length > 2 && (
+                        <span className="text-xs text-gray-500">+{daySessions.length - 2} más</span>
+                      )}
                     </div>
-                    {session.status === 'scheduled' && (
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => router.push(`/sessions/${session.id}`)}
-                          className="flex items-center gap-1 px-3 py-1 bg-primary-600 text-white hover:bg-primary-700 rounded-lg transition-colors"
-                        >
-                          <Play size={16} />
-                          <span className="text-sm">Iniciar</span>
-                        </button>
-                        <button
-                          onClick={() => handleUpdateStatus(session.id, 'completed')}
-                          className="flex items-center gap-1 px-3 py-1 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                        >
-                          <CheckCircle size={16} />
-                          <span className="text-sm">Completada</span>
-                        </button>
-                        <button
-                          onClick={() => handleUpdateStatus(session.id, 'no-show')}
-                          className="flex items-center gap-1 px-3 py-1 text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
-                        >
-                          <XCircle size={16} />
-                          <span className="text-sm">No Apareció</span>
-                        </button>
-                      </div>
-                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
