@@ -4,16 +4,21 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { ValueProposition } from '@/types/coaching';
-import { CheckCircle, Lightbulb, User } from 'lucide-react';
-import PhotoUpload from '@/components/PhotoUpload';
+import { User, Sparkles, Camera, Info, Copy, Users, Target, Flag, Settings2 } from 'lucide-react';
 import { toast, Toaster } from 'sonner';
+
+interface ValueProposition {
+  coachingType: string;
+  targetAudience: string;
+  desiredOutcome: string;
+  problemSolved: string;
+}
 
 export default function CoachProfilePage() {
   const { userProfile, refreshProfile } = useAuth();
   const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
   const [displayName, setDisplayName] = useState('');
+  const [photoURL, setPhotoURL] = useState('');
   
   const [valueProps, setValueProps] = useState<ValueProposition>({
     coachingType: '',
@@ -24,195 +29,236 @@ export default function CoachProfilePage() {
 
   useEffect(() => {
     if (userProfile) {
+      setDisplayName(userProfile.displayName || '');
+      setPhotoURL(userProfile.photoURL || '');
       if (userProfile.valueProposition) {
         setValueProps(userProfile.valueProposition);
       }
-      setDisplayName(userProfile.displayName || '');
     }
   }, [userProfile]);
 
-  const generatePitch = () => {
-    const { problemSolved } = valueProps;
-    if (!problemSolved) return '';
-    return `You know that problem when ${problemSolved}? Well, I help you solve that problem.`;
-  };
-
   const handleSave = async () => {
     if (!userProfile?.uid) return;
-
     setSaving(true);
     try {
-      const pitch = generatePitch();
-      const updatedValueProps = { ...valueProps, pitch };
-
       await updateDoc(doc(db, 'users', userProfile.uid), {
-        displayName: displayName,
-        valueProposition: updatedValueProps,
-        updatedAt: new Date(),
+        displayName,
+        valueProposition: valueProps,
       });
-
-      toast.success('Profile saved successfully!');
-      setSaved(true);
-      setTimeout(() => setSaved(false), 3000);
-      refreshProfile?.();
+      await refreshProfile();
+      toast.success('Perfil actualizado correctamente');
     } catch (error) {
-      console.error('Error saving profile:', error);
-      toast.error('Failed to save profile');
+      console.error('Error:', error);
+      toast.error('Error al guardar');
     } finally {
       setSaving(false);
     }
   };
 
-  const handlePhotoUpload = (url: string) => {
-    toast.success(url ? 'Photo updated!' : 'Photo removed');
-    refreshProfile?.();
-  };
-
-  if (!userProfile) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <Toaster position="top-center" richColors />
-      <div className="max-w-4xl mx-auto space-y-8">
-        
+    <div className="min-h-screen bg-[#0a0a0f] p-8">
+      <Toaster position="top-right" theme="dark" />
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Coach Profile</h1>
-          <p className="text-gray-600">
-            Manage your profile information and value proposition
-          </p>
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-white mb-2">Perfil del Coach</h1>
+            <p className="text-gray-400">Gestiona la información de tu perfil público y define tu propuesta de valor.</p>
+          </div>
+          <button className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors">
+            Perfil Público Activo
+          </button>
         </div>
 
-        {/* Profile Photo & Basic Info */}
-        <div className="bg-white rounded-xl border-2 border-gray-200 p-6">
+        {/* Profile Information Section */}
+        <div className="bg-[#12131a] border border-blue-900/30 rounded-xl p-6 mb-6">
           <div className="flex items-center gap-2 mb-6">
-            <User className="w-5 h-5 text-primary-600" />
-            <h2 className="text-xl font-bold text-gray-900">Profile Information</h2>
+            <User className="w-5 h-5 text-blue-400" />
+            <h2 className="text-white font-semibold">Información del Perfil</h2>
           </div>
-          
-          <div className="space-y-6">
-            <PhotoUpload 
-              userId={userProfile.uid}
-              currentPhotoURL={userProfile.photoURL}
-              onUploadComplete={handlePhotoUpload}
-            />
-            
-            <div className="border-t pt-6">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Display Name
-              </label>
-              <input
-                type="text"
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-                placeholder="Your name as shown to coachees"
-                className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-              />
+
+          <div className="flex flex-col md:flex-row gap-8">
+            {/* Photo */}
+            <div className="flex flex-col items-center">
+              <div className="relative mb-3">
+                <div className="w-32 h-32 bg-gray-700 rounded-full flex items-center justify-center overflow-hidden">
+                  {photoURL ? (
+                    <img src={photoURL} alt="Profile" className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-white text-4xl font-medium">{displayName?.charAt(0) || 'C'}</span>
+                  )}
+                </div>
+                <button className="absolute bottom-1 right-1 w-8 h-8 bg-[#1a1b23] border border-gray-700 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+                  <Camera className="w-4 h-4" />
+                </button>
+              </div>
+              <button className="text-blue-400 text-sm hover:text-blue-300">Eliminar foto</button>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email
-              </label>
-              <p className="text-gray-600">{userProfile.email}</p>
+            {/* Form */}
+            <div className="flex-1 space-y-6">
+              {/* Photo Requirements */}
+              <div className="flex items-start gap-3 p-4 bg-[#1a1b23] border border-blue-900/20 rounded-lg">
+                <Info className="w-5 h-5 text-gray-500 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-gray-400 text-sm font-medium mb-1">Requisitos de la foto</p>
+                  <p className="text-gray-500 text-sm">
+                    Sube una foto profesional en formato JPG, PNG o WebP. Tamaño máximo de 2MB. Se recomienda una dimensión de 400×400 píxeles.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                {/* Display Name */}
+                <div>
+                  <label className="block text-gray-400 text-sm mb-2">Nombre Visible</label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={displayName}
+                      onChange={(e) => setDisplayName(e.target.value)}
+                      placeholder="John Doe"
+                      className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 pr-10"
+                    />
+                    <Copy className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
+                  </div>
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label className="block text-gray-400 text-sm mb-2">Correo Electrónico</label>
+                  <div className="relative">
+                    <input
+                      type="email"
+                      value={userProfile?.email || ''}
+                      disabled
+                      className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-gray-500 cursor-not-allowed pr-10"
+                    />
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600">🔒</div>
+                  </div>
+                  <p className="text-gray-600 text-xs mt-1">El correo electrónico no se puede cambiar.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Value Proposition */}
-        <div className="bg-white rounded-xl border-2 border-gray-200 p-6">
-          <div className="flex items-center gap-2 mb-6">
-            <Lightbulb className="w-5 h-5 text-primary-600" />
-            <h2 className="text-xl font-bold text-gray-900">Value Proposition</h2>
+        {/* Value Proposition Section */}
+        <div className="bg-[#12131a] border border-blue-900/30 rounded-xl p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-amber-400" />
+              <h2 className="text-white font-semibold">Propuesta de Valor</h2>
+            </div>
+            <span className="px-3 py-1 bg-gray-800 text-gray-400 text-xs rounded-full uppercase tracking-wider">
+              Esencial
+            </span>
           </div>
 
-          <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 mb-6">
-            <p className="text-sm text-blue-800">
-              <strong>Formula:</strong> I assume that my <strong>[coaching type]</strong> will help{' '}
-              <strong>[target audience]</strong> who want{' '}
-              <strong>[desired outcome]</strong> by solving{' '}
-              <strong>[specific problem]</strong>
+          {/* Impact Formula */}
+          <div className="bg-gradient-to-r from-amber-900/20 to-orange-900/20 border border-amber-700/30 rounded-xl p-5 mb-6">
+            <div className="flex items-center gap-2 mb-3">
+              <Sparkles className="w-4 h-4 text-amber-400" />
+              <span className="text-amber-400 text-sm font-semibold uppercase tracking-wider">Tu Fórmula de Impacto</span>
+            </div>
+            <p className="text-white">
+              "Yo asumo que mi{' '}
+              <span className="px-2 py-1 bg-[#1a1b23] border border-gray-700 rounded text-gray-300">
+                {valueProps.coachingType || 'tipo de coaching'}
+              </span>
+              {' '}ayudará a{' '}
+              <span className="px-2 py-1 bg-[#1a1b23] border border-gray-700 rounded text-gray-300">
+                {valueProps.targetAudience || 'público objetivo'}
+              </span>
+              {' '}quienes desean{' '}
+              <span className="px-2 py-1 bg-[#1a1b23] border border-gray-700 rounded text-gray-300">
+                {valueProps.desiredOutcome || 'resultado deseado'}
+              </span>
+              {' '}resolviendo{' '}
+              <span className="px-2 py-1 bg-[#1a1b23] border border-gray-700 rounded text-gray-300">
+                {valueProps.problemSolved || 'problema específico'}
+              </span>
+              ."
             </p>
           </div>
 
-          <div className="space-y-6">
+          {/* Form Fields */}
+          <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Coaching Type *
+              <label className="block text-gray-400 text-sm mb-2">
+                Tipo de Coaching <span className="text-amber-400">*</span>
               </label>
-              <input
-                type="text"
-                value={valueProps.coachingType}
-                onChange={(e) => setValueProps({ ...valueProps, coachingType: e.target.value })}
-                placeholder="e.g., Leadership Coaching, Career Coaching, Life Coaching"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Target Audience *
-              </label>
-              <input
-                type="text"
-                value={valueProps.targetAudience}
-                onChange={(e) => setValueProps({ ...valueProps, targetAudience: e.target.value })}
-                placeholder="e.g., Mid-level managers, Career changers, Entrepreneurs"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Desired Outcome *
-              </label>
-              <input
-                type="text"
-                value={valueProps.desiredOutcome}
-                onChange={(e) => setValueProps({ ...valueProps, desiredOutcome: e.target.value })}
-                placeholder="e.g., advance in their careers, find work-life balance"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Problem Solved *
-              </label>
-              <textarea
-                value={valueProps.problemSolved}
-                onChange={(e) => setValueProps({ ...valueProps, problemSolved: e.target.value })}
-                placeholder="e.g., you feel stuck in your current role and don't know how to progress"
-                rows={3}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-              />
-            </div>
-
-            {valueProps.problemSolved && (
-              <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4">
-                <h3 className="font-bold text-green-900 mb-2">Your Pitch:</h3>
-                <p className="text-green-800">{generatePitch()}</p>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={valueProps.coachingType}
+                  onChange={(e) => setValueProps({ ...valueProps, coachingType: e.target.value })}
+                  placeholder="Ej: Coaching de Liderazgo"
+                  className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 pr-10"
+                />
+                <Settings2 className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
               </div>
-            )}
-          </div>
-        </div>
+            </div>
 
-        {/* Save Button */}
-        <div className="flex justify-end">
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            className="px-8 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-          >
-            {saved && <CheckCircle size={20} />}
-            {saving ? 'Saving...' : saved ? 'Saved!' : 'Save Profile'}
-          </button>
+            <div>
+              <label className="block text-gray-400 text-sm mb-2">
+                Público Objetivo <span className="text-amber-400">*</span>
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={valueProps.targetAudience}
+                  onChange={(e) => setValueProps({ ...valueProps, targetAudience: e.target.value })}
+                  placeholder="Ej: Gerentes Primerizos"
+                  className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 pr-10"
+                />
+                <Users className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
+              </div>
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block text-gray-400 text-sm mb-2">
+                Resultado Deseado <span className="text-amber-400">*</span>
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={valueProps.desiredOutcome}
+                  onChange={(e) => setValueProps({ ...valueProps, desiredOutcome: e.target.value })}
+                  placeholder="Ej: Mejorar su comunicación efectiva y delegar con confianza"
+                  className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 pr-10"
+                />
+                <Flag className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
+              </div>
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block text-gray-400 text-sm mb-2">
+                Problema Resuelto <span className="text-amber-400">*</span>
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={valueProps.problemSolved}
+                  onChange={(e) => setValueProps({ ...valueProps, problemSolved: e.target.value })}
+                  placeholder="Ej: Se sienten abrumados por la microgestión y temen perder talento en sus equipos..."
+                  className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 pr-10"
+                />
+                <Target className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
+              </div>
+            </div>
+          </div>
+
+          {/* Save Button */}
+          <div className="flex justify-end mt-6">
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+            >
+              {saving ? 'Guardando...' : 'Guardar Cambios'}
+            </button>
+          </div>
         </div>
       </div>
     </div>
