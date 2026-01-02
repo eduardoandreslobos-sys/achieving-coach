@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Calendar, Clock, User, Play, CheckCircle, XCircle, Plus, ArrowRight } from 'lucide-react';
+import { Calendar, Clock, User, Play, CheckCircle, XCircle, Plus, Video } from 'lucide-react';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
@@ -14,7 +14,9 @@ interface Session {
   duration: number;
   status: 'scheduled' | 'completed' | 'cancelled';
   coachName: string;
+  coachId: string;
   confirmed: boolean;
+  meetingUrl?: string;
 }
 
 export default function SessionsPage() {
@@ -29,7 +31,11 @@ export default function SessionsPage() {
   const loadSessions = async () => {
     if (!user?.uid) { setLoading(false); return; }
     try {
-      const q = query(collection(db, 'sessions'), where('coacheeId', '==', user.uid), orderBy('date', 'desc'));
+      const q = query(
+        collection(db, 'sessions'), 
+        where('coacheeId', '==', user.uid), 
+        orderBy('date', 'desc')
+      );
       const snapshot = await getDocs(q);
       const data = snapshot.docs.map(doc => ({
         id: doc.id,
@@ -38,33 +44,36 @@ export default function SessionsPage() {
         duration: doc.data().duration || 60,
         status: doc.data().status || 'scheduled',
         coachName: doc.data().coachName || 'Tu Coach',
+        coachId: doc.data().coachId || '',
         confirmed: doc.data().confirmed || false,
+        meetingUrl: doc.data().meetingUrl,
       })) as Session[];
       setSessions(data);
     } catch (error) {
-      console.error('Error:', error);
-      // Mock data for demo
-      setSessions([
-        { id: '1', title: 'Check-In', date: new Date('2025-12-28'), duration: 60, status: 'scheduled', coachName: 'John Doe', confirmed: true },
-        { id: '2', title: 'Revisar objetivos del plan', date: new Date('2025-12-24'), duration: 60, status: 'completed', coachName: 'John Doe', confirmed: true },
-        { id: '3', title: 'Sesión de Exploración', date: new Date('2025-12-21'), duration: 60, status: 'scheduled', coachName: 'John Doe', confirmed: false },
-        { id: '4', title: 'First meeting', date: new Date('2025-12-19'), duration: 60, status: 'cancelled', coachName: 'John Doe', confirmed: false },
-      ]);
+      console.error('Error loading sessions:', error);
+      setSessions([]);
     } finally {
       setLoading(false);
     }
   };
 
-  const upcomingSessions = sessions.filter(s => s.status === 'scheduled' && new Date(s.date) >= new Date());
-  const pastSessions = sessions.filter(s => s.status !== 'scheduled' || new Date(s.date) < new Date());
+  const now = new Date();
+  const upcomingSessions = sessions.filter(s => s.status === 'scheduled' && new Date(s.date) >= now);
+  const pastSessions = sessions.filter(s => s.status !== 'scheduled' || new Date(s.date) < now);
 
-  const formatDate = (date: Date) => date.toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const formatDate = (date: Date) => date.toLocaleDateString('es-CL', { 
+    weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' 
+  });
+  
+  const formatTime = (date: Date) => date.toLocaleTimeString('es-CL', { 
+    hour: '2-digit', minute: '2-digit' 
+  });
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'scheduled': return <span className="px-2 py-1 bg-gray-700 text-gray-300 text-xs rounded-full">Programada</span>;
-      case 'completed': return <span className="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded-full">Completada</span>;
-      case 'cancelled': return <span className="px-2 py-1 bg-red-500/20 text-red-400 text-xs rounded-full">Cancelada</span>;
+      case 'scheduled': return <span className="px-2 py-1 bg-blue-500/20 text-blue-400 text-xs rounded-full">Programada</span>;
+      case 'completed': return <span className="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded-full flex items-center gap-1"><CheckCircle className="w-3 h-3" />Completada</span>;
+      case 'cancelled': return <span className="px-2 py-1 bg-red-500/20 text-red-400 text-xs rounded-full flex items-center gap-1"><XCircle className="w-3 h-3" />Cancelada</span>;
       default: return null;
     }
   };
@@ -98,34 +107,59 @@ export default function SessionsPage() {
           
           {upcomingSessions.length === 0 ? (
             <div className="bg-[#12131a] border border-blue-900/30 rounded-xl p-8 text-center">
-              <div className="w-14 h-14 bg-gray-800 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Calendar className="w-7 h-7 text-gray-500" />
-              </div>
-              <h3 className="text-white font-semibold mb-2">No hay sesiones próximas</h3>
-              <p className="text-gray-400 text-sm mb-4">Empieza tu viaje de transformación hoy mismo.</p>
-              <Link href="#" className="text-blue-400 hover:text-blue-300 text-sm inline-flex items-center gap-1">
-                Programa tu primera sesión <ArrowRight className="w-4 h-4" />
-              </Link>
+              <Calendar className="w-12 h-12 text-gray-600 mx-auto mb-4" />
+              <p className="text-gray-400 mb-2">No tienes sesiones programadas</p>
+              <p className="text-gray-500 text-sm">Tu coach te agendará próximas sesiones</p>
             </div>
           ) : (
             <div className="space-y-3">
               {upcomingSessions.map((session) => (
-                <div key={session.id} className="bg-[#12131a] border border-blue-900/30 rounded-xl p-5 flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div>
-                      <h3 className="text-white font-semibold">{session.title}</h3>
-                      <div className="flex items-center gap-4 text-gray-400 text-sm mt-1">
-                        <span className="flex items-center gap-1"><User className="w-4 h-4" /> {session.coachName}</span>
-                        <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> {formatDate(session.date)}</span>
-                        <span className="flex items-center gap-1"><Clock className="w-4 h-4" /> {session.duration} min</span>
+                <div key={session.id} className="bg-[#12131a] border border-blue-900/30 rounded-xl p-5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-blue-600/20 rounded-xl flex items-center justify-center">
+                        <Calendar className="w-6 h-6 text-blue-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-medium">{session.title}</h3>
+                        <div className="flex items-center gap-3 text-gray-400 text-sm mt-1">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="w-4 h-4" />
+                            {formatDate(session.date)}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Clock className="w-4 h-4" />
+                            {formatTime(session.date)} ({session.duration} min)
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 mt-2">
+                          <User className="w-4 h-4 text-gray-500" />
+                          <span className="text-gray-400 text-sm">{session.coachName}</span>
+                          {session.confirmed && (
+                            <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs rounded-full">Confirmada</span>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    {session.confirmed && <span className="text-emerald-400 text-sm flex items-center gap-1"><CheckCircle className="w-4 h-4" /> Confirmada</span>}
-                    <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">
-                      <Play className="w-4 h-4" /> Iniciar
-                    </button>
+                    <div className="flex items-center gap-2">
+                      {session.meetingUrl && (
+                        <a 
+                          href={session.meetingUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                        >
+                          <Video className="w-4 h-4" />
+                          Unirse
+                        </a>
+                      )}
+                      <Link
+                        href={'/sessions/' + session.id}
+                        className="px-4 py-2 bg-[#1a1b23] text-white rounded-lg hover:bg-[#22232d] transition-colors"
+                      >
+                        Ver Detalles
+                      </Link>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -138,23 +172,49 @@ export default function SessionsPage() {
           <h2 className="text-xl font-semibold text-white mb-4">Sesiones Pasadas</h2>
           
           {pastSessions.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">No hay sesiones pasadas</p>
+            <div className="bg-[#12131a] border border-blue-900/30 rounded-xl p-8 text-center">
+              <p className="text-gray-500">No hay sesiones pasadas</p>
+            </div>
           ) : (
             <div className="space-y-3">
               {pastSessions.map((session) => (
                 <div key={session.id} className="bg-[#12131a] border border-blue-900/30 rounded-xl p-5">
                   <div className="flex items-center justify-between">
-                    <div>
-                      <div className="flex items-center gap-3 mb-1">
-                        <h3 className="text-white font-semibold">{session.title}</h3>
-                        {getStatusBadge(session.status)}
+                    <div className="flex items-center gap-4">
+                      <div className={'w-12 h-12 rounded-xl flex items-center justify-center ' + 
+                        (session.status === 'completed' ? 'bg-emerald-600/20' : 'bg-red-600/20')
+                      }>
+                        {session.status === 'completed' ? (
+                          <CheckCircle className="w-6 h-6 text-emerald-400" />
+                        ) : (
+                          <XCircle className="w-6 h-6 text-red-400" />
+                        )}
                       </div>
-                      <div className="flex items-center gap-4 text-gray-400 text-sm">
-                        <span className="flex items-center gap-1"><User className="w-4 h-4" /> {session.coachName}</span>
-                        <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> {formatDate(session.date)}</span>
-                        <span className="flex items-center gap-1"><Clock className="w-4 h-4" /> {session.duration} min</span>
+                      <div>
+                        <div className="flex items-center gap-3">
+                          <h3 className="text-white font-medium">{session.title}</h3>
+                          {getStatusBadge(session.status)}
+                        </div>
+                        <div className="flex items-center gap-3 text-gray-400 text-sm mt-1">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="w-4 h-4" />
+                            {formatDate(session.date)}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <User className="w-4 h-4" />
+                            {session.coachName}
+                          </span>
+                        </div>
                       </div>
                     </div>
+                    {session.status === 'completed' && (
+                      <Link
+                        href={'/sessions/' + session.id}
+                        className="px-4 py-2 bg-[#1a1b23] text-white rounded-lg hover:bg-[#22232d] transition-colors"
+                      >
+                        Ver Notas
+                      </Link>
+                    )}
                   </div>
                 </div>
               ))}

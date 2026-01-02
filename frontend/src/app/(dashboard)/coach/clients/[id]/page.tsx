@@ -270,6 +270,13 @@ export default function ClientAnalyticsPage() {
             </div>
             <div className="flex gap-3">
               <Link
+                href={`/coach/clients/${clientId}/results`}
+                className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+              >
+                <BarChart3 size={20} />
+                Ver Resultados
+              </Link>
+              <Link
                 href={`/messages?userId=${clientId}`}
                 className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-lg hover:border-primary-300"
               >
