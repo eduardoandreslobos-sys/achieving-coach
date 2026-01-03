@@ -1,85 +1,97 @@
 // Google Analytics 4 Event Tracking
 
-export const GA_ID = 'G-9J43WG4NL7';
-
-// Page view
-export const pageview = (url: string) => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('config', GA_ID, {
-      page_path: url,
-    });
-  }
-};
-
-// Custom events
-export const event = ({ action, category, label, value }: {
-  action: string;
-  category: string;
-  label?: string;
-  value?: number;
-}) => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', action, {
-      event_category: category,
-      event_label: label,
-      value: value,
-    });
-  }
-};
-
-// Conversion events
-export const trackSignUp = () => {
-  event({
-    action: 'sign_up',
-    category: 'engagement',
-    label: 'User Registration',
-  });
-};
-
-export const trackFreeTrial = () => {
-  event({
-    action: 'begin_trial',
-    category: 'conversion',
-    label: 'Free Trial Started',
-  });
-};
-
-export const trackPurchase = (value: number, plan: string) => {
-  event({
-    action: 'purchase',
-    category: 'conversion',
-    label: plan,
-    value: value,
-  });
-};
-
-export const trackBlogRead = (title: string) => {
-  event({
-    action: 'blog_read',
-    category: 'engagement',
-    label: title,
-  });
-};
-
-export const trackToolUsed = (toolName: string) => {
-  event({
-    action: 'tool_used',
-    category: 'engagement',
-    label: toolName,
-  });
-};
-
-export const trackContactForm = () => {
-  event({
-    action: 'contact_form_submit',
-    category: 'lead',
-    label: 'Contact Form',
-  });
-};
-
-// Declare gtag for TypeScript
 declare global {
   interface Window {
     gtag: (...args: any[]) => void;
   }
 }
+
+type EventName = 
+  | 'sign_up'
+  | 'login'
+  | 'tool_started'
+  | 'tool_completed'
+  | 'session_booked'
+  | 'session_completed'
+  | 'coachee_invited'
+  | 'coachee_joined'
+  | 'message_sent'
+  | 'goal_created'
+  | 'goal_completed'
+  | 'reflection_created'
+  | 'program_started'
+  | 'icf_simulation_completed';
+
+interface EventParams {
+  [key: string]: string | number | boolean | undefined;
+}
+
+export const trackEvent = (eventName: EventName, params?: EventParams) => {
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', eventName, {
+      ...params,
+      timestamp: new Date().toISOString(),
+    });
+  }
+};
+
+// Auth Events
+export const trackSignUp = (method: string, userRole: string) => {
+  trackEvent('sign_up', { method, user_role: userRole });
+};
+
+export const trackLogin = (method: string) => {
+  trackEvent('login', { method });
+};
+
+// Tool Events
+export const trackToolStarted = (toolId: string, toolName: string) => {
+  trackEvent('tool_started', { tool_id: toolId, tool_name: toolName });
+};
+
+export const trackToolCompleted = (toolId: string, toolName: string, durationSeconds?: number) => {
+  trackEvent('tool_completed', { tool_id: toolId, tool_name: toolName, duration_seconds: durationSeconds });
+};
+
+// Session Events
+export const trackSessionBooked = (sessionType: string) => {
+  trackEvent('session_booked', { session_type: sessionType });
+};
+
+export const trackSessionCompleted = (sessionId: string, durationMinutes: number) => {
+  trackEvent('session_completed', { session_id: sessionId, duration_minutes: durationMinutes });
+};
+
+// Coaching Events
+export const trackCoacheeInvited = () => {
+  trackEvent('coachee_invited', {});
+};
+
+export const trackCoacheeJoined = (coachId: string) => {
+  trackEvent('coachee_joined', { coach_id: coachId });
+};
+
+export const trackProgramStarted = (programId: string) => {
+  trackEvent('program_started', { program_id: programId });
+};
+
+// Engagement Events
+export const trackMessageSent = () => {
+  trackEvent('message_sent', {});
+};
+
+export const trackGoalCreated = () => {
+  trackEvent('goal_created', {});
+};
+
+export const trackGoalCompleted = (goalId: string) => {
+  trackEvent('goal_completed', { goal_id: goalId });
+};
+
+export const trackReflectionCreated = () => {
+  trackEvent('reflection_created', {});
+};
+
+export const trackICFSimulationCompleted = (score: number, competency: string) => {
+  trackEvent('icf_simulation_completed', { score, competency });
+};

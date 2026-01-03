@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+import { trackSignUp } from '@/lib/analytics';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
@@ -53,6 +54,7 @@ export default function SignUp() {
       });
 
       setShowVerification(true);
+      trackSignUp('email', 'coachee');
     } catch (err: any) {
       if (err.code === 'auth/email-already-in-use') {
         setError('Ya existe una cuenta con este email');
