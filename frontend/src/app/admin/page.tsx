@@ -1,51 +1,40 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { collection, getDocs, query, orderBy, limit, where, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { Users, FileText, Target, TrendingUp, TrendingDown, Calendar, Activity } from 'lucide-react';
+import { Users, FileText, Zap, Calendar, ArrowUpRight, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 interface Stats {
-  totalUsers: number;
   totalCoaches: number;
   totalCoachees: number;
-  totalSessions: number;
-  totalToolResults: number;
-  totalBlogPosts: number;
+  totalUsers: number;
   newUsersThisWeek: number;
-  newUsersLastWeek: number;
+  totalToolResults: number;
+  totalSessions: number;
+  totalBlogPosts: number;
 }
 
 interface RecentUser {
   id: string;
-  email?: string;
-  displayName?: string;
-  firstName?: string;
-  role?: string;
-  createdAt: Date;
-}
-
-interface RecentActivity {
-  id: string;
-  type: 'user_signup' | 'tool_completed' | 'session_created' | 'blog_published';
-  description: string;
+  email: string;
+  displayName: string;
+  role: string;
   createdAt: Date;
 }
 
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState<Stats>({
-    totalUsers: 0,
     totalCoaches: 0,
     totalCoachees: 0,
-    totalSessions: 0,
-    totalToolResults: 0,
-    totalBlogPosts: 0,
+    totalUsers: 0,
     newUsersThisWeek: 0,
-    newUsersLastWeek: 0,
+    totalToolResults: 0,
+    totalSessions: 0,
+    totalBlogPosts: 0,
   });
   const [recentUsers, setRecentUsers] = useState<RecentUser[]>([]);
-  const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -54,274 +43,201 @@ export default function AdminDashboardPage() {
 
   const loadDashboardData = async () => {
     try {
-      // Load users
       const usersSnapshot = await getDocs(collection(db, 'users'));
       const users = usersSnapshot.docs.map(doc => ({
-        ...(doc.data() as { role?: string; email?: string; displayName?: string; firstName?: string }),
         id: doc.id,
+        email: doc.data().email || '',
+        displayName: doc.data().displayName || doc.data().firstName || doc.data().email?.split('@')[0] || '',
+        role: doc.data().role || 'coachee',
         createdAt: doc.data().createdAt?.toDate() || new Date(),
       }));
 
       const coaches = users.filter(u => u.role === 'coach').length;
       const coachees = users.filter(u => u.role === 'coachee').length;
 
-      // Calculate new users this week vs last week
-      const now = new Date();
-      const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-      const twoWeeksAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
-
+      const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
       const newUsersThisWeek = users.filter(u => u.createdAt >= oneWeekAgo).length;
-      const newUsersLastWeek = users.filter(u => u.createdAt >= twoWeeksAgo && u.createdAt < oneWeekAgo).length;
 
-      // Load sessions
       const sessionsSnapshot = await getDocs(collection(db, 'sessions'));
-      
-      // Load tool results
       const toolResultsSnapshot = await getDocs(collection(db, 'tool_results'));
-      
-      // Load blog posts
-      const blogSnapshot = await getDocs(collection(db, 'blog_posts'));
+
+      let blogCount = 0;
+      try {
+        const blogSnapshot = await getDocs(collection(db, 'blog_posts'));
+        blogCount = blogSnapshot.size;
+      } catch (e) {}
 
       setStats({
-        totalUsers: users.length,
         totalCoaches: coaches,
         totalCoachees: coachees,
-        totalSessions: sessionsSnapshot.size,
-        totalToolResults: toolResultsSnapshot.size,
-        totalBlogPosts: blogSnapshot.size,
+        totalUsers: users.length,
         newUsersThisWeek,
-        newUsersLastWeek,
+        totalToolResults: toolResultsSnapshot.size,
+        totalSessions: sessionsSnapshot.size,
+        totalBlogPosts: blogCount,
       });
 
-      // Recent users (sorted by createdAt)
-      const sortedUsers = users
-        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-        .slice(0, 5)
-        .map(u => ({
-          id: u.id,
-          email: u.email,
-          displayName: u.displayName,
-          firstName: u.firstName,
-          role: u.role,
-          createdAt: u.createdAt,
-        }));
+      const sortedUsers = users.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).slice(0, 5);
       setRecentUsers(sortedUsers);
-
-      // Build recent activity from multiple sources
-      const activities: RecentActivity[] = [];
-
-      // Add recent user signups
-      users.slice(0, 3).forEach(u => {
-        activities.push({
-          id: `user-${u.id}`,
-          type: 'user_signup',
-          description: `${u.displayName || u.firstName || u.email} signed up as ${u.role}`,
-          createdAt: u.createdAt,
-        });
-      });
-
-      // Add recent tool completions
-      const toolResults = toolResultsSnapshot.docs.map(doc => ({
-        ...(doc.data() as { toolId?: string }),
-        id: doc.id,
-        completedAt: doc.data().completedAt?.toDate() || new Date(),
-      }));
-      toolResults.slice(0, 3).forEach(t => {
-        activities.push({
-          id: `tool-${t.id}`,
-          type: 'tool_completed',
-          description: `${t.toolId || 'Tool'} completed`,
-          createdAt: t.completedAt,
-        });
-      });
-
-      // Sort all activities by date
-      activities.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-      setRecentActivity(activities.slice(0, 8));
-
     } catch (error) {
-      console.error('Error loading dashboard data:', error);
+      console.error('Error loading dashboard:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const calculateGrowth = (current: number, previous: number) => {
-    if (previous === 0) return current > 0 ? '100' : '0';
-    return ((current - previous) / previous * 100).toFixed(1);
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
   };
 
-  const userGrowth = calculateGrowth(stats.newUsersThisWeek, stats.newUsersLastWeek);
-  const isPositiveGrowth = parseFloat(userGrowth) >= 0;
+  const getInitials = (name: string) => {
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  };
+
+  const getRoleColor = (role: string) => {
+    switch (role) {
+      case 'coach': return 'bg-blue-500/20 text-blue-400';
+      case 'coachee': return 'bg-emerald-500/20 text-emerald-400';
+      case 'admin': return 'bg-violet-500/20 text-violet-400';
+      default: return 'bg-gray-500/20 text-gray-400';
+    }
+  };
+
+  const getAvatarColor = (name: string) => {
+    const colors = ['bg-blue-600', 'bg-emerald-600', 'bg-violet-600', 'bg-amber-600', 'bg-rose-600'];
+    const index = name.charCodeAt(0) % colors.length;
+    return colors[index];
+  };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
+      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-          <p className="text-gray-600">Loading dashboard...</p>
+          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400">Cargando dashboard...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div>
-      {/* Welcome header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Welcome back!</h1>
-        <p className="text-gray-600 mt-1">Here's a summary of platform activity.</p>
-      </div>
+    <div className="min-h-screen bg-[#0a0a0f] p-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white">¡Bienvenido de nuevo!</h1>
+          <p className="text-gray-400 mt-1">Aquí tienes un resumen de la actividad de la plataforma.</p>
+        </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {/* Total Coaches */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-gray-500">Total Active Coaches</span>
-          </div>
-          <div className="flex items-end justify-between">
-            <div>
-              <div className="text-3xl font-bold text-gray-900">{stats.totalCoaches.toLocaleString()}</div>
-              <div className={`text-sm mt-1 flex items-center gap-1 ${isPositiveGrowth ? 'text-green-600' : 'text-red-600'}`}>
-                {isPositiveGrowth ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
-                <span>{isPositiveGrowth ? '+' : ''}{userGrowth}% vs last week</span>
-              </div>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {/* Coaches Activos */}
+          <div className="bg-gradient-to-br from-blue-600/20 to-blue-900/20 border border-blue-500/30 rounded-2xl p-6">
+            <p className="text-gray-400 text-sm mb-1">Coaches Activos Totales</p>
+            <p className="text-4xl font-bold text-white mb-2">{stats.totalCoaches}</p>
+            <div className="flex items-center text-emerald-400 text-sm">
+              <ArrowUpRight className="w-4 h-4 mr-1" />
+              <span>+0% vs semana pasada</span>
             </div>
+          </div>
+
+          {/* Coachees Activos */}
+          <div className="bg-gradient-to-br from-emerald-600/20 to-emerald-900/20 border border-emerald-500/30 rounded-2xl p-6">
+            <p className="text-gray-400 text-sm mb-1">Coachees Activos Totales</p>
+            <p className="text-4xl font-bold text-white mb-2">{stats.totalCoachees}</p>
+            <p className="text-gray-500 text-sm">{stats.totalUsers} usuarios totales</p>
+          </div>
+
+          {/* Nuevos Registros */}
+          <div className="bg-gradient-to-br from-violet-600/20 to-violet-900/20 border border-violet-500/30 rounded-2xl p-6">
+            <p className="text-gray-400 text-sm mb-1">Nuevos Registros</p>
+            <p className="text-4xl font-bold text-white mb-2">+{stats.newUsersThisWeek}</p>
+            <div className="flex items-center text-emerald-400 text-sm">
+              <ArrowUpRight className="w-4 h-4 mr-1" />
+              <span>en últimos 7 días</span>
+            </div>
+          </div>
+
+          {/* Herramientas Completadas */}
+          <div className="bg-gradient-to-br from-amber-600/20 to-amber-900/20 border border-amber-500/30 rounded-2xl p-6">
+            <p className="text-gray-400 text-sm mb-1">Herramientas Completadas</p>
+            <p className="text-4xl font-bold text-white mb-2">{stats.totalToolResults}</p>
+            <p className="text-gray-500 text-sm">{stats.totalSessions} sesiones</p>
           </div>
         </div>
 
-        {/* Total Coachees */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-gray-500">Total Active Coachees</span>
-          </div>
-          <div className="flex items-end justify-between">
-            <div>
-              <div className="text-3xl font-bold text-gray-900">{stats.totalCoachees.toLocaleString()}</div>
-              <div className="text-sm mt-1 text-gray-500">
-                {stats.totalUsers} total users
-              </div>
+        {/* Content Grid */}
+        <div className="grid lg:grid-cols-2 gap-6">
+          {/* Nuevos Registros Recientes */}
+          <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-semibold text-white">Nuevos Registros Recientes</h2>
+              <Link href="/admin/users" className="text-blue-400 hover:text-blue-300 text-sm flex items-center gap-1">
+                Gestionar Usuarios <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
-          </div>
-        </div>
-
-        {/* New Sign-ups */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-gray-500">New Sign-ups</span>
-          </div>
-          <div className="flex items-end justify-between">
-            <div>
-              <div className="text-3xl font-bold text-gray-900">+{stats.newUsersThisWeek}</div>
-              <div className={`text-sm mt-1 flex items-center gap-1 ${isPositiveGrowth ? 'text-green-600' : 'text-red-600'}`}>
-                {isPositiveGrowth ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
-                <span>in last 7 days</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Tool Completions */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-gray-500">Tool Completions</span>
-          </div>
-          <div className="flex items-end justify-between">
-            <div>
-              <div className="text-3xl font-bold text-gray-900">{stats.totalToolResults.toLocaleString()}</div>
-              <div className="text-sm mt-1 text-gray-500">
-                {stats.totalSessions} sessions
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Two column layout */}
-      <div className="grid lg:grid-cols-2 gap-8">
-        {/* Recent Sign-ups */}
-        <div className="bg-white rounded-xl border border-gray-200">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-            <h2 className="font-semibold text-gray-900">Recent Sign-ups</h2>
-            <Link href="/admin/users" className="text-sm text-primary-600 hover:text-primary-700 font-medium">
-              Manage Users →
-            </Link>
-          </div>
-          <div className="divide-y divide-gray-100">
-            {recentUsers.length > 0 ? (
-              recentUsers.map(user => (
-                <div key={user.id} className="px-6 py-4 flex items-center gap-4">
-                  <div className="w-10 h-10 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center">
-                    <span className="text-sm font-semibold text-white">
-                      {(user.displayName || user.firstName || user.email)?.[0]?.toUpperCase()}
-                    </span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-medium text-gray-900 truncate">
-                      {user.displayName || user.firstName || user.email}
+            <div className="space-y-4">
+              {recentUsers.map((user) => (
+                <div key={user.id} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-medium ${getAvatarColor(user.displayName)}`}>
+                      {getInitials(user.displayName)}
                     </div>
-                    <div className="text-sm text-gray-500">{user.email}</div>
+                    <div>
+                      <p className="text-white font-medium">{user.displayName}</p>
+                      <p className="text-gray-500 text-sm">{user.email}</p>
+                    </div>
                   </div>
                   <div className="text-right">
-                    <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
-                      user.role === 'coach' ? 'bg-blue-100 text-blue-700' :
-                      user.role === 'admin' ? 'bg-purple-100 text-purple-700' :
-                      'bg-green-100 text-green-700'
-                    }`}>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getRoleColor(user.role)}`}>
                       {user.role}
                     </span>
-                    <div className="text-xs text-gray-400 mt-1">
-                      {user.createdAt?.toLocaleDateString()}
-                    </div>
+                    <p className="text-gray-500 text-xs mt-1">{formatDate(user.createdAt)}</p>
                   </div>
                 </div>
-              ))
-            ) : (
-              <div className="px-6 py-8 text-center text-gray-500">
-                No users yet
-              </div>
-            )}
+              ))}
+              {recentUsers.length === 0 && (
+                <p className="text-gray-500 text-center py-4">No hay registros recientes</p>
+              )}
+            </div>
           </div>
-        </div>
 
-        {/* Content Engagement */}
-        <div className="bg-white rounded-xl border border-gray-200">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-            <h2 className="font-semibold text-gray-900">Content Overview</h2>
-            <Link href="/admin/blog" className="text-sm text-primary-600 hover:text-primary-700 font-medium">
-              Manage Content →
-            </Link>
-          </div>
-          <div className="p-6">
+          {/* Resumen de Contenido */}
+          <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-semibold text-white">Resumen de Contenido</h2>
+              <Link href="/admin/blog" className="text-blue-400 hover:text-blue-300 text-sm flex items-center gap-1">
+                Gestionar Contenido <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="flex items-center gap-3 mb-2">
-                  <FileText className="w-5 h-5 text-primary-600" />
-                  <span className="text-sm font-medium text-gray-600">Blog Posts</span>
+              <div className="bg-[#1a1b23] rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <FileText className="w-5 h-5 text-blue-400" />
+                  <span className="text-gray-400 text-sm">Entradas Blog</span>
                 </div>
-                <div className="text-2xl font-bold text-gray-900">{stats.totalBlogPosts}</div>
+                <p className="text-3xl font-bold text-white">{stats.totalBlogPosts}</p>
               </div>
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="flex items-center gap-3 mb-2">
-                  <Calendar className="w-5 h-5 text-green-600" />
-                  <span className="text-sm font-medium text-gray-600">Sessions</span>
+              <div className="bg-[#1a1b23] rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Calendar className="w-5 h-5 text-emerald-400" />
+                  <span className="text-gray-400 text-sm">Sesiones</span>
                 </div>
-                <div className="text-2xl font-bold text-gray-900">{stats.totalSessions}</div>
+                <p className="text-3xl font-bold text-white">{stats.totalSessions}</p>
               </div>
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="flex items-center gap-3 mb-2">
-                  <Target className="w-5 h-5 text-purple-600" />
-                  <span className="text-sm font-medium text-gray-600">Tools Used</span>
+              <div className="bg-[#1a1b23] rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Zap className="w-5 h-5 text-amber-400" />
+                  <span className="text-gray-400 text-sm">Herramientas</span>
                 </div>
-                <div className="text-2xl font-bold text-gray-900">{stats.totalToolResults}</div>
+                <p className="text-3xl font-bold text-white">{stats.totalToolResults}</p>
               </div>
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="flex items-center gap-3 mb-2">
-                  <Users className="w-5 h-5 text-orange-600" />
-                  <span className="text-sm font-medium text-gray-600">Total Users</span>
+              <div className="bg-[#1a1b23] rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Users className="w-5 h-5 text-violet-400" />
+                  <span className="text-gray-400 text-sm">Usuarios Totales</span>
                 </div>
-                <div className="text-2xl font-bold text-gray-900">{stats.totalUsers}</div>
+                <p className="text-3xl font-bold text-white">{stats.totalUsers}</p>
               </div>
             </div>
           </div>

@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { collection, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { Search, MoreHorizontal, UserPlus, Filter } from 'lucide-react';
+import { Search, MoreHorizontal, UserPlus, ChevronDown } from 'lucide-react';
 
 interface User {
   id: string;
@@ -12,9 +12,9 @@ interface User {
   firstName?: string;
   lastName?: string;
   role: 'admin' | 'coach' | 'coachee';
+  status?: 'active' | 'inactive' | 'pending';
   createdAt: Date;
   lastLoginAt?: Date;
-  subscriptionStatus?: string;
 }
 
 export default function AdminUsersPage() {
@@ -24,7 +24,7 @@ export default function AdminUsersPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [selectedUser, setSelectedUser] = useState<string | null>(null);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
 
   useEffect(() => {
     loadUsers();
@@ -37,14 +37,28 @@ export default function AdminUsersPage() {
   const loadUsers = async () => {
     try {
       const snapshot = await getDocs(collection(db, 'users'));
-      const usersData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() || new Date(),
-        lastLoginAt: doc.data().lastLoginAt?.toDate(),
-      })) as User[];
+      const usersData = snapshot.docs.map(doc => {
+        const data = doc.data();
+        const lastLogin = data.lastLoginAt?.toDate();
+        const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+        
+        let status: 'active' | 'inactive' | 'pending' = 'active';
+        if (!data.emailVerified) status = 'pending';
+        else if (lastLogin && lastLogin < thirtyDaysAgo) status = 'inactive';
+
+        return {
+          id: doc.id,
+          email: data.email || '',
+          displayName: data.displayName || data.firstName || '',
+          firstName: data.firstName || '',
+          lastName: data.lastName || '',
+          role: data.role || 'coachee',
+          status,
+          createdAt: data.createdAt?.toDate() || new Date(),
+          lastLoginAt: lastLogin,
+        };
+      }) as User[];
       
-      // Sort by createdAt desc
       usersData.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
       setUsers(usersData);
     } catch (error) {
@@ -56,226 +70,229 @@ export default function AdminUsersPage() {
 
   const filterUsers = () => {
     let filtered = [...users];
-
-    // Search filter
+    
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(u => 
-        u.email?.toLowerCase().includes(term) ||
+        u.email.toLowerCase().includes(term) ||
         u.displayName?.toLowerCase().includes(term) ||
-        u.firstName?.toLowerCase().includes(term) ||
-        u.lastName?.toLowerCase().includes(term)
+        u.firstName?.toLowerCase().includes(term)
       );
     }
-
-    // Role filter
+    
     if (roleFilter !== 'all') {
       filtered = filtered.filter(u => u.role === roleFilter);
     }
-
-    // Status filter
+    
     if (statusFilter !== 'all') {
-      filtered = filtered.filter(u => u.subscriptionStatus === statusFilter);
+      filtered = filtered.filter(u => u.status === statusFilter);
     }
-
+    
     setFilteredUsers(filtered);
   };
 
-  const updateUserRole = async (userId: string, newRole: string) => {
-    try {
-      await updateDoc(doc(db, 'users', userId), { role: newRole });
-      loadUsers();
-      setSelectedUser(null);
-    } catch (error) {
-      console.error('Error updating user role:', error);
-      alert('Error updating user role');
+  const getName = (user: User) => {
+    if (user.displayName) return user.displayName;
+    if (user.firstName && user.lastName) return `${user.firstName} ${user.lastName}`;
+    if (user.firstName) return user.firstName;
+    return user.email.split('@')[0];
+  };
+
+  const getInitials = (user: User) => {
+    const name = getName(user);
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  };
+
+  const getAvatarColor = (name: string) => {
+    const colors = ['bg-blue-600', 'bg-emerald-600', 'bg-violet-600', 'bg-amber-600', 'bg-rose-600', 'bg-cyan-600'];
+    const index = name.charCodeAt(0) % colors.length;
+    return colors[index];
+  };
+
+  const getRoleBadge = (role: string) => {
+    switch (role) {
+      case 'coach': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
+      case 'coachee': return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
+      case 'admin': return 'bg-violet-500/20 text-violet-400 border-violet-500/30';
+      default: return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
     }
   };
 
-  const formatDate = (date?: Date) => {
-    if (!date) return 'Never';
-    const now = new Date();
-    const diff = now.getTime() - date.getTime();
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const days = Math.floor(hours / 24);
-    
-    if (hours < 1) return 'Just now';
-    if (hours < 24) return `${hours} hours ago`;
-    if (days < 7) return `${days} days ago`;
-    return date.toLocaleDateString();
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'active': return { dot: 'bg-emerald-400', text: 'text-emerald-400', label: 'Activo' };
+      case 'inactive': return { dot: 'bg-gray-400', text: 'text-gray-400', label: 'Inactivo' };
+      case 'pending': return { dot: 'bg-amber-400', text: 'text-amber-400', label: 'Pendiente' };
+      default: return { dot: 'bg-gray-400', text: 'text-gray-400', label: status };
+    }
   };
 
-  const getStatusColor = (status?: string) => {
-    switch (status) {
-      case 'active': return 'bg-green-100 text-green-700';
-      case 'trial': return 'bg-blue-100 text-blue-700';
-      case 'inactive': return 'bg-gray-100 text-gray-700';
-      case 'pending': return 'bg-yellow-100 text-yellow-700';
-      default: return 'bg-gray-100 text-gray-700';
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  };
+
+  const handleRoleChange = async (userId: string, newRole: string) => {
+    try {
+      await updateDoc(doc(db, 'users', userId), { role: newRole });
+      setUsers(users.map(u => u.id === userId ? { ...u, role: newRole as any } : u));
+      setOpenMenu(null);
+    } catch (error) {
+      console.error('Error updating role:', error);
     }
   };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="inline-block w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin"></div>
+      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400">Cargando usuarios...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div>
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
-          <p className="text-gray-600 mt-1">Manage all users including coaches, coachees, and admins.</p>
-        </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium">
-          <UserPlus className="w-4 h-4" />
-          Add User
-        </button>
-      </div>
-
-      {/* Filters */}
-      <div className="flex items-center gap-4 mb-6">
-        {/* Search */}
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search by name, email..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-          />
-        </div>
-
-        {/* Role filter */}
-        <select
-          value={roleFilter}
-          onChange={(e) => setRoleFilter(e.target.value)}
-          className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-        >
-          <option value="all">Role: All</option>
-          <option value="admin">Admin</option>
-          <option value="coach">Coach</option>
-          <option value="coachee">Coachee</option>
-        </select>
-
-        {/* Status filter */}
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-        >
-          <option value="all">Status: All</option>
-          <option value="active">Active</option>
-          <option value="trial">Trial</option>
-          <option value="inactive">Inactive</option>
-        </select>
-      </div>
-
-      {/* Users Table */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50 border-b border-gray-200">
-            <tr>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">User</th>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Email</th>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Role</th>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Last Activity</th>
-              <th className="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider"></th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-            {filteredUsers.map(user => (
-              <tr key={user.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center">
-                      <span className="text-sm font-semibold text-white">
-                        {(user.displayName || user.firstName || user.email)?.[0]?.toUpperCase()}
-                      </span>
-                    </div>
-                    <span className="font-medium text-gray-900">
-                      {user.displayName || `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email?.split('@')[0]}
-                    </span>
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-gray-600">{user.email}</td>
-                <td className="px-6 py-4">
-                  <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
-                    user.role === 'admin' ? 'bg-purple-100 text-purple-700' :
-                    user.role === 'coach' ? 'bg-blue-100 text-blue-700' :
-                    'bg-green-100 text-green-700'
-                  }`}>
-                    {user.role?.charAt(0).toUpperCase() + user.role?.slice(1)}
-                  </span>
-                </td>
-                <td className="px-6 py-4">
-                  <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(user.subscriptionStatus)}`}>
-                    {(user.subscriptionStatus || 'Active').charAt(0).toUpperCase() + (user.subscriptionStatus || 'Active').slice(1)}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-gray-500 text-sm">
-                  {formatDate(user.lastLoginAt || user.createdAt)}
-                </td>
-                <td className="px-6 py-4 text-right">
-                  <div className="relative">
-                    <button 
-                      onClick={() => setSelectedUser(selectedUser === user.id ? null : user.id)}
-                      className="p-2 hover:bg-gray-100 rounded-lg"
-                    >
-                      <MoreHorizontal className="w-4 h-4 text-gray-500" />
-                    </button>
-                    
-                    {selectedUser === user.id && (
-                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
-                        <button
-                          onClick={() => updateUserRole(user.id, 'admin')}
-                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                        >
-                          Make Admin
-                        </button>
-                        <button
-                          onClick={() => updateUserRole(user.id, 'coach')}
-                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                        >
-                          Make Coach
-                        </button>
-                        <button
-                          onClick={() => updateUserRole(user.id, 'coachee')}
-                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                        >
-                          Make Coachee
-                        </button>
-                        <hr className="my-1" />
-                        <button
-                          className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
-                        >
-                          Delete User
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {filteredUsers.length === 0 && (
-          <div className="text-center py-12 text-gray-500">
-            No users found
+    <div className="min-h-screen bg-[#0a0a0f] p-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-white">Gestión de Usuarios</h1>
+            <p className="text-gray-400 mt-1">Gestiona todos los usuarios, coaches y administradores de la plataforma.</p>
           </div>
-        )}
-      </div>
+          <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+            <UserPlus className="w-4 h-4" />
+            Añadir Usuario
+          </button>
+        </div>
 
-      {/* Summary */}
-      <div className="mt-4 text-sm text-gray-500">
-        Showing {filteredUsers.length} of {users.length} users
+        {/* Filters */}
+        <div className="flex flex-col md:flex-row gap-4 mb-6">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+            <input
+              type="text"
+              placeholder="Buscar por nombre, email..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 bg-[#12131a] border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+            />
+          </div>
+          <div className="flex gap-3">
+            <div className="relative">
+              <select
+                value={roleFilter}
+                onChange={(e) => setRoleFilter(e.target.value)}
+                className="appearance-none px-4 py-3 pr-10 bg-[#12131a] border border-gray-800 rounded-lg text-white focus:outline-none focus:border-blue-500 cursor-pointer"
+              >
+                <option value="all">Rol: Todos</option>
+                <option value="coach">Coach</option>
+                <option value="coachee">Coachee</option>
+                <option value="admin">Admin</option>
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+            </div>
+            <div className="relative">
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="appearance-none px-4 py-3 pr-10 bg-[#12131a] border border-gray-800 rounded-lg text-white focus:outline-none focus:border-blue-500 cursor-pointer"
+              >
+                <option value="all">Estado: Todos</option>
+                <option value="active">Activo</option>
+                <option value="inactive">Inactivo</option>
+                <option value="pending">Pendiente</option>
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+            </div>
+          </div>
+        </div>
+
+        {/* Table */}
+        <div className="bg-[#12131a] border border-gray-800 rounded-2xl overflow-hidden">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-gray-800">
+                <th className="text-left px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Usuario</th>
+                <th className="text-left px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                <th className="text-left px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Rol</th>
+                <th className="text-left px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                <th className="text-left px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Última Actividad</th>
+                <th className="text-left px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-800">
+              {filteredUsers.map((user) => {
+                const statusInfo = getStatusBadge(user.status || 'active');
+                return (
+                  <tr key={user.id} className="hover:bg-[#1a1b23] transition-colors">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-medium ${getAvatarColor(getName(user))}`}>
+                          {getInitials(user)}
+                        </div>
+                        <span className="text-white font-medium">{getName(user)}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-gray-400">{user.email}</td>
+                    <td className="px-6 py-4">
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getRoleBadge(user.role)}`}>
+                        {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <div className={`w-2 h-2 rounded-full ${statusInfo.dot}`}></div>
+                        <span className={statusInfo.text}>{statusInfo.label}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-gray-400">
+                      {user.lastLoginAt ? formatDate(user.lastLoginAt) : formatDate(user.createdAt)}
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="relative">
+                        <button
+                          onClick={() => setOpenMenu(openMenu === user.id ? null : user.id)}
+                          className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+                        >
+                          <MoreHorizontal className="w-5 h-5 text-gray-400" />
+                        </button>
+                        {openMenu === user.id && (
+                          <div className="absolute right-0 mt-2 w-48 bg-[#1a1b23] border border-gray-700 rounded-lg shadow-xl z-10">
+                            <button
+                              onClick={() => handleRoleChange(user.id, 'coach')}
+                              className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800"
+                            >
+                              Cambiar a Coach
+                            </button>
+                            <button
+                              onClick={() => handleRoleChange(user.id, 'coachee')}
+                              className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800"
+                            >
+                              Cambiar a Coachee
+                            </button>
+                            <button
+                              onClick={() => handleRoleChange(user.id, 'admin')}
+                              className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800"
+                            >
+                              Cambiar a Admin
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          {filteredUsers.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-500">No se encontraron usuarios</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
