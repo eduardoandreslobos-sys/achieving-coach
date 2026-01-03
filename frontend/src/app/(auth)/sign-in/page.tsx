@@ -54,6 +54,7 @@ export default function SignIn() {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       await redirectToDashboard(userCredential.user.uid);
+      trackLogin('email');
     } catch (err: any) {
       if (err.code === 'auth/invalid-credential') {
         setError('Credenciales inválidas. Verifica tu email y contraseña.');

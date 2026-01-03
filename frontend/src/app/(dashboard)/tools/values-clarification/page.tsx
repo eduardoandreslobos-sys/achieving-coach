@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
+import { trackToolCompleted } from '@/lib/analytics';
 import { collection, addDoc, query, where, getDocs, serverTimestamp, orderBy, limit, updateDoc, doc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { Heart, Award, Users, TrendingUp, Lightbulb, CheckCircle2 } from 'lucide-react';
@@ -124,6 +125,7 @@ export default function ValuesClarificationPage() {
       toast.error('Please select at least 5 values to continue');
       return;
     }
+      trackToolCompleted('values-clarification', 'Values Clarification');
     setTopValues([...selectedValues]);
     setStep('rank');
   };

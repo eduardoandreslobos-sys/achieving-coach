@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, query, where, getDocs, serverTimestamp, updateDoc, doc } from 'firebase/firestore';
+import { trackToolCompleted } from '@/lib/analytics';
 import { CheckCircle2, Target } from 'lucide-react';
 import Link from 'next/link';
 import { toast, Toaster } from 'sonner';
@@ -149,6 +150,7 @@ export default function GROWWorksheetPage() {
             </Link>
           </div>
         </div>
+      trackToolCompleted('grow-model', 'GROW Model');
       </div>
     );
   }
