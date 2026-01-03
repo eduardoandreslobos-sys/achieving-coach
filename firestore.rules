@@ -16,12 +16,31 @@ service cloud.firestore {
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
     
+    function isParticipant(participants) {
+      return isAuthenticated() && request.auth.uid in participants;
+    }
+    
     // Users collection
     match /users/{userId} {
       allow read: if resource.data.role == 'coach';
       allow read: if isAuthenticated();
       allow update: if isOwner(userId);
       allow create: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Conversations - only participants can read/write
+    match /conversations/{conversationId} {
+      allow read: if isAuthenticated() && request.auth.uid in resource.data.participants;
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated() && request.auth.uid in resource.data.participants;
+      
+      // Messages subcollection
+      match /messages/{messageId} {
+        allow read: if isAuthenticated() && 
+          request.auth.uid in get(/databases/$(database)/documents/conversations/$(conversationId)).data.participants;
+        allow create: if isAuthenticated() && 
+          request.auth.uid in get(/databases/$(database)/documents/conversations/$(conversationId)).data.participants;
+      }
     }
     
     // Sessions
@@ -42,7 +61,7 @@ service cloud.firestore {
       allow write: if isAuthenticated();
     }
     
-    // Messages
+    // Messages (legacy - for backwards compatibility)
     match /messages/{messageId} {
       allow read: if isAuthenticated();
       allow write: if isAuthenticated();
@@ -72,6 +91,12 @@ service cloud.firestore {
       allow write: if false;
     }
     
+    // ICF Simulation Results
+    match /icf_simulation_results/{resultId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+    
     // Blog Posts - Public read, admin write
     match /blog_posts/{postId} {
       allow read: if true;
@@ -81,6 +106,25 @@ service cloud.firestore {
     // Coaching Programs
     match /coaching_programs/{programId} {
       allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+    
+    // Stakeholders
+    match /stakeholders/{stakeholderId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+    
+    // Stakeholder Feedback (public write for portal)
+    match /stakeholder_feedback/{feedbackId} {
+      allow read: if isAuthenticated();
+      allow create: if true;
+      allow update: if isAuthenticated();
+    }
+    
+    // Invitations
+    match /invitations/{invitationId} {
+      allow read: if true;
       allow write: if isAuthenticated();
     }
   }

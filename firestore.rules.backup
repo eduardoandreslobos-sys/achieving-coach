@@ -2,77 +2,86 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
+    // Helper functions
     function isAuthenticated() {
       return request.auth != null;
     }
     
     function isOwner(userId) {
-      return request.auth.uid == userId;
+      return isAuthenticated() && request.auth.uid == userId;
     }
     
-    // Activities (para logging)
-    match /activities/{activityId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update, delete: if false; // Logs son inmutables
+    function isAdmin() {
+      return isAuthenticated() && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
     
-    // Tool Results
-    match /tool_results/{resultId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update, delete: if isAuthenticated();
-    }
-    
-    // Users
+    // Users collection
     match /users/{userId} {
+      allow read: if resource.data.role == 'coach';
       allow read: if isAuthenticated();
-      allow write: if isOwner(userId);
-    }
-    
-    // Goals
-    match /goals/{goalId} {
-      allow read, write: if isAuthenticated();
+      allow update: if isOwner(userId);
+      allow create: if request.auth != null && request.auth.uid == userId;
     }
     
     // Sessions
     match /sessions/{sessionId} {
-      allow read, write: if isAuthenticated();
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+    
+    // Goals
+    match /goals/{goalId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
     }
     
     // Reflections
     match /reflections/{reflectionId} {
-      allow read, write: if isAuthenticated();
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
     }
     
-    // GROW Sessions
-    match /grow_sessions/{sessionId} {
-      allow read, write: if isAuthenticated();
+    // Messages
+    match /messages/{messageId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
     }
     
     // Tool assignments
     match /tool_assignments/{assignmentId} {
-      allow read, write: if isAuthenticated();
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
     }
     
-    // Wheel of Life
-    match /wheel_of_life/{assessmentId} {
-      allow read, write: if isAuthenticated();
+    // Tool results
+    match /tool_results/{resultId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
     }
     
-    // DISC Results
-    match /disc_results/{resultId} {
-      allow read, write: if isAuthenticated();
+    // Notifications
+    match /notifications/{notificationId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
     }
     
-    // Coaches
-    match /coaches/{coachId} {
-      allow read, write: if isAuthenticated();
+    // ICF Questions
+    match /icf_questions/{questionId} {
+      allow read: if isAuthenticated();
+      allow write: if false;
     }
     
-    // Coachees
-    match /coachees/{coacheeId} {
-      allow read, write: if isAuthenticated();
+    // Blog Posts - Public read, admin write
+    match /blog_posts/{postId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // Coaching Programs
+    match /coaching_programs/{programId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
     }
   }
 }

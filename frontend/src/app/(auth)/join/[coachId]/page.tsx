@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, getDoc, serverTimestamp, collection, addDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import { CheckCircle, AlertCircle } from 'lucide-react';
 
@@ -109,6 +109,22 @@ export default function JoinCoachPage() {
         createdAt: serverTimestamp(),
         subscriptionStatus: 'active',
         updatedAt: serverTimestamp(),
+      });
+
+      // Create conversation between coach and coachee
+      await addDoc(collection(db, 'conversations'), {
+        participants: [coachId, userCredential.user.uid],
+        participantNames: {
+          [coachId]: coachInfo?.displayName || 'Coach',
+          [userCredential.user.uid]: `${formData.firstName} ${formData.lastName}`,
+        },
+        lastMessage: '¡Bienvenido! Tu coach te ha invitado a la plataforma.',
+        lastMessageTime: serverTimestamp(),
+        createdAt: serverTimestamp(),
+        unreadCount: {
+          [coachId]: 0,
+          [userCredential.user.uid]: 1,
+        },
       });
 
       router.push('/dashboard');
