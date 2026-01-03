@@ -76,6 +76,8 @@ export default function RootLayout({
         <OrganizationSchema />
         <WebSiteSchema />
         <SoftwareApplicationSchema />
+        {/* Contentsquare Analytics */}
+        <script src="https://t.contentsquare.net/uxa/b089ac4a8ea2.js" async />
       </head>
       <body className={inter.className}>
         <GoogleAnalytics />
