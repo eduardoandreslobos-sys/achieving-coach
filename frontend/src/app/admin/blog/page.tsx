@@ -5,7 +5,7 @@ import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, orderBy 
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { Plus, Edit2, Trash2, Eye, EyeOff, AlertCircle, Image as ImageIcon } from 'lucide-react';
+import { Plus, Edit2, Trash2, Eye, EyeOff, AlertCircle, Image as ImageIcon, Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { BlogPost } from '@/types/blog';
 import ImageUpload from '@/components/ImageUpload';
 import type { ImageUploadResult } from '@/lib/imageUtils';
@@ -14,10 +14,15 @@ export default function AdminBlogPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
   const [showEditor, setShowEditor] = useState(false);
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [checkingAccess, setCheckingAccess] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState<'all' | 'published' | 'draft'>('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 4;
 
   useEffect(() => {
     if (!loading && !user) {
@@ -33,9 +38,12 @@ export default function AdminBlogPage() {
     }
   }, [userRole]);
 
+  useEffect(() => {
+    filterPosts();
+  }, [posts, searchTerm, activeTab]);
+
   const checkUserRole = async () => {
     if (!user) return;
-    
     try {
       const userDoc = await getDocs(query(collection(db, 'users')));
       const userData = userDoc.docs.find(doc => doc.id === user.uid);
@@ -64,37 +72,52 @@ export default function AdminBlogPage() {
     }
   };
 
+  const filterPosts = () => {
+    let filtered = [...posts];
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(p => 
+        p.title.toLowerCase().includes(term) || 
+        p.description?.toLowerCase().includes(term)
+      );
+    }
+    if (activeTab === 'published') {
+      filtered = filtered.filter(p => p.published);
+    } else if (activeTab === 'draft') {
+      filtered = filtered.filter(p => !p.published);
+    }
+    setFilteredPosts(filtered);
+    setCurrentPage(1);
+  };
+
   const handleDelete = async (postId: string) => {
-    if (!confirm('Are you sure you want to delete this post?')) return;
-    
+    if (!confirm('¿Estás seguro de eliminar esta publicación?')) return;
     try {
       await deleteDoc(doc(db, 'blog_posts', postId));
       loadPosts();
     } catch (error) {
       console.error('Error deleting post:', error);
-      alert('Error deleting post. Make sure you have admin permissions.');
     }
   };
 
-  const togglePublished = async (post: BlogPost) => {
+  const togglePublish = async (post: BlogPost) => {
     try {
-      await updateDoc(doc(db, 'blog_posts', post.id), {
-        published: !post.published,
-        updatedAt: new Date(),
-      });
+      await updateDoc(doc(db, 'blog_posts', post.id), { published: !post.published });
       loadPosts();
     } catch (error) {
-      console.error('Error toggling published:', error);
-      alert('Error updating post. Make sure you have admin permissions.');
+      console.error('Error toggling publish:', error);
     }
   };
+
+  const paginatedPosts = filteredPosts.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage);
+  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
 
   if (loading || checkingAccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-          <p className="text-gray-600">Checking access...</p>
+          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400">Cargando...</p>
         </div>
       </div>
     );
@@ -104,28 +127,15 @@ export default function AdminBlogPage() {
 
   if (userRole !== 'admin') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 text-center">
-          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <AlertCircle className="w-8 h-8 text-red-600" />
+      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
+        <div className="max-w-md w-full bg-[#12131a] border border-gray-800 rounded-xl p-8 text-center">
+          <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <AlertCircle className="w-8 h-8 text-red-400" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h1>
-          <p className="text-gray-600 mb-6">
-            This area is restricted to AchievingCoach administrators only.
-          </p>
-          <div className="bg-gray-50 rounded-lg p-4 mb-6 text-left">
-            <p className="text-sm text-gray-700 mb-2">
-              <strong>Your role:</strong> <span className="text-gray-900">{userRole || 'None'}</span>
-            </p>
-            <p className="text-sm text-gray-700">
-              <strong>Required role:</strong> <span className="text-red-600">admin</span>
-            </p>
-          </div>
-          <button
-            onClick={() => router.push('/dashboard')}
-            className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-          >
-            Go to Dashboard
+          <h1 className="text-2xl font-bold text-white mb-2">Acceso Denegado</h1>
+          <p className="text-gray-400 mb-6">Esta área está restringida a administradores.</p>
+          <button onClick={() => router.push('/dashboard')} className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            Ir al Dashboard
           </button>
         </div>
       </div>
@@ -133,174 +143,204 @@ export default function AdminBlogPage() {
   }
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-4xl font-bold text-gray-900">Blog Administration</h1>
-          <p className="text-gray-600 mt-2">Manage AchievingCoach corporate blog content</p>
+    <div className="min-h-screen bg-[#0a0a0f] p-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-white">Administración de Contenido</h1>
+            <p className="text-gray-400 mt-1">Gestiona el contenido de tu blog corporativo y recursos educativos.</p>
+          </div>
+          <button
+            onClick={() => { setEditingPost(null); setShowEditor(true); }}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            Nueva Publicación
+          </button>
         </div>
-        <button
-          onClick={() => {
-            setEditingPost(null);
-            setShowEditor(true);
-          }}
-          className="flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-all font-semibold"
-        >
-          <Plus className="w-5 h-5" />
-          New Post
-        </button>
-      </div>
 
-      {showEditor ? (
-        <BlogEditor
-          post={editingPost}
-          onSave={() => {
-            setShowEditor(false);
-            setEditingPost(null);
-            loadPosts();
-          }}
-          onCancel={() => {
-            setShowEditor(false);
-            setEditingPost(null);
-          }}
-        />
-      ) : (
-        <div className="bg-white rounded-xl border border-gray-200">
-          <div className="overflow-x-auto">
+        {showEditor ? (
+          <BlogEditor
+            post={editingPost}
+            onSave={() => { setShowEditor(false); setEditingPost(null); loadPosts(); }}
+            onCancel={() => { setShowEditor(false); setEditingPost(null); }}
+          />
+        ) : (
+          <div className="bg-[#12131a] border border-gray-800 rounded-2xl">
+            {/* Search and Tabs */}
+            <div className="p-6 border-b border-gray-800">
+              <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+                <div className="relative flex-1 max-w-md">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                  <input
+                    type="text"
+                    placeholder="Buscar publicación..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 bg-[#1a1b23] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  {(['all', 'published', 'draft'] as const).map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab)}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                        activeTab === tab
+                          ? 'bg-white text-gray-900'
+                          : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                      }`}
+                    >
+                      {tab === 'all' ? 'Todas' : tab === 'published' ? 'Publicadas' : 'Borradores'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Table */}
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
-                <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Post</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Category</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Type</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Status</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Date</th>
-                  <th className="px-6 py-4 text-right text-sm font-semibold text-gray-900">Actions</th>
+              <thead>
+                <tr className="border-b border-gray-800">
+                  <th className="text-left px-6 py-4 text-xs font-medium text-gray-500 uppercase">Publicación</th>
+                  <th className="text-left px-6 py-4 text-xs font-medium text-gray-500 uppercase">Categoría</th>
+                  <th className="text-left px-6 py-4 text-xs font-medium text-gray-500 uppercase">Tipo</th>
+                  <th className="text-left px-6 py-4 text-xs font-medium text-gray-500 uppercase">Estado</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
-                {posts.map((post) => (
-                  <tr key={post.id} className="hover:bg-gray-50">
+              <tbody className="divide-y divide-gray-800">
+                {paginatedPosts.map((post) => (
+                  <tr key={post.id} className="hover:bg-[#1a1b23] transition-colors group">
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-4">
                         {post.featuredImage ? (
-                          <img
-                            src={post.featuredImage.url}
-                            alt={post.featuredImage.alt}
-                            className="w-16 h-16 rounded-lg object-cover"
-                          />
+                          <img src={post.featuredImage.url} alt="" className="w-16 h-12 rounded-lg object-cover" />
                         ) : (
-                          <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
-                            <ImageIcon className="w-6 h-6 text-gray-400" />
+                          <div className="w-16 h-12 bg-gray-800 rounded-lg flex items-center justify-center">
+                            <ImageIcon className="w-5 h-5 text-gray-600" />
                           </div>
                         )}
-                        <div>
-                          <div className="font-medium text-gray-900">{post.title}</div>
-                          <div className="text-sm text-gray-500">{post.description.substring(0, 50)}...</div>
+                        <div className="flex-1">
+                          <p className="text-white font-medium">{post.title}</p>
+                          <p className="text-gray-500 text-sm truncate max-w-xs">{post.description?.substring(0, 60)}...</p>
+                        </div>
+                        <div className="opacity-0 group-hover:opacity-100 flex gap-2">
+                          <button onClick={() => { setEditingPost(post); setShowEditor(true); }} className="p-2 hover:bg-gray-700 rounded-lg">
+                            <Edit2 className="w-4 h-4 text-gray-400" />
+                          </button>
+                          <button onClick={() => togglePublish(post)} className="p-2 hover:bg-gray-700 rounded-lg">
+                            {post.published ? <EyeOff className="w-4 h-4 text-gray-400" /> : <Eye className="w-4 h-4 text-gray-400" />}
+                          </button>
+                          <button onClick={() => handleDelete(post.id)} className="p-2 hover:bg-gray-700 rounded-lg">
+                            <Trash2 className="w-4 h-4 text-red-400" />
+                          </button>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{post.category}</td>
+                    <td className="px-6 py-4 text-gray-400">{post.category}</td>
                     <td className="px-6 py-4">
-                      <span className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-xs font-medium">
-                        {post.type}
+                      <span className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-xs font-medium">
+                        {post.type || 'Blog Post'}
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <button
-                        onClick={() => togglePublished(post)}
-                        className={`flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium ${
-                          post.published
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-gray-100 text-gray-700'
-                        }`}
-                      >
-                        {post.published ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
-                        {post.published ? 'Published' : 'Draft'}
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
-                      {post.createdAt?.toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => {
-                            setEditingPost(post);
-                            setShowEditor(true);
-                          }}
-                          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                        >
-                          <Edit2 className="w-4 h-4 text-gray-600" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(post.id)}
-                          className="p-2 hover:bg-red-50 rounded-lg transition-colors"
-                        >
-                          <Trash2 className="w-4 h-4 text-red-600" />
-                        </button>
+                      <div className="flex items-center gap-2">
+                        <div className={`w-2 h-2 rounded-full ${post.published ? 'bg-emerald-400' : 'bg-amber-400'}`}></div>
+                        <span className={post.published ? 'text-emerald-400' : 'text-amber-400'}>
+                          {post.published ? 'Publicado' : 'Borrador'}
+                        </span>
                       </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </div>
 
-          {posts.length === 0 && (
-            <div className="text-center py-12 text-gray-500">
-              No blog posts yet. Click "New Post" to create one.
-            </div>
-          )}
-        </div>
-      )}
+            {filteredPosts.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-gray-500">No se encontraron publicaciones</p>
+              </div>
+            )}
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between px-6 py-4 border-t border-gray-800">
+                <p className="text-sm text-gray-500">
+                  Mostrando {(currentPage - 1) * postsPerPage + 1} a {Math.min(currentPage * postsPerPage, filteredPosts.length)} de {filteredPosts.length} resultados
+                </p>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="p-2 hover:bg-gray-800 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <ChevronLeft className="w-4 h-4 text-gray-400" />
+                  </button>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`w-8 h-8 rounded-lg text-sm ${
+                        currentPage === page ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-gray-800'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+                  <button
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    className="p-2 hover:bg-gray-800 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <ChevronRight className="w-4 h-4 text-gray-400" />
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
-function BlogEditor({ post, onSave, onCancel }: any) {
+// BlogEditor Component
+function BlogEditor({ post, onSave, onCancel }: { post: BlogPost | null; onSave: () => void; onCancel: () => void }) {
   const [formData, setFormData] = useState({
     title: post?.title || '',
     slug: post?.slug || '',
     description: post?.description || '',
     content: post?.content || '',
-    featuredImage: post?.featuredImage || null,
     authorName: post?.author?.name || '',
     authorRole: post?.author?.role || '',
-    category: post?.category || 'Coaching Skills',
-    type: post?.type || 'Blog Post',
-    readTime: post?.readTime || '5 min read',
+    category: post?.category || 'Habilidades de Coaching',
+    type: (post?.type || 'Blog Post') as 'Blog Post' | 'Guide' | 'Webinar',
+    readTime: post?.readTime || '5 min',
     published: post?.published || false,
+    featuredImage: post?.featuredImage || null,
   });
   const [showImageUpload, setShowImageUpload] = useState(false);
 
   const handleImageUploaded = (result: ImageUploadResult) => {
-    setFormData({
-      ...formData,
-      featuredImage: {
-        url: result.url,
-        alt: result.alt,
-        width: result.width,
-        height: result.height,
-      },
-    });
+    setFormData({ ...formData, featuredImage: { url: result.url, alt: result.alt, width: result.width || 800, height: result.height || 600 } });
     setShowImageUpload(false);
+  };
+
+  const generateSlug = (title: string) => {
+    return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
       const postData = {
         title: formData.title,
-        slug: formData.slug || formData.title.toLowerCase().replace(/\s+/g, '-'),
+        slug: formData.slug || generateSlug(formData.title),
         description: formData.description,
         content: formData.content,
         featuredImage: formData.featuredImage,
-        author: {
-          name: formData.authorName,
-          role: formData.authorRole,
-        },
+        author: { name: formData.authorName, role: formData.authorRole },
         category: formData.category,
         type: formData.type,
         readTime: formData.readTime,
@@ -311,203 +351,107 @@ function BlogEditor({ post, onSave, onCancel }: any) {
       if (post?.id) {
         await updateDoc(doc(db, 'blog_posts', post.id), postData);
       } else {
-        await addDoc(collection(db, 'blog_posts'), {
-          ...postData,
-          createdAt: new Date(),
-        });
+        await addDoc(collection(db, 'blog_posts'), { ...postData, createdAt: new Date() });
       }
-
       onSave();
     } catch (error) {
       console.error('Error saving post:', error);
-      alert('Error saving post. Make sure you have admin permissions.');
+      alert('Error al guardar.');
     }
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-8">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">
-        {post ? 'Edit Post' : 'New Post'}
-      </h2>
-
+    <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-8">
+      <h2 className="text-2xl font-bold text-white mb-6">{post ? 'Editar Publicación' : 'Nueva Publicación'}</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Featured Image */}
         <div>
-          <label className="block text-sm font-medium text-gray-900 mb-2">Featured Image</label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">Imagen Destacada</label>
           {formData.featuredImage ? (
-            <div className="relative rounded-lg overflow-hidden border border-gray-200">
-              <img
-                src={formData.featuredImage.url}
-                alt={formData.featuredImage.alt}
-                className="w-full h-64 object-cover"
-              />
-              <button
-                type="button"
-                onClick={() => setFormData({ ...formData, featuredImage: null })}
-                className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600"
-              >
+            <div className="relative rounded-lg overflow-hidden border border-gray-700">
+              <img src={formData.featuredImage.url} alt="" className="w-full h-48 object-cover" />
+              <button type="button" onClick={() => setFormData({ ...formData, featuredImage: null })} className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600">
                 <Trash2 className="w-4 h-4" />
               </button>
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                <p className="text-white text-sm">{formData.featuredImage.alt}</p>
-              </div>
             </div>
           ) : showImageUpload ? (
-            <ImageUpload
-              onImageUploaded={handleImageUploaded}
-              context={formData.title || 'blog post'}
-            />
+            <ImageUpload onImageUploaded={handleImageUploaded} context={formData.title || 'blog post'} />
           ) : (
-            <button
-              type="button"
-              onClick={() => setShowImageUpload(true)}
-              className="w-full border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-primary-500 hover:bg-gray-50 transition-all"
-            >
-              <ImageIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-700 font-medium">Add Featured Image</p>
-              <p className="text-sm text-gray-500 mt-2">WebP format recommended</p>
+            <button type="button" onClick={() => setShowImageUpload(true)} className="w-full border-2 border-dashed border-gray-700 rounded-lg p-8 text-center hover:border-blue-500 transition-all">
+              <ImageIcon className="w-12 h-12 text-gray-600 mx-auto mb-4" />
+              <p className="text-gray-400">Agregar Imagen</p>
             </button>
           )}
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-900 mb-2">Title *</label>
-            <input
-              type="text"
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-              required
-            />
+            <label className="block text-sm font-medium text-gray-300 mb-2">Título *</label>
+            <input type="text" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500" required />
           </div>
-
           <div>
-            <label className="block text-sm font-medium text-gray-900 mb-2">Slug</label>
-            <input
-              type="text"
-              value={formData.slug}
-              onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-              placeholder="auto-generated-from-title"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-            />
+            <label className="block text-sm font-medium text-gray-300 mb-2">Slug</label>
+            <input type="text" value={formData.slug} onChange={(e) => setFormData({ ...formData, slug: e.target.value })} placeholder="auto-generado" className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500" />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-900 mb-2">Description *</label>
-          <textarea
-            value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            rows={3}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-            required
-          />
+          <label className="block text-sm font-medium text-gray-300 mb-2">Descripción *</label>
+          <textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} rows={3} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500" required />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-900 mb-2">Content (Markdown) *</label>
-          <textarea
-            value={formData.content}
-            onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-            rows={12}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 font-mono text-sm"
-            required
-          />
+          <label className="block text-sm font-medium text-gray-300 mb-2">Contenido (Markdown) *</label>
+          <textarea value={formData.content} onChange={(e) => setFormData({ ...formData, content: e.target.value })} rows={12} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white font-mono text-sm focus:outline-none focus:border-blue-500" required />
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-900 mb-2">Author Name *</label>
-            <input
-              type="text"
-              value={formData.authorName}
-              onChange={(e) => setFormData({ ...formData, authorName: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-              required
-            />
+            <label className="block text-sm font-medium text-gray-300 mb-2">Nombre del Autor *</label>
+            <input type="text" value={formData.authorName} onChange={(e) => setFormData({ ...formData, authorName: e.target.value })} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500" required />
           </div>
-
           <div>
-            <label className="block text-sm font-medium text-gray-900 mb-2">Author Role *</label>
-            <input
-              type="text"
-              value={formData.authorRole}
-              onChange={(e) => setFormData({ ...formData, authorRole: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-              required
-            />
+            <label className="block text-sm font-medium text-gray-300 mb-2">Rol del Autor *</label>
+            <input type="text" value={formData.authorRole} onChange={(e) => setFormData({ ...formData, authorRole: e.target.value })} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500" required />
           </div>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-900 mb-2">Category *</label>
-            <select
-              value={formData.category}
-              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-            >
-              <option>Coaching Skills</option>
-              <option>Leadership Development</option>
-              <option>ICF Preparation</option>
-              <option>Business Growth</option>
-              <option>Tools & Technology</option>
+            <label className="block text-sm font-medium text-gray-300 mb-2">Categoría</label>
+            <select value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500">
+              <option>Habilidades de Coaching</option>
+              <option>Desarrollo de Liderazgo</option>
+              <option>Tecnología</option>
+              <option>Recursos Humanos</option>
+              <option>Gestión</option>
             </select>
           </div>
-
           <div>
-            <label className="block text-sm font-medium text-gray-900 mb-2">Type *</label>
-            <select
-              value={formData.type}
-              onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-            >
+            <label className="block text-sm font-medium text-gray-300 mb-2">Tipo</label>
+            <select value={formData.type} onChange={(e) => setFormData({ ...formData, type: e.target.value as 'Blog Post' | 'Guide' | 'Webinar' })} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500">
               <option>Blog Post</option>
               <option>Guide</option>
               <option>Webinar</option>
             </select>
           </div>
-
           <div>
-            <label className="block text-sm font-medium text-gray-900 mb-2">Read Time *</label>
-            <input
-              type="text"
-              value={formData.readTime}
-              onChange={(e) => setFormData({ ...formData, readTime: e.target.value })}
-              placeholder="5 min read"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-              required
-            />
+            <label className="block text-sm font-medium text-gray-300 mb-2">Tiempo de Lectura</label>
+            <input type="text" value={formData.readTime} onChange={(e) => setFormData({ ...formData, readTime: e.target.value })} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500" />
           </div>
         </div>
 
         <div className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            id="published"
-            checked={formData.published}
-            onChange={(e) => setFormData({ ...formData, published: e.target.checked })}
-            className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
-          />
-          <label htmlFor="published" className="text-sm font-medium text-gray-900">
-            Publish immediately
-          </label>
+          <input type="checkbox" id="published" checked={formData.published} onChange={(e) => setFormData({ ...formData, published: e.target.checked })} className="w-4 h-4 rounded border-gray-600 bg-gray-700 text-blue-600 focus:ring-blue-500" />
+          <label htmlFor="published" className="text-sm text-gray-300">Publicar inmediatamente</label>
         </div>
 
-        <div className="flex items-center gap-4 pt-6 border-t border-gray-200">
-          <button
-            type="submit"
-            className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-all font-semibold"
-          >
-            {post ? 'Update Post' : 'Create Post'}
+        <div className="flex gap-4 pt-6 border-t border-gray-700">
+          <button type="submit" className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
+            {post ? 'Actualizar' : 'Crear Publicación'}
           </button>
-          <button
-            type="button"
-            onClick={onCancel}
-            className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all font-semibold"
-          >
-            Cancel
+          <button type="button" onClick={onCancel} className="px-6 py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-800">
+            Cancelar
           </button>
         </div>
       </form>
