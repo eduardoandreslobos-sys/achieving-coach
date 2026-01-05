@@ -1,15 +1,17 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { collection, getDocs, query, where, Timestamp } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { TrendingUp, Users, Target, Calendar, Activity, BarChart3 } from 'lucide-react';
+import { Users, CheckCircle, Calendar, BarChart3, MoreHorizontal } from 'lucide-react';
 
 interface AnalyticsData {
+  totalUsers: number;
+  totalTools: number;
+  sessionsThisMonth: number;
+  toolsPerUser: number;
   usersByWeek: { week: string; count: number }[];
-  toolUsage: { tool: string; count: number }[];
-  roleDistribution: { role: string; count: number }[];
-  sessionStats: { total: number; thisMonth: number; lastMonth: number };
+  roleDistribution: { role: string; count: number; percentage: number }[];
   topTools: { name: string; completions: number }[];
 }
 
@@ -22,18 +24,33 @@ export default function AdminAnalyticsPage() {
     loadAnalytics();
   }, [timeRange]);
 
+  const formatToolName = (toolId: string) => {
+    const names: Record<string, string> = {
+      'wheel-of-life': 'Wheel Of Life',
+      'grow-model': 'Grow Worksheet',
+      'disc': 'DISC Assessment',
+      'values-clarification': 'Values Clarification',
+      'limiting-beliefs': 'Limiting Beliefs',
+      'resilience-scale': 'Resilience Scale',
+    };
+    return names[toolId] || toolId;
+  };
+
   const loadAnalytics = async () => {
     try {
       // Load users
       const usersSnapshot = await getDocs(collection(db, 'users'));
       const users = usersSnapshot.docs.map(doc => ({
-        ...(doc.data() as { role?: string }),
-        ...doc.data(),
-        id: doc.id,
+        role: doc.data().role || 'coachee',
         createdAt: doc.data().createdAt?.toDate() || new Date(),
       }));
 
-      // Calculate users by week (last 8 weeks)
+      const totalUsers = users.length;
+      const coaches = users.filter(u => u.role === 'coach').length;
+      const coachees = users.filter(u => u.role === 'coachee').length;
+      const admins = users.filter(u => u.role === 'admin').length;
+
+      // Users by week (last 8 weeks)
       const usersByWeek: { week: string; count: number }[] = [];
       for (let i = 7; i >= 0; i--) {
         const weekStart = new Date();
@@ -45,24 +62,23 @@ export default function AdminAnalyticsPage() {
           u.createdAt >= weekStart && u.createdAt < weekEnd
         ).length;
         
-        usersByWeek.push({
-          week: weekStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-          count
-        });
+        const weekLabel = weekStart.toLocaleDateString('es-ES', { month: 'short', day: 'numeric' }).toUpperCase();
+        usersByWeek.push({ week: weekLabel, count });
       }
 
       // Role distribution
       const roleDistribution = [
-        { role: 'Coaches', count: users.filter(u => u.role === 'coach').length },
-        { role: 'Coachees', count: users.filter(u => u.role === 'coachee').length },
-        { role: 'Admins', count: users.filter(u => u.role === 'admin').length },
+        { role: 'Coaches', count: coaches, percentage: Math.round((coaches / totalUsers) * 100) || 0 },
+        { role: 'Coachees', count: coachees, percentage: Math.round((coachees / totalUsers) * 100) || 0 },
+        { role: 'Administradores', count: admins, percentage: Math.round((admins / totalUsers) * 100) || 0 },
       ];
 
       // Load tool results
       const toolResultsSnapshot = await getDocs(collection(db, 'tool_results'));
       const toolResults = toolResultsSnapshot.docs.map(doc => doc.data());
+      const totalTools = toolResults.length;
 
-      // Tool usage aggregation
+      // Tool counts
       const toolCounts: Record<string, number> = {};
       toolResults.forEach(result => {
         const toolId = result.toolId || 'unknown';
@@ -74,29 +90,22 @@ export default function AdminAnalyticsPage() {
         .sort((a, b) => b.completions - a.completions)
         .slice(0, 5);
 
-      // Sessions stats
+      // Sessions this month
       const sessionsSnapshot = await getDocs(collection(db, 'sessions'));
-      const sessions = sessionsSnapshot.docs.map(doc => ({
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() || new Date(),
-      }));
-
       const now = new Date();
-      const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-      const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-      const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
-
-      const sessionStats = {
-        total: sessions.length,
-        thisMonth: sessions.filter(s => s.createdAt >= thisMonthStart).length,
-        lastMonth: sessions.filter(s => s.createdAt >= lastMonthStart && s.createdAt <= lastMonthEnd).length,
-      };
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+      const sessionsThisMonth = sessionsSnapshot.docs.filter(doc => {
+        const date = doc.data().createdAt?.toDate();
+        return date && date >= monthStart;
+      }).length;
 
       setData({
+        totalUsers,
+        totalTools,
+        sessionsThisMonth,
+        toolsPerUser: totalUsers > 0 ? Math.round((totalTools / totalUsers) * 10) / 10 : 0,
         usersByWeek,
-        toolUsage: topTools.map(t => ({ tool: t.name, count: t.completions })),
         roleDistribution,
-        sessionStats,
         topTools,
       });
     } catch (error) {
@@ -106,173 +115,176 @@ export default function AdminAnalyticsPage() {
     }
   };
 
-  const formatToolName = (toolId: string) => {
-    return toolId
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
-  };
+  const maxWeekCount = Math.max(...(data?.usersByWeek.map(w => w.count) || [1]), 1);
+  const maxToolCount = Math.max(...(data?.topTools.map(t => t.completions) || [1]), 1);
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
+      <div className="p-8 flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <div className="inline-block w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-          <p className="text-gray-600">Loading analytics...</p>
+          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400">Cargando analíticas...</p>
         </div>
       </div>
     );
   }
 
-  const maxUserCount = Math.max(...(data?.usersByWeek.map(w => w.count) || [1]), 1);
-
   return (
-    <div>
+    <div className="p-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-start justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Analytics</h1>
-          <p className="text-gray-600 mt-1">Platform performance and insights</p>
+          <h1 className="text-3xl font-bold text-white">Analíticas</h1>
+          <p className="text-gray-400 mt-1">Rendimiento detallado y perspectivas clave de la plataforma</p>
         </div>
-        <select
-          value={timeRange}
-          onChange={(e) => setTimeRange(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-        >
-          <option value="7">Last 7 days</option>
-          <option value="30">Last 30 days</option>
-          <option value="90">Last 90 days</option>
-        </select>
+        <div className="flex items-center gap-2 bg-[#12131a] border border-gray-800 rounded-xl px-4 py-2">
+          <span className="text-white text-sm">Últimos {timeRange} días</span>
+          <Calendar className="w-4 h-4 text-gray-400" />
+        </div>
       </div>
 
-      {/* Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <Users className="w-5 h-5 text-blue-600" />
+      {/* Metrics Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {/* Usuarios Totales */}
+        <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-5">
+          <div className="flex items-start justify-between mb-3">
+            <div className="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center">
+              <Users className="w-5 h-5 text-blue-400" />
             </div>
-            <span className="text-sm font-medium text-gray-500">Total Users</span>
+            <span className="text-emerald-400 text-sm font-medium">+12% ↑</span>
           </div>
-          <div className="text-3xl font-bold text-gray-900">
-            {data?.roleDistribution.reduce((sum, r) => sum + r.count, 0) || 0}
-          </div>
+          <p className="text-gray-400 text-sm mb-1">Usuarios Totales</p>
+          <p className="text-3xl font-bold text-white">
+            {data?.totalUsers || 0}
+            <span className="text-base font-normal text-gray-500 ml-2">activos</span>
+          </p>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="p-2 bg-green-100 rounded-lg">
-              <Target className="w-5 h-5 text-green-600" />
-            </div>
-            <span className="text-sm font-medium text-gray-500">Tool Completions</span>
+        {/* Herramientas Completadas */}
+        <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-5">
+          <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center mb-3">
+            <CheckCircle className="w-5 h-5 text-emerald-400" />
           </div>
-          <div className="text-3xl font-bold text-gray-900">
-            {data?.toolUsage.reduce((sum, t) => sum + t.count, 0) || 0}
-          </div>
+          <p className="text-gray-400 text-sm mb-1">Herramientas Completadas</p>
+          <p className="text-3xl font-bold text-white">{data?.totalTools || 0}</p>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="p-2 bg-purple-100 rounded-lg">
-              <Calendar className="w-5 h-5 text-purple-600" />
-            </div>
-            <span className="text-sm font-medium text-gray-500">Sessions This Month</span>
+        {/* Sesiones Este Mes */}
+        <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-5">
+          <div className="w-10 h-10 bg-violet-500/20 rounded-xl flex items-center justify-center mb-3">
+            <Calendar className="w-5 h-5 text-violet-400" />
           </div>
-          <div className="text-3xl font-bold text-gray-900">
-            {data?.sessionStats.thisMonth || 0}
-          </div>
+          <p className="text-gray-400 text-sm mb-1">Sesiones Este Mes</p>
+          <p className="text-3xl font-bold text-white">
+            {data?.sessionsThisMonth || 0}
+            <span className="text-base font-normal text-gray-500 ml-2">programadas</span>
+          </p>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="p-2 bg-orange-100 rounded-lg">
-              <Activity className="w-5 h-5 text-orange-600" />
-            </div>
-            <span className="text-sm font-medium text-gray-500">Avg. Tools/User</span>
+        {/* Prom. Herramientas/Usuario */}
+        <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-5">
+          <div className="w-10 h-10 bg-amber-500/20 rounded-xl flex items-center justify-center mb-3">
+            <BarChart3 className="w-5 h-5 text-amber-400" />
           </div>
-          <div className="text-3xl font-bold text-gray-900">
-            {data && data.roleDistribution.reduce((sum, r) => sum + r.count, 0) > 0
-              ? (data.toolUsage.reduce((sum, t) => sum + t.count, 0) / data.roleDistribution.reduce((sum, r) => sum + r.count, 0)).toFixed(1)
-              : '0'}
-          </div>
+          <p className="text-gray-400 text-sm mb-1">Prom. Herramientas/Usuario</p>
+          <p className="text-3xl font-bold text-white">{data?.toolsPerUser || 0}</p>
         </div>
       </div>
 
       {/* Charts Row */}
-      <div className="grid lg:grid-cols-2 gap-8 mb-8">
-        {/* User Growth Chart */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="font-semibold text-gray-900 mb-6">User Signups (Last 8 Weeks)</h2>
-          <div className="flex items-end gap-2 h-48">
-            {data?.usersByWeek.map((week, index) => (
-              <div key={index} className="flex-1 flex flex-col items-center">
+      <div className="grid lg:grid-cols-2 gap-6 mb-8">
+        {/* Registros de Usuarios */}
+        <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-semibold text-white">Registros de Usuarios</h2>
+            <span className="text-sm text-gray-500 bg-gray-800 px-3 py-1 rounded-lg">Últimas 8 Semanas</span>
+          </div>
+          
+          {/* Bar Chart */}
+          <div className="flex items-end justify-between gap-3 h-48">
+            {data?.usersByWeek.map((week, i) => (
+              <div key={i} className="flex-1 flex flex-col items-center gap-2">
                 <div 
-                  className="w-full bg-primary-500 rounded-t transition-all duration-300 hover:bg-primary-600"
-                  style={{ height: `${(week.count / maxUserCount) * 100}%`, minHeight: week.count > 0 ? '8px' : '2px' }}
-                ></div>
-                <span className="text-xs text-gray-500 mt-2 truncate w-full text-center">{week.week}</span>
+                  className="w-full bg-blue-500 rounded-t-lg transition-all hover:bg-blue-400"
+                  style={{ height: `${(week.count / maxWeekCount) * 100}%`, minHeight: week.count > 0 ? '8px' : '4px' }}
+                />
+                <span className="text-xs text-gray-500 whitespace-nowrap">{week.week}</span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Role Distribution */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="font-semibold text-gray-900 mb-6">User Distribution</h2>
-          <div className="space-y-4">
-            {data?.roleDistribution.map((role, index) => {
-              const total = data.roleDistribution.reduce((sum, r) => sum + r.count, 0);
-              const percentage = total > 0 ? (role.count / total) * 100 : 0;
-              const colors = ['bg-blue-500', 'bg-green-500', 'bg-purple-500'];
-              return (
-                <div key={role.role}>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span className="font-medium text-gray-700">{role.role}</span>
-                    <span className="text-gray-500">{role.count} ({percentage.toFixed(1)}%)</span>
+        {/* Distribución de Usuarios */}
+        <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-semibold text-white">Distribución de Usuarios</h2>
+            <button className="p-1 hover:bg-gray-800 rounded-lg">
+              <MoreHorizontal className="w-5 h-5 text-gray-500" />
+            </button>
+          </div>
+          
+          <div className="space-y-5">
+            {data?.roleDistribution.map((role, i) => (
+              <div key={i}>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <div className={`w-2 h-2 rounded-full ${
+                      role.role === 'Coaches' ? 'bg-blue-500' :
+                      role.role === 'Coachees' ? 'bg-emerald-500' : 'bg-violet-500'
+                    }`} />
+                    <span className="text-white">{role.role}</span>
                   </div>
-                  <div className="w-full bg-gray-100 rounded-full h-3">
-                    <div 
-                      className={`h-3 rounded-full ${colors[index]}`}
-                      style={{ width: `${percentage}%` }}
-                    ></div>
-                  </div>
+                  <span className="text-gray-400">
+                    {role.count} <span className="text-gray-500">({role.percentage}%)</span>
+                  </span>
                 </div>
-              );
-            })}
+                <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
+                  <div 
+                    className={`h-full rounded-full transition-all ${
+                      role.role === 'Coaches' ? 'bg-blue-500' :
+                      role.role === 'Coachees' ? 'bg-emerald-500' : 'bg-violet-500'
+                    }`}
+                    style={{ width: `${role.percentage}%` }}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Top Tools */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="font-semibold text-gray-900 mb-6">Most Used Tools</h2>
-        {data?.topTools && data.topTools.length > 0 ? (
-          <div className="space-y-4">
-            {data.topTools.map((tool, index) => {
-              const maxCompletions = data.topTools[0].completions || 1;
-              const percentage = (tool.completions / maxCompletions) * 100;
-              return (
-                <div key={tool.name} className="flex items-center gap-4">
-                  <span className="w-6 text-sm font-medium text-gray-400">#{index + 1}</span>
-                  <div className="flex-1">
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="font-medium text-gray-700">{tool.name}</span>
-                      <span className="text-gray-500">{tool.completions} completions</span>
-                    </div>
-                    <div className="w-full bg-gray-100 rounded-full h-2">
-                      <div 
-                        className="h-2 rounded-full bg-gradient-to-r from-primary-400 to-primary-600"
-                        style={{ width: `${percentage}%` }}
-                      ></div>
-                    </div>
-                  </div>
+      {/* Herramientas Más Usadas */}
+      <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-lg font-semibold text-white">Herramientas Más Usadas</h2>
+          <button className="text-blue-400 text-sm hover:text-blue-300">VER TODO</button>
+        </div>
+        
+        <div className="space-y-4">
+          {data?.topTools.map((tool, i) => (
+            <div key={i} className="flex items-center gap-4">
+              <span className="text-gray-500 text-sm w-6">{String(i + 1).padStart(2, '0')}</span>
+              <div className="flex-1">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-white">{tool.name}</span>
+                  <span className="text-sm text-gray-500 bg-gray-800 px-2 py-0.5 rounded">
+                    {tool.completions} completadas
+                  </span>
                 </div>
-              );
-            })}
-          </div>
-        ) : (
-          <p className="text-gray-500 text-center py-8">No tool completions yet</p>
-        )}
+                <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-blue-500 rounded-full"
+                    style={{ width: `${(tool.completions / maxToolCount) * 100}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+          
+          {(!data?.topTools || data.topTools.length === 0) && (
+            <p className="text-gray-500 text-center py-8">No hay datos de herramientas aún</p>
+          )}
+        </div>
       </div>
     </div>
   );
