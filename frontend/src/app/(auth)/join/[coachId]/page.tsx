@@ -5,7 +5,8 @@ import { useRouter, useParams } from 'next/navigation';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp, collection, addDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
-import { CheckCircle, AlertCircle } from 'lucide-react';
+import { CheckCircle, AlertCircle, Loader2, ArrowRight, User } from 'lucide-react';
+import Link from 'next/link';
 
 export default function JoinCoachPage() {
   const params = useParams();
@@ -16,7 +17,6 @@ export default function JoinCoachPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [debugInfo, setDebugInfo] = useState<string[]>([]);
 
   const [formData, setFormData] = useState({
     email: '',
@@ -28,36 +28,23 @@ export default function JoinCoachPage() {
 
   useEffect(() => {
     const fetchCoach = async () => {
-      const logs: string[] = [];
-      logs.push(`Starting fetch for coachId: ${coachId}`);
-      
       try {
-        logs.push('Attempting to fetch coach document...');
         const coachDoc = await getDoc(doc(db, 'users', coachId));
-        
-        logs.push(`Document exists: ${coachDoc.exists()}`);
-        
+
         if (coachDoc.exists()) {
           const data = coachDoc.data();
-          logs.push(`Coach role: ${data.role}`);
-          
+
           if (data.role === 'coach') {
             setCoachInfo({ uid: coachDoc.id, ...data });
-            logs.push('✅ Coach found and validated');
           } else {
-            logs.push(`❌ User is not a coach. Role: ${data.role}`);
-            setError(`This user is not a coach. Role: ${data.role}`);
+            setError('Este enlace de invitación no es válido.');
           }
         } else {
-          logs.push('❌ Coach document does not exist');
-          setError('Invalid invitation link - coach not found');
+          setError('Enlace de invitación inválido - coach no encontrado');
         }
       } catch (err: any) {
-        logs.push(`❌ Error: ${err.message}`);
-        logs.push(`Error code: ${err.code || 'N/A'}`);
-        setError(`Failed to load coach information: ${err.message}`);
+        setError('Error al cargar la información del coach');
       } finally {
-        setDebugInfo(logs);
         setLoading(false);
       }
     };
@@ -65,7 +52,7 @@ export default function JoinCoachPage() {
     if (coachId) {
       fetchCoach();
     } else {
-      setError('No coach ID provided');
+      setError('No se proporcionó ID de coach');
       setLoading(false);
     }
   }, [coachId]);
@@ -75,12 +62,12 @@ export default function JoinCoachPage() {
     setError('');
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError('Las contraseñas no coinciden');
       return;
     }
 
-    if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters');
+    if (formData.password.length < 8) {
+      setError('La contraseña debe tener al menos 8 caracteres');
       return;
     }
 
@@ -102,7 +89,7 @@ export default function JoinCoachPage() {
         displayName: `${formData.firstName} ${formData.lastName}`,
         coacheeInfo: {
           coachId: coachId,
-          coachName: coachInfo?.displayName || coachInfo?.firstName || `${coachInfo?.firstName || ""} ${coachInfo?.lastName || ""}`.trim() || "Coach",
+          coachName: coachInfo?.displayName || coachInfo?.firstName || "Coach",
           onboardingCompleted: true,
           goals: [],
         },
@@ -129,17 +116,23 @@ export default function JoinCoachPage() {
 
       router.push('/dashboard');
     } catch (err: any) {
-      setError(err.message || 'Failed to create account');
+      if (err.code === 'auth/email-already-in-use') {
+        setError('Este correo electrónico ya está registrado');
+      } else if (err.code === 'auth/weak-password') {
+        setError('La contraseña es muy débil');
+      } else {
+        setError('Error al crear la cuenta. Por favor intenta de nuevo.');
+      }
       setSubmitting(false);
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading coach information...</p>
+          <Loader2 className="w-12 h-12 text-blue-500 animate-spin mx-auto mb-4" />
+          <p className="text-gray-400">Cargando información del coach...</p>
         </div>
       </div>
     );
@@ -147,144 +140,166 @@ export default function JoinCoachPage() {
 
   if (error && !coachInfo) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-        <div className="max-w-2xl w-full">
-          <div className="bg-white rounded-xl border-2 border-red-200 p-8">
-            <div className="text-center mb-6">
-              <AlertCircle className="mx-auto text-red-600 mb-4" size={64} />
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">Invalid Link</h1>
-              <p className="text-red-600 mb-4">{error}</p>
-              <p className="text-sm text-gray-600">Coach ID: {coachId}</p>
+      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a] p-4">
+        <div className="max-w-md w-full">
+          <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
+            <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <AlertCircle className="w-8 h-8 text-red-400" />
             </div>
-
-            <details className="mt-6">
-              <summary className="cursor-pointer text-sm font-medium text-gray-700 mb-2">
-                🔍 Debug Information
-              </summary>
-              <div className="bg-gray-50 rounded-lg p-4 text-xs font-mono space-y-1 max-h-64 overflow-y-auto">
-                {debugInfo.map((log, idx) => (
-                  <div key={idx} className={log.includes('❌') ? 'text-red-600' : log.includes('✅') ? 'text-green-600' : 'text-gray-700'}>
-                    {log}
-                  </div>
-                ))}
-              </div>
-            </details>
-
-            <div className="mt-6 text-center">
-              <a href="/" className="text-primary-600 hover:text-primary-700 font-medium">
-                Go to Homepage
-              </a>
-            </div>
+            <h1 className="text-2xl font-bold text-white mb-2">Enlace Inválido</h1>
+            <p className="text-gray-400 mb-6">{error}</p>
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Ir al Inicio
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </div>
     );
   }
 
+  const coachInitials = coachInfo?.displayName
+    ? coachInfo.displayName.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase()
+    : 'C';
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary-50 to-white flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center py-12 px-4">
       <div className="max-w-md w-full">
+        {/* Logo */}
         <div className="text-center mb-8">
-          <div className="w-20 h-20 bg-primary-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-            {coachInfo?.firstName?.[0]}{coachInfo?.lastName?.[0]}
-          </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Join {coachInfo?.displayName} Coaching
-          </h1>
-          <p className="text-gray-600">Create your account to start your coaching journey</p>
+          <Link href="/" className="inline-flex items-center gap-2">
+            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-lg">A</span>
+            </div>
+            <span className="font-semibold text-white text-xl">AchievingCoach</span>
+          </Link>
         </div>
 
-        <div className="bg-white rounded-xl border-2 border-gray-200 p-6 mb-6">
-          <h3 className="font-bold text-gray-900 mb-3">What you'll get:</h3>
+        {/* Coach Info */}
+        <div className="text-center mb-8">
+          <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-violet-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+            {coachInitials}
+          </div>
+          <h1 className="text-2xl font-bold text-white mb-2">
+            Únete al coaching de {coachInfo?.displayName || 'tu coach'}
+          </h1>
+          <p className="text-gray-400">Crea tu cuenta para comenzar tu viaje de coaching</p>
+        </div>
+
+        {/* Benefits */}
+        <div className="bg-[#111111] border border-gray-800 rounded-xl p-5 mb-6">
+          <h3 className="font-semibold text-white mb-3">Lo que obtendrás:</h3>
           <ul className="space-y-2">
             <li className="flex items-start gap-2">
-              <CheckCircle className="text-green-500 flex-shrink-0 mt-0.5" size={20} />
-              <span className="text-sm text-gray-700">Personalized coaching sessions</span>
+              <CheckCircle className="text-emerald-400 flex-shrink-0 mt-0.5 w-5 h-5" />
+              <span className="text-sm text-gray-300">Sesiones de coaching personalizadas</span>
             </li>
             <li className="flex items-start gap-2">
-              <CheckCircle className="text-green-500 flex-shrink-0 mt-0.5" size={20} />
-              <span className="text-sm text-gray-700">Goal tracking and progress monitoring</span>
+              <CheckCircle className="text-emerald-400 flex-shrink-0 mt-0.5 w-5 h-5" />
+              <span className="text-sm text-gray-300">Seguimiento de metas y progreso</span>
             </li>
             <li className="flex items-start gap-2">
-              <CheckCircle className="text-green-500 flex-shrink-0 mt-0.5" size={20} />
-              <span className="text-sm text-gray-700">Direct messaging with your coach</span>
+              <CheckCircle className="text-emerald-400 flex-shrink-0 mt-0.5 w-5 h-5" />
+              <span className="text-sm text-gray-300">Mensajería directa con tu coach</span>
             </li>
             <li className="flex items-start gap-2">
-              <CheckCircle className="text-green-500 flex-shrink-0 mt-0.5" size={20} />
-              <span className="text-sm text-gray-700">Access to coaching tools and resources</span>
+              <CheckCircle className="text-emerald-400 flex-shrink-0 mt-0.5 w-5 h-5" />
+              <span className="text-sm text-gray-300">Acceso a herramientas y recursos</span>
             </li>
           </ul>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-xl border-2 border-gray-200 p-6">
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="bg-[#111111] border border-gray-800 rounded-xl p-6">
           {error && (
-            <div className="mb-4 rounded-md bg-red-50 p-4">
-              <p className="text-sm text-red-800">{error}</p>
+            <div className="mb-4 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+              <p className="text-sm text-red-400">{error}</p>
             </div>
           )}
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
-                <input 
-                  type="text" 
-                  required 
-                  value={formData.firstName} 
-                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })} 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" 
+                <label className="block text-sm font-medium text-gray-300 mb-2">Nombre *</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.firstName}
+                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
-                <input 
-                  type="text" 
-                  required 
-                  value={formData.lastName} 
-                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })} 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" 
+                <label className="block text-sm font-medium text-gray-300 mb-2">Apellido *</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.lastName}
+                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                  className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-              <input 
-                type="email" 
-                required 
-                value={formData.email} 
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })} 
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" 
+              <label className="block text-sm font-medium text-gray-300 mb-2">Correo Electrónico *</label>
+              <input
+                type="email"
+                required
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Password *</label>
-              <input 
-                type="password" 
-                required 
-                value={formData.password} 
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })} 
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" 
-                placeholder="Min 6 characters" 
+              <label className="block text-sm font-medium text-gray-300 mb-2">Contraseña *</label>
+              <input
+                type="password"
+                required
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                placeholder="Mínimo 8 caracteres"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password *</label>
-              <input 
-                type="password" 
-                required 
-                value={formData.confirmPassword} 
-                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })} 
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500" 
+              <label className="block text-sm font-medium text-gray-300 mb-2">Confirmar Contraseña *</label>
+              <input
+                type="password"
+                required
+                value={formData.confirmPassword}
+                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
           </div>
-          <button 
-            type="submit" 
-            disabled={submitting} 
-            className="w-full mt-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-full mt-6 py-3 bg-white text-black rounded-xl font-semibold hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-colors"
           >
-            {submitting ? 'Creating account...' : 'Create Account & Start Coaching'}
+            {submitting ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                Creando cuenta...
+              </>
+            ) : (
+              <>
+                Crear Cuenta
+                <ArrowRight className="w-5 h-5" />
+              </>
+            )}
           </button>
         </form>
+
+        {/* Footer */}
+        <p className="text-center text-gray-500 text-sm mt-6">
+          ¿Ya tienes cuenta?{' '}
+          <Link href="/sign-in" className="text-blue-400 hover:text-blue-300">
+            Iniciar Sesión
+          </Link>
+        </p>
       </div>
     </div>
   );

@@ -3,17 +3,19 @@
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { 
-  LayoutDashboard, 
-  Users, 
-  Wrench, 
-  UserPlus, 
-  Award, 
-  MessageSquare, 
-  Calendar, 
-  LogOut, 
+import {
+  LayoutDashboard,
+  Users,
+  Wrench,
+  UserPlus,
+  Award,
+  MessageSquare,
+  Calendar,
+  LogOut,
   User,
-  MoreVertical
+  MoreVertical,
+  Globe,
+  CalendarCheck
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import Image from 'next/image';
@@ -28,7 +30,12 @@ const mainNavigation = [
 
 const communicationNav = [
   { name: 'Mensajes', href: '/messages', icon: MessageSquare, badge: null },
-  { name: 'Sesiones', href: '/sessions', icon: Calendar },
+  { name: 'Sesiones', href: '/coach/sessions', icon: Calendar },
+];
+
+const bookingNav = [
+  { name: 'Reservas', href: '/coach/bookings', icon: CalendarCheck },
+  { name: 'Booking Público', href: '/coach/booking', icon: Globe },
 ];
 
 const accountNav = [
@@ -112,6 +119,16 @@ export default function CoachSidebar() {
           <div className="space-y-1">
             {communicationNav.map((item) => (
               <NavItem key={item.name} item={item} badge={item.name === 'Mensajes' ? messageCount : null} />
+            ))}
+          </div>
+        </div>
+
+        {/* Booking */}
+        <div>
+          <p className="px-3 mb-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Booking</p>
+          <div className="space-y-1">
+            {bookingNav.map((item) => (
+              <NavItem key={item.name} item={item} />
             ))}
           </div>
         </div>

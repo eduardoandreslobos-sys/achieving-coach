@@ -107,11 +107,12 @@ export default function GROWWorksheetPage() {
         }
       }
 
-      toast.success('✅ GROW Worksheet saved!', {
+      toast.success('GROW Worksheet saved!', {
         description: 'Your coach has been notified.',
         duration: 4000,
       });
-      
+
+      trackToolCompleted('grow-model', 'GROW Model');
       setIsCompleted(true);
       
     } catch (error) {
@@ -144,13 +145,12 @@ export default function GROWWorksheetPage() {
             </p>
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               Return to Dashboard
             </Link>
           </div>
         </div>
-      trackToolCompleted('grow-model', 'GROW Model');
       </div>
     );
   }
@@ -171,7 +171,7 @@ export default function GROWWorksheetPage() {
             <div className="flex gap-4 justify-center">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Return to Dashboard
               </Link>
@@ -214,7 +214,7 @@ export default function GROWWorksheetPage() {
               value={data.goal}
               onChange={(e) => setData({ ...data, goal: e.target.value })}
               placeholder="Describe your goal in specific, measurable terms..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
               rows={4}
             />
           </div>
@@ -233,7 +233,7 @@ export default function GROWWorksheetPage() {
               value={data.reality}
               onChange={(e) => setData({ ...data, reality: e.target.value })}
               placeholder="Describe where you are now, what's working, what's not..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
               rows={4}
             />
           </div>
@@ -252,7 +252,7 @@ export default function GROWWorksheetPage() {
               value={data.options}
               onChange={(e) => setData({ ...data, options: e.target.value })}
               placeholder="List all possible options and strategies you could try..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
               rows={4}
             />
           </div>
@@ -271,7 +271,7 @@ export default function GROWWorksheetPage() {
               value={data.way}
               onChange={(e) => setData({ ...data, way: e.target.value })}
               placeholder="Commit to specific actions with timelines..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
               rows={4}
             />
           </div>
@@ -281,7 +281,7 @@ export default function GROWWorksheetPage() {
           <button
             onClick={handleSave}
             disabled={saving || !data.goal || !data.reality || !data.options || !data.way}
-            className="px-8 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="px-8 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             {saving ? 'Saving...' : 'Save Worksheet'}
           </button>
