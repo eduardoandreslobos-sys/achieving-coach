@@ -6,7 +6,7 @@
 
 import { Router, Request, Response } from 'express';
 import { OrganizationService } from '../services/organization.service';
-import { CreateOrganizationDto, UpdateOrganizationDto } from '../models/organization.model';
+import { CreateOrganizationDto, UpdateOrganizationDto, Organization } from '../models/organization.model';
 
 const router = Router();
 
@@ -159,7 +159,7 @@ router.get('/:id/limits/:type', async (req: Request, res: Response) => {
     
     const canAdd = await OrganizationService.checkLimit(
       id,
-      type as keyof any
+      type as keyof Organization['limits']
     );
     
     res.json({ canAdd });

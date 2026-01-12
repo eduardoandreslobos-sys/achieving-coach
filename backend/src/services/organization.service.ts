@@ -152,15 +152,19 @@ export class OrganizationService {
     // Update organization
     const updatedOrg: Organization = {
       ...org,
-      ...data,
+      name: data.name ?? org.name,
+      slug: data.slug ?? org.slug,
+      domain: data.domain ?? org.domain,
+      plan: data.plan ?? org.plan,
+      status: data.status ?? org.status,
       limits: data.limits ? { ...org.limits, ...data.limits } : org.limits,
-      branding: data.branding ? { ...org.branding, ...data.branding } : org.branding,
+      branding: data.branding ? { ...(org.branding || { primaryColor: '#6366f1', secondaryColor: '#8b5cf6' }), ...data.branding } : org.branding,
       settings: data.settings ? { ...org.settings, ...data.settings } : org.settings,
       contactInfo: data.contactInfo ? { ...org.contactInfo, ...data.contactInfo } : org.contactInfo,
       updatedAt: new Date(),
     };
-    
-    await db.collection(COLLECTION).doc(id).update(updatedOrg);
+
+    await db.collection(COLLECTION).doc(id).update(updatedOrg as unknown as Record<string, unknown>);
     
     return updatedOrg;
   }
