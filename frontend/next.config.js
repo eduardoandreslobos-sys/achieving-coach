@@ -36,6 +36,17 @@ const nextConfig = {
   // Compression
   compress: true,
   
+  // Redirects for SEO (fixing old URLs)
+  async redirects() {
+    return [
+      {
+        source: '/search',
+        destination: '/blog',
+        permanent: true,
+      },
+    ];
+  },
+
   // Headers for caching
   async headers() {
     return [
