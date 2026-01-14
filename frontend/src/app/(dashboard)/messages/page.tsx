@@ -49,34 +49,41 @@ export default function MessagesPage() {
       orderBy('lastMessageTime', 'desc')
     );
 
-    const unsubscribe = onSnapshot(q, async (snapshot) => {
-      const convs: Conversation[] = [];
-      
-      for (const docSnap of snapshot.docs) {
-        const data = docSnap.data();
-        const recipientId = data.participants.find((p: string) => p !== user.uid);
-        
-        // Get recipient info
-        const recipientDoc = await getDocs(
-          query(collection(db, 'users'), where('uid', '==', recipientId))
-        );
-        const recipient = recipientDoc.docs[0]?.data();
-        
-        convs.push({
-          id: docSnap.id,
-          recipientId,
-          recipientName: recipient?.displayName || recipient?.firstName || 'Usuario',
-          recipientEmail: recipient?.email || '',
-          recipientPhoto: recipient?.photoURL,
-          lastMessage: data.lastMessage || '',
-          lastMessageTime: data.lastMessageTime?.toDate() || new Date(),
-          unreadCount: data.unreadCount?.[user.uid] || 0,
-        });
+    const unsubscribe = onSnapshot(
+      q,
+      async (snapshot) => {
+        const convs: Conversation[] = [];
+
+        for (const docSnap of snapshot.docs) {
+          const data = docSnap.data();
+          const recipientId = data.participants.find((p: string) => p !== user.uid);
+
+          // Get recipient info
+          const recipientDoc = await getDocs(
+            query(collection(db, 'users'), where('uid', '==', recipientId))
+          );
+          const recipient = recipientDoc.docs[0]?.data();
+
+          convs.push({
+            id: docSnap.id,
+            recipientId,
+            recipientName: recipient?.displayName || recipient?.firstName || 'Usuario',
+            recipientEmail: recipient?.email || '',
+            recipientPhoto: recipient?.photoURL,
+            lastMessage: data.lastMessage || '',
+            lastMessageTime: data.lastMessageTime?.toDate() || new Date(),
+            unreadCount: data.unreadCount?.[user.uid] || 0,
+          });
+        }
+
+        setConversations(convs);
+        setLoading(false);
+      },
+      (error) => {
+        console.error('Error loading conversations:', error);
+        setLoading(false);
       }
-      
-      setConversations(convs);
-      setLoading(false);
-    });
+    );
 
     return () => unsubscribe();
   }, [user?.uid]);

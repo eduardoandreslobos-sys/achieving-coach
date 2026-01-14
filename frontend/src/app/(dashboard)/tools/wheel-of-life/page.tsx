@@ -30,8 +30,9 @@ export default function WheelOfLifePage() {
     const checkAccess = async () => {
       if (!user || !userProfile) return;
 
+      // Coaches cannot complete tools - they can only assign them to coachees
       if (userProfile.role === 'coach') {
-        setHasAccess(true);
+        setHasAccess(false);
         setLoading(false);
         return;
       }
@@ -139,30 +140,45 @@ export default function WheelOfLifePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
   if (!hasAccess) {
+    const isCoach = userProfile?.role === 'coach';
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+      <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-            <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Target className="w-8 h-8 text-yellow-600" />
+          <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
+            <div className={`w-16 h-16 ${isCoach ? 'bg-blue-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
+              <Target className={`w-8 h-8 ${isCoach ? 'text-blue-400' : 'text-yellow-400'}`} />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Access Required</h2>
-            <p className="text-gray-600 mb-6">
-              This tool needs to be assigned by your coach before you can access it.
+            <h2 className="text-2xl font-bold text-white mb-4">
+              {isCoach ? 'Tool for Coachees Only' : 'Access Required'}
+            </h2>
+            <p className="text-gray-400 mb-6">
+              {isCoach
+                ? 'This tool is designed to be completed by coachees. You can assign it to your clients from the client management page.'
+                : 'This tool needs to be assigned by your coach before you can access it.'}
             </p>
-            <Link
-              href="/dashboard"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-            >
-              Return to Dashboard
-            </Link>
+            <div className="flex gap-4 justify-center">
+              <Link
+                href={isCoach ? '/coach/clients' : '/dashboard'}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                {isCoach ? 'Go to Clients' : 'Return to Dashboard'}
+              </Link>
+              {isCoach && (
+                <Link
+                  href="/coach/tools"
+                  className="inline-flex items-center gap-2 px-6 py-3 border border-gray-700 text-gray-300 rounded-lg hover:bg-[#1a1a1a] transition-colors"
+                >
+                  View Tools Library
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -171,27 +187,27 @@ export default function WheelOfLifePage() {
 
   if (isCompleted) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+      <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
         <Toaster position="top-center" richColors />
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle2 className="w-8 h-8 text-green-600" />
+          <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
+            <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle2 className="w-8 h-8 text-emerald-400" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Tool Completed!</h2>
-            <p className="text-gray-600 mb-6">
+            <h2 className="text-2xl font-bold text-white mb-4">Tool Completed!</h2>
+            <p className="text-gray-400 mb-6">
               You've successfully completed the Wheel of Life assessment. Your coach has been notified and can review your results.
             </p>
             <div className="flex gap-4 justify-center">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Return to Dashboard
               </Link>
               <Link
                 href="/tools"
-                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-gray-700 text-gray-300 rounded-lg hover:bg-[#1a1a1a] transition-colors"
               >
                 View Other Tools
               </Link>
@@ -207,32 +223,32 @@ export default function WheelOfLifePage() {
     : 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+    <div className="min-h-screen bg-[#0a0a0a] text-white py-12 px-4">
       <Toaster position="top-center" richColors />
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <Link 
+          <Link
             href="/tools"
-            className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium mb-4"
+            className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium mb-4"
           >
             ← Back to Tools
           </Link>
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
-              <Target className="w-6 h-6 text-primary-600" />
+            <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
+              <Target className="w-6 h-6 text-blue-400" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Wheel of Life</h1>
-              <p className="text-gray-600">Assess your life balance across key areas</p>
+              <h1 className="text-3xl font-bold text-white">Wheel of Life</h1>
+              <p className="text-gray-400">Assess your life balance across key areas</p>
             </div>
           </div>
         </div>
 
         {/* Instructions */}
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8">
-          <h2 className="text-lg font-semibold text-blue-900 mb-2">How to use this tool</h2>
-          <p className="text-blue-800">
+        <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-6 mb-8">
+          <h2 className="text-lg font-semibold text-blue-400 mb-2">How to use this tool</h2>
+          <p className="text-blue-300">
             Rate each area of your life on a scale from 0-10, where 0 is completely unsatisfied and 10 is completely satisfied.
             Be honest with yourself - this assessment is about understanding where you are now, not where you think you should be.
           </p>
@@ -243,16 +259,16 @@ export default function WheelOfLifePage() {
           {lifeAreas.map((area) => {
             const Icon = area.icon;
             return (
-              <div key={area.id} className="bg-white rounded-xl border-2 border-gray-200 p-6 hover:border-primary-300 transition-colors">
+              <div key={area.id} className="bg-[#111111] rounded-xl border border-gray-800 p-6 hover:border-blue-500/50 transition-colors">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className={`w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center ${area.color}`}>
-                    <Icon className="w-5 h-5" />
+                  <div className={`w-10 h-10 rounded-lg bg-[#1a1a1a] flex items-center justify-center`}>
+                    <Icon className={`w-5 h-5 ${area.color}`} />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900">{area.name}</h3>
+                  <h3 className="text-lg font-semibold text-white">{area.name}</h3>
                 </div>
-                
+
                 <div className="space-y-2">
-                  <div className="flex justify-between text-sm text-gray-600">
+                  <div className="flex justify-between text-sm text-gray-500">
                     <span>Unsatisfied</span>
                     <span>Satisfied</span>
                   </div>
@@ -262,10 +278,10 @@ export default function WheelOfLifePage() {
                     max="10"
                     value={scores[area.id] || 0}
                     onChange={(e) => setScores({ ...scores, [area.id]: parseInt(e.target.value) })}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
+                    className="w-full h-2 bg-[#1a1a1a] rounded-lg appearance-none cursor-pointer accent-blue-500"
                   />
                   <div className="text-center">
-                    <span className="text-2xl font-bold text-primary-600">
+                    <span className="text-2xl font-bold text-blue-400">
                       {scores[area.id] !== undefined ? scores[area.id] : '-'}
                     </span>
                     <span className="text-gray-500">/10</span>
@@ -278,14 +294,14 @@ export default function WheelOfLifePage() {
 
         {/* Average Score */}
         {Object.keys(scores).length > 0 && (
-          <div className="bg-primary-50 border-2 border-primary-200 rounded-xl p-6 mb-8">
+          <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-6 mb-8">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-1">Average Score</h3>
-                <p className="text-gray-600">Overall life satisfaction</p>
+                <h3 className="text-lg font-semibold text-white mb-1">Average Score</h3>
+                <p className="text-gray-400">Overall life satisfaction</p>
               </div>
               <div className="text-right">
-                <div className="text-4xl font-bold text-primary-600">{averageScore.toFixed(1)}</div>
+                <div className="text-4xl font-bold text-blue-400">{averageScore.toFixed(1)}</div>
                 <div className="text-sm text-gray-500">out of 10</div>
               </div>
             </div>
@@ -296,7 +312,7 @@ export default function WheelOfLifePage() {
         <button
           onClick={handleSave}
           disabled={saving || Object.keys(scores).length !== lifeAreas.length}
-          className="w-full bg-primary-600 text-white py-4 rounded-lg font-semibold hover:bg-primary-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+          className="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
         >
           {saving ? 'Saving...' : 'Save Results'}
         </button>

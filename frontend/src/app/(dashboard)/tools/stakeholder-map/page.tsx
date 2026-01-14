@@ -35,8 +35,9 @@ export default function StakeholderMapPage() {
     const checkAccess = async () => {
       if (!user || !userProfile) return;
 
+      // Coaches cannot complete tools - they can only assign them to coachees
       if (userProfile.role === 'coach') {
-        setHasAccess(true);
+        setHasAccess(false);
         setLoading(false);
         return;
       }
@@ -148,38 +149,45 @@ export default function StakeholderMapPage() {
   };
 
   const getQuadrant = (influence: number, support: number) => {
-    if (influence >= 3 && support >= 3) return { label: 'Key Players', color: 'bg-green-100 border-green-300' };
-    if (influence >= 3 && support < 3) return { label: 'Keep Satisfied', color: 'bg-yellow-100 border-yellow-300' };
-    if (influence < 3 && support >= 3) return { label: 'Show Consideration', color: 'bg-blue-100 border-blue-300' };
-    return { label: 'Monitor', color: 'bg-gray-100 border-gray-300' };
+    if (influence >= 3 && support >= 3) return { label: 'Key Players', color: 'bg-emerald-500/20 border-emerald-500/50' };
+    if (influence >= 3 && support < 3) return { label: 'Keep Satisfied', color: 'bg-yellow-500/20 border-yellow-500/50' };
+    if (influence < 3 && support >= 3) return { label: 'Show Consideration', color: 'bg-blue-500/20 border-blue-500/50' };
+    return { label: 'Monitor', color: 'bg-gray-500/20 border-gray-500/50' };
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
   if (!hasAccess) {
+    const isCoach = userProfile?.role === 'coach';
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+      <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-            <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Users className="w-8 h-8 text-yellow-600" />
+          <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
+            <div className={`w-16 h-16 ${isCoach ? 'bg-blue-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
+              <Users className={`w-8 h-8 ${isCoach ? 'text-blue-400' : 'text-yellow-400'}`} />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Access Required</h2>
-            <p className="text-gray-600 mb-6">
-              This tool needs to be assigned by your coach before you can access it.
+            <h2 className="text-2xl font-bold text-white mb-4">
+              {isCoach ? 'Tool for Coachees Only' : 'Access Required'}
+            </h2>
+            <p className="text-gray-400 mb-6">
+              {isCoach
+                ? 'This tool is designed to be completed by coachees. You can assign it to your clients from the client management page.'
+                : 'This tool needs to be assigned by your coach before you can access it.'}
             </p>
-            <Link
-              href="/dashboard"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-            >
-              Return to Dashboard
-            </Link>
+            <div className="flex gap-4 justify-center">
+              <Link
+                href={isCoach ? '/coach/clients' : '/dashboard'}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                {isCoach ? 'Go to Clients' : 'Return to Dashboard'}
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -188,27 +196,27 @@ export default function StakeholderMapPage() {
 
   if (isCompleted) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+      <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
         <Toaster position="top-center" richColors />
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle2 className="w-8 h-8 text-green-600" />
+          <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
+            <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle2 className="w-8 h-8 text-emerald-400" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Tool Completed!</h2>
-            <p className="text-gray-600 mb-6">
+            <h2 className="text-2xl font-bold text-white mb-4">Tool Completed!</h2>
+            <p className="text-gray-400 mb-6">
               You've successfully completed the Stakeholder Map. Your coach has been notified.
             </p>
             <div className="flex gap-4 justify-center">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Return to Dashboard
               </Link>
               <Link
                 href="/tools"
-                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-gray-700 text-gray-300 rounded-lg hover:bg-[#1a1a1a] transition-colors"
               >
                 View Other Tools
               </Link>
@@ -220,47 +228,47 @@ export default function StakeholderMapPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-[#0a0a0a] text-white p-8">
       <Toaster position="top-center" richColors />
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Stakeholder Map</h1>
-          <p className="text-gray-600">
+          <h1 className="text-3xl font-bold text-white mb-2">Stakeholder Map</h1>
+          <p className="text-gray-400">
             Identify and analyze key stakeholders in your project or goal
           </p>
         </div>
 
-        <div className="bg-white rounded-xl border-2 border-gray-200 p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <Plus size={24} />
+        <div className="bg-[#111111] border border-gray-800 rounded-xl p-6 mb-6">
+          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <Plus size={24} className="text-blue-400" />
             Add Stakeholder
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+              <label className="block text-sm font-medium text-gray-400 mb-1">Name</label>
               <input
                 type="text"
                 value={newStakeholder.name}
                 onChange={(e) => setNewStakeholder({ ...newStakeholder, name: e.target.value })}
                 placeholder="Stakeholder name"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+              <label className="block text-sm font-medium text-gray-400 mb-1">Role</label>
               <input
                 type="text"
                 value={newStakeholder.role}
                 onChange={(e) => setNewStakeholder({ ...newStakeholder, role: e.target.value })}
                 placeholder="Their role or position"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-400 mb-1">
                 Influence (1-5): {newStakeholder.influence}
               </label>
               <input
@@ -269,7 +277,7 @@ export default function StakeholderMapPage() {
                 max="5"
                 value={newStakeholder.influence}
                 onChange={(e) => setNewStakeholder({ ...newStakeholder, influence: parseInt(e.target.value) })}
-                className="w-full"
+                className="w-full accent-blue-500"
               />
               <div className="flex justify-between text-xs text-gray-500">
                 <span>Low</span>
@@ -278,7 +286,7 @@ export default function StakeholderMapPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-400 mb-1">
                 Support (1-5): {newStakeholder.support}
               </label>
               <input
@@ -287,7 +295,7 @@ export default function StakeholderMapPage() {
                 max="5"
                 value={newStakeholder.support}
                 onChange={(e) => setNewStakeholder({ ...newStakeholder, support: parseInt(e.target.value) })}
-                className="w-full"
+                className="w-full accent-blue-500"
               />
               <div className="flex justify-between text-xs text-gray-500">
                 <span>Blocker</span>
@@ -296,13 +304,13 @@ export default function StakeholderMapPage() {
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Engagement Strategy</label>
+              <label className="block text-sm font-medium text-gray-400 mb-1">Engagement Strategy</label>
               <textarea
                 value={newStakeholder.strategy}
                 onChange={(e) => setNewStakeholder({ ...newStakeholder, strategy: e.target.value })}
                 placeholder="How will you engage with this stakeholder?"
                 rows={2}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
           </div>
@@ -310,7 +318,7 @@ export default function StakeholderMapPage() {
           <button
             onClick={addStakeholder}
             disabled={!newStakeholder.name || !newStakeholder.role}
-            className="mt-4 px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
           >
             Add to Map
           </button>
@@ -324,39 +332,39 @@ export default function StakeholderMapPage() {
                 return (
                   <div
                     key={stakeholder.id}
-                    className={`${quadrant.color} border-2 rounded-xl p-4`}
+                    className={`${quadrant.color} border rounded-xl p-4`}
                   >
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex-1">
-                        <h3 className="font-bold text-gray-900">{stakeholder.name}</h3>
-                        <p className="text-sm text-gray-600">{stakeholder.role}</p>
+                        <h3 className="font-bold text-white">{stakeholder.name}</h3>
+                        <p className="text-sm text-gray-400">{stakeholder.role}</p>
                       </div>
                       <button
                         onClick={() => removeStakeholder(stakeholder.id)}
-                        className="text-red-600 hover:text-red-700"
+                        className="text-red-400 hover:text-red-300"
                       >
                         <Trash2 size={20} />
                       </button>
                     </div>
-                    
-                    <div className="text-xs font-medium text-gray-700 mb-2">
+
+                    <div className="text-xs font-medium text-gray-300 mb-2">
                       {quadrant.label}
                     </div>
 
                     <div className="grid grid-cols-2 gap-2 text-sm mb-2">
                       <div>
-                        <span className="text-gray-600">Influence:</span>
+                        <span className="text-gray-400">Influence:</span>
                         <span className="ml-1 font-medium">{'⭐'.repeat(stakeholder.influence)}</span>
                       </div>
                       <div>
-                        <span className="text-gray-600">Support:</span>
+                        <span className="text-gray-400">Support:</span>
                         <span className="ml-1 font-medium">{'❤️'.repeat(stakeholder.support)}</span>
                       </div>
                     </div>
 
                     {stakeholder.strategy && (
-                      <p className="text-sm text-gray-700 mt-2 pt-2 border-t border-gray-300">
-                        <strong>Strategy:</strong> {stakeholder.strategy}
+                      <p className="text-sm text-gray-300 mt-2 pt-2 border-t border-gray-700">
+                        <strong className="text-gray-200">Strategy:</strong> {stakeholder.strategy}
                       </p>
                     )}
                   </div>
@@ -368,7 +376,7 @@ export default function StakeholderMapPage() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="px-8 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 disabled:opacity-50 flex items-center gap-2"
+                className="px-8 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-700 disabled:text-gray-500 flex items-center gap-2 transition-colors"
               >
                 {saving ? 'Saving...' : 'Save Map'}
               </button>
@@ -377,10 +385,10 @@ export default function StakeholderMapPage() {
         )}
 
         {stakeholders.length === 0 && (
-          <div className="bg-white rounded-xl border-2 border-dashed border-gray-300 p-12 text-center">
-            <Users className="mx-auto text-gray-400 mb-4" size={64} />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No stakeholders yet</h3>
-            <p className="text-gray-600">Add stakeholders to start mapping your network</p>
+          <div className="bg-[#111111] border border-gray-800 border-dashed rounded-xl p-12 text-center">
+            <Users className="mx-auto text-gray-600 mb-4" size={64} />
+            <h3 className="text-lg font-medium text-white mb-2">No stakeholders yet</h3>
+            <p className="text-gray-400">Add stakeholders to start mapping your network</p>
           </div>
         )}
       </div>

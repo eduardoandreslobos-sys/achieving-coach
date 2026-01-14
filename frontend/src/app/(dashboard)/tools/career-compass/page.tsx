@@ -22,8 +22,9 @@ export default function CareerCompassPage() {
     const checkAccess = async () => {
       if (!user || !userProfile) return;
 
+      // Coaches cannot complete tools - they can only assign them to coachees
       if (userProfile.role === 'coach') {
-        setHasAccess(true);
+        setHasAccess(false);
         setLoading(false);
         return;
       }
@@ -119,29 +120,34 @@ export default function CareerCompassPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
   if (!hasAccess) {
+    const isCoach = userProfile?.role === 'coach';
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+      <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-            <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Compass className="w-8 h-8 text-yellow-600" />
+          <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
+            <div className={`w-16 h-16 ${isCoach ? 'bg-blue-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
+              <Compass className={`w-8 h-8 ${isCoach ? 'text-blue-400' : 'text-yellow-400'}`} />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Access Required</h2>
-            <p className="text-gray-600 mb-6">
-              This tool needs to be assigned by your coach before you can access it.
+            <h2 className="text-2xl font-bold text-white mb-4">
+              {isCoach ? 'Tool for Coachees Only' : 'Access Required'}
+            </h2>
+            <p className="text-gray-400 mb-6">
+              {isCoach
+                ? 'This tool is designed to be completed by coachees. You can assign it to your clients from the client management page.'
+                : 'This tool needs to be assigned by your coach before you can access it.'}
             </p>
             <Link
-              href="/dashboard"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+              href={isCoach ? '/coach/clients' : '/dashboard'}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
-              Return to Dashboard
+              {isCoach ? 'Go to Clients' : 'Return to Dashboard'}
             </Link>
           </div>
         </div>
@@ -151,27 +157,27 @@ export default function CareerCompassPage() {
 
   if (isCompleted && !showResults) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+      <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
         <Toaster position="top-center" richColors />
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle2 className="w-8 h-8 text-green-600" />
+          <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
+            <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle2 className="w-8 h-8 text-emerald-400" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Tool Completed!</h2>
-            <p className="text-gray-600 mb-6">
+            <h2 className="text-2xl font-bold text-white mb-4">Tool Completed!</h2>
+            <p className="text-gray-400 mb-6">
               You've successfully completed Career Compass. Your coach has been notified.
             </p>
             <div className="flex gap-4 justify-center">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Return to Dashboard
               </Link>
               <Link
                 href="/tools"
-                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-gray-700 text-gray-300 rounded-lg hover:bg-[#1a1a1a] transition-colors"
               >
                 View Other Tools
               </Link>
@@ -184,18 +190,18 @@ export default function CareerCompassPage() {
 
   if (showResults && compass) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+      <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
         <Toaster position="top-center" richColors />
         <div className="max-w-6xl mx-auto mb-8">
-          <Link 
+          <Link
             href="/tools"
-            className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium"
+            className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium"
           >
             <ArrowLeft size={20} />
             Back to Tools
           </Link>
         </div>
-        <CareerCompassResults 
+        <CareerCompassResults
           compass={compass}
           onReset={handleReset}
         />
@@ -204,44 +210,44 @@ export default function CareerCompassPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+    <div className="min-h-screen bg-[#0a0a0a] text-white py-12 px-4">
       <Toaster position="top-center" richColors />
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
-          <Link 
+          <Link
             href="/tools"
-            className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium mb-6"
+            className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium mb-6"
           >
             <ArrowLeft size={20} />
             Back to Tools
           </Link>
           <div className="flex items-center gap-4 mb-4">
-            <div className="bg-indigo-100 p-4 rounded-xl">
-              <Compass className="w-10 h-10 text-indigo-600" />
+            <div className="bg-indigo-500/20 p-4 rounded-xl">
+              <Compass className="w-10 h-10 text-indigo-400" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold text-gray-900">
+              <h1 className="text-4xl font-bold text-white">
                 Career Compass Mapping
               </h1>
-              <p className="text-gray-600 mt-1">
+              <p className="text-gray-400 mt-1">
                 Map your career journey and chart your path forward
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-indigo-50 border-2 border-indigo-200 rounded-xl p-6 mb-8">
-          <h2 className="text-lg font-bold text-indigo-900 mb-3">
+        <div className="bg-indigo-500/10 border border-indigo-500/30 rounded-xl p-6 mb-8">
+          <h2 className="text-lg font-bold text-indigo-300 mb-3">
             Navigate Your Career Path
           </h2>
-          <div className="space-y-3 text-indigo-800">
+          <div className="space-y-3 text-indigo-200">
             <p>
-              The Career Compass helps you gain clarity on where you are, where you want to go, 
+              The Career Compass helps you gain clarity on where you are, where you want to go,
               and how to get there. This comprehensive tool examines multiple dimensions of your career.
             </p>
-            <div className="bg-white rounded-lg p-4 mt-4">
-              <p className="font-medium mb-2">You'll explore:</p>
-              <div className="grid md:grid-cols-2 gap-2 text-sm">
+            <div className="bg-[#1a1a1a] rounded-lg p-4 mt-4">
+              <p className="font-medium mb-2 text-white">You'll explore:</p>
+              <div className="grid md:grid-cols-2 gap-2 text-sm text-gray-300">
                 <div>• Your current career satisfaction</div>
                 <div>• Your strengths and interests</div>
                 <div>• Your core career values</div>
@@ -251,7 +257,7 @@ export default function CareerCompassPage() {
               </div>
             </div>
             <p className="text-sm mt-4">
-              <strong>Time commitment:</strong> 15-20 minutes
+              <strong className="text-white">Time commitment:</strong> 15-20 minutes
             </p>
           </div>
         </div>

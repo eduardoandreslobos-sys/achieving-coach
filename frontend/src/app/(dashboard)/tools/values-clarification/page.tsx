@@ -49,8 +49,9 @@ export default function ValuesClarificationPage() {
     const checkAccess = async () => {
       if (!user || !userProfile) return;
 
+      // Coaches cannot complete tools - they can only assign them to coachees
       if (userProfile.role === 'coach') {
-        setHasAccess(true);
+        setHasAccess(false);
         setLoading(false);
         return;
       }
@@ -211,20 +212,36 @@ export default function ValuesClarificationPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      <div className="flex items-center justify-center h-screen bg-[#0a0a0a]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
   if (!hasAccess) {
+    const isCoach = userProfile?.role === 'coach';
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="text-center">
-          <p className="text-xl text-gray-600 mb-4">This tool has not been assigned to you yet.</p>
-          <Link href="/dashboard" className="text-primary-600 hover:text-primary-700">
-            Return to Dashboard
-          </Link>
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center py-12 px-4">
+        <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center max-w-md">
+          <div className={`w-16 h-16 ${isCoach ? 'bg-blue-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
+            <Heart className={`w-8 h-8 ${isCoach ? 'text-blue-400' : 'text-yellow-400'}`} />
+          </div>
+          <h2 className="text-2xl font-bold text-white mb-4">
+            {isCoach ? 'Tool for Coachees Only' : 'Access Required'}
+          </h2>
+          <p className="text-gray-400 mb-6">
+            {isCoach
+              ? 'This tool is designed to be completed by coachees. You can assign it to your clients from the client management page.'
+              : 'This tool has not been assigned to you yet.'}
+          </p>
+          <div className="flex gap-4 justify-center">
+            <Link
+              href={isCoach ? '/coach/clients' : '/dashboard'}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+            >
+              {isCoach ? 'Go to Clients' : 'Return to Dashboard'}
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -232,27 +249,27 @@ export default function ValuesClarificationPage() {
 
   if (isCompleted) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+      <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
         <Toaster position="top-center" richColors />
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle2 className="w-8 h-8 text-green-600" />
+          <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
+            <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle2 className="w-8 h-8 text-emerald-400" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Tool Completed!</h2>
-            <p className="text-gray-600 mb-6">
+            <h2 className="text-2xl font-bold text-white mb-4">Tool Completed!</h2>
+            <p className="text-gray-400 mb-6">
               You've successfully completed the Values Clarification exercise. Your coach has been notified and can review your results.
             </p>
             <div className="flex gap-4 justify-center">
               <Link
                 href="/dashboard"
-                className="px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
               >
                 Return to Dashboard
               </Link>
               <Link
                 href="/tools"
-                className="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+                className="px-6 py-3 border border-gray-700 text-gray-300 rounded-lg font-medium hover:bg-[#1a1a1a] transition-colors"
               >
                 Explore More Tools
               </Link>
@@ -264,22 +281,22 @@ export default function ValuesClarificationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+    <div className="min-h-screen bg-[#0a0a0a] text-white py-12 px-4">
       <Toaster position="top-center" richColors />
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Values Clarification</h1>
-          <p className="text-xl text-gray-600">
+          <h1 className="text-4xl font-bold text-white mb-4">Values Clarification</h1>
+          <p className="text-xl text-gray-400">
             Discover and prioritize your core values to guide your decisions and actions
           </p>
         </div>
 
         {step === 'select' && (
           <div className="space-y-8">
-            <div className="bg-white rounded-2xl shadow-lg p-8">
+            <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8">
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Step 1: Select Your Values</h2>
-                <p className="text-gray-600">
+                <h2 className="text-2xl font-bold text-white mb-2">Step 1: Select Your Values</h2>
+                <p className="text-gray-400">
                   Choose up to 10 values that resonate most with you. Selected: {selectedValues.length}/10
                 </p>
               </div>
@@ -292,17 +309,17 @@ export default function ValuesClarificationPage() {
                     <button
                       key={value.id}
                       onClick={() => toggleValue(value.id)}
-                      className={`p-4 rounded-xl border-2 transition-all text-left ${
+                      className={`p-4 rounded-xl border transition-all text-left ${
                         isSelected
-                          ? 'border-primary-600 bg-primary-50'
-                          : 'border-gray-200 hover:border-gray-300'
+                          ? 'border-blue-500 bg-blue-500/10'
+                          : 'border-gray-700 hover:border-gray-600 bg-[#1a1a1a]'
                       }`}
                     >
                       <div className="flex items-start gap-3">
-                        <Icon className={`w-6 h-6 ${isSelected ? 'text-primary-600' : 'text-gray-400'}`} />
+                        <Icon className={`w-6 h-6 ${isSelected ? 'text-blue-400' : 'text-gray-500'}`} />
                         <div>
-                          <h3 className="font-semibold text-gray-900">{value.name}</h3>
-                          <p className="text-sm text-gray-600">{value.description}</p>
+                          <h3 className="font-semibold text-white">{value.name}</h3>
+                          <p className="text-sm text-gray-400">{value.description}</p>
                         </div>
                       </div>
                     </button>
@@ -313,7 +330,7 @@ export default function ValuesClarificationPage() {
               <button
                 onClick={proceedToRanking}
                 disabled={selectedValues.length < 5}
-                className="w-full py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+                className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed"
               >
                 Continue to Ranking
               </button>
@@ -323,10 +340,10 @@ export default function ValuesClarificationPage() {
 
         {step === 'rank' && (
           <div className="space-y-8">
-            <div className="bg-white rounded-2xl shadow-lg p-8">
+            <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8">
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Step 2: Rank Your Values</h2>
-                <p className="text-gray-600">
+                <h2 className="text-2xl font-bold text-white mb-2">Step 2: Rank Your Values</h2>
+                <p className="text-gray-400">
                   Arrange your selected values in order of importance (most important at the top)
                 </p>
               </div>
@@ -336,27 +353,27 @@ export default function ValuesClarificationPage() {
                   const value = coreValues.find(v => v.id === valueId);
                   if (!value) return null;
                   const Icon = value.icon;
-                  
+
                   return (
-                    <div key={valueId} className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
-                      <span className="text-2xl font-bold text-primary-600 w-8">{index + 1}</span>
-                      <Icon className="w-6 h-6 text-gray-400" />
+                    <div key={valueId} className="flex items-center gap-4 p-4 bg-[#1a1a1a] border border-gray-800 rounded-xl">
+                      <span className="text-2xl font-bold text-blue-400 w-8">{index + 1}</span>
+                      <Icon className="w-6 h-6 text-gray-500" />
                       <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900">{value.name}</h3>
-                        <p className="text-sm text-gray-600">{value.description}</p>
+                        <h3 className="font-semibold text-white">{value.name}</h3>
+                        <p className="text-sm text-gray-400">{value.description}</p>
                       </div>
                       <div className="flex flex-col gap-1">
                         <button
                           onClick={() => moveValue(index, 'up')}
                           disabled={index === 0}
-                          className="p-1 hover:bg-gray-200 rounded disabled:opacity-30"
+                          className="p-1 hover:bg-[#2a2a2a] rounded disabled:opacity-30 text-gray-400"
                         >
                           ▲
                         </button>
                         <button
                           onClick={() => moveValue(index, 'down')}
                           disabled={index === topValues.length - 1}
-                          className="p-1 hover:bg-gray-200 rounded disabled:opacity-30"
+                          className="p-1 hover:bg-[#2a2a2a] rounded disabled:opacity-30 text-gray-400"
                         >
                           ▼
                         </button>
@@ -369,14 +386,14 @@ export default function ValuesClarificationPage() {
               <div className="flex gap-4">
                 <button
                   onClick={() => setStep('select')}
-                  className="flex-1 py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+                  className="flex-1 py-3 border border-gray-700 text-gray-300 rounded-lg font-medium hover:bg-[#1a1a1a] transition-colors"
                 >
                   Back
                 </button>
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="flex-1 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors disabled:bg-gray-300"
+                  className="flex-1 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:bg-gray-700 disabled:text-gray-500"
                 >
                   {saving ? 'Saving...' : 'Save Results'}
                 </button>

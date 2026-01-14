@@ -18,8 +18,9 @@ export default function DISCPage() {
     const checkAccess = async () => {
       if (!user || !userProfile) return;
 
+      // Coaches cannot complete tools - they can only assign them to coachees
       if (userProfile.role === 'coach') {
-        setHasAccess(true);
+        setHasAccess(false);
         setLoading(false);
         return;
       }
@@ -47,30 +48,37 @@ export default function DISCPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
       </div>
     );
   }
 
   if (!hasAccess) {
+    const isCoach = userProfile?.role === 'coach';
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+      <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-            <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CircleDot className="w-8 h-8 text-yellow-600" />
+          <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
+            <div className={`w-16 h-16 ${isCoach ? 'bg-blue-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
+              <CircleDot className={`w-8 h-8 ${isCoach ? 'text-blue-400' : 'text-yellow-400'}`} />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Access Required</h2>
-            <p className="text-gray-600 mb-6">
-              This tool needs to be assigned by your coach before you can access it.
+            <h2 className="text-2xl font-bold text-white mb-4">
+              {isCoach ? 'Tool for Coachees Only' : 'Access Required'}
+            </h2>
+            <p className="text-gray-400 mb-6">
+              {isCoach
+                ? 'This tool is designed to be completed by coachees. You can assign it to your clients from the client management page.'
+                : 'This tool needs to be assigned by your coach before you can access it.'}
             </p>
-            <Link
-              href="/dashboard"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-            >
-              Return to Dashboard
-            </Link>
+            <div className="flex gap-4 justify-center">
+              <Link
+                href={isCoach ? '/coach/clients' : '/dashboard'}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                {isCoach ? 'Go to Clients' : 'Return to Dashboard'}
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -79,27 +87,27 @@ export default function DISCPage() {
 
   if (isCompleted) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4">
+      <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
         <Toaster position="top-center" richColors />
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle2 className="w-8 h-8 text-green-600" />
+          <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
+            <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle2 className="w-8 h-8 text-emerald-400" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Tool Completed!</h2>
-            <p className="text-gray-600 mb-6">
+            <h2 className="text-2xl font-bold text-white mb-4">Tool Completed!</h2>
+            <p className="text-gray-400 mb-6">
               You've successfully completed the DISC Assessment. Your coach has been notified.
             </p>
             <div className="flex gap-4 justify-center">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Return to Dashboard
               </Link>
               <Link
                 href="/tools"
-                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-gray-700 text-gray-300 rounded-lg hover:bg-[#1a1a1a] transition-colors"
               >
                 View Other Tools
               </Link>
@@ -111,12 +119,12 @@ export default function DISCPage() {
   }
 
   return (
-    <div className="p-6">
+    <div className="min-h-screen bg-[#0a0a0a] text-white p-8">
       <Toaster position="top-center" richColors />
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">DISC Assessment</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-3xl font-bold text-white">DISC Assessment</h1>
+          <p className="text-gray-400 mt-2">
             Discover your behavioral profile and communication style
           </p>
         </div>
