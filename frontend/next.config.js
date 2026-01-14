@@ -1,5 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // SEO: Consistent URLs without trailing slashes
+  trailingSlash: false,
+
+  // SEO: Skip build errors for static generation (helps with dynamic routes)
+  skipTrailingSlashRedirect: false,
+
   // Image optimization
   images: {
     formats: ['image/webp', 'image/avif'],
