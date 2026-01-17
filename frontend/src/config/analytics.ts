@@ -33,7 +33,7 @@ export const analyticsConfig = {
 
   // Microsoft Clarity - Free Heatmaps & Session Recording
   clarity: {
-    projectId: process.env.NEXT_PUBLIC_CLARITY_ID || 'v2wxhumwgv',
+    projectId: process.env.NEXT_PUBLIC_CLARITY_ID || 'v2wz3f64o1',
   },
 
   // Meta/Facebook Pixel
