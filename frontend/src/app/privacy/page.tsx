@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Shield, Lock, Eye, Database, UserCheck, Globe, Mail, ArrowLeft } from 'lucide-react';
+import { Navbar } from '@/components/layout/Navbar';
+import { Footer } from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
   title: 'Política de Privacidad – AchievingCoach',
@@ -10,25 +12,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">A</span>
-              </div>
-              <span className="font-semibold text-white">AchievingCoach</span>
-            </Link>
-            <div className="flex items-center gap-4">
-              <Link href="/sign-in" className="text-gray-400 hover:text-white text-sm transition-colors">Iniciar Sesión</Link>
-              <Link href="/sign-up" className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
-                Comenzar Gratis
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Content */}
       <div className="pt-32 pb-20 px-6">
@@ -160,17 +144,7 @@ export default function PrivacyPage() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="py-12 px-6 border-t border-white/5">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-gray-600 text-sm">© 2026 AchievingCoach Inc. Todos los derechos reservados.</p>
-          <div className="flex gap-6">
-            <Link href="/privacy" className="text-white text-sm">Privacidad</Link>
-            <Link href="/terms" className="text-gray-500 hover:text-white text-sm transition-colors">Términos</Link>
-            <Link href="/contact" className="text-gray-500 hover:text-white text-sm transition-colors">Contacto</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

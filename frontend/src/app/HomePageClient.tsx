@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { BarChart3, Shield, Zap, Users, Sparkles, ArrowRight, Play, ChevronLeft, ChevronRight, Brain, Target, Calendar, FileSignature, Layers, Workflow, Cpu, Headphones, Lock, Eye, CheckCircle, Star } from 'lucide-react';
 import { useState } from 'react';
+import { Navbar } from '@/components/layout/Navbar';
+import { Footer } from '@/components/layout/Footer';
 
 export default function HomePageClient() {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -24,33 +26,7 @@ export default function HomePageClient() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/90 backdrop-blur-md border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">A</span>
-              </div>
-              <span className="font-semibold text-white">AchievingCoach</span>
-            </Link>
-
-            <div className="hidden md:flex items-center gap-8">
-              <Link href="/features" className="text-gray-400 hover:text-white text-sm transition-colors">Características</Link>
-              <Link href="/features" className="text-gray-400 hover:text-white text-sm transition-colors">Soluciones</Link>
-              <Link href="/pricing" className="text-gray-400 hover:text-white text-sm transition-colors">Precios</Link>
-              <Link href="/about" className="text-gray-400 hover:text-white text-sm transition-colors">Nosotros</Link>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <Link href="/sign-in" className="text-gray-400 hover:text-white text-sm transition-colors">Iniciar Sesión</Link>
-              <Link href="/sign-up" className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
-                Comenzar Gratis
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-6 relative overflow-hidden">
@@ -624,65 +600,7 @@ export default function HomePageClient() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 px-6 border-t border-white/5">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-5 gap-8 mb-12">
-            <div className="md:col-span-2">
-              <Link href="/" className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">A</span>
-                </div>
-                <span className="font-semibold text-white">AchievingCoach</span>
-              </Link>
-              <p className="text-gray-500 text-sm mb-4">
-                La plataforma de IA que empodera a la próxima generación de coaches ejecutivos de clase mundial.
-              </p>
-              <div className="flex gap-3">
-                <a href="#" className="text-gray-500 hover:text-white transition-colors">Twitter</a>
-                <a href="#" className="text-gray-500 hover:text-white transition-colors">LinkedIn</a>
-                <a href="#" className="text-gray-500 hover:text-white transition-colors">Instagram</a>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-white font-semibold mb-4">Producto</h4>
-              <ul className="space-y-2 text-sm text-gray-500">
-                <li><Link href="/features" className="hover:text-white transition-colors">Características</Link></li>
-                <li><Link href="/pricing" className="hover:text-white transition-colors">Precios</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Integraciones</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Roadmap</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-white font-semibold mb-4">Recursos</h4>
-              <ul className="space-y-2 text-sm text-gray-500">
-                <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Comunidad</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Academia</Link></li>
-                <li><Link href="/contact" className="hover:text-white transition-colors">Centro de Ayuda</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-white font-semibold mb-4">Legal</h4>
-              <ul className="space-y-2 text-sm text-gray-500">
-                <li><Link href="/privacy" className="hover:text-white transition-colors">Privacidad</Link></li>
-                <li><Link href="/terms" className="hover:text-white transition-colors">Términos</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Seguridad</Link></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-white/5">
-            <p className="text-gray-600 text-sm">© 2026 AchievingCoach Inc. Todos los derechos reservados.</p>
-            <p className="text-gray-600 text-sm mt-2 md:mt-0">
-              <time dateTime="2026-01-16">Última actualización: Enero 2026</time>
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

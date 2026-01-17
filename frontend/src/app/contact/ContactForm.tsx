@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { Mail, MapPin, ArrowRight, Linkedin, Twitter, Youtube, ChevronDown, CheckCircle, AlertCircle } from 'lucide-react';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { Navbar } from '@/components/layout/Navbar';
+import { Footer } from '@/components/layout/Footer';
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -75,33 +77,7 @@ export default function ContactForm() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold">A</span>
-              </div>
-              <span className="font-semibold text-white">AchievingCoach</span>
-            </Link>
-
-            <div className="hidden md:flex items-center gap-8">
-              <Link href="/features" className="text-gray-400 hover:text-white text-sm transition-colors">Características</Link>
-              <Link href="/pricing" className="text-gray-400 hover:text-white text-sm transition-colors">Precios</Link>
-              <Link href="/about" className="text-gray-400 hover:text-white text-sm transition-colors">Nosotros</Link>
-              <Link href="/blog" className="text-gray-400 hover:text-white text-sm transition-colors">Blog</Link>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <Link href="/sign-in" className="text-gray-400 hover:text-white text-sm transition-colors">Iniciar Sesión</Link>
-              <Link href="/sign-up" className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
-                Comenzar Gratis
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Main Content */}
       <main className="pt-24 pb-12 px-6">
@@ -259,16 +235,7 @@ export default function ContactForm() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="py-8 px-6 border-t border-white/5">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-gray-600 text-sm">© 2026 AchievingCoach. Todos los derechos reservados.</p>
-          <div className="flex items-center gap-6 text-sm text-gray-500">
-            <Link href="/privacy" className="hover:text-white transition-colors">Política de Privacidad</Link>
-            <Link href="/terms" className="hover:text-white transition-colors">Términos de Servicio</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
