@@ -3,7 +3,6 @@
 import GoogleAnalytics from './GoogleAnalytics';
 import Hotjar from './Hotjar';
 import MicrosoftClarity from './MicrosoftClarity';
-import Contentsquare from './Contentsquare';
 
 /**
  * AnalyticsProvider - Loads all analytics scripts
@@ -15,13 +14,12 @@ export default function AnalyticsProvider() {
       <GoogleAnalytics />
       <Hotjar />
       <MicrosoftClarity />
-      <Contentsquare />
     </>
   );
 }
 
 // Re-export individual components for granular control
-export { GoogleAnalytics, Hotjar, MicrosoftClarity, Contentsquare };
+export { GoogleAnalytics, Hotjar, MicrosoftClarity };
 
 // Re-export event utilities
 export { hotjarEvents } from './Hotjar';

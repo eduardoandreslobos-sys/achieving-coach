@@ -26,11 +26,6 @@ export const analyticsConfig = {
     version: 6,
   },
 
-  // Contentsquare - UX Analytics
-  contentsquare: {
-    siteId: process.env.NEXT_PUBLIC_CONTENTSQUARE_ID || 'b009ac4a8eea2',
-  },
-
   // Microsoft Clarity - Free Heatmaps & Session Recording
   clarity: {
     projectId: process.env.NEXT_PUBLIC_CLARITY_ID || 'v2wz3f64o1',
