@@ -1,0 +1,2523 @@
+{
+  "config": {
+    "configFile": "/Users/eduardolobosstevens/achieving-coach/frontend/playwright.config.ts",
+    "rootDir": "/Users/eduardolobosstevens/achieving-coach/frontend/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 4
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/eduardolobosstevens/achieving-coach/frontend/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/eduardolobosstevens/achieving-coach/frontend/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/eduardolobosstevens/achieving-coach/frontend/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/Users/eduardolobosstevens/achieving-coach/frontend/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.56.1",
+    "workers": 4,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "e2e/public-pages.spec.ts",
+      "file": "e2e/public-pages.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Public Pages - Features",
+          "file": "e2e/public-pages.spec.ts",
+          "line": 4,
+          "column": 6,
+          "specs": [
+            {
+              "title": "features page loads correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4439,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:16.657Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-68c611a1cb7822dae430",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 5,
+              "column": 7
+            },
+            {
+              "title": "features page has dark theme",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 4591,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m50\u001b[39m\nReceived:   \u001b[31m255\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m50\u001b[39m\nReceived:   \u001b[31m255\u001b[39m\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:26:33",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 33,
+                          "line": 26
+                        },
+                        "snippet": "  24 |     if (rgbMatch) {\n  25 |       const [, r, g, b] = rgbMatch.map(Number);\n> 26 |       expect(Math.max(r, g, b)).toBeLessThan(50);\n     |                                 ^\n  27 |     }\n  28 |   });\n  29 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 33,
+                            "line": 26
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m50\u001b[39m\nReceived:   \u001b[31m255\u001b[39m\n\n  24 |     if (rgbMatch) {\n  25 |       const [, r, g, b] = rgbMatch.map(Number);\n> 26 |       expect(Math.max(r, g, b)).toBeLessThan(50);\n     |                                 ^\n  27 |     }\n  28 |   });\n  29 |\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:26:33"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:16.695Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-d5eae-eatures-page-has-dark-theme-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-d5eae-eatures-page-has-dark-theme-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-d5eae-eatures-page-has-dark-theme-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 33,
+                        "line": 26
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-5b5a70b58a2997545923",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 14,
+              "column": 7
+            },
+            {
+              "title": "features page has navigation to pricing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 4451,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:16.672Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-305219fae3b086e5b9a3",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 30,
+              "column": 7
+            },
+            {
+              "title": "features page shows feature cards",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 4615,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:46:40",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 40,
+                          "line": 46
+                        },
+                        "snippet": "  44 |     // Should have multiple feature sections or cards\n  45 |     const featureCards = page.locator('div[class*=\"rounded\"], section');\n> 46 |     expect(await featureCards.count()).toBeGreaterThan(0);\n     |                                        ^\n  47 |   });\n  48 | });\n  49 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 40,
+                            "line": 46
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\n  44 |     // Should have multiple feature sections or cards\n  45 |     const featureCards = page.locator('div[class*=\"rounded\"], section');\n> 46 |     expect(await featureCards.count()).toBeGreaterThan(0);\n     |                                        ^\n  47 |   });\n  48 | });\n  49 |\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:46:40"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:16.688Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-cae70-es-page-shows-feature-cards-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-cae70-es-page-shows-feature-cards-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-cae70-es-page-shows-feature-cards-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 40,
+                        "line": 46
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-6b37fcd45f8073374544",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 40,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Public Pages - Pricing",
+          "file": "e2e/public-pages.spec.ts",
+          "line": 50,
+          "column": 6,
+          "specs": [
+            {
+              "title": "pricing page loads correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2102,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:21.740Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-9c452674d9bf3b4f0509",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 51,
+              "column": 7
+            },
+            {
+              "title": "pricing page shows pricing tiers",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 2140,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:65:37",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 37,
+                          "line": 65
+                        },
+                        "snippet": "  63 |     // Should show pricing information\n  64 |     const priceText = page.locator('text=$29, text=$59, text=Core, text=Pro, text=Enterprise');\n> 65 |     expect(await priceText.count()).toBeGreaterThan(0);\n     |                                     ^\n  66 |   });\n  67 |\n  68 |   test('pricing page has CTA buttons', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 37,
+                            "line": 65
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\n  63 |     // Should show pricing information\n  64 |     const priceText = page.locator('text=$29, text=$59, text=Core, text=Pro, text=Enterprise');\n> 65 |     expect(await priceText.count()).toBeGreaterThan(0);\n     |                                     ^\n  66 |   });\n  67 |\n  68 |   test('pricing page has CTA buttons', async ({ page }) => {\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:65:37"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:21.751Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-9099a-ng-page-shows-pricing-tiers-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-9099a-ng-page-shows-pricing-tiers-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-9099a-ng-page-shows-pricing-tiers-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 37,
+                        "line": 65
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-4ee15668cc696d7b6111",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 59,
+              "column": 7
+            },
+            {
+              "title": "pricing page has CTA buttons",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 4517,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:73:38",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 38,
+                          "line": 73
+                        },
+                        "snippet": "  71 |\n  72 |     const ctaButtons = page.locator('a[href*=\"sign-up\"], button:has-text(\"Start\"), button:has-text(\"Comenzar\")');\n> 73 |     expect(await ctaButtons.count()).toBeGreaterThan(0);\n     |                                      ^\n  74 |   });\n  75 |\n  76 |   test('pricing page has dark theme', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 38,
+                            "line": 73
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\n  71 |\n  72 |     const ctaButtons = page.locator('a[href*=\"sign-up\"], button:has-text(\"Start\"), button:has-text(\"Comenzar\")');\n> 73 |     expect(await ctaButtons.count()).toBeGreaterThan(0);\n     |                                      ^\n  74 |   });\n  75 |\n  76 |   test('pricing page has dark theme', async ({ page }) => {\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:73:38"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:22.471Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-1f5ea-ricing-page-has-CTA-buttons-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-1f5ea-ricing-page-has-CTA-buttons-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-1f5ea-ricing-page-has-CTA-buttons-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 38,
+                        "line": 73
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-2b399fb6e7d89ff44535",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 68,
+              "column": 7
+            },
+            {
+              "title": "pricing page has dark theme",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 4658,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:22.470Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-a270d1cd0813600646e4",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 76,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Public Pages - About",
+          "file": "e2e/public-pages.spec.ts",
+          "line": 95,
+          "column": 6,
+          "specs": [
+            {
+              "title": "about page loads correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3397,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:23.851Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-f921f0d7a36082207e5a",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 96,
+              "column": 7
+            },
+            {
+              "title": "about page has company information",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2852,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:24.253Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-eda9211d229153d61d76",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 104,
+              "column": 7
+            },
+            {
+              "title": "about page has dark theme",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 2269,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m50\u001b[39m\nReceived:   \u001b[31m255\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m50\u001b[39m\nReceived:   \u001b[31m255\u001b[39m\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:125:33",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 33,
+                          "line": 125
+                        },
+                        "snippet": "  123 |     if (rgbMatch) {\n  124 |       const [, r, g, b] = rgbMatch.map(Number);\n> 125 |       expect(Math.max(r, g, b)).toBeLessThan(50);\n      |                                 ^\n  126 |     }\n  127 |   });\n  128 | });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 33,
+                            "line": 125
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m50\u001b[39m\nReceived:   \u001b[31m255\u001b[39m\n\n  123 |     if (rgbMatch) {\n  124 |       const [, r, g, b] = rgbMatch.map(Number);\n> 125 |       expect(Math.max(r, g, b)).toBeLessThan(50);\n      |                                 ^\n  126 |     }\n  127 |   });\n  128 | });\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:125:33"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:27.188Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-b0a62-t-about-page-has-dark-theme-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-b0a62-t-about-page-has-dark-theme-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-b0a62-t-about-page-has-dark-theme-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 33,
+                        "line": 125
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-3d917a46a5dc14c6d5d2",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 113,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Public Pages - Blog",
+          "file": "e2e/public-pages.spec.ts",
+          "line": 130,
+          "column": 6,
+          "specs": [
+            {
+              "title": "blog page loads correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2752,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:27.623Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-3acb5d26b1b86ecc15db",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 131,
+              "column": 7
+            },
+            {
+              "title": "blog page shows article list",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 2382,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:145:36",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 36,
+                          "line": 145
+                        },
+                        "snippet": "  143 |     // Should have article cards or links\n  144 |     const articles = page.locator('a[href*=\"/blog/\"], article, div[class*=\"rounded-xl\"]');\n> 145 |     expect(await articles.count()).toBeGreaterThan(0);\n      |                                    ^\n  146 |   });\n  147 |\n  148 |   test('blog page has search functionality', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 36,
+                            "line": 145
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\n  143 |     // Should have article cards or links\n  144 |     const articles = page.locator('a[href*=\"/blog/\"], article, div[class*=\"rounded-xl\"]');\n> 145 |     expect(await articles.count()).toBeGreaterThan(0);\n      |                                    ^\n  146 |   });\n  147 |\n  148 |   test('blog page has search functionality', async ({ page }) => {\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:145:36"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:27.257Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-28808-log-page-shows-article-list-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-28808-log-page-shows-article-list-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-28808-log-page-shows-article-list-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 36,
+                        "line": 145
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-74979fbc6826e9f09439",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 139,
+              "column": 7
+            },
+            {
+              "title": "blog page has search functionality",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2240,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:27.315Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-8299c4b06de465d8b6a4",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 148,
+              "column": 7
+            },
+            {
+              "title": "blog page has category filters",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 6506,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:163:38",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 38,
+                          "line": 163
+                        },
+                        "snippet": "  161 |\n  162 |     const categories = page.locator('button:has-text(\"Todos\"), button:has-text(\"Guías\"), button:has-text(\"ICF\")');\n> 163 |     expect(await categories.count()).toBeGreaterThan(0);\n      |                                      ^\n  164 |   });\n  165 |\n  166 |   test('blog page has dark theme', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 38,
+                            "line": 163
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\n  161 |\n  162 |     const categories = page.locator('button:has-text(\"Todos\"), button:has-text(\"Guías\"), button:has-text(\"ICF\")');\n> 163 |     expect(await categories.count()).toBeGreaterThan(0);\n      |                                      ^\n  164 |   });\n  165 |\n  166 |   test('blog page has dark theme', async ({ page }) => {\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:163:38"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:29.869Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-c3148-g-page-has-category-filters-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-c3148-g-page-has-category-filters-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-c3148-g-page-has-category-filters-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 38,
+                        "line": 163
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-94b3a9e67a31a6d6362d",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 158,
+              "column": 7
+            },
+            {
+              "title": "blog page has dark theme",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2192,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:29.566Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-7f898dc2e2873d1051dc",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 166,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Public Pages - Contact",
+          "file": "e2e/public-pages.spec.ts",
+          "line": 185,
+          "column": 6,
+          "specs": [
+            {
+              "title": "contact page loads correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6245,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:30.109Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-65829a2bc48cd4064785",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 186,
+              "column": 7
+            },
+            {
+              "title": "contact page has contact form",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 5878,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:203:93",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 93,
+                          "line": 203
+                        },
+                        "snippet": "  201 |     const messageField = page.locator('textarea');\n  202 |\n> 203 |     expect(await nameField.count() + await emailField.count() + await messageField.count()).toBeGreaterThan(0);\n      |                                                                                             ^\n  204 |   });\n  205 |\n  206 |   test('contact page has submit button', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 93,
+                            "line": 203
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\n  201 |     const messageField = page.locator('textarea');\n  202 |\n> 203 |     expect(await nameField.count() + await emailField.count() + await messageField.count()).toBeGreaterThan(0);\n      |                                                                                             ^\n  204 |   });\n  205 |\n  206 |   test('contact page has submit button', async ({ page }) => {\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:203:93"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:30.508Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-43f62-ntact-page-has-contact-form-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-43f62-ntact-page-has-contact-form-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-43f62-ntact-page-has-contact-form-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 93,
+                        "line": 203
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-2a115822115bede493ec",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 194,
+              "column": 7
+            },
+            {
+              "title": "contact page has submit button",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 7051,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:31.849Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-992917bc18f38397f2a2",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 206,
+              "column": 7
+            },
+            {
+              "title": "contact form validates required fields",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 5945,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:36.883Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-c99e96f689d356bbb546",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 214,
+              "column": 7
+            },
+            {
+              "title": "contact page has dark theme",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 1450,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m50\u001b[39m\nReceived:   \u001b[31m255\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m50\u001b[39m\nReceived:   \u001b[31m255\u001b[39m\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:237:33",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 33,
+                          "line": 237
+                        },
+                        "snippet": "  235 |     if (rgbMatch) {\n  236 |       const [, r, g, b] = rgbMatch.map(Number);\n> 237 |       expect(Math.max(r, g, b)).toBeLessThan(50);\n      |                                 ^\n  238 |     }\n  239 |   });\n  240 | });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 33,
+                            "line": 237
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m50\u001b[39m\nReceived:   \u001b[31m255\u001b[39m\n\n  235 |     if (rgbMatch) {\n  236 |       const [, r, g, b] = rgbMatch.map(Number);\n> 237 |       expect(Math.max(r, g, b)).toBeLessThan(50);\n      |                                 ^\n  238 |     }\n  239 |   });\n  240 | });\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:237:33"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:36.495Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-9f90c-contact-page-has-dark-theme-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-9f90c-contact-page-has-dark-theme-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-9f90c-contact-page-has-dark-theme-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 33,
+                        "line": 237
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-84e8ffdcc7def20980af",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 225,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Public Pages - Organizations",
+          "file": "e2e/public-pages.spec.ts",
+          "line": 242,
+          "column": 6,
+          "specs": [
+            {
+              "title": "organizations page loads correctly",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 9435,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:248:24",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 24,
+                          "line": 248
+                        },
+                        "snippet": "  246 |\n  247 |     const body = page.locator('body');\n> 248 |     await expect(body).toBeVisible();\n      |                        ^\n  249 |   });\n  250 |\n  251 |   test('organizations page has dark theme', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 24,
+                            "line": 248
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n  246 |\n  247 |     const body = page.locator('body');\n> 248 |     await expect(body).toBeVisible();\n      |                        ^\n  249 |   });\n  250 |\n  251 |   test('organizations page has dark theme', async ({ page }) => {\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:248:24"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:37.053Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-9be91-ations-page-loads-correctly-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-9be91-ations-page-loads-correctly-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-9be91-ations-page-loads-correctly-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 24,
+                        "line": 248
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-908d208f780b5c85547d",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 243,
+              "column": 7
+            },
+            {
+              "title": "organizations page has dark theme",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3371,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:38.338Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-839e707649bdf21cb53d",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 251,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Public Pages - Legal",
+          "file": "e2e/public-pages.spec.ts",
+          "line": 270,
+          "column": 6,
+          "specs": [
+            {
+              "title": "privacy page loads correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 6206,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:38.926Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-c0f1283716ba5b6a34ee",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 271,
+              "column": 7
+            },
+            {
+              "title": "terms page loads correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3229,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:41.827Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-aac95bf21a4d0f60e0ce",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 279,
+              "column": 7
+            },
+            {
+              "title": "privacy page has dark theme",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 2995,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m50\u001b[39m\nReceived:   \u001b[31m255\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m50\u001b[39m\nReceived:   \u001b[31m255\u001b[39m\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:299:33",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 33,
+                          "line": 299
+                        },
+                        "snippet": "  297 |     if (rgbMatch) {\n  298 |       const [, r, g, b] = rgbMatch.map(Number);\n> 299 |       expect(Math.max(r, g, b)).toBeLessThan(50);\n      |                                 ^\n  300 |     }\n  301 |   });\n  302 | });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 33,
+                            "line": 299
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m50\u001b[39m\nReceived:   \u001b[31m255\u001b[39m\n\n  297 |     if (rgbMatch) {\n  298 |       const [, r, g, b] = rgbMatch.map(Number);\n> 299 |       expect(Math.max(r, g, b)).toBeLessThan(50);\n      |                                 ^\n  300 |     }\n  301 |   });\n  302 | });\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:299:33"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:42.984Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-7ccd2-privacy-page-has-dark-theme-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-7ccd2-privacy-page-has-dark-theme-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-7ccd2-privacy-page-has-dark-theme-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 33,
+                        "line": 299
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-16d68f095af70255ad8b",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 287,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Public Pages - Home",
+          "file": "e2e/public-pages.spec.ts",
+          "line": 304,
+          "column": 6,
+          "specs": [
+            {
+              "title": "home page loads correctly",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 7201,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:310:24",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 24,
+                          "line": 310
+                        },
+                        "snippet": "  308 |\n  309 |     const body = page.locator('body');\n> 310 |     await expect(body).toBeVisible();\n      |                        ^\n  311 |   });\n  312 |\n  313 |   test('home page has hero section', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 24,
+                            "line": 310
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n  308 |\n  309 |     const body = page.locator('body');\n> 310 |     await expect(body).toBeVisible();\n      |                        ^\n  311 |   });\n  312 |\n  313 |   test('home page has hero section', async ({ page }) => {\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:310:24"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:45.086Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-8d53f-e-home-page-loads-correctly-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-8d53f-e-home-page-loads-correctly-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-8d53f-e-home-page-loads-correctly-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 24,
+                        "line": 310
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-85e2b32784f1e1847c1f",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 305,
+              "column": 7
+            },
+            {
+              "title": "home page has hero section",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2076,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:45.141Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-c0b7e08379ca933a9dc1",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 313,
+              "column": 7
+            },
+            {
+              "title": "home page has CTA buttons",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 1791,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:326:38",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 38,
+                          "line": 326
+                        },
+                        "snippet": "  324 |\n  325 |     const ctaButtons = page.locator('a[href*=\"sign-up\"], a:has-text(\"Start\"), a:has-text(\"Comenzar\")');\n> 326 |     expect(await ctaButtons.count()).toBeGreaterThan(0);\n      |                                      ^\n  327 |   });\n  328 |\n  329 |   test('home page has navigation', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 38,
+                            "line": 326
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\n  324 |\n  325 |     const ctaButtons = page.locator('a[href*=\"sign-up\"], a:has-text(\"Start\"), a:has-text(\"Comenzar\")');\n> 326 |     expect(await ctaButtons.count()).toBeGreaterThan(0);\n      |                                      ^\n  327 |   });\n  328 |\n  329 |   test('home page has navigation', async ({ page }) => {\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:326:38"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:46.626Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-1d0c6-e-home-page-has-CTA-buttons-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-1d0c6-e-home-page-has-CTA-buttons-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-1d0c6-e-home-page-has-CTA-buttons-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 38,
+                        "line": 326
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-ca26b92a6ff1b256eacc",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 321,
+              "column": 7
+            },
+            {
+              "title": "home page has navigation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 14,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 2651,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:47.056Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-8e2a86fa685a5d4bddad",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 329,
+              "column": 7
+            },
+            {
+              "title": "home page navigation links work",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 2712,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:47.227Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-ff9aaa299083dd026a5d",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 337,
+              "column": 7
+            },
+            {
+              "title": "home page has dark theme",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 15,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 1584,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m50\u001b[39m\nReceived:   \u001b[31m255\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m50\u001b[39m\nReceived:   \u001b[31m255\u001b[39m\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:362:33",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 33,
+                          "line": 362
+                        },
+                        "snippet": "  360 |     if (rgbMatch) {\n  361 |       const [, r, g, b] = rgbMatch.map(Number);\n> 362 |       expect(Math.max(r, g, b)).toBeLessThan(50);\n      |                                 ^\n  363 |     }\n  364 |   });\n  365 | });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 33,
+                            "line": 362
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m50\u001b[39m\nReceived:   \u001b[31m255\u001b[39m\n\n  360 |     if (rgbMatch) {\n  361 |       const [, r, g, b] = rgbMatch.map(Number);\n> 362 |       expect(Math.max(r, g, b)).toBeLessThan(50);\n      |                                 ^\n  363 |     }\n  364 |   });\n  365 | });\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:362:33"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:48.957Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-9ed94-me-home-page-has-dark-theme-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-9ed94-me-home-page-has-dark-theme-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-9ed94-me-home-page-has-dark-theme-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 33,
+                        "line": 362
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-e55823ce42151874059b",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 350,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Public Pages - Responsive Design",
+          "file": "e2e/public-pages.spec.ts",
+          "line": 367,
+          "column": 6,
+          "specs": [
+            {
+              "title": "home page renders correctly on mobile",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 14,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 7090,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:381:26",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 26,
+                          "line": 381
+                        },
+                        "snippet": "  379 |\n  380 |       const body = page.locator('body');\n> 381 |       await expect(body).toBeVisible();\n      |                          ^\n  382 |\n  383 |       // Check no horizontal overflow\n  384 |       const bodyWidth = await body.evaluate((el) => el.scrollWidth);"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 26,
+                            "line": 381
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n  379 |\n  380 |       const body = page.locator('body');\n> 381 |       await expect(body).toBeVisible();\n      |                          ^\n  382 |\n  383 |       // Check no horizontal overflow\n  384 |       const bodyWidth = await body.evaluate((el) => el.scrollWidth);\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:381:26"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:49.907Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-89eed-renders-correctly-on-mobile-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-89eed-renders-correctly-on-mobile-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-89eed-renders-correctly-on-mobile-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 26,
+                        "line": 381
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-a6f553de8029b650b846",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 375,
+              "column": 9
+            },
+            {
+              "title": "features page renders correctly on mobile",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 7017,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:394:26",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 26,
+                          "line": 394
+                        },
+                        "snippet": "  392 |\n  393 |       const body = page.locator('body');\n> 394 |       await expect(body).toBeVisible();\n      |                          ^\n  395 |     });\n  396 |\n  397 |     test(`pricing page renders correctly on ${viewport.name}`, async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 26,
+                            "line": 394
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n  392 |\n  393 |       const body = page.locator('body');\n> 394 |       await expect(body).toBeVisible();\n      |                          ^\n  395 |     });\n  396 |\n  397 |     test(`pricing page renders correctly on ${viewport.name}`, async ({ page }) => {\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:394:26"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:49.951Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-7a01f-renders-correctly-on-mobile-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-7a01f-renders-correctly-on-mobile-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-7a01f-renders-correctly-on-mobile-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 26,
+                        "line": 394
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-afb98a16849458641f53",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 388,
+              "column": 9
+            },
+            {
+              "title": "pricing page renders correctly on mobile",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 16,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 7081,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:403:26",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 26,
+                          "line": 403
+                        },
+                        "snippet": "  401 |\n  402 |       const body = page.locator('body');\n> 403 |       await expect(body).toBeVisible();\n      |                          ^\n  404 |     });\n  405 |   }\n  406 | });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 26,
+                            "line": 403
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n  401 |\n  402 |       const body = page.locator('body');\n> 403 |       await expect(body).toBeVisible();\n      |                          ^\n  404 |     });\n  405 |   }\n  406 | });\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:403:26"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:51.106Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-42947-renders-correctly-on-mobile-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-42947-renders-correctly-on-mobile-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-42947-renders-correctly-on-mobile-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 26,
+                        "line": 403
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-6e1205cffb1ae345ad5b",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 397,
+              "column": 9
+            },
+            {
+              "title": "home page renders correctly on tablet",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 17,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 6644,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:381:26",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 26,
+                          "line": 381
+                        },
+                        "snippet": "  379 |\n  380 |       const body = page.locator('body');\n> 381 |       await expect(body).toBeVisible();\n      |                          ^\n  382 |\n  383 |       // Check no horizontal overflow\n  384 |       const bodyWidth = await body.evaluate((el) => el.scrollWidth);"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 26,
+                            "line": 381
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n  379 |\n  380 |       const body = page.locator('body');\n> 381 |       await expect(body).toBeVisible();\n      |                          ^\n  382 |\n  383 |       // Check no horizontal overflow\n  384 |       const bodyWidth = await body.evaluate((el) => el.scrollWidth);\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:381:26"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:52.634Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-0cde9-renders-correctly-on-tablet-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-0cde9-renders-correctly-on-tablet-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-0cde9-renders-correctly-on-tablet-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 26,
+                        "line": 381
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-3d223f33f0770dcf6bd6",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 375,
+              "column": 9
+            },
+            {
+              "title": "features page renders correctly on tablet",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 19,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 7459,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:394:26",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 26,
+                          "line": 394
+                        },
+                        "snippet": "  392 |\n  393 |       const body = page.locator('body');\n> 394 |       await expect(body).toBeVisible();\n      |                          ^\n  395 |     });\n  396 |\n  397 |     test(`pricing page renders correctly on ${viewport.name}`, async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 26,
+                            "line": 394
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n  392 |\n  393 |       const body = page.locator('body');\n> 394 |       await expect(body).toBeVisible();\n      |                          ^\n  395 |     });\n  396 |\n  397 |     test(`pricing page renders correctly on ${viewport.name}`, async ({ page }) => {\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:394:26"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:57.328Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-98ca0-renders-correctly-on-tablet-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-98ca0-renders-correctly-on-tablet-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-98ca0-renders-correctly-on-tablet-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 26,
+                        "line": 394
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-92e15128a50077428a44",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 388,
+              "column": 9
+            },
+            {
+              "title": "pricing page renders correctly on tablet",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 18,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 7368,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:403:26",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 26,
+                          "line": 403
+                        },
+                        "snippet": "  401 |\n  402 |       const body = page.locator('body');\n> 403 |       await expect(body).toBeVisible();\n      |                          ^\n  404 |     });\n  405 |   }\n  406 | });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 26,
+                            "line": 403
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n  401 |\n  402 |       const body = page.locator('body');\n> 403 |       await expect(body).toBeVisible();\n      |                          ^\n  404 |     });\n  405 |   }\n  406 | });\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:403:26"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:57.328Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-726f2-renders-correctly-on-tablet-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-726f2-renders-correctly-on-tablet-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-726f2-renders-correctly-on-tablet-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 26,
+                        "line": 403
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-eb48a544e6a7d73ece03",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 397,
+              "column": 9
+            },
+            {
+              "title": "home page renders correctly on desktop",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 20,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 6990,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:381:26",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 26,
+                          "line": 381
+                        },
+                        "snippet": "  379 |\n  380 |       const body = page.locator('body');\n> 381 |       await expect(body).toBeVisible();\n      |                          ^\n  382 |\n  383 |       // Check no horizontal overflow\n  384 |       const bodyWidth = await body.evaluate((el) => el.scrollWidth);"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 26,
+                            "line": 381
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n  379 |\n  380 |       const body = page.locator('body');\n> 381 |       await expect(body).toBeVisible();\n      |                          ^\n  382 |\n  383 |       // Check no horizontal overflow\n  384 |       const bodyWidth = await body.evaluate((el) => el.scrollWidth);\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:381:26"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:58.762Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-74110-enders-correctly-on-desktop-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-74110-enders-correctly-on-desktop-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-74110-enders-correctly-on-desktop-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 26,
+                        "line": 381
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-a0b70f851bfc7b1d460d",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 375,
+              "column": 9
+            },
+            {
+              "title": "features page renders correctly on desktop",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 21,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 6692,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:394:26",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 26,
+                          "line": 394
+                        },
+                        "snippet": "  392 |\n  393 |       const body = page.locator('body');\n> 394 |       await expect(body).toBeVisible();\n      |                          ^\n  395 |     });\n  396 |\n  397 |     test(`pricing page renders correctly on ${viewport.name}`, async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 26,
+                            "line": 394
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n  392 |\n  393 |       const body = page.locator('body');\n> 394 |       await expect(body).toBeVisible();\n      |                          ^\n  395 |     });\n  396 |\n  397 |     test(`pricing page renders correctly on ${viewport.name}`, async ({ page }) => {\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:394:26"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:09:59.779Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-de2d9-enders-correctly-on-desktop-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-de2d9-enders-correctly-on-desktop-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-de2d9-enders-correctly-on-desktop-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 26,
+                        "line": 394
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-fc93165966adba1544d2",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 388,
+              "column": 9
+            },
+            {
+              "title": "pricing page renders correctly on desktop",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 22,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 7011,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:403:26",
+                        "location": {
+                          "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                          "column": 26,
+                          "line": 403
+                        },
+                        "snippet": "  401 |\n  402 |       const body = page.locator('body');\n> 403 |       await expect(body).toBeVisible();\n      |                          ^\n  404 |     });\n  405 |   }\n  406 | });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                            "column": 26,
+                            "line": 403
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('body')\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('body')\u001b[22m\n\u001b[2m    9 × locator resolved to <body>…</body>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n  401 |\n  402 |       const body = page.locator('body');\n> 403 |       await expect(body).toBeVisible();\n      |                          ^\n  404 |     });\n  405 |   }\n  406 | });\n    at /Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts:403:26"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-16T23:10:05.410Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-5e263-enders-correctly-on-desktop-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-5e263-enders-correctly-on-desktop-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eduardolobosstevens/achieving-coach/frontend/test-results/e2e-public-pages-Public-Pa-5e263-enders-correctly-on-desktop-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eduardolobosstevens/achieving-coach/frontend/tests/e2e/public-pages.spec.ts",
+                        "column": 26,
+                        "line": 403
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b91e5a170456ec5bed4e-258a5bfd33295a0e9e84",
+              "file": "e2e/public-pages.spec.ts",
+              "line": 397,
+              "column": 9
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-01-16T23:09:16.122Z",
+    "duration": 56516.015,
+    "expected": 18,
+    "skipped": 0,
+    "unexpected": 23,
+    "flaky": 0
+  }
+}
