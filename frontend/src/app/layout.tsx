@@ -161,7 +161,7 @@ export const metadata: Metadata = {
     'DC.publisher': 'AchievingCoach',
     'DC.type': 'Software',
     'DC.format': 'text/html',
-    'DC.language': 'en',
+    'DC.language': 'es',
 
     // Google specific
     'google': 'notranslate',
@@ -172,6 +172,12 @@ export const metadata: Metadata = {
 
     // Format detection
     'format-detection': 'telephone=no',
+
+    // Freshness signals for Gemini AI
+    'article:published_time': '2024-01-01T00:00:00Z',
+    'article:modified_time': '2026-01-16T00:00:00Z',
+    'last-modified': '2026-01-16',
+    'revision-date': '2026-01-16',
   },
 };
 

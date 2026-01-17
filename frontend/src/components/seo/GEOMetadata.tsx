@@ -518,6 +518,75 @@ export function GEOServiceSchema() {
 }
 
 /**
+ * GEO-optimized Breadcrumb Schema for navigation
+ */
+export function GEOBreadcrumbSchema() {
+  const breadcrumbs = [
+    { name: 'Inicio', url: 'https://achievingcoach.com' },
+  ];
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    '@id': 'https://achievingcoach.com/#breadcrumb',
+    itemListElement: breadcrumbs.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+
+  return (
+    <Script
+      id="geo-breadcrumb-schema"
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+/**
+ * Homepage Speakable Schema - Voice search optimization for Gemini
+ */
+export function GEOSpeakableSchema() {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': 'https://achievingcoach.com/#webpage',
+    url: 'https://achievingcoach.com',
+    name: 'AchievingCoach - Plataforma de Coaching Ejecutivo',
+    description: 'Sistema operativo completo para coaches profesionales con herramientas ICF, gestión de clientes e insights de IA.',
+    datePublished: '2024-01-01',
+    dateModified: '2026-01-16',
+    inLanguage: 'es',
+    isPartOf: {
+      '@id': 'https://achievingcoach.com/#website',
+    },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: [
+        'h1',
+        'h2',
+        '.hero-description',
+        '.faq-answer',
+      ],
+    },
+    mainEntity: {
+      '@id': 'https://achievingcoach.com/#software',
+    },
+  };
+
+  return (
+    <Script
+      id="geo-speakable-schema"
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+/**
  * Combined GEO Schemas - Use in root layout
  */
 export default function GEOSchemas() {
@@ -530,6 +599,8 @@ export default function GEOSchemas() {
       <GEOHowToSchema />
       <GEOReviewSchema />
       <GEOServiceSchema />
+      <GEOBreadcrumbSchema />
+      <GEOSpeakableSchema />
     </>
   );
 }

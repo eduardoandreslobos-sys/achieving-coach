@@ -93,7 +93,7 @@ export default function HomePageClient() {
       <section className="py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">Gestión de Coaching Avanzada</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4">¿Cómo gestionar tu práctica de coaching de forma eficiente?</h2>
             <p className="text-gray-400 max-w-2xl">
               Optimiza tu flujo de trabajo con una plataforma unificada que maneja la complejidad con elegancia.
             </p>
@@ -163,7 +163,7 @@ export default function HomePageClient() {
           <div className="flex items-center justify-between mb-8">
             <div>
               <p className="text-blue-400 text-xs uppercase tracking-wider mb-2">RECURSOS DE ÉLITE</p>
-              <h2 className="text-3xl lg:text-4xl font-bold">Herramientas para el Éxito</h2>
+              <h2 className="text-3xl lg:text-4xl font-bold">¿Qué herramientas necesita un coach profesional?</h2>
             </div>
             <Link href="/coach/tools" className="text-blue-400 text-sm hover:text-blue-300 flex items-center gap-1">
               Explorar Biblioteca
@@ -228,8 +228,8 @@ export default function HomePageClient() {
             <div>
               <p className="text-emerald-400 text-xs uppercase tracking-wider mb-4">INTELLIGENCE LAYER</p>
               <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-                Insights con IA<br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">y Análisis Profundo</span>
+                ¿Cómo puede la IA mejorar tu coaching?<br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">Análisis Profundo con Inteligencia Artificial</span>
               </h2>
               <p className="text-gray-400 mb-8">
                 Convierte los datos de conversación en estrategias de coaching accionables. Nuestra IA analiza patrones para ayudarte a demostrar el ROI a tus clientes.
@@ -296,7 +296,7 @@ export default function HomePageClient() {
       {/* Conectividad y Eficiencia */}
       <section className="py-20 px-6 bg-[#080808]">
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-3xl lg:text-4xl font-bold mb-4">Conectividad y Eficiencia</h2>
+          <h2 className="text-3xl lg:text-4xl font-bold mb-4">¿Cómo integrar tus herramientas de coaching favoritas?</h2>
           <p className="text-gray-400 mb-12 max-w-2xl mx-auto">
             Conecta tus herramientas favoritas y deja que nuestros flujos de trabajo manejen el trabajo pesado, sin fricción.
           </p>
@@ -454,7 +454,7 @@ export default function HomePageClient() {
       {/* Seguridad */}
       <section className="py-20 px-6">
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-3xl lg:text-4xl font-bold mb-4">Seguridad de Clase Mundial</h2>
+          <h2 className="text-3xl lg:text-4xl font-bold mb-4">¿Es seguro almacenar datos de clientes en AchievingCoach?</h2>
           <p className="text-gray-400 mb-12 max-w-2xl mx-auto">
             Protegemos tu práctica y la privacidad de tus clientes con los estándares más altos de la industria.
           </p>
@@ -677,6 +677,9 @@ export default function HomePageClient() {
 
           <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-white/5">
             <p className="text-gray-600 text-sm">© 2026 AchievingCoach Inc. Todos los derechos reservados.</p>
+            <p className="text-gray-600 text-sm mt-2 md:mt-0">
+              <time dateTime="2026-01-16">Última actualización: Enero 2026</time>
+            </p>
           </div>
         </div>
       </footer>

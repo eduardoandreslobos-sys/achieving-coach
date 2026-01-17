@@ -50,6 +50,30 @@ export default function robots(): MetadataRoute.Robots {
         allow: ['/', '/blog/', '/features/', '/pricing/', '/about/'],
         disallow: ['/admin/', '/dashboard/', '/coach/', '/api/'],
       },
+      // Cohere AI
+      {
+        userAgent: 'cohere-ai',
+        allow: ['/', '/blog/', '/features/', '/pricing/', '/about/', '/tools/'],
+        disallow: ['/admin/', '/dashboard/', '/coach/', '/api/'],
+      },
+      // Meta AI
+      {
+        userAgent: 'FacebookBot',
+        allow: ['/', '/blog/', '/features/', '/pricing/', '/about/', '/tools/'],
+        disallow: ['/admin/', '/dashboard/', '/coach/', '/api/'],
+      },
+      // You.com
+      {
+        userAgent: 'YouBot',
+        allow: ['/', '/blog/', '/features/', '/pricing/', '/about/', '/tools/'],
+        disallow: ['/admin/', '/dashboard/', '/coach/', '/api/'],
+      },
+      // Apple/Siri
+      {
+        userAgent: 'Applebot-Extended',
+        allow: ['/', '/blog/', '/features/', '/pricing/', '/about/', '/tools/'],
+        disallow: ['/admin/', '/dashboard/', '/coach/', '/api/'],
+      },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
     host: baseUrl,
