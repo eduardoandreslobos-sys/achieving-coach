@@ -79,6 +79,8 @@ interface GA4Data {
   channels: { channel: string; sessions: number; users: number; engagementRate: number; conversions: number }[];
   languages: { code: string; language: string; users: number; sessions: number; engagementRate: number }[];
   dailyTrends: { date: string; users: number; sessions: number; pageViews: number }[];
+  aiTraffic: { source: string; sessions: number; users: number; engagementRate: number }[];
+  totalAiSessions: number;
 }
 
 interface Keyword {
@@ -741,6 +743,63 @@ export default function AdminAnalyticsPage() {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+
+          {/* AI Traffic */}
+          <div className="bg-gradient-to-r from-violet-500/10 to-blue-500/10 border border-violet-500/20 rounded-2xl p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-violet-500 to-blue-500 rounded-xl flex items-center justify-center">
+                  <span className="text-xl">🤖</span>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white">Tráfico desde AI</h3>
+                  <p className="text-gray-500 text-xs">Solo tráfico detectable con referrer</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-2xl font-bold text-white">{ga4Data?.totalAiSessions || 0}</p>
+                <p className="text-gray-500 text-xs">sesiones totales</p>
+              </div>
+            </div>
+
+            {ga4Data?.aiTraffic && ga4Data.aiTraffic.length > 0 ? (
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                {ga4Data.aiTraffic.map((ai, i) => (
+                  <div key={i} className="bg-[#12131a] rounded-xl p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-lg">
+                        {ai.source.includes('Perplexity') ? '🔮' :
+                         ai.source.includes('ChatGPT') ? '💚' :
+                         ai.source.includes('Claude') ? '🟠' :
+                         ai.source.includes('Gemini') || ai.source.includes('Bard') ? '🔵' :
+                         ai.source.includes('Bing') || ai.source.includes('Copilot') ? '🟦' :
+                         ai.source.includes('Poe') ? '🟣' :
+                         ai.source.includes('Phind') ? '⚡' :
+                         '🤖'}
+                      </span>
+                      <span className="text-white font-medium text-sm">{ai.source}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-gray-400">{ai.sessions} sessions</span>
+                      <span className="text-emerald-400">{(ai.engagementRate * 100).toFixed(0)}% eng</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-6">
+                <p className="text-gray-400 text-sm">No se detectó tráfico desde motores de AI</p>
+                <p className="text-gray-600 text-xs mt-1">Esto es normal - muchos AI no envían datos de referrer</p>
+              </div>
+            )}
+
+            <div className="mt-4 pt-4 border-t border-gray-800">
+              <p className="text-gray-500 text-xs">
+                <span className="text-amber-400">⚠️</span> Limitación: Google AI Overviews y tráfico donde el usuario copia/pega URLs no son detectables.
+                Este número representa solo una fracción del tráfico real desde AI.
+              </p>
             </div>
           </div>
         </div>

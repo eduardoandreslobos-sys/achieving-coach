@@ -48,6 +48,7 @@ export async function GET(request: NextRequest) {
       prevPeriodResponse,
       landingPagesResponse,
       browserResponse,
+      referrersResponse,
     ] = await Promise.all([
       // Overall traffic metrics
       analyticsDataClient.runReport({
@@ -242,6 +243,22 @@ export async function GET(request: NextRequest) {
         orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
         limit: 10,
       }),
+
+      // Full referrers for AI detection
+      analyticsDataClient.runReport({
+        property: `properties/${GA4_PROPERTY_ID}`,
+        dateRanges: [
+          { startDate: formatDate(startDate), endDate: formatDate(endDate) },
+        ],
+        dimensions: [{ name: 'sessionSource' }, { name: 'fullPageUrl' }],
+        metrics: [
+          { name: 'sessions' },
+          { name: 'activeUsers' },
+          { name: 'engagementRate' },
+        ],
+        orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
+        limit: 100,
+      }),
     ]);
 
     // Parse traffic metrics
@@ -380,6 +397,56 @@ export async function GET(request: NextRequest) {
       sessions: parseInt(row.metricValues?.[1]?.value || '0'),
     })) || [];
 
+    // Parse and detect AI traffic
+    const aiPatterns = [
+      { pattern: 'perplexity', name: 'Perplexity AI', icon: 'perplexity' },
+      { pattern: 'chat.openai', name: 'ChatGPT', icon: 'chatgpt' },
+      { pattern: 'chatgpt', name: 'ChatGPT', icon: 'chatgpt' },
+      { pattern: 'claude.ai', name: 'Claude', icon: 'claude' },
+      { pattern: 'anthropic', name: 'Claude', icon: 'claude' },
+      { pattern: 'you.com', name: 'You.com', icon: 'you' },
+      { pattern: 'bing.com', name: 'Bing Copilot', icon: 'bing' },
+      { pattern: 'copilot', name: 'Microsoft Copilot', icon: 'copilot' },
+      { pattern: 'bard.google', name: 'Google Bard', icon: 'gemini' },
+      { pattern: 'gemini', name: 'Google Gemini', icon: 'gemini' },
+      { pattern: 'poe.com', name: 'Poe', icon: 'poe' },
+      { pattern: 'phind.com', name: 'Phind', icon: 'phind' },
+      { pattern: 'kagi.com', name: 'Kagi', icon: 'kagi' },
+      { pattern: 'duckduckgo', name: 'DuckDuckGo AI', icon: 'ddg' },
+    ];
+
+    const aiTrafficMap = new Map<string, { sessions: number; users: number; engagementRate: number }>();
+
+    referrersResponse[0]?.rows?.forEach(row => {
+      const source = (row.dimensionValues?.[0]?.value || '').toLowerCase();
+      const sessions = parseInt(row.metricValues?.[0]?.value || '0');
+      const users = parseInt(row.metricValues?.[1]?.value || '0');
+      const engagementRate = parseFloat(row.metricValues?.[2]?.value || '0');
+
+      for (const ai of aiPatterns) {
+        if (source.includes(ai.pattern)) {
+          const existing = aiTrafficMap.get(ai.name) || { sessions: 0, users: 0, engagementRate: 0 };
+          aiTrafficMap.set(ai.name, {
+            sessions: existing.sessions + sessions,
+            users: existing.users + users,
+            engagementRate: (existing.engagementRate + engagementRate) / 2,
+          });
+          break;
+        }
+      }
+    });
+
+    const aiTraffic = Array.from(aiTrafficMap.entries())
+      .map(([name, data]) => ({
+        source: name,
+        sessions: data.sessions,
+        users: data.users,
+        engagementRate: data.engagementRate,
+      }))
+      .sort((a, b) => b.sessions - a.sessions);
+
+    const totalAiSessions = aiTraffic.reduce((sum, ai) => sum + ai.sessions, 0);
+
     // Calculate organic traffic percentage
     const totalSessions = channels.reduce((sum, c) => sum + c.sessions, 0);
     const organicSessions = channels.find(c => c.channel.toLowerCase().includes('organic'))?.sessions || 0;
@@ -422,6 +489,8 @@ export async function GET(request: NextRequest) {
         channels,
         languages,
         dailyTrends,
+        aiTraffic,
+        totalAiSessions,
         dateRange: {
           start: formatDate(startDate),
           end: formatDate(endDate),
