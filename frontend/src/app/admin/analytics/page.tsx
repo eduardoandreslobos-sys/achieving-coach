@@ -140,7 +140,32 @@ interface SearchConsoleData {
   dailyTrends: { date: string; clicks: number; impressions: number; ctr: string; position: string }[];
 }
 
-type TabType = 'overview' | 'traffic' | 'seo' | 'geo' | 'platform';
+interface ClarityData {
+  metrics: {
+    totalSessions: number;
+    totalPageViews: number;
+    totalUsers: number;
+    avgScrollDepth: number;
+    avgEngagementTime: number;
+    deadClickCount: number;
+    rageClickCount: number;
+    quickbackCount: number;
+    excessiveScrollCount: number;
+    deadClickRate: number;
+    rageClickRate: number;
+    quickbackRate: number;
+    botTraffic: number;
+  } | null;
+  byDevice: any[];
+  byBrowser: any[];
+  byCountry: any[];
+  byOS: any[];
+  byPage: any[];
+  period: string;
+  notice?: string;
+}
+
+type TabType = 'overview' | 'traffic' | 'seo' | 'geo' | 'ux' | 'platform';
 
 export default function AdminAnalyticsPage() {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
@@ -153,12 +178,14 @@ export default function AdminAnalyticsPage() {
   const [platformData, setPlatformData] = useState<PlatformData | null>(null);
   const [ga4Data, setGa4Data] = useState<GA4Data | null>(null);
   const [searchConsoleData, setSearchConsoleData] = useState<SearchConsoleData | null>(null);
+  const [clarityData, setClarityData] = useState<ClarityData | null>(null);
 
   const tabs = [
     { id: 'overview' as TabType, label: 'Resumen', icon: BarChart3 },
     { id: 'traffic' as TabType, label: 'Tráfico', icon: TrendingUp },
     { id: 'seo' as TabType, label: 'SEO', icon: Search },
     { id: 'geo' as TabType, label: 'GEO', icon: Globe },
+    { id: 'ux' as TabType, label: 'UX', icon: MousePointer },
     { id: 'platform' as TabType, label: 'Plataforma', icon: Users },
   ];
 
@@ -172,6 +199,7 @@ export default function AdminAnalyticsPage() {
       loadPlatformData(),
       loadGA4Data(),
       loadSearchConsoleData(),
+      loadClarityData(),
     ]);
     setLoading(false);
   };
@@ -292,6 +320,20 @@ export default function AdminAnalyticsPage() {
       }
     } catch (error) {
       console.error('Error loading Search Console data:', error);
+    }
+  };
+
+  const loadClarityData = async () => {
+    try {
+      // Clarity API only supports 1, 2, or 3 days
+      const days = Math.min(3, Math.max(1, Math.ceil(timeRange / 10)));
+      const res = await fetch(`/api/clarity?days=${days}`);
+      const json = await res.json();
+      if (json.success) {
+        setClarityData(json.data);
+      }
+    } catch (error) {
+      console.error('Error loading Clarity data:', error);
     }
   };
 
@@ -1226,6 +1268,182 @@ export default function AdminAnalyticsPage() {
               ))}
             </div>
           </div>
+        </div>
+      )}
+
+      {/* UX Tab - Microsoft Clarity */}
+      {activeTab === 'ux' && (
+        <div className="space-y-6">
+          {clarityData?.notice && (
+            <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4">
+              <div className="flex items-center gap-2">
+                <AlertCircle className="w-5 h-5 text-amber-400" />
+                <p className="text-amber-400 text-sm">{clarityData.notice}</p>
+              </div>
+            </div>
+          )}
+
+          {/* UX Metrics Overview */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-gradient-to-br from-red-500/10 to-red-600/5 border border-red-500/20 rounded-2xl p-5">
+              <div className="w-10 h-10 bg-red-500/20 rounded-xl flex items-center justify-center mb-3">
+                <span className="text-xl">😤</span>
+              </div>
+              <p className="text-gray-400 text-sm mb-1">Rage Clicks</p>
+              <p className="text-3xl font-bold text-white">{clarityData?.metrics?.rageClickCount || 0}</p>
+              <p className="text-red-400 text-xs mt-1">{((clarityData?.metrics?.rageClickRate || 0) * 100).toFixed(1)}% de sesiones</p>
+            </div>
+
+            <div className="bg-gradient-to-br from-amber-500/10 to-amber-600/5 border border-amber-500/20 rounded-2xl p-5">
+              <div className="w-10 h-10 bg-amber-500/20 rounded-xl flex items-center justify-center mb-3">
+                <span className="text-xl">👆</span>
+              </div>
+              <p className="text-gray-400 text-sm mb-1">Dead Clicks</p>
+              <p className="text-3xl font-bold text-white">{clarityData?.metrics?.deadClickCount || 0}</p>
+              <p className="text-amber-400 text-xs mt-1">{((clarityData?.metrics?.deadClickRate || 0) * 100).toFixed(1)}% de sesiones</p>
+            </div>
+
+            <div className="bg-gradient-to-br from-violet-500/10 to-violet-600/5 border border-violet-500/20 rounded-2xl p-5">
+              <div className="w-10 h-10 bg-violet-500/20 rounded-xl flex items-center justify-center mb-3">
+                <span className="text-xl">⬅️</span>
+              </div>
+              <p className="text-gray-400 text-sm mb-1">Quick Backs</p>
+              <p className="text-3xl font-bold text-white">{clarityData?.metrics?.quickbackCount || 0}</p>
+              <p className="text-violet-400 text-xs mt-1">{((clarityData?.metrics?.quickbackRate || 0) * 100).toFixed(1)}% de sesiones</p>
+            </div>
+
+            <div className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border border-blue-500/20 rounded-2xl p-5">
+              <div className="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center mb-3">
+                <span className="text-xl">📜</span>
+              </div>
+              <p className="text-gray-400 text-sm mb-1">Excessive Scrolls</p>
+              <p className="text-3xl font-bold text-white">{clarityData?.metrics?.excessiveScrollCount || 0}</p>
+            </div>
+          </div>
+
+          {/* Engagement Metrics */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-5">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center">
+                  <Eye className="w-5 h-5 text-emerald-400" />
+                </div>
+                <div>
+                  <p className="text-gray-400 text-sm">Sesiones Totales</p>
+                  <p className="text-2xl font-bold text-white">{clarityData?.metrics?.totalSessions || 0}</p>
+                </div>
+              </div>
+              <div className="h-1 bg-gray-800 rounded-full overflow-hidden">
+                <div className="h-full bg-emerald-500 rounded-full" style={{ width: '100%' }} />
+              </div>
+            </div>
+
+            <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-5">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-cyan-500/20 rounded-xl flex items-center justify-center">
+                  <TrendingDown className="w-5 h-5 text-cyan-400" />
+                </div>
+                <div>
+                  <p className="text-gray-400 text-sm">Scroll Depth Promedio</p>
+                  <p className="text-2xl font-bold text-white">{((clarityData?.metrics?.avgScrollDepth || 0) * 100).toFixed(0)}%</p>
+                </div>
+              </div>
+              <div className="h-1 bg-gray-800 rounded-full overflow-hidden">
+                <div className="h-full bg-cyan-500 rounded-full" style={{ width: `${(clarityData?.metrics?.avgScrollDepth || 0) * 100}%` }} />
+              </div>
+            </div>
+
+            <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-5">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-orange-500/20 rounded-xl flex items-center justify-center">
+                  <Clock className="w-5 h-5 text-orange-400" />
+                </div>
+                <div>
+                  <p className="text-gray-400 text-sm">Tiempo Promedio</p>
+                  <p className="text-2xl font-bold text-white">{formatDuration(clarityData?.metrics?.avgEngagementTime || 0)}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bot Traffic Warning */}
+          {(clarityData?.metrics?.botTraffic || 0) > 0 && (
+            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">🤖</span>
+                <div>
+                  <p className="text-red-400 font-medium">Tráfico de Bots Detectado</p>
+                  <p className="text-gray-400 text-sm">{clarityData?.metrics?.botTraffic} sesiones identificadas como bots</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* What these metrics mean */}
+          <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-6">
+            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <AlertCircle className="w-5 h-5 text-blue-400" />
+              ¿Qué significan estas métricas?
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div className="flex items-start gap-3">
+                <span className="text-lg">😤</span>
+                <div>
+                  <p className="text-white font-medium">Rage Clicks</p>
+                  <p className="text-gray-400">Usuarios haciendo clic repetidamente en un elemento (frustración)</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="text-lg">👆</span>
+                <div>
+                  <p className="text-white font-medium">Dead Clicks</p>
+                  <p className="text-gray-400">Clics en elementos no interactivos (UX confusa)</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="text-lg">⬅️</span>
+                <div>
+                  <p className="text-white font-medium">Quick Backs</p>
+                  <p className="text-gray-400">Usuarios que vuelven rápido a la página anterior (contenido no relevante)</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="text-lg">📜</span>
+                <div>
+                  <p className="text-white font-medium">Excessive Scrolls</p>
+                  <p className="text-gray-400">Scroll excesivo buscando contenido (navegación difícil)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Link to Clarity Dashboard */}
+          <div className="bg-gradient-to-r from-blue-500/10 to-violet-500/10 border border-blue-500/20 rounded-2xl p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
+                  <MousePointer className="w-6 h-6 text-blue-400" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white">Microsoft Clarity</h3>
+                  <p className="text-gray-400 text-sm">Ver heatmaps, grabaciones de sesión y más detalles</p>
+                </div>
+              </div>
+              <a
+                href="https://clarity.microsoft.com/projects/view/v2wz3f64o1/dashboard"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+              >
+                Abrir Dashboard
+                <ChevronRight className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+
+          <p className="text-gray-500 text-xs text-center">
+            Datos de los últimos {clarityData?.period || '3 días'} • La API de Clarity solo permite datos de hasta 72 horas
+          </p>
         </div>
       )}
 
