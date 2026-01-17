@@ -1,7 +1,7 @@
 import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
-import { getAuth, Auth } from 'firebase/auth';
-import { getFirestore, Firestore } from 'firebase/firestore';
-import { getStorage, FirebaseStorage } from 'firebase/storage';
+import { getAuth, Auth, connectAuthEmulator } from 'firebase/auth';
+import { getFirestore, Firestore, connectFirestoreEmulator } from 'firebase/firestore';
+import { getStorage, FirebaseStorage, connectStorageEmulator } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || '',
@@ -12,36 +12,67 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '',
 };
 
-// Initialize Firebase app
-let app: FirebaseApp;
+// Check if Firebase is properly configured
+const isFirebaseConfigured = (): boolean => {
+  const apiKey = firebaseConfig.apiKey;
+  return !!(
+    apiKey &&
+    apiKey.length > 10 &&
+    !apiKey.includes('dummy') &&
+    !apiKey.includes('test') &&
+    firebaseConfig.projectId &&
+    firebaseConfig.projectId.length > 0
+  );
+};
 
-if (typeof window !== 'undefined') {
-  // Client-side initialization
-  if (!getApps().length) {
-    app = initializeApp(firebaseConfig);
-  } else {
-    app = getApps()[0];
+// Flag to check if Firebase is available
+export const isFirebaseAvailable = isFirebaseConfigured();
+
+// Initialize Firebase app
+let app: FirebaseApp | null = null;
+let authInstance: Auth | null = null;
+let dbInstance: Firestore | null = null;
+let storageInstance: FirebaseStorage | null = null;
+
+// Only initialize if we have valid configuration
+if (isFirebaseAvailable) {
+  try {
+    if (typeof window !== 'undefined') {
+      // Client-side initialization
+      if (!getApps().length) {
+        app = initializeApp(firebaseConfig);
+      } else {
+        app = getApps()[0];
+      }
+    } else {
+      // Server-side initialization
+      if (!getApps().length) {
+        app = initializeApp(firebaseConfig);
+      } else {
+        app = getApps()[0];
+      }
+    }
+
+    if (app) {
+      authInstance = getAuth(app);
+      dbInstance = getFirestore(app);
+      storageInstance = getStorage(app);
+    }
+  } catch (error) {
+    console.warn('Firebase initialization failed:', error);
+    // Don't throw - allow app to work without Firebase
   }
 } else {
-  // Server-side: create a dummy app for build time
-  // This won't actually be used since all Firebase calls are client-side
-  if (!getApps().length && firebaseConfig.apiKey) {
-    app = initializeApp(firebaseConfig);
-  } else if (getApps().length) {
-    app = getApps()[0];
-  } else {
-    // Dummy initialization for build time
-    app = initializeApp({
-      apiKey: 'build-time-dummy',
-      authDomain: 'build-time-dummy',
-      projectId: 'build-time-dummy',
-      storageBucket: 'build-time-dummy',
-      messagingSenderId: 'build-time-dummy',
-      appId: 'build-time-dummy',
-    });
+  // Log warning only in development and only once
+  if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+    console.info(
+      '%c[Firebase] Running without Firebase configuration. Some features may be unavailable.',
+      'color: #FFA500'
+    );
   }
 }
 
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-export const storage = getStorage(app);
+// Export with fallback handling - consumers should check isFirebaseAvailable
+export const auth = authInstance as Auth;
+export const db = dbInstance as Firestore;
+export const storage = storageInstance as FirebaseStorage;
