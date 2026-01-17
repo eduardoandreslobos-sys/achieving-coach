@@ -369,6 +369,155 @@ export function SpeakableSchema({
 }
 
 /**
+ * GEO-optimized Review Schema - Social proof for AI engines
+ */
+export function GEOReviewSchema() {
+  const reviews = [
+    {
+      author: 'Sarah A.',
+      role: 'Master Certified Coach',
+      rating: 5,
+      review: 'La profundidad de la analítica no tiene comparación. Es como tener un supervisor en la sala conmigo, señalando matices que podría haber perdido.',
+      date: '2024-11-15',
+    },
+    {
+      author: 'David Chen',
+      role: 'Consultor Ejecutivo',
+      rating: 5,
+      review: 'AchievingCoach se sabe gestionar mi agenda, gestiona mi metodología. La actualización 2024 es asombrosamente rápida y hermosa.',
+      date: '2024-10-28',
+    },
+    {
+      author: 'Elena R.',
+      role: 'Coach de Liderazgo',
+      rating: 5,
+      review: 'Una mezcla perfecta de tecnología y toque humano. Solo los informes automatizados me ahorran unas 10 horas a la semana.',
+      date: '2024-12-02',
+    },
+  ];
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    '@id': 'https://achievingcoach.com/#product-reviews',
+    name: 'AchievingCoach - Plataforma de Coaching Ejecutivo',
+    description: 'Sistema operativo completo para coaches profesionales con herramientas ICF, gestión de clientes e insights de IA.',
+    brand: {
+      '@type': 'Brand',
+      name: 'AchievingCoach',
+    },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.8',
+      reviewCount: '150',
+      bestRating: '5',
+      worstRating: '1',
+    },
+    review: reviews.map((r, index) => ({
+      '@type': 'Review',
+      '@id': `https://achievingcoach.com/#review-${index}`,
+      author: {
+        '@type': 'Person',
+        name: r.author,
+        jobTitle: r.role,
+      },
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: r.rating,
+        bestRating: 5,
+        worstRating: 1,
+      },
+      reviewBody: r.review,
+      datePublished: r.date,
+      publisher: {
+        '@type': 'Organization',
+        name: 'AchievingCoach',
+      },
+    })),
+  };
+
+  return (
+    <Script
+      id="geo-review-schema"
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+/**
+ * GEO-optimized Service Schema - For coaching services
+ */
+export function GEOServiceSchema() {
+  const services = [
+    {
+      name: 'Gestión de Clientes de Coaching',
+      description: 'Centraliza perfiles de clientes, historial de sesiones, notas y documentos en una plataforma profesional unificada.',
+    },
+    {
+      name: 'Herramientas de Evaluación ICF',
+      description: 'Accede a más de 12 herramientas interactivas incluyendo DISC, Rueda de la Vida, GROW y evaluaciones de competencias ICF.',
+    },
+    {
+      name: 'Análisis con Inteligencia Artificial',
+      description: 'Obtén insights automatizados de sesiones, análisis de progreso y sugerencias de coaching impulsadas por IA.',
+    },
+    {
+      name: 'Agendamiento y Calendario',
+      description: 'Programa sesiones, envía recordatorios automáticos y gestiona reprogramaciones sin esfuerzo.',
+    },
+    {
+      name: 'Reportes Profesionales',
+      description: 'Genera informes de progreso automáticos para clientes, stakeholders y departamentos de RRHH.',
+    },
+  ];
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    '@id': 'https://achievingcoach.com/#service',
+    serviceType: 'Coaching Platform',
+    provider: {
+      '@id': 'https://achievingcoach.com/#organization',
+    },
+    name: 'AchievingCoach - Plataforma Profesional de Coaching',
+    description: 'Sistema operativo completo para coaches ejecutivos, de vida y de carrera. Incluye gestión de clientes, herramientas ICF, análisis con IA y reportes automatizados.',
+    areaServed: {
+      '@type': 'Place',
+      name: 'Worldwide',
+    },
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Servicios de AchievingCoach',
+      itemListElement: services.map((service, index) => ({
+        '@type': 'Offer',
+        '@id': `https://achievingcoach.com/#service-${index}`,
+        itemOffered: {
+          '@type': 'Service',
+          name: service.name,
+          description: service.description,
+        },
+      })),
+    },
+    offers: {
+      '@type': 'AggregateOffer',
+      lowPrice: '0',
+      highPrice: '99',
+      priceCurrency: 'USD',
+      offerCount: '3',
+    },
+  };
+
+  return (
+    <Script
+      id="geo-service-schema"
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+/**
  * Combined GEO Schemas - Use in root layout
  */
 export default function GEOSchemas() {
@@ -379,6 +528,8 @@ export default function GEOSchemas() {
       <GEOWebSiteSchema />
       <GEOFAQSchema />
       <GEOHowToSchema />
+      <GEOReviewSchema />
+      <GEOServiceSchema />
     </>
   );
 }

@@ -487,6 +487,143 @@ export default function HomePageClient() {
         </div>
       </section>
 
+      {/* Testimonios - Social Proof */}
+      <section className="py-20 px-6 bg-[#080808]">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-amber-400 text-xs uppercase tracking-wider mb-4">TESTIMONIOS</p>
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4">Lo Que Dicen Nuestros Coaches</h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Coaches profesionales de todo el mundo confían en AchievingCoach para transformar su práctica de coaching ejecutivo.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+                <div className="flex gap-1 mb-4">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star key={star} className="w-4 h-4 text-amber-400 fill-amber-400" />
+                  ))}
+                </div>
+                <p className="text-gray-300 mb-6 italic">&ldquo;{testimonial.quote}&rdquo;</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-violet-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                    {testimonial.name.charAt(0)}
+                  </div>
+                  <div>
+                    <p className="text-white font-medium">{testimonial.name}</p>
+                    <p className="text-gray-500 text-sm">{testimonial.role}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-8">
+            <p className="text-gray-500 text-sm">
+              Valoración promedio de <span className="text-amber-400 font-semibold">4.8/5</span> basada en más de 150 reseñas
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ - Preguntas Frecuentes */}
+      <section className="py-20 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-blue-400 text-xs uppercase tracking-wider mb-4">PREGUNTAS FRECUENTES</p>
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4">Todo lo que Necesitas Saber</h2>
+            <p className="text-gray-400">
+              Respuestas a las preguntas más comunes sobre nuestra plataforma de coaching ejecutivo.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <details className="bg-[#111111] border border-gray-800 rounded-xl group">
+              <summary className="p-6 cursor-pointer list-none flex items-center justify-between">
+                <h3 className="text-white font-semibold">¿Qué es AchievingCoach?</h3>
+                <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              <div className="px-6 pb-6 text-gray-400">
+                AchievingCoach es una plataforma profesional diseñada para coaches ejecutivos, coaches de vida y coaches de carrera. Proporciona más de 12 herramientas interactivas de coaching incluyendo evaluaciones DISC, Rueda de la Vida y hojas de trabajo del modelo GROW, junto con gestión de clientes, programación de sesiones e insights impulsados por IA.
+              </div>
+            </details>
+
+            <details className="bg-[#111111] border border-gray-800 rounded-xl group">
+              <summary className="p-6 cursor-pointer list-none flex items-center justify-between">
+                <h3 className="text-white font-semibold">¿Cuánto cuesta AchievingCoach?</h3>
+                <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              <div className="px-6 pb-6 text-gray-400">
+                AchievingCoach ofrece un plan gratuito para comenzar. Los planes Premium comienzan en $29/mes para coaches individuales, con planes Enterprise a $99/mes para organizaciones de coaching. Todos los planes incluyen acceso a las herramientas principales de coaching.
+              </div>
+            </details>
+
+            <details className="bg-[#111111] border border-gray-800 rounded-xl group">
+              <summary className="p-6 cursor-pointer list-none flex items-center justify-between">
+                <h3 className="text-white font-semibold">¿Está alineado con las competencias ICF?</h3>
+                <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              <div className="px-6 pb-6 text-gray-400">
+                Sí, AchievingCoach está diseñado alrededor de las competencias de la ICF (International Coaching Federation). La plataforma incluye un Simulador de Competencias ICF y herramientas alineadas con metodologías de coaching aprobadas por la ICF.
+              </div>
+            </details>
+
+            <details className="bg-[#111111] border border-gray-800 rounded-xl group">
+              <summary className="p-6 cursor-pointer list-none flex items-center justify-between">
+                <h3 className="text-white font-semibold">¿Qué herramientas de coaching incluye?</h3>
+                <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              <div className="px-6 pb-6 text-gray-400">
+                AchievingCoach incluye más de 12 herramientas profesionales: Evaluación DISC, Rueda de la Vida, Hoja de Trabajo GROW, Clarificación de Valores, Mapeo de Stakeholders, Brújula de Carrera, Diario de Disparadores Emocionales, Feedback-Feedforward, Analizador de Bucles de Hábitos, Transformación de Creencias Limitantes y Evaluación de Escala de Resiliencia.
+              </div>
+            </details>
+
+            <details className="bg-[#111111] border border-gray-800 rounded-xl group">
+              <summary className="p-6 cursor-pointer list-none flex items-center justify-between">
+                <h3 className="text-white font-semibold">¿Es seguro para los datos de mis clientes?</h3>
+                <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              <div className="px-6 pb-6 text-gray-400">
+                Sí, AchievingCoach utiliza seguridad de nivel empresarial incluyendo encriptación AES-256, cumple con GDPR, CCPA y directrices HIPAA, y proporciona controles de permisos granulares para proteger las conversaciones de coaching sensibles.
+              </div>
+            </details>
+
+            <details className="bg-[#111111] border border-gray-800 rounded-xl group">
+              <summary className="p-6 cursor-pointer list-none flex items-center justify-between">
+                <h3 className="text-white font-semibold">¿Soporta múltiples idiomas?</h3>
+                <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              <div className="px-6 pb-6 text-gray-400">
+                Sí, AchievingCoach soporta interfaces en inglés y español. La plataforma está diseñada para coaches internacionales que trabajan con clientes globalmente.
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Final */}
+      <section className="py-20 px-6 bg-gradient-to-b from-[#080808] to-[#0a0a0a]">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl lg:text-4xl font-bold mb-4">
+            Comienza a Transformar tu Práctica de Coaching Ejecutivo Hoy
+          </h2>
+          <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
+            Únete a cientos de coaches profesionales que ya utilizan AchievingCoach como su sistema operativo de coaching. Prueba gratis, sin compromiso.
+          </p>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Link href="/sign-up" className="px-8 py-3.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
+              Crear Cuenta Gratis
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link href="/contact" className="px-8 py-3.5 bg-white/5 border border-white/10 text-white font-medium rounded-lg hover:bg-white/10 transition-colors">
+              Contactar Ventas
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="py-12 px-6 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
