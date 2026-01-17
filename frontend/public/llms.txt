@@ -1,89 +1,47 @@
 # AchievingCoach
 
-> Professional coaching platform for organizations and individuals
+> AchievingCoach is a professional coaching platform (plataforma de coaching ejecutivo) designed for executive coaches, life coaches, and career coaches. It provides 12+ interactive coaching tools aligned with ICF competencies, client management, AI-powered insights, and automated reporting to demonstrate coaching ROI.
 
-## Main
+AchievingCoach serves as the complete operating system (sistema operativo) for coaching practices. Coaches use it to manage clients, deliver assessments like DISC and Wheel of Life, track progress through structured 9-phase methodology, and generate professional reports for HR departments and corporate sponsors.
 
-- [Homepage](https://achievingcoach.com): AchievingCoach - Transform your coaching practice with AI-powered tools
-- [About](https://achievingcoach.com/about): Learn about our mission to democratize professional coaching
-- [Pricing](https://achievingcoach.com/pricing): Flexible plans for coaches, teams, and enterprises
+## Coaching Tools
 
-## Product
+- [DISC Assessment](https://achievingcoach.com/coach/tools/disc): Behavioral assessment for communication and leadership styles
+- [Wheel of Life](https://achievingcoach.com/coach/tools/wheel-of-life): Life balance evaluation across 8-12 dimensions
+- [GROW Model Worksheet](https://achievingcoach.com/coach/tools/grow): Goal-Reality-Options-Will framework for coaching conversations
+- [Values Clarification](https://achievingcoach.com/coach/tools/values): Core values identification and prioritization exercise
+- [Stakeholder Mapping](https://achievingcoach.com/coach/tools/stakeholder-mapping): Relationship and influence analysis for executives
+- [Career Compass](https://achievingcoach.com/coach/tools/career-compass): Career direction and professional development planning
+- [ICF Competency Simulator](https://achievingcoach.com/coach/icf-simulator): AI-powered practice for ICF core competencies
 
-- [Coaching Tools](https://achievingcoach.com/tools): 10+ professional coaching tools including GROW, DISC, Wheel of Life
-- [Dashboard](https://achievingcoach.com/dashboard): Unified coaching dashboard for progress tracking
-- [Sessions Management](https://achievingcoach.com/sessions): Schedule and manage coaching sessions
-- [Goals Tracking](https://achievingcoach.com/goals): Set and track SMART goals with confidence levels
-- [Reflections](https://achievingcoach.com/reflections): Journal and reflect on coaching journey
+## Platform Features
 
-## For Coaches
+- [Client Management](https://achievingcoach.com/coach/clients): Centralized profiles, session history, documents, and progress tracking
+- [Session Scheduling](https://achievingcoach.com/coach/calendar): Google Calendar integration with automatic reminders
+- [AI Insights](https://achievingcoach.com/features): Session analysis, pattern recognition, and coaching suggestions
+- [Progress Reports](https://achievingcoach.com/coach/reports): Automated reports for clients, HR, and corporate sponsors
+- [9-Phase Methodology](https://achievingcoach.com/features): Structured coaching framework from discovery to completion
 
-- [Coach Dashboard](https://achievingcoach.com/coach): Manage clients, programs, and sessions
-- [Client Management](https://achievingcoach.com/coach/clients): Track client progress and assign tools
-- [ICF Simulator](https://achievingcoach.com/coach/icf-simulator): Practice ICF competencies
-- [Programs](https://achievingcoach.com/coach/programs): Create structured coaching programs
+## Pricing
 
-## Features
+- [Free Tier](https://achievingcoach.com/pricing): Get started with basic features at no cost
+- [Premium Plan](https://achievingcoach.com/pricing): $29/month for individual coaches with full tool access
+- [Enterprise Plan](https://achievingcoach.com/pricing): $99/month for coaching organizations with unlimited users
 
-- **Multi-tenant Architecture**: Separate workspaces for organizations
-- **Role-Based Access**: Org Admin, Coach Admin, Supervisor, Coach, Coachee
-- **Professional Coaching Tools**: GROW Worksheet, DISC Assessment, Wheel of Life, Values Clarification
-- **Progress Tracking**: Goals, sessions, reflections, and tools completion
-- **Enterprise Ready**: SSO, custom branding, unlimited users
+## Resources
 
-## Technology
+- [Blog](https://achievingcoach.com/blog): Coaching methodologies, ICF competencies, and industry best practices
+- [Features](https://achievingcoach.com/features): Complete platform capabilities overview
+- [About](https://achievingcoach.com/about): Company mission and team
 
-- **Frontend**: Next.js 14, React, Tailwind CSS
-- **Backend**: Node.js, Express, TypeScript
-- **Database**: Google Firestore
-- **Authentication**: Firebase Auth
-- **Hosting**: Google Cloud Run
-- **AI Integration**: Ready for Claude API integration
+## Security
 
-## Plans
+AchievingCoach uses enterprise-grade security: AES-256 encryption, GDPR/CCPA/HIPAA compliance, and granular permission controls. Data is hosted on Google Cloud with daily backups.
 
-- **Starter**: $29/month - 2 coaches, 10 coachees, 5GB storage
-- **Professional**: $99/month - 10 coaches, 100 coachees, 50GB storage
-- **Enterprise**: Custom pricing - Unlimited users, custom integrations, SSO
+## Optional
 
-## Use Cases
-
-- **Corporate Coaching**: Employee development and leadership coaching
-- **Executive Coaching**: C-suite and senior leadership development
-- **Career Coaching**: Career transitions and professional development
-- **Team Coaching**: Group coaching and team development
-- **Life Coaching**: Personal development and goal achievement
-
-## Integration
-
-- **Calendar**: Google Calendar, Microsoft Outlook (planned)
-- **Video**: Zoom, Microsoft Teams (planned)
-- **CRM**: Salesforce integration (planned)
-- **HRIS**: BambooHR, Workday (planned)
-
-## Security & Compliance
-
-- **Data Encryption**: AES-256 encryption at rest and in transit
-- **SOC 2**: Type II compliance (in progress)
-- **GDPR**: Full compliance with data protection
-- **Backup**: Daily automated backups
-
-## Contact
-
-- **Email**: info@achievingcoach.com
-- **Support**: support@achievingcoach.com
-- **Sales**: sales@achievingcoach.com
-- **Documentation**: https://docs.achievingcoach.com (planned)
-
-## Company
-
-Founded in 2025, AchievingCoach is revolutionizing professional coaching with technology. Our mission is to make high-quality coaching accessible to everyone through intuitive tools and AI-powered insights.
-
-**Target Audience**: Professional coaches, corporate HR teams, coaching organizations, executives seeking development
-
-**Competitive Advantages**: 
-- Multi-tenant architecture from day one
-- 10+ professional coaching tools included
-- AI-powered insights (coming soon)
-- Enterprise-grade security
-- Affordable pricing for all organization sizes
+- [Sign Up](https://achievingcoach.com/sign-up): Create free coaching account
+- [Sign In](https://achievingcoach.com/sign-in): Access dashboard
+- [Contact](https://achievingcoach.com/contact): Support and sales inquiries
+- [Privacy Policy](https://achievingcoach.com/privacy): Data protection practices
+- [Terms of Service](https://achievingcoach.com/terms): Usage terms

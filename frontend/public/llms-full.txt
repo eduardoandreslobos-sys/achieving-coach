@@ -1,0 +1,143 @@
+# AchievingCoach - Complete Documentation
+
+> AchievingCoach is a professional coaching platform (plataforma de coaching ejecutivo) designed for executive coaches, life coaches, and career coaches. It provides 12+ interactive coaching tools aligned with ICF (International Coaching Federation) competencies, client management, session scheduling, AI-powered insights, and automated reporting to demonstrate coaching ROI.
+
+AchievingCoach serves as the complete operating system (sistema operativo) for coaching practices. The platform enables coaches to manage their entire business: client profiles, session scheduling, assessment delivery, progress tracking, and professional reporting for corporate sponsors and HR departments.
+
+## What is AchievingCoach?
+
+AchievingCoach is a SaaS platform that digitizes and streamlines the coaching workflow. Unlike generic CRM systems, it is purpose-built for the coaching profession with:
+
+- **12+ Interactive Coaching Tools**: Digital versions of industry-standard assessments (DISC, Wheel of Life, GROW, etc.)
+- **ICF Alignment**: Tools and methodology aligned with International Coaching Federation core competencies
+- **9-Phase Coaching Methodology**: Structured framework from initial discovery through completion
+- **AI-Powered Insights**: Session analysis and coaching suggestions
+- **Multi-Role Support**: Separate dashboards for coaches, clients (coachees), and administrators
+
+## Coaching Tools (Detailed)
+
+### DISC Assessment
+Behavioral assessment tool that identifies four primary personality types: Dominance, Influence, Steadiness, and Conscientiousness. Helps coaches understand client communication styles and leadership approaches.
+
+### Wheel of Life
+Life balance evaluation tool that measures satisfaction across 8-12 customizable life dimensions (career, relationships, health, finances, etc.). Visual spider chart shows areas needing attention.
+
+### GROW Model Worksheet
+Interactive worksheet for the GROW coaching framework:
+- **G**oal: What do you want to achieve?
+- **R**eality: Where are you now?
+- **O**ptions: What could you do?
+- **W**ill: What will you do?
+
+### Values Clarification
+Exercise to identify and prioritize core personal values. Helps clients make decisions aligned with what matters most to them.
+
+### Stakeholder Mapping
+Relationship analysis tool for executives. Maps key stakeholders by influence and interest to develop engagement strategies.
+
+### Career Compass
+Career direction planning tool that evaluates skills, interests, and market opportunities to guide professional development.
+
+### Emotional Triggers Journal
+Journaling tool to identify emotional patterns and triggers. Builds self-awareness for emotional regulation.
+
+### Feedback-Feedforward
+360-degree feedback collection tool that also captures forward-looking development suggestions.
+
+### Habit Loop Analyzer
+Tool based on habit science to identify cue-routine-reward patterns and design behavior change interventions.
+
+### Limiting Beliefs Transformation
+Cognitive restructuring exercise to identify and reframe self-limiting beliefs.
+
+### Resilience Scale Assessment
+Measurement tool for psychological resilience with targeted development recommendations.
+
+### ICF Competency Simulator
+AI-powered practice environment where coaches can practice demonstrating ICF core competencies and receive feedback.
+
+## Pricing Plans
+
+### Free Tier
+- Basic access to platform
+- Limited tool usage
+- Good for exploring the platform
+
+### Premium Plan - $29/month
+- Individual coaches
+- Full access to all 12+ tools
+- Unlimited clients
+- Session scheduling with calendar integration
+- Progress reports
+- Email support
+
+### Enterprise Plan - $99/month
+- Coaching organizations
+- Unlimited coaches
+- Custom branding
+- Advanced analytics
+- API access
+- Priority support
+- SSO integration
+
+## Frequently Asked Questions
+
+### Is AchievingCoach ICF certified?
+AchievingCoach is designed around ICF (International Coaching Federation) competencies. The platform includes an ICF Competency Simulator and tools aligned with ICF-approved coaching methodologies. The platform itself is not "certified" by ICF, but supports coaches in practicing ICF standards.
+
+### What languages does AchievingCoach support?
+The platform supports English and Spanish interfaces. Additional languages are planned.
+
+### How secure is client data?
+AchievingCoach uses enterprise-grade security including AES-256 encryption at rest and in transit, is compliant with GDPR, CCPA, and HIPAA guidelines, and provides granular permission controls.
+
+### Can I integrate with my calendar?
+Yes, AchievingCoach integrates with Google Calendar for session scheduling with automatic reminders.
+
+### Is there a mobile app?
+AchievingCoach is a responsive web application that works on mobile browsers. Native mobile apps are planned.
+
+### Can I white-label the platform?
+Enterprise plans include custom branding options.
+
+## Use Cases
+
+### Executive Coaching
+For coaches working with C-suite executives, directors, and senior leaders. Features include stakeholder mapping, 360 feedback, and executive-ready reporting.
+
+### Life Coaching
+For coaches focused on personal development, life transitions, and goal achievement. Includes Wheel of Life, values clarification, and goal tracking.
+
+### Career Coaching
+For coaches helping clients with career transitions, professional development, and job search. Features Career Compass and skills assessment tools.
+
+### Corporate/Internal Coaching
+For organizations with internal coaching programs. Multi-tenant architecture supports separate workspaces with role-based access.
+
+### Team Coaching
+For coaches working with teams on collaboration, communication, and performance. Group tools and team dashboards available.
+
+## Technology Stack
+
+- **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS
+- **Backend**: Firebase (Firestore, Authentication, Storage)
+- **Hosting**: Google Cloud Run
+- **AI**: Integration-ready for advanced AI features
+
+## Company Information
+
+- **Website**: https://achievingcoach.com
+- **Support Email**: support@achievingcoach.com
+- **Founded**: 2024
+- **Location**: United States
+
+## Links
+
+- [Homepage](https://achievingcoach.com)
+- [Features](https://achievingcoach.com/features)
+- [Pricing](https://achievingcoach.com/pricing)
+- [Blog](https://achievingcoach.com/blog)
+- [Sign Up](https://achievingcoach.com/sign-up)
+- [Contact](https://achievingcoach.com/contact)
+- [Privacy Policy](https://achievingcoach.com/privacy)
+- [Terms of Service](https://achievingcoach.com/terms)
