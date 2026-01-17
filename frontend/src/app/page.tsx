@@ -3,7 +3,7 @@ import HomePageClient from "./HomePageClient";
 
 export const metadata: Metadata = {
   title: 'AchievingCoach - Plataforma Profesional de Coaching Ejecutivo',
-  description: 'Transforma tu práctica de coaching con AchievingCoach. Herramientas profesionales incluyendo Modelo GROW, Evaluación DISC, Rueda de la Vida y más. Confianza de coaches y organizaciones en todo el mundo. Inicia tu prueba gratuita de 14 días.',
+  description: 'Transforma tu práctica de coaching con herramientas profesionales: GROW, DISC, Rueda de la Vida y más. Prueba gratis 14 días.',
   keywords: [
     'plataforma de coaching',
     'software de coaching profesional',

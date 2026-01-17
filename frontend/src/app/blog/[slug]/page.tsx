@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   
   return {
     title: 'Blog Post',
-    description: 'Read our latest coaching insights',
+    description: 'Descubre insights de coaching experto: estrategias, herramientas y mejores prácticas para coaches profesionales.',
   };
 }
 
