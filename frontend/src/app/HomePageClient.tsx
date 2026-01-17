@@ -331,6 +331,126 @@ export default function HomePageClient() {
         </div>
       </section>
 
+      {/* Por qué AchievingCoach - SEO Content Section */}
+      <section className="py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            <div>
+              <h2 className="text-3xl lg:text-4xl font-bold mb-6">
+                La Plataforma Profesional de<br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-violet-400">Coaching Ejecutivo</span>
+              </h2>
+              <div className="space-y-4 text-gray-400">
+                <p>
+                  AchievingCoach es el sistema operativo definitivo para coaches profesionales que buscan transformar su práctica de coaching ejecutivo. Nuestra plataforma profesional integra todas las herramientas que necesitas para gestionar clientes, sesiones y resultados en un solo lugar.
+                </p>
+                <p>
+                  Como sistema operativo del coaching ejecutivo, automatizamos las tareas administrativas para que puedas enfocarte en lo que realmente importa: el desarrollo y crecimiento de tus clientes. Desde la primera sesión de descubrimiento hasta el cierre del proceso, nuestra plataforma profesional te acompaña en cada paso.
+                </p>
+                <p>
+                  El coaching ejecutivo requiere herramientas a la altura del impacto que generas. Por eso diseñamos AchievingCoach como una plataforma profesional completa que incluye evaluaciones psicométricas, seguimiento de objetivos, análisis de progreso y comunicación integrada con tus clientes.
+                </p>
+              </div>
+            </div>
+            <div className="bg-[#111111] border border-gray-800 rounded-xl p-8">
+              <h3 className="text-xl font-bold text-white mb-6">¿Por qué elegir nuestra plataforma profesional?</h3>
+              <ul className="space-y-4">
+                <li className="flex gap-3">
+                  <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <span className="text-white font-medium">Sistema operativo completo</span>
+                    <p className="text-gray-500 text-sm mt-1">Gestiona todo tu negocio de coaching ejecutivo desde una única plataforma profesional integrada.</p>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <span className="text-white font-medium">Metodologías probadas</span>
+                    <p className="text-gray-500 text-sm mt-1">Implementa GROW, DISC, Rueda de la Vida y más de 10 herramientas de coaching ejecutivo validadas.</p>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <span className="text-white font-medium">Analítica avanzada</span>
+                    <p className="text-gray-500 text-sm mt-1">Demuestra el ROI de tu coaching ejecutivo con reportes automáticos y métricas de impacto.</p>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <span className="text-white font-medium">Cumplimiento ICF</span>
+                    <p className="text-gray-500 text-sm mt-1">Plataforma profesional alineada con las competencias de la International Coaching Federation.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Beneficios del Coaching Ejecutivo - SEO Content */}
+      <section className="py-20 px-6 bg-[#080808]">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4">Transforma tu Práctica de Coaching Ejecutivo</h2>
+            <p className="text-gray-400 max-w-3xl mx-auto">
+              El coaching ejecutivo es una de las profesiones de mayor impacto en el desarrollo organizacional. Con AchievingCoach, llevas tu práctica profesional al siguiente nivel con tecnología diseñada específicamente para coaches que trabajan con líderes y equipos de alto rendimiento.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+              <Star className="w-8 h-8 text-amber-400 mb-4" />
+              <h3 className="text-white font-semibold mb-2">Coaching Ejecutivo de Alto Impacto</h3>
+              <p className="text-gray-500 text-sm">
+                Nuestra plataforma profesional te permite estructurar procesos de coaching ejecutivo que generan resultados medibles. Desde la definición de objetivos hasta el seguimiento de KPIs, todo integrado en un sistema operativo intuitivo.
+              </p>
+            </div>
+
+            <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+              <Users className="w-8 h-8 text-blue-400 mb-4" />
+              <h3 className="text-white font-semibold mb-2">Gestión Profesional de Clientes</h3>
+              <p className="text-gray-500 text-sm">
+                El coaching ejecutivo requiere un manejo impecable de la relación con el cliente. Nuestra plataforma profesional centraliza perfiles, historial de sesiones, documentos y comunicación en un solo lugar.
+              </p>
+            </div>
+
+            <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+              <Brain className="w-8 h-8 text-violet-400 mb-4" />
+              <h3 className="text-white font-semibold mb-2">Inteligencia Artificial para Coaches</h3>
+              <p className="text-gray-500 text-sm">
+                El sistema operativo de AchievingCoach incluye IA que analiza sesiones y sugiere enfoques. Perfecto para coaches ejecutivos que quieren maximizar el impacto de cada conversación.
+              </p>
+            </div>
+
+            <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+              <Target className="w-8 h-8 text-emerald-400 mb-4" />
+              <h3 className="text-white font-semibold mb-2">Seguimiento de Objetivos</h3>
+              <p className="text-gray-500 text-sm">
+                El coaching ejecutivo efectivo se mide por resultados. Nuestra plataforma profesional te permite definir, trackear y reportar el progreso hacia objetivos con precisión.
+              </p>
+            </div>
+
+            <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+              <Calendar className="w-8 h-8 text-pink-400 mb-4" />
+              <h3 className="text-white font-semibold mb-2">Agendamiento y Recordatorios</h3>
+              <p className="text-gray-500 text-sm">
+                Como sistema operativo completo, AchievingCoach maneja tu calendario, envía recordatorios automáticos y facilita la reprogramación. Menos administración, más coaching ejecutivo.
+              </p>
+            </div>
+
+            <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+              <BarChart3 className="w-8 h-8 text-cyan-400 mb-4" />
+              <h3 className="text-white font-semibold mb-2">Reportes para Stakeholders</h3>
+              <p className="text-gray-500 text-sm">
+                El coaching ejecutivo corporativo requiere comunicar resultados a RRHH y sponsors. Genera reportes profesionales automáticos que demuestran el valor de tu intervención.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Seguridad */}
       <section className="py-20 px-6">
         <div className="max-w-7xl mx-auto text-center">
