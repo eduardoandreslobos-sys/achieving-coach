@@ -64,7 +64,7 @@ export default function CoachSidebar() {
 
   const handleSignOut = async () => {
     await logout();
-    router.push('/sign-in');
+    router.push('/');
   };
 
   const NavItem = ({ item, badge }: { item: typeof mainNavigation[0], badge?: number | null }) => {

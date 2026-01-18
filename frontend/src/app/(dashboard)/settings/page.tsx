@@ -176,7 +176,7 @@ export default function SettingsPage() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      router.push('/sign-in');
+      router.push('/');
     } catch (error) {
       console.error('Error signing out:', error);
       toast.error('Error al cerrar sesión');

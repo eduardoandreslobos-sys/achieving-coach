@@ -38,7 +38,7 @@ export default function DashboardSidebar() {
 
   const handleSignOut = async () => {
     await logout();
-    router.push('/sign-in');
+    router.push('/');
   };
 
   return (

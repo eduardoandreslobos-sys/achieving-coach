@@ -10,7 +10,7 @@ export default function UserMenu() {
 
   const handleSignOut = async () => {
     await logout();
-    router.push('/sign-in');
+    router.push('/');
   };
 
   const getInitials = () => {
