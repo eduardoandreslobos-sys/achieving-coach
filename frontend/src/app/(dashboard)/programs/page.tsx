@@ -44,7 +44,7 @@ export default function ProgramsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-[#0a0a0f]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -60,12 +60,12 @@ export default function ProgramsPage() {
 
         {programs.length === 0 ? (
           /* Empty State */
-          <div className="bg-[#12131a] border border-blue-900/30 rounded-2xl p-16">
+          <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-16">
             <div className="flex flex-col items-center text-center">
               {/* Icon with gradient background */}
               <div className="relative mb-8">
-                <div className="w-20 h-20 bg-gradient-to-br from-blue-600/30 to-blue-900/30 rounded-2xl flex items-center justify-center">
-                  <Flag className="w-10 h-10 text-blue-400" />
+                <div className="w-20 h-20 bg-gradient-to-br from-emerald-600/30 to-blue-900/30 rounded-2xl flex items-center justify-center">
+                  <Flag className="w-10 h-10 text-emerald-400" />
                 </div>
               </div>
 
@@ -76,7 +76,7 @@ export default function ProgramsPage() {
 
               <button
                 onClick={() => loadPrograms()}
-                className="flex items-center gap-2 px-6 py-3 bg-[#1a1b23] border border-blue-900/30 text-white rounded-xl font-medium hover:bg-[#22232d] transition-colors"
+                className="flex items-center gap-2 px-6 py-3 bg-[#1a1b23] border border-gray-800 text-white rounded-xl font-medium hover:bg-[#22232d] transition-colors"
               >
                 <RefreshCw className="w-5 h-5" />
                 Actualizar
@@ -87,15 +87,15 @@ export default function ProgramsPage() {
           /* Programs List */
           <div className="space-y-4">
             {programs.map((program) => (
-              <div key={program.id} className="bg-[#12131a] border border-blue-900/30 rounded-xl p-6">
+              <div key={program.id} className="bg-[#12131a] border border-gray-800 rounded-xl p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-white font-semibold text-lg">{program.name}</h3>
-                  <span className="text-blue-400 text-sm">{program.progress}% completado</span>
+                  <span className="text-emerald-400 text-sm">{program.progress}% completado</span>
                 </div>
                 <p className="text-gray-400 text-sm mb-4">{program.description}</p>
                 <div className="h-2 bg-[#1a1b23] rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-blue-500 rounded-full transition-all"
+                    className="h-full bg-emerald-500 rounded-full transition-all"
                     style={{ width: program.progress + '%' }}
                   />
                 </div>

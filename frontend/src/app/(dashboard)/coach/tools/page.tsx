@@ -33,7 +33,7 @@ const CATEGORIES = [
 const CATEGORY_COLORS: Record<string, { bg: string; text: string }> = {
   'EVALUACIÓN': { bg: 'bg-emerald-500/20', text: 'text-emerald-400' },
   'REFLEXIÓN': { bg: 'bg-orange-500/20', text: 'text-orange-400' },
-  'COGNITIVO': { bg: 'bg-blue-500/20', text: 'text-blue-400' },
+  'COGNITIVO': { bg: 'bg-emerald-500/20', text: 'text-emerald-400' },
   'HÁBITOS': { bg: 'bg-pink-500/20', text: 'text-pink-400' },
   'CARRERA': { bg: 'bg-amber-500/20', text: 'text-amber-400' },
   'RESILIENCIA': { bg: 'bg-emerald-500/20', text: 'text-emerald-400' },
@@ -55,7 +55,7 @@ const TOOL_ICONS: Record<string, any> = {
 const DARK_TOOLS = [
   { id: 'wheel-of-life', name: 'Rueda de la Vida', description: 'Herramienta visual clásica para evaluar el nivel de...', category: 'EVALUACIÓN', time: 15, icon: RefreshCw, color: 'bg-emerald-500/20', iconColor: 'text-emerald-400' },
   { id: 'values-clarification', name: 'Clarificación de Valores', description: 'Ejercicio fundamental para identificar los valores...', category: 'REFLEXIÓN', time: 20, icon: Lightbulb, color: 'bg-orange-500/20', iconColor: 'text-orange-400' },
-  { id: 'limiting-beliefs', name: 'Creencias Limitantes', description: 'Guía estructurada para desafiar y reformular...', category: 'COGNITIVO', time: 30, icon: TrendingUp, color: 'bg-blue-500/20', iconColor: 'text-blue-400' },
+  { id: 'limiting-beliefs', name: 'Creencias Limitantes', description: 'Guía estructurada para desafiar y reformular...', category: 'COGNITIVO', time: 30, icon: TrendingUp, color: 'bg-emerald-500/20', iconColor: 'text-emerald-400' },
   { id: 'habits-loop', name: 'Loop de Hábitos', description: 'Framework basado en la ciencia del comportamiento...', category: 'HÁBITOS', time: 45, icon: Smile, color: 'bg-pink-500/20', iconColor: 'text-pink-400' },
   { id: 'career-compass', name: 'Brújula de Carrera', description: 'Herramienta de exploración profesional para...', category: 'CARRERA', time: 25, icon: Compass, color: 'bg-amber-500/20', iconColor: 'text-amber-400' },
   { id: 'resilience-scale', name: 'Escala de Resiliencia', description: 'Evaluación basada en investigación para medir...', category: 'RESILIENCIA', time: 20, icon: Shield, color: 'bg-emerald-500/20', iconColor: 'text-emerald-400' },
@@ -162,7 +162,7 @@ export default function CoachToolsPage() {
               <Upload className="w-4 h-4" />
               Importar
             </button>
-            <button className="flex items-center gap-2 px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+            <button className="flex items-center gap-2 px-5 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium">
               <Plus className="w-4 h-4" />
               Crear Herramienta
             </button>
@@ -183,7 +183,7 @@ export default function CoachToolsPage() {
             >
               {tab.name}
               {activeTab === tab.id && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500"></div>
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500"></div>
               )}
             </button>
           ))}
@@ -198,12 +198,12 @@ export default function CoachToolsPage() {
               placeholder="Buscar por nombre, categoría o etiqueta..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+              className="w-full pl-10 pr-4 py-2.5 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
             />
           </div>
           <div className="flex gap-3">
             <div className="relative">
-              <select className="appearance-none px-4 py-2.5 pr-10 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500 cursor-pointer">
+              <select className="appearance-none px-4 py-2.5 pr-10 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500 cursor-pointer">
                 <option>Categoría</option>
                 <option>Evaluación</option>
                 <option>Reflexión</option>
@@ -212,7 +212,7 @@ export default function CoachToolsPage() {
               <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
             </div>
             <div className="relative">
-              <select className="appearance-none px-4 py-2.5 pr-10 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500 cursor-pointer">
+              <select className="appearance-none px-4 py-2.5 pr-10 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500 cursor-pointer">
                 <option>Tipo</option>
                 <option>Herramienta</option>
                 <option>Ejercicio</option>
@@ -290,7 +290,7 @@ export default function CoachToolsPage() {
                     </div>
                     <Link
                       href={`/tools/${tool.id}`}
-                      className="flex items-center gap-1 text-blue-400 text-sm font-medium hover:text-blue-300 transition-colors"
+                      className="flex items-center gap-1 text-emerald-400 text-sm font-medium hover:text-emerald-300 transition-colors"
                     >
                       Ver Detalles
                       <ArrowRight className="w-4 h-4" />
@@ -335,7 +335,7 @@ export default function CoachToolsPage() {
               <div className="flex gap-3">
                 <Link
                   href={`/tools/${previewTool.id}`}
-                  className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 text-center transition-colors"
+                  className="flex-1 px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 text-center transition-colors"
                 >
                   Probar Herramienta
                 </Link>
@@ -385,7 +385,7 @@ export default function CoachToolsPage() {
                   <select
                     value={selectedClient}
                     onChange={(e) => setSelectedClient(e.target.value)}
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
                   >
                     <option value="">Elegir cliente...</option>
                     {clients.map((client) => (
@@ -402,7 +402,7 @@ export default function CoachToolsPage() {
                     <button
                       onClick={handleAssignTool}
                       disabled={!selectedClient || assigning}
-                      className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-700 disabled:cursor-not-allowed"
+                      className="flex-1 px-4 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 disabled:bg-gray-700 disabled:cursor-not-allowed"
                     >
                       {assigning ? 'Asignando...' : 'Asignar'}
                     </button>

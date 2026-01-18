@@ -168,7 +168,7 @@ export default function CoacheeProgramPage() {
               <p className="font-semibold">{program.sessionsPlanned}</p>
             </div>
             <div className="bg-gray-50 rounded-lg p-4">
-              <Clock className="text-blue-600 mb-2" size={24} />
+              <Clock className="text-emerald-600 mb-2" size={24} />
               <p className="text-sm text-gray-600">Duración</p>
               <p className="font-semibold">{program.duration} meses</p>
             </div>
@@ -388,7 +388,7 @@ export default function CoacheeProgramPage() {
                   </div>
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                     session.status === 'completed' ? 'bg-green-100 text-green-800' :
-                    session.status === 'in-progress' ? 'bg-blue-100 text-blue-800' :
+                    session.status === 'in-progress' ? 'bg-emerald-100 text-blue-800' :
                     session.status === 'cancelled' ? 'bg-red-100 text-red-800' :
                     'bg-gray-100 text-gray-800'
                   }`}>
@@ -410,7 +410,7 @@ function StatusBadge({ status }: { status: CoachingProgram['status'] }) {
   const config = {
     draft: { bg: 'bg-gray-100', text: 'text-gray-800', label: 'Borrador' },
     pending_acceptance: { bg: 'bg-yellow-100', text: 'text-yellow-800', label: 'Pendiente' },
-    active: { bg: 'bg-blue-100', text: 'text-blue-800', label: 'Activo' },
+    active: { bg: 'bg-emerald-100', text: 'text-blue-800', label: 'Activo' },
     completed: { bg: 'bg-green-100', text: 'text-green-800', label: 'Completado' },
     paused: { bg: 'bg-orange-100', text: 'text-orange-800', label: 'Pausado' },
     cancelled: { bg: 'bg-red-100', text: 'text-red-800', label: 'Cancelado' },

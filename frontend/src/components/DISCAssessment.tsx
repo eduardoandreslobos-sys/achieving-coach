@@ -108,7 +108,7 @@ export function DISCAssessment() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
       </div>
     );
   }
@@ -120,7 +120,7 @@ export function DISCAssessment() {
           <p>{error}</p>
           <button 
             onClick={loadQuestionsData} 
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="mt-4 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700"
           >
             Intentar de nuevo
           </button>
@@ -133,7 +133,7 @@ export function DISCAssessment() {
     return (
       <div className="bg-white rounded-xl shadow-sm border p-6">
         <div className="flex flex-col items-center justify-center min-h-[300px] space-y-4">
-          <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
+          <Loader2 className="h-12 w-12 animate-spin text-emerald-600" />
           <p className="text-lg text-gray-600">Calculando tu perfil DISC...</p>
         </div>
       </div>
@@ -165,7 +165,7 @@ export function DISCAssessment() {
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 
-              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+              className="bg-emerald-600 h-2 rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -237,7 +237,7 @@ export function DISCAssessment() {
           <button
             onClick={handleNext}
             disabled={!canProceed}
-            className="px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="px-6 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             {currentGroup === questions.length - 1 ? 'Finalizar' : 'Siguiente'}
             <ArrowRight className="h-4 w-4" />

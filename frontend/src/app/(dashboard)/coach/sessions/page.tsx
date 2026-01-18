@@ -282,7 +282,7 @@ export default function CoachSessionsPage() {
   const getStatusBadge = (status: Session['status']) => {
     switch (status) {
       case 'scheduled':
-        return <span className="px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-400">Programada</span>;
+        return <span className="px-2 py-1 text-xs rounded-full bg-emerald-500/20 text-emerald-400">Programada</span>;
       case 'completed':
         return <span className="px-2 py-1 text-xs rounded-full bg-emerald-500/20 text-emerald-400">Completada</span>;
       case 'cancelled':
@@ -314,7 +314,7 @@ export default function CoachSessionsPage() {
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
         >
           <Plus className="w-4 h-4" />
           Nueva Sesión
@@ -325,8 +325,8 @@ export default function CoachSessionsPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         <div className="bg-[#111111] border border-gray-800 rounded-xl p-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
-              <Calendar className="w-5 h-5 text-blue-400" />
+            <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
+              <Calendar className="w-5 h-5 text-emerald-400" />
             </div>
             <div>
               <p className="text-2xl font-bold">{stats.total}</p>
@@ -381,7 +381,7 @@ export default function CoachSessionsPage() {
             placeholder="Buscar por nombre o email..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-[#111111] border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+            className="w-full pl-10 pr-4 py-2 bg-[#111111] border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
           />
         </div>
         <div className="flex gap-2">
@@ -391,7 +391,7 @@ export default function CoachSessionsPage() {
               onClick={() => setFilter(f)}
               className={`px-4 py-2 rounded-lg text-sm transition-colors ${
                 filter === f
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-emerald-600 text-white'
                   : 'bg-[#111111] border border-gray-800 text-gray-400 hover:text-white'
               }`}
             >
@@ -426,8 +426,8 @@ export default function CoachSessionsPage() {
                   <tr key={session.id} className="hover:bg-[#1a1a1a] transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center">
-                          <span className="text-blue-400 font-medium">
+                        <div className="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center">
+                          <span className="text-emerald-400 font-medium">
                             {session.coacheeName.charAt(0).toUpperCase()}
                           </span>
                         </div>
@@ -466,7 +466,7 @@ export default function CoachSessionsPage() {
                             href={session.meetingLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-2 text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors"
+                            className="p-2 text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-colors"
                             title="Unirse a la reunión"
                           >
                             <Video className="w-4 h-4" />
@@ -518,7 +518,7 @@ export default function CoachSessionsPage() {
                 <select
                   value={newSession.coacheeId}
                   onChange={(e) => setNewSession({ ...newSession, coacheeId: e.target.value })}
-                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
                 >
                   <option value="">Seleccionar coachee</option>
                   {coachees.map((coachee) => (
@@ -535,7 +535,7 @@ export default function CoachSessionsPage() {
                     type="date"
                     value={newSession.scheduledDate}
                     onChange={(e) => setNewSession({ ...newSession, scheduledDate: e.target.value })}
-                    className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
                   />
                 </div>
                 <div>
@@ -544,7 +544,7 @@ export default function CoachSessionsPage() {
                     type="time"
                     value={newSession.scheduledTime}
                     onChange={(e) => setNewSession({ ...newSession, scheduledTime: e.target.value })}
-                    className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
                   />
                 </div>
               </div>
@@ -553,7 +553,7 @@ export default function CoachSessionsPage() {
                 <select
                   value={newSession.duration}
                   onChange={(e) => setNewSession({ ...newSession, duration: parseInt(e.target.value) })}
-                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
                 >
                   <option value={30}>30 minutos</option>
                   <option value={45}>45 minutos</option>
@@ -569,7 +569,7 @@ export default function CoachSessionsPage() {
                   value={newSession.meetingLink}
                   onChange={(e) => setNewSession({ ...newSession, meetingLink: e.target.value })}
                   placeholder="https://zoom.us/j/..."
-                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
                 />
               </div>
               <div>
@@ -579,7 +579,7 @@ export default function CoachSessionsPage() {
                   onChange={(e) => setNewSession({ ...newSession, notes: e.target.value })}
                   placeholder="Notas o agenda para la sesión..."
                   rows={3}
-                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 resize-none"
+                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 resize-none"
                 />
               </div>
             </div>
@@ -592,7 +592,7 @@ export default function CoachSessionsPage() {
               </button>
               <button
                 onClick={handleCreateSession}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 Crear Sesión
               </button>
@@ -641,7 +641,7 @@ export default function CoachSessionsPage() {
                 <select
                   value={selectedSession.status}
                   onChange={(e) => setSelectedSession({ ...selectedSession, status: e.target.value as Session['status'] })}
-                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
                 >
                   <option value="scheduled">Programada</option>
                   <option value="completed">Completada</option>
@@ -656,7 +656,7 @@ export default function CoachSessionsPage() {
                   value={selectedSession.meetingLink || ''}
                   onChange={(e) => setSelectedSession({ ...selectedSession, meetingLink: e.target.value })}
                   placeholder="https://zoom.us/j/..."
-                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
                 />
               </div>
               <div>
@@ -666,7 +666,7 @@ export default function CoachSessionsPage() {
                   onChange={(e) => setSelectedSession({ ...selectedSession, postSessionNotes: e.target.value })}
                   placeholder="Notas después de la sesión..."
                   rows={4}
-                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 resize-none"
+                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 resize-none"
                 />
               </div>
             </div>
@@ -682,7 +682,7 @@ export default function CoachSessionsPage() {
               </button>
               <button
                 onClick={handleUpdateSession}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 Guardar Cambios
               </button>

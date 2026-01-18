@@ -99,7 +99,7 @@ export default function BlogPage() {
               <input
                 type="text"
                 placeholder="Buscar artículos..."
-                className="pl-10 pr-4 py-3 bg-[#111111] border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 w-full lg:w-80"
+                className="pl-10 pr-4 py-3 bg-[#111111] border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 w-full lg:w-80"
               />
             </div>
           </div>
@@ -111,7 +111,7 @@ export default function BlogPage() {
                 key={cat.slug}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   cat.slug === 'all'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-emerald-600 text-white'
                     : 'bg-[#111111] border border-gray-800 text-gray-400 hover:text-white hover:border-gray-700'
                 }`}
               >
@@ -126,10 +126,10 @@ export default function BlogPage() {
       {/* Featured Post */}
       <section className="px-6 mb-16">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-gradient-to-br from-blue-500/10 to-violet-500/10 border border-blue-500/20 rounded-2xl p-8 lg:p-12">
+          <div className="bg-gradient-to-br from-emerald-500/10 to-violet-500/10 border border-emerald-500/20 rounded-2xl p-8 lg:p-12">
             <div className="grid lg:grid-cols-2 gap-8 items-center">
               <div>
-                <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-full text-blue-400 text-xs mb-4">
+                <span className="inline-flex items-center gap-1 px-3 py-1 bg-emerald-500/20 border border-emerald-500/30 rounded-full text-emerald-400 text-xs mb-4">
                   <Tag className="w-3 h-3" />
                   {featuredPost.category}
                 </span>
@@ -147,7 +147,7 @@ export default function BlogPage() {
                 </div>
                 <Link
                   href={`/blog/${featuredPost.slug}`}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors"
                 >
                   Leer Artículo
                   <ArrowRight className="w-4 h-4" />
@@ -184,7 +184,7 @@ export default function BlogPage() {
                     </span>
                     <span className="text-gray-600 text-xs">{post.readTime}</span>
                   </div>
-                  <h3 className="text-white font-semibold mb-2 group-hover:text-blue-400 transition-colors">
+                  <h3 className="text-white font-semibold mb-2 group-hover:text-emerald-400 transition-colors">
                     {post.title}
                   </h3>
                   <p className="text-gray-500 text-sm line-clamp-2 mb-4">{post.excerpt}</p>
@@ -215,9 +215,9 @@ export default function BlogPage() {
             <input
               type="email"
               placeholder="tu@email.com"
-              className="flex-1 px-4 py-3 bg-[#111111] border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+              className="flex-1 px-4 py-3 bg-[#111111] border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
             />
-            <button className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+            <button className="px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors">
               Suscribir
             </button>
           </div>

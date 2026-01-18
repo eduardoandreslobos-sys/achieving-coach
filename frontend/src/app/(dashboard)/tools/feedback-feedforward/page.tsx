@@ -149,7 +149,7 @@ export default function FeedbackFeedForwardPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -160,8 +160,8 @@ export default function FeedbackFeedForwardPage() {
       <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
-            <div className={`w-16 h-16 ${isCoach ? 'bg-blue-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
-              <Lightbulb className={`w-8 h-8 ${isCoach ? 'text-blue-400' : 'text-yellow-400'}`} />
+            <div className={`w-16 h-16 ${isCoach ? 'bg-emerald-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
+              <Lightbulb className={`w-8 h-8 ${isCoach ? 'text-emerald-400' : 'text-yellow-400'}`} />
             </div>
             <h2 className="text-2xl font-bold text-white mb-4">
               {isCoach ? 'Tool for Coachees Only' : 'Access Required'}
@@ -173,7 +173,7 @@ export default function FeedbackFeedForwardPage() {
             </p>
             <Link
               href={isCoach ? '/coach/clients' : '/dashboard'}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
             >
               {isCoach ? 'Go to Clients' : 'Return to Dashboard'}
             </Link>
@@ -199,7 +199,7 @@ export default function FeedbackFeedForwardPage() {
             <div className="flex gap-4 justify-center">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 Return to Dashboard
               </Link>
@@ -227,11 +227,11 @@ export default function FeedbackFeedForwardPage() {
           </p>
         </div>
 
-        <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 mb-6">
+        <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 mb-6">
           <div className="flex items-start gap-3">
-            <Lightbulb className="text-blue-400 flex-shrink-0" size={24} />
+            <Lightbulb className="text-emerald-400 flex-shrink-0" size={24} />
             <div>
-              <h3 className="font-bold text-blue-300 mb-1">Feed-Forward vs Feedback</h3>
+              <h3 className="font-bold text-emerald-300 mb-1">Feed-Forward vs Feedback</h3>
               <p className="text-sm text-blue-200">
                 <strong>Feedback</strong> focuses on the past. <strong>Feed-forward</strong> focuses on future possibilities.
                 Instead of "You should have...", try "Next time you could..."
@@ -253,7 +253,7 @@ export default function FeedbackFeedForwardPage() {
                 value={currentItem.situation}
                 onChange={(e) => setCurrentItem({ ...currentItem, situation: e.target.value })}
                 placeholder="Describe the situation you want to address"
-                className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               />
             </div>
 
@@ -298,7 +298,7 @@ export default function FeedbackFeedForwardPage() {
                   value={step}
                   onChange={(e) => updateActionStep(index, e.target.value)}
                   placeholder={`Action step ${index + 1}`}
-                  className="w-full px-4 py-2 mb-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-2 mb-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                 />
               ))}
             </div>
@@ -307,7 +307,7 @@ export default function FeedbackFeedForwardPage() {
           <button
             onClick={addItem}
             disabled={!currentItem.situation || !currentItem.feedback || !currentItem.feedforward}
-            className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
+            className="mt-4 px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
           >
             Add Item
           </button>
@@ -344,7 +344,7 @@ export default function FeedbackFeedForwardPage() {
                       <ul className="space-y-1">
                         {item.actionSteps.map((step, idx) => (
                           <li key={idx} className="text-sm text-gray-300 flex items-start gap-2">
-                            <span className="text-blue-400">•</span>
+                            <span className="text-emerald-400">•</span>
                             {step}
                           </li>
                         ))}
@@ -359,7 +359,7 @@ export default function FeedbackFeedForwardPage() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="px-8 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-700 disabled:text-gray-500 flex items-center gap-2 transition-colors"
+                className="px-8 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 disabled:bg-gray-700 disabled:text-gray-500 flex items-center gap-2 transition-colors"
               >
                 {saving ? 'Saving...' : 'Save Planner'}
               </button>

@@ -71,9 +71,9 @@ export default function CoachProfilePage() {
         </div>
 
         {/* Profile Information Section */}
-        <div className="bg-[#12131a] border border-blue-900/30 rounded-xl p-6 mb-6">
+        <div className="bg-[#12131a] border border-gray-800 rounded-xl p-6 mb-6">
           <div className="flex items-center gap-2 mb-6">
-            <User className="w-5 h-5 text-blue-400" />
+            <User className="w-5 h-5 text-emerald-400" />
             <h2 className="text-white font-semibold">Información del Perfil</h2>
           </div>
 
@@ -92,13 +92,13 @@ export default function CoachProfilePage() {
                   <Camera className="w-4 h-4" />
                 </button>
               </div>
-              <button className="text-blue-400 text-sm hover:text-blue-300">Eliminar foto</button>
+              <button className="text-emerald-400 text-sm hover:text-emerald-300">Eliminar foto</button>
             </div>
 
             {/* Form */}
             <div className="flex-1 space-y-6">
               {/* Photo Requirements */}
-              <div className="flex items-start gap-3 p-4 bg-[#1a1b23] border border-blue-900/20 rounded-lg">
+              <div className="flex items-start gap-3 p-4 bg-[#1a1b23] border border-gray-800 rounded-lg">
                 <Info className="w-5 h-5 text-gray-500 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-gray-400 text-sm font-medium mb-1">Requisitos de la foto</p>
@@ -118,7 +118,7 @@ export default function CoachProfilePage() {
                       value={displayName}
                       onChange={(e) => setDisplayName(e.target.value)}
                       placeholder="John Doe"
-                      className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 pr-10"
+                      className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-800 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-emerald-500 pr-10"
                     />
                     <Copy className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
                   </div>
@@ -132,7 +132,7 @@ export default function CoachProfilePage() {
                       type="email"
                       value={userProfile?.email || ''}
                       disabled
-                      className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-gray-500 cursor-not-allowed pr-10"
+                      className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-800 rounded-xl text-gray-500 cursor-not-allowed pr-10"
                     />
                     <div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600">🔒</div>
                   </div>
@@ -144,7 +144,7 @@ export default function CoachProfilePage() {
         </div>
 
         {/* Value Proposition Section */}
-        <div className="bg-[#12131a] border border-blue-900/30 rounded-xl p-6">
+        <div className="bg-[#12131a] border border-gray-800 rounded-xl p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-amber-400" />
@@ -194,7 +194,7 @@ export default function CoachProfilePage() {
                   value={valueProps.coachingType}
                   onChange={(e) => setValueProps({ ...valueProps, coachingType: e.target.value })}
                   placeholder="Ej: Coaching de Liderazgo"
-                  className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 pr-10"
+                  className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-800 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-emerald-500 pr-10"
                 />
                 <Settings2 className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
               </div>
@@ -210,7 +210,7 @@ export default function CoachProfilePage() {
                   value={valueProps.targetAudience}
                   onChange={(e) => setValueProps({ ...valueProps, targetAudience: e.target.value })}
                   placeholder="Ej: Gerentes Primerizos"
-                  className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 pr-10"
+                  className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-800 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-emerald-500 pr-10"
                 />
                 <Users className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
               </div>
@@ -226,7 +226,7 @@ export default function CoachProfilePage() {
                   value={valueProps.desiredOutcome}
                   onChange={(e) => setValueProps({ ...valueProps, desiredOutcome: e.target.value })}
                   placeholder="Ej: Mejorar su comunicación efectiva y delegar con confianza"
-                  className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 pr-10"
+                  className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-800 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-emerald-500 pr-10"
                 />
                 <Flag className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
               </div>
@@ -242,7 +242,7 @@ export default function CoachProfilePage() {
                   value={valueProps.problemSolved}
                   onChange={(e) => setValueProps({ ...valueProps, problemSolved: e.target.value })}
                   placeholder="Ej: Se sienten abrumados por la microgestión y temen perder talento en sus equipos..."
-                  className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 pr-10"
+                  className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-800 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-emerald-500 pr-10"
                 />
                 <Target className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
               </div>
@@ -254,7 +254,7 @@ export default function CoachProfilePage() {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+              className="px-6 py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50"
             >
               {saving ? 'Guardando...' : 'Guardar Cambios'}
             </button>

@@ -148,7 +148,7 @@ export default function ResilienceScalePage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -159,8 +159,8 @@ export default function ResilienceScalePage() {
       <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
-            <div className={`w-16 h-16 ${isCoach ? 'bg-blue-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
-              <Shield className={`w-8 h-8 ${isCoach ? 'text-blue-400' : 'text-yellow-400'}`} />
+            <div className={`w-16 h-16 ${isCoach ? 'bg-emerald-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
+              <Shield className={`w-8 h-8 ${isCoach ? 'text-emerald-400' : 'text-yellow-400'}`} />
             </div>
             <h2 className="text-2xl font-bold text-white mb-4">
               {isCoach ? 'Tool for Coachees Only' : 'Access Required'}
@@ -173,7 +173,7 @@ export default function ResilienceScalePage() {
             <div className="flex gap-4 justify-center">
               <Link
                 href={isCoach ? '/coach/clients' : '/dashboard'}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 {isCoach ? 'Go to Clients' : 'Return to Dashboard'}
               </Link>
@@ -200,7 +200,7 @@ export default function ResilienceScalePage() {
             <div className="flex gap-4 justify-center">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 Return to Dashboard
               </Link>
@@ -224,7 +224,7 @@ export default function ResilienceScalePage() {
         <div className="max-w-5xl mx-auto mb-8">
           <Link
             href="/tools"
-            className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium"
+            className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-medium"
           >
             <ArrowLeft size={20} />
             Back to Tools
@@ -246,15 +246,15 @@ export default function ResilienceScalePage() {
         <div className="mb-8">
           <Link
             href="/tools"
-            className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium mb-6"
+            className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-medium mb-6"
           >
             <ArrowLeft size={20} />
             Back to Tools
           </Link>
 
           <div className="flex items-center gap-4 mb-4">
-            <div className="bg-blue-500/20 p-4 rounded-xl">
-              <Shield className="w-10 h-10 text-blue-400" />
+            <div className="bg-emerald-500/20 p-4 rounded-xl">
+              <Shield className="w-10 h-10 text-emerald-400" />
             </div>
             <div>
               <h1 className="text-4xl font-bold text-white">
@@ -267,29 +267,29 @@ export default function ResilienceScalePage() {
           </div>
         </div>
 
-        <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-6 mb-8">
-          <h2 className="text-lg font-bold text-blue-300 mb-3">
+        <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 mb-8">
+          <h2 className="text-lg font-bold text-emerald-300 mb-3">
             Instructions
           </h2>
           <ul className="space-y-2 text-blue-200">
             <li className="flex items-start gap-2">
-              <span className="font-bold mt-0.5 text-blue-400">•</span>
+              <span className="font-bold mt-0.5 text-emerald-400">•</span>
               <span>This assessment contains 25 questions across 4 categories</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="font-bold mt-0.5 text-blue-400">•</span>
+              <span className="font-bold mt-0.5 text-emerald-400">•</span>
               <span>Rate each statement on a scale of 1 (Strongly Disagree) to 5 (Strongly Agree)</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="font-bold mt-0.5 text-blue-400">•</span>
+              <span className="font-bold mt-0.5 text-emerald-400">•</span>
               <span>Answer honestly based on how you typically feel and behave</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="font-bold mt-0.5 text-blue-400">•</span>
+              <span className="font-bold mt-0.5 text-emerald-400">•</span>
               <span>There are no right or wrong answers</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="font-bold mt-0.5 text-blue-400">•</span>
+              <span className="font-bold mt-0.5 text-emerald-400">•</span>
               <span>The assessment takes approximately 5-7 minutes to complete</span>
             </li>
           </ul>

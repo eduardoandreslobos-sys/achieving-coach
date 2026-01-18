@@ -37,8 +37,8 @@ export default function InviteCoacheesPage() {
           {/* Main Card - Invite Link */}
           <div className="lg:col-span-2 bg-[#111111] border border-gray-800 rounded-xl p-6">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center">
-                <Link2 className="w-6 h-6 text-blue-400" />
+              <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center">
+                <Link2 className="w-6 h-6 text-emerald-400" />
               </div>
               <div>
                 <h2 className="text-xl font-semibold text-white">Tu Enlace de Invitación</h2>
@@ -55,7 +55,7 @@ export default function InviteCoacheesPage() {
                 <button
                   onClick={copyToClipboard}
                   disabled={!inviteLink}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex-shrink-0 disabled:opacity-50 font-medium"
+                  className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors flex-shrink-0 disabled:opacity-50 font-medium"
                 >
                   {copied ? (
                     <>
@@ -84,7 +84,7 @@ export default function InviteCoacheesPage() {
             
             <div className="space-y-6">
               <div className="flex gap-4">
-                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center flex-shrink-0">
                   <span className="text-sm text-white font-bold">1</span>
                 </div>
                 <div>
@@ -94,7 +94,7 @@ export default function InviteCoacheesPage() {
               </div>
 
               <div className="flex gap-4">
-                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center flex-shrink-0">
                   <span className="text-sm text-white font-bold">2</span>
                 </div>
                 <div>
@@ -104,7 +104,7 @@ export default function InviteCoacheesPage() {
               </div>
 
               <div className="flex gap-4">
-                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center flex-shrink-0">
                   <span className="text-sm text-white font-bold">3</span>
                 </div>
                 <div>
@@ -145,9 +145,9 @@ export default function InviteCoacheesPage() {
           </div>
 
           {/* CTA Card */}
-          <div className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border border-blue-500/20 rounded-xl p-6 flex flex-col items-center justify-center text-center">
-            <div className="w-14 h-14 bg-blue-500/20 rounded-full flex items-center justify-center mb-4">
-              <Rocket className="w-7 h-7 text-blue-400" />
+          <div className="bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 border border-emerald-500/20 rounded-xl p-6 flex flex-col items-center justify-center text-center">
+            <div className="w-14 h-14 bg-emerald-500/20 rounded-full flex items-center justify-center mb-4">
+              <Rocket className="w-7 h-7 text-emerald-400" />
             </div>
             <h3 className="font-semibold text-white mb-2">Estás listo para crecer</h3>
             <p className="text-sm text-gray-400 mb-4">Tu enlace está activo. Comienza a compartirlo hoy.</p>

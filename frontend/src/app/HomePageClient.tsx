@@ -31,13 +31,13 @@ export default function HomePageClient() {
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-6 relative overflow-hidden">
         <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/30 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/30 rounded-full blur-3xl"></div>
           <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-violet-500/20 rounded-full blur-3xl"></div>
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-xs mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-xs mb-6">
               <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
               NUEVA VERSIÓN 2026
             </div>
@@ -52,7 +52,7 @@ export default function HomePageClient() {
             </p>
 
             <div className="flex flex-wrap gap-4 justify-center mb-12">
-              <Link href="/sign-up" className="px-8 py-3.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
+              <Link href="/sign-up" className="px-8 py-3.5 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2">
                 Iniciar Prueba Gratuita
                 <ArrowRight className="w-4 h-4" />
               </Link>
@@ -78,8 +78,8 @@ export default function HomePageClient() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* Card 1 */}
             <div className="bg-[#111111] border border-gray-800 rounded-xl p-6 hover:border-gray-700 transition-colors">
-              <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center mb-4">
-                <Users className="w-5 h-5 text-blue-400" />
+              <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center mb-4">
+                <Users className="w-5 h-5 text-emerald-400" />
               </div>
               <h3 className="text-white font-semibold mb-2">Perfiles y Viajes del Cliente</h3>
               <p className="text-gray-500 text-sm">Centraliza y visualiza la evolución de cada cliente: objetivos, notas, planes de acción y progreso consolidados de forma intuitiva e interactiva.</p>
@@ -138,10 +138,10 @@ export default function HomePageClient() {
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <p className="text-blue-400 text-xs uppercase tracking-wider mb-2">RECURSOS DE ÉLITE</p>
+              <p className="text-emerald-400 text-xs uppercase tracking-wider mb-2">RECURSOS DE ÉLITE</p>
               <h2 className="text-3xl lg:text-4xl font-bold">¿Qué herramientas necesita un coach profesional?</h2>
             </div>
-            <Link href="/coach/tools" className="text-blue-400 text-sm hover:text-blue-300 flex items-center gap-1">
+            <Link href="/coach/tools" className="text-emerald-400 text-sm hover:text-emerald-300 flex items-center gap-1">
               Explorar Biblioteca
               <ArrowRight className="w-4 h-4" />
             </Link>
@@ -153,7 +153,7 @@ export default function HomePageClient() {
           <div className="grid lg:grid-cols-2 gap-6">
             {/* Simulador ICF Card */}
             <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
-              <p className="text-blue-400 text-xs uppercase tracking-wider mb-4">PREMIUM</p>
+              <p className="text-emerald-400 text-xs uppercase tracking-wider mb-4">PREMIUM</p>
               <h3 className="text-2xl font-bold text-white mb-3">Simulador de Competencias ICF</h3>
               <p className="text-gray-400 text-sm mb-6">
                 Practica y refina tu presencia como coach con nuestro simulador impulsado por IA, basado en las competencias centrales de la International Coaching Federation.
@@ -163,7 +163,7 @@ export default function HomePageClient() {
                 <span className="px-3 py-1 bg-[#1a1a1a] border border-gray-700 rounded-full text-xs text-gray-400">Preguntas Poderosas</span>
                 <span className="px-3 py-1 bg-[#1a1a1a] border border-gray-700 rounded-full text-xs text-gray-400">Presencia</span>
               </div>
-              <Link href="/coach/icf-simulator" className="text-blue-400 text-sm font-medium hover:text-blue-300 flex items-center gap-1">
+              <Link href="/coach/icf-simulator" className="text-emerald-400 text-sm font-medium hover:text-emerald-300 flex items-center gap-1">
                 Probar Simulador
                 <ArrowRight className="w-4 h-4" />
               </Link>
@@ -187,7 +187,7 @@ export default function HomePageClient() {
               <div className="flex flex-wrap gap-2">
                 {tools.map((tool, i) => (
                   <span key={i} className="px-3 py-1.5 bg-[#1a1a1a] border border-gray-700 rounded-lg text-xs text-gray-300 flex items-center gap-1.5">
-                    <span className="text-blue-400">{tool.icon}</span>
+                    <span className="text-emerald-400">{tool.icon}</span>
                     {tool.name}
                   </span>
                 ))}
@@ -252,11 +252,11 @@ export default function HomePageClient() {
               </div>
               <div className="h-40 bg-[#1a1a1a] rounded-lg mb-6 flex items-end p-4 gap-2">
                 {[30, 45, 35, 60, 50, 70, 65, 80, 75, 90].map((h, i) => (
-                  <div key={i} className="flex-1 bg-blue-500/50 rounded-t" style={{ height: `${h}%` }}></div>
+                  <div key={i} className="flex-1 bg-emerald-500/50 rounded-t" style={{ height: `${h}%` }}></div>
                 ))}
               </div>
               <div className="bg-[#1a1a1a] rounded-lg p-4">
-                <div className="flex items-center gap-2 text-blue-400 text-xs mb-2">
+                <div className="flex items-center gap-2 text-emerald-400 text-xs mb-2">
                   <Sparkles className="w-4 h-4" />
                   AI INSIGHT
                 </div>
@@ -294,7 +294,7 @@ export default function HomePageClient() {
 
           <div className="flex justify-center gap-6 flex-wrap">
             <div className="flex items-center gap-2 px-4 py-2 bg-[#111111] border border-gray-800 rounded-lg">
-              <Cpu className="w-4 h-4 text-blue-400" />
+              <Cpu className="w-4 h-4 text-emerald-400" />
               <span className="text-sm text-gray-300">Open API</span>
               <span className="text-xs text-gray-500">v2.0 disponible</span>
             </div>
@@ -385,7 +385,7 @@ export default function HomePageClient() {
             </div>
 
             <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
-              <Users className="w-8 h-8 text-blue-400 mb-4" />
+              <Users className="w-8 h-8 text-emerald-400 mb-4" />
               <h3 className="text-white font-semibold mb-2">Gestión Profesional de Clientes</h3>
               <p className="text-gray-500 text-sm">
                 El coaching ejecutivo requiere un manejo impecable de la relación con el cliente. Nuestra plataforma profesional centraliza perfiles, historial de sesiones, documentos y comunicación en un solo lugar.
@@ -437,8 +437,8 @@ export default function HomePageClient() {
 
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-[#111111] border border-gray-800 rounded-xl p-6 text-left">
-              <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center mb-4">
-                <Shield className="w-5 h-5 text-blue-400" />
+              <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center mb-4">
+                <Shield className="w-5 h-5 text-emerald-400" />
               </div>
               <h3 className="text-white font-semibold mb-2">Seguridad Enterprise</h3>
               <p className="text-gray-500 text-sm">Encriptación de nivel bancario (AES-256) para recibir datos del cliente y notas de sesión, en reposo y en tránsito.</p>
@@ -484,7 +484,7 @@ export default function HomePageClient() {
                 </div>
                 <p className="text-gray-300 mb-6 italic">&ldquo;{testimonial.quote}&rdquo;</p>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-violet-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                  <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-violet-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                     {testimonial.name.charAt(0)}
                   </div>
                   <div>
@@ -508,7 +508,7 @@ export default function HomePageClient() {
       <section className="py-20 px-6">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-blue-400 text-xs uppercase tracking-wider mb-4">PREGUNTAS FRECUENTES</p>
+            <p className="text-emerald-400 text-xs uppercase tracking-wider mb-4">PREGUNTAS FRECUENTES</p>
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">Todo lo que Necesitas Saber</h2>
             <p className="text-gray-400">
               Respuestas a las preguntas más comunes sobre nuestra plataforma de coaching ejecutivo.
@@ -589,7 +589,7 @@ export default function HomePageClient() {
             Únete a cientos de coaches profesionales que ya utilizan AchievingCoach como su sistema operativo de coaching. Prueba gratis, sin compromiso.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/sign-up" className="px-8 py-3.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
+            <Link href="/sign-up" className="px-8 py-3.5 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2">
               Crear Cuenta Gratis
               <ArrowRight className="w-4 h-4" />
             </Link>

@@ -200,7 +200,7 @@ export default function SettingsPage() {
             <button
               onClick={handleSaveProfile}
               disabled={saving}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition-colors"
             >
               {saving ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -213,9 +213,9 @@ export default function SettingsPage() {
         </div>
 
         {/* Profile Section */}
-        <div className="bg-[#12131a] border border-blue-900/30 rounded-xl p-6 mb-6">
+        <div className="bg-[#12131a] border border-gray-800 rounded-xl p-6 mb-6">
           <div className="flex items-center gap-2 mb-6">
-            <User className="w-5 h-5 text-blue-400" />
+            <User className="w-5 h-5 text-emerald-400" />
             <h2 className="text-white font-semibold">Información de Perfil</h2>
           </div>
 
@@ -251,7 +251,7 @@ export default function SettingsPage() {
               <button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploadingPhoto}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 disabled:opacity-50 transition-colors"
               >
                 {uploadingPhoto ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -264,7 +264,7 @@ export default function SettingsPage() {
           </div>
 
           {/* Photo Requirements */}
-          <div className="bg-[#1a1b23] border border-blue-900/20 rounded-lg p-4 mb-6">
+          <div className="bg-[#1a1b23] border border-gray-800 rounded-lg p-4 mb-6">
             <p className="text-gray-400 text-xs font-medium uppercase tracking-wider mb-2">REQUISITOS DE LA FOTO:</p>
             <ul className="text-gray-500 text-sm space-y-1">
               <li>• Formato: JPG, PNG, o WebP</li>
@@ -273,7 +273,7 @@ export default function SettingsPage() {
             </ul>
           </div>
 
-          <div className="border-t border-blue-900/20 pt-6 space-y-5">
+          <div className="border-t border-gray-800 pt-6 space-y-5">
             {/* Name */}
             <div>
               <label className="block text-gray-400 text-sm mb-2">Nombre Visible</label>
@@ -281,7 +281,7 @@ export default function SettingsPage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-800 rounded-xl text-white focus:outline-none focus:border-emerald-500"
               />
             </div>
 
@@ -292,7 +292,7 @@ export default function SettingsPage() {
                 type="email"
                 value={email}
                 disabled
-                className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-gray-500 cursor-not-allowed"
+                className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-800 rounded-xl text-gray-500 cursor-not-allowed"
               />
               <p className="text-gray-600 text-xs mt-1">El correo electrónico no se puede cambiar.</p>
             </div>
@@ -300,7 +300,7 @@ export default function SettingsPage() {
             {/* Role */}
             <div>
               <label className="block text-gray-400 text-sm mb-2">Rol</label>
-              <span className="inline-block px-3 py-1 bg-blue-600/20 text-blue-400 text-sm rounded-lg capitalize">
+              <span className="inline-block px-3 py-1 bg-emerald-600/20 text-emerald-400 text-sm rounded-lg capitalize">
                 {userProfile?.role || 'Coachee'}
               </span>
             </div>
@@ -311,7 +311,7 @@ export default function SettingsPage() {
                 <label className="block text-gray-400 text-sm mb-2">Tu Coach</label>
                 <p className="text-gray-400 text-sm">
                   Estás conectado con un coach. Ver{' '}
-                  <Link href="/dashboard" className="text-blue-400 hover:text-blue-300">dashboard</Link>
+                  <Link href="/dashboard" className="text-emerald-400 hover:text-emerald-300">dashboard</Link>
                   {' '}para más detalles.
                 </p>
               </div>
@@ -320,16 +320,16 @@ export default function SettingsPage() {
         </div>
 
         {/* Account Section */}
-        <div className="bg-[#12131a] border border-blue-900/30 rounded-xl p-6">
+        <div className="bg-[#12131a] border border-gray-800 rounded-xl p-6">
           <div className="flex items-center gap-2 mb-6">
-            <Shield className="w-5 h-5 text-blue-400" />
+            <Shield className="w-5 h-5 text-emerald-400" />
             <h2 className="text-white font-semibold">Cuenta</h2>
           </div>
 
           <div className="space-y-4">
             <button
               onClick={() => setShowPasswordModal(true)}
-              className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 text-white rounded-xl text-left hover:bg-[#22232d] transition-colors"
+              className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-800 text-white rounded-xl text-left hover:bg-[#22232d] transition-colors"
             >
               Cambiar contraseña
             </button>
@@ -346,8 +346,8 @@ export default function SettingsPage() {
       {/* Password Change Modal */}
       {showPasswordModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-[#12131a] border border-blue-900/30 rounded-2xl w-full max-w-md">
-            <div className="flex items-center justify-between p-6 border-b border-blue-900/20">
+          <div className="bg-[#12131a] border border-gray-800 rounded-2xl w-full max-w-md">
+            <div className="flex items-center justify-between p-6 border-b border-gray-800">
               <h2 className="text-xl font-bold text-white">Cambiar Contraseña</h2>
               <button
                 onClick={() => {
@@ -369,7 +369,7 @@ export default function SettingsPage() {
                     type={showCurrentPassword ? 'text' : 'password'}
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
-                    className="w-full px-4 py-3 pr-12 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-3 pr-12 bg-[#1a1b23] border border-gray-800 rounded-xl text-white focus:outline-none focus:border-emerald-500"
                   />
                   <button
                     type="button"
@@ -387,7 +387,7 @@ export default function SettingsPage() {
                     type={showNewPassword ? 'text' : 'password'}
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full px-4 py-3 pr-12 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-3 pr-12 bg-[#1a1b23] border border-gray-800 rounded-xl text-white focus:outline-none focus:border-emerald-500"
                   />
                   <button
                     type="button"
@@ -406,7 +406,7 @@ export default function SettingsPage() {
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full px-4 py-3 pr-12 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-3 pr-12 bg-[#1a1b23] border border-gray-800 rounded-xl text-white focus:outline-none focus:border-emerald-500"
                   />
                   {confirmPassword && (
                     <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -420,7 +420,7 @@ export default function SettingsPage() {
                 </div>
               </div>
             </div>
-            <div className="flex justify-end gap-3 p-6 border-t border-blue-900/20">
+            <div className="flex justify-end gap-3 p-6 border-t border-gray-800">
               <button
                 onClick={() => {
                   setShowPasswordModal(false);
@@ -435,7 +435,7 @@ export default function SettingsPage() {
               <button
                 onClick={handleChangePassword}
                 disabled={changingPassword || !currentPassword || !newPassword || newPassword !== confirmPassword}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition-colors"
               >
                 {changingPassword ? (
                   <Loader2 className="w-4 h-4 animate-spin" />

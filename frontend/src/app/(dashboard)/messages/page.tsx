@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Search, Video, MoreVertical, Plus, Send } from 'lucide-react';
+import { Search, Video, MoreVertical, Plus, Send, X, UserPlus } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
-import { 
-  collection, query, where, orderBy, onSnapshot, addDoc, 
+import {
+  collection, query, where, orderBy, onSnapshot, addDoc,
   serverTimestamp, getDocs, doc, updateDoc, or
 } from 'firebase/firestore';
 
@@ -28,6 +28,14 @@ interface Message {
   read: boolean;
 }
 
+interface Contact {
+  uid: string;
+  displayName: string;
+  email: string;
+  photoURL?: string;
+  role: string;
+}
+
 export default function MessagesPage() {
   const { user, userProfile } = useAuth();
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -36,6 +44,10 @@ export default function MessagesPage() {
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showContactPicker, setShowContactPicker] = useState(false);
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [loadingContacts, setLoadingContacts] = useState(false);
+  const [contactSearchQuery, setContactSearchQuery] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Load conversations
@@ -120,6 +132,108 @@ export default function MessagesPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  // Load available contacts when picker opens
+  const loadContacts = async () => {
+    if (!user?.uid || !userProfile) return;
+
+    setLoadingContacts(true);
+    try {
+      const usersRef = collection(db, 'users');
+      let contactsList: Contact[] = [];
+
+      if (userProfile.role === 'coach') {
+        // Coach sees their clients
+        const clientsQuery = query(usersRef, where('coachId', '==', user.uid));
+        const clientsSnapshot = await getDocs(clientsQuery);
+        contactsList = clientsSnapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            uid: data.uid || doc.id,
+            displayName: data.displayName || `${data.firstName || ''} ${data.lastName || ''}`.trim() || 'Cliente',
+            email: data.email || '',
+            photoURL: data.photoURL,
+            role: data.role || 'coachee',
+          };
+        });
+      } else {
+        // Coachee sees their coach
+        if (userProfile.coachId) {
+          const coachQuery = query(usersRef, where('uid', '==', userProfile.coachId));
+          const coachSnapshot = await getDocs(coachQuery);
+          if (!coachSnapshot.empty) {
+            const coachData = coachSnapshot.docs[0].data();
+            contactsList = [{
+              uid: coachData.uid || coachSnapshot.docs[0].id,
+              displayName: coachData.displayName || `${coachData.firstName || ''} ${coachData.lastName || ''}`.trim() || 'Coach',
+              email: coachData.email || '',
+              photoURL: coachData.photoURL,
+              role: 'coach',
+            }];
+          }
+        }
+      }
+
+      // Filter out contacts that already have conversations
+      const existingRecipientIds = conversations.map(c => c.recipientId);
+      contactsList = contactsList.filter(c => !existingRecipientIds.includes(c.uid));
+
+      setContacts(contactsList);
+    } catch (error) {
+      console.error('Error loading contacts:', error);
+    } finally {
+      setLoadingContacts(false);
+    }
+  };
+
+  const handleOpenContactPicker = () => {
+    setShowContactPicker(true);
+    setContactSearchQuery('');
+    loadContacts();
+  };
+
+  const handleSelectContact = async (contact: Contact) => {
+    if (!user?.uid) return;
+
+    // Check if conversation already exists
+    const existingConv = conversations.find(c => c.recipientId === contact.uid);
+    if (existingConv) {
+      setSelectedConversation(existingConv);
+      setShowContactPicker(false);
+      return;
+    }
+
+    try {
+      // Create new conversation
+      const conversationRef = await addDoc(collection(db, 'conversations'), {
+        participants: [user.uid, contact.uid],
+        lastMessage: '',
+        lastMessageTime: serverTimestamp(),
+        unreadCount: {
+          [user.uid]: 0,
+          [contact.uid]: 0,
+        },
+        createdAt: serverTimestamp(),
+      });
+
+      // Select the new conversation
+      const newConversation: Conversation = {
+        id: conversationRef.id,
+        recipientId: contact.uid,
+        recipientName: contact.displayName,
+        recipientEmail: contact.email,
+        recipientPhoto: contact.photoURL,
+        lastMessage: '',
+        lastMessageTime: new Date(),
+        unreadCount: 0,
+      };
+
+      setSelectedConversation(newConversation);
+      setShowContactPicker(false);
+    } catch (error) {
+      console.error('Error creating conversation:', error);
+    }
+  };
+
   const handleSend = async () => {
     if (!newMessage.trim() || !selectedConversation?.id || !user?.uid) return;
 
@@ -168,7 +282,7 @@ export default function MessagesPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-[#0a0a0f]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -183,8 +297,15 @@ export default function MessagesPage() {
 
         <div className="flex gap-6 h-[600px]">
           {/* Conversations List */}
-          <div className="w-80 bg-[#12131a] border border-blue-900/30 rounded-xl overflow-hidden flex flex-col">
-            <div className="p-4">
+          <div className="w-80 bg-[#12131a] border border-gray-800 rounded-xl overflow-hidden flex flex-col">
+            <div className="p-4 space-y-3">
+              <button
+                onClick={handleOpenContactPicker}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors font-medium"
+              >
+                <UserPlus className="w-5 h-5" />
+                Nueva Conversación
+              </button>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                 <input
@@ -192,7 +313,7 @@ export default function MessagesPage() {
                   placeholder="Buscar mensajes..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-[#1a1b23] border border-blue-900/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                  className="w-full pl-10 pr-4 py-2.5 bg-[#1a1b23] border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
                 />
               </div>
             </div>
@@ -210,7 +331,7 @@ export default function MessagesPage() {
                       key={conv.id}
                       onClick={() => setSelectedConversation(conv)}
                       className={'flex items-center gap-3 p-4 cursor-pointer transition-colors ' + 
-                        (selectedConversation?.id === conv.id ? 'bg-blue-600/20 border-l-2 border-blue-500' : 'hover:bg-[#1a1b23]')
+                        (selectedConversation?.id === conv.id ? 'bg-emerald-600/20 border-l-2 border-emerald-500' : 'hover:bg-[#1a1b23]')
                       }
                     >
                       <div className="relative">
@@ -224,7 +345,7 @@ export default function MessagesPage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
-                          <h4 className={'font-medium ' + (conv.unreadCount > 0 ? 'text-blue-400' : 'text-white')}>
+                          <h4 className={'font-medium ' + (conv.unreadCount > 0 ? 'text-emerald-400' : 'text-white')}>
                             {conv.recipientName}
                           </h4>
                           <span className="text-gray-500 text-xs">{formatTime(conv.lastMessageTime)}</span>
@@ -232,7 +353,7 @@ export default function MessagesPage() {
                         <p className="text-gray-400 text-sm truncate">{conv.lastMessage}</p>
                       </div>
                       {conv.unreadCount > 0 && (
-                        <span className="w-5 h-5 bg-blue-600 text-white text-xs rounded-full flex items-center justify-center">
+                        <span className="w-5 h-5 bg-emerald-600 text-white text-xs rounded-full flex items-center justify-center">
                           {conv.unreadCount}
                         </span>
                       )}
@@ -243,7 +364,7 @@ export default function MessagesPage() {
           </div>
 
           {/* Chat Area */}
-          <div className="flex-1 bg-[#12131a] border border-blue-900/30 rounded-xl flex flex-col overflow-hidden">
+          <div className="flex-1 bg-[#12131a] border border-gray-800 rounded-xl flex flex-col overflow-hidden">
             {!selectedConversation ? (
               <div className="flex-1 flex items-center justify-center text-gray-500">
                 Selecciona una conversación para comenzar
@@ -251,7 +372,7 @@ export default function MessagesPage() {
             ) : (
               <>
                 {/* Chat Header */}
-                <div className="flex items-center justify-between p-4 border-b border-blue-900/30">
+                <div className="flex items-center justify-between p-4 border-b border-gray-800">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white font-medium overflow-hidden">
                       {selectedConversation.recipientPhoto ? (
@@ -290,7 +411,7 @@ export default function MessagesPage() {
                           </div>
                         )}
                         <div className={msg.senderId === user?.uid 
-                          ? 'bg-blue-600 text-white rounded-2xl rounded-br-md px-4 py-3 max-w-md'
+                          ? 'bg-emerald-600 text-white rounded-2xl rounded-br-md px-4 py-3 max-w-md'
                           : 'bg-[#1a1b23] text-white rounded-2xl rounded-bl-md px-4 py-3 max-w-md'
                         }>
                           <p className="text-sm">{msg.content}</p>
@@ -302,7 +423,7 @@ export default function MessagesPage() {
                 </div>
 
                 {/* Input */}
-                <div className="p-4 border-t border-blue-900/30">
+                <div className="p-4 border-t border-gray-800">
                   <div className="flex items-center gap-3">
                     <button className="p-2 text-gray-400 hover:text-white transition-colors">
                       <Plus className="w-5 h-5" />
@@ -313,12 +434,12 @@ export default function MessagesPage() {
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                      className="flex-1 px-4 py-2.5 bg-[#1a1b23] border border-blue-900/30 rounded-full text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                      className="flex-1 px-4 py-2.5 bg-[#1a1b23] border border-gray-800 rounded-full text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
                     />
                     <button
                       onClick={handleSend}
                       disabled={!newMessage.trim()}
-                      className="p-2.5 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors disabled:opacity-50"
+                      className="p-2.5 bg-emerald-600 text-white rounded-full hover:bg-emerald-700 transition-colors disabled:opacity-50"
                     >
                       <Send className="w-5 h-5" />
                     </button>
@@ -331,6 +452,78 @@ export default function MessagesPage() {
             )}
           </div>
         </div>
+
+        {/* Contact Picker Modal */}
+        {showContactPicker && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-[#12131a] border border-gray-800 rounded-xl w-full max-w-md mx-4 overflow-hidden">
+              <div className="flex items-center justify-between p-4 border-b border-gray-800">
+                <h3 className="text-lg font-semibold text-white">Nueva Conversación</h3>
+                <button
+                  onClick={() => setShowContactPicker(false)}
+                  className="p-1 text-gray-400 hover:text-white transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="p-4">
+                <div className="relative mb-4">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                  <input
+                    type="text"
+                    placeholder="Buscar contacto..."
+                    value={contactSearchQuery}
+                    onChange={(e) => setContactSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2.5 bg-[#1a1b23] border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+
+                <div className="max-h-64 overflow-y-auto">
+                  {loadingContacts ? (
+                    <div className="flex items-center justify-center py-8">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-500"></div>
+                    </div>
+                  ) : contacts.length === 0 ? (
+                    <div className="text-center py-8 text-gray-500">
+                      {userProfile?.role === 'coach'
+                        ? 'No tienes clientes asignados aún'
+                        : 'No tienes un coach asignado aún'}
+                    </div>
+                  ) : (
+                    contacts
+                      .filter(c =>
+                        c.displayName.toLowerCase().includes(contactSearchQuery.toLowerCase()) ||
+                        c.email.toLowerCase().includes(contactSearchQuery.toLowerCase())
+                      )
+                      .map((contact) => (
+                        <div
+                          key={contact.uid}
+                          onClick={() => handleSelectContact(contact)}
+                          className="flex items-center gap-3 p-3 hover:bg-[#1a1b23] rounded-lg cursor-pointer transition-colors"
+                        >
+                          <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white font-medium overflow-hidden">
+                            {contact.photoURL ? (
+                              <img src={contact.photoURL} alt="" className="w-full h-full object-cover" />
+                            ) : (
+                              contact.displayName.charAt(0).toUpperCase()
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-white font-medium truncate">{contact.displayName}</h4>
+                            <p className="text-gray-500 text-sm truncate">{contact.email}</p>
+                          </div>
+                          <span className="text-xs text-gray-500 capitalize px-2 py-1 bg-[#1a1b23] rounded">
+                            {contact.role === 'coach' ? 'Coach' : 'Cliente'}
+                          </span>
+                        </div>
+                      ))
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

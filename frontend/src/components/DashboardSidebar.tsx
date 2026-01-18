@@ -3,20 +3,21 @@
 import { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { 
-  LayoutDashboard, 
-  Target, 
-  Wrench, 
-  MessageSquare, 
-  Calendar, 
-  BookOpen, 
-  FileText, 
+import {
+  LayoutDashboard,
+  Target,
+  Wrench,
+  MessageSquare,
+  Calendar,
+  BookOpen,
+  FileText,
   LogOut,
   Settings,
   FolderKanban,
   ChevronLeft
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -42,21 +43,21 @@ export default function DashboardSidebar() {
   };
 
   return (
-    <div className={`relative flex flex-col ${collapsed ? 'w-20' : 'w-64'} bg-[#0a0a0f] border-r border-gray-800/50 h-screen transition-all duration-300`}>
+    <div className={`relative flex flex-col ${collapsed ? 'w-20' : 'w-64'} bg-[var(--bg-primary)] border-r border-[var(--border-color)] h-screen transition-all duration-300`}>
       {/* Header */}
       <div className={`flex items-center ${collapsed ? 'justify-center' : 'gap-3'} h-16 px-4`}>
-        <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">
+        <div className="w-9 h-9 bg-emerald-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">
           A
         </div>
-        {!collapsed && <span className="text-lg font-semibold text-blue-400">AchievingCoach</span>}
+        {!collapsed && <span className="text-lg font-semibold text-emerald-400">AchievingCoach</span>}
       </div>
-      
+
       {/* Collapse Toggle */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="absolute top-5 -right-3 w-6 h-6 bg-[#12131a] border border-gray-700 rounded-full flex items-center justify-center hover:bg-[#1a1b23] z-10"
+        className="absolute top-5 -right-3 w-6 h-6 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-full flex items-center justify-center hover:bg-[var(--bg-tertiary)] z-10"
       >
-        <ChevronLeft className={`w-4 h-4 text-gray-400 transition-transform ${collapsed ? 'rotate-180' : ''}`} />
+        <ChevronLeft className={`w-4 h-4 text-[var(--fg-muted)] transition-transform ${collapsed ? 'rotate-180' : ''}`} />
       </button>
 
       {/* Navigation */}
@@ -71,8 +72,8 @@ export default function DashboardSidebar() {
               title={collapsed ? item.name : undefined}
               className={`flex items-center ${collapsed ? 'justify-center px-2' : 'px-4'} py-3 text-sm font-medium rounded-lg transition-colors ${
                 isActive
-                  ? 'bg-blue-600/20 text-blue-400 border-l-2 border-blue-500 -ml-[2px]'
-                  : 'text-gray-400 hover:bg-[#12131a] hover:text-white'
+                  ? 'bg-emerald-600/20 text-emerald-400 border-l-2 border-emerald-500 -ml-[2px]'
+                  : 'text-gray-400 hover:bg-[var(--bg-tertiary)] hover:text-white dark:hover:text-white'
               }`}
             >
               <Icon className={`w-5 h-5 ${collapsed ? '' : 'mr-3'} flex-shrink-0`} />
@@ -80,7 +81,7 @@ export default function DashboardSidebar() {
                 <span className="flex-1">{item.name}</span>
               )}
               {!collapsed && item.badge && (
-                <span className="ml-2 px-2 py-0.5 bg-blue-600 text-white text-xs rounded-full">
+                <span className="ml-2 px-2 py-0.5 bg-emerald-600 text-white text-xs rounded-full">
                   {item.badge}
                 </span>
               )}
@@ -89,22 +90,27 @@ export default function DashboardSidebar() {
         })}
       </nav>
 
-      {/* User Profile */}
+      {/* Theme Toggle & User Profile */}
       {userProfile && (
-        <div className="border-t border-gray-800/50 p-4">
+        <div className="border-t border-[var(--border-color)] p-4">
+          {/* Theme Toggle */}
+          <div className={`mb-4 ${collapsed ? 'flex justify-center' : ''}`}>
+            <ThemeToggle />
+          </div>
+
           <div className={`flex items-center ${collapsed ? 'justify-center' : 'gap-3'}`}>
-            <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+            <div className="w-10 h-10 bg-emerald-600/20 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
               {userProfile.photoURL ? (
                 <img src={userProfile.photoURL} alt="Profile" className="w-full h-full object-cover" />
               ) : (
-                <span className="text-white font-medium">
+                <span className="text-emerald-400 font-medium">
                   {userProfile.displayName?.charAt(0) || userProfile.firstName?.charAt(0) || 'U'}
                 </span>
               )}
             </div>
             {!collapsed && (
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-white truncate">
+                <p className="text-sm font-medium text-white dark:text-white truncate">
                   {userProfile.displayName || `${userProfile.firstName} ${userProfile.lastName}`}
                 </p>
                 <p className="text-xs text-gray-500 truncate">{userProfile.email}</p>
@@ -113,7 +119,7 @@ export default function DashboardSidebar() {
             {!collapsed && (
               <button
                 onClick={handleSignOut}
-                className="p-2 text-gray-400 hover:text-white hover:bg-[#12131a] rounded-lg transition-colors"
+                className="p-2 text-gray-400 hover:text-white hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"
                 title="Cerrar Sesión"
               >
                 <LogOut className="w-4 h-4" />
@@ -123,7 +129,7 @@ export default function DashboardSidebar() {
           {collapsed && (
             <button
               onClick={handleSignOut}
-              className="mt-3 p-2 text-gray-400 hover:text-white hover:bg-[#12131a] rounded-lg transition-colors w-full flex justify-center"
+              className="mt-3 p-2 text-gray-400 hover:text-white hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors w-full flex justify-center"
               title="Cerrar Sesión"
             >
               <LogOut className="w-4 h-4" />

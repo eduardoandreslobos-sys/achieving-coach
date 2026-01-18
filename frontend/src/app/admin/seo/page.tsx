@@ -126,7 +126,7 @@ export default function SEOAnalyticsPage() {
           <button
             onClick={loadAllData}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors disabled:opacity-50"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             Actualizar Datos
@@ -160,10 +160,10 @@ export default function SEOAnalyticsPage() {
       {/* Metrics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
         {/* Tráfico Total */}
-        <div className="bg-gradient-to-br from-blue-600/20 to-blue-900/30 border border-blue-500/30 rounded-2xl p-5">
+        <div className="bg-gradient-to-br from-emerald-600/20 to-blue-900/30 border border-emerald-500/30 rounded-2xl p-5">
           <div className="flex items-center justify-between mb-3">
             <span className="text-gray-400 text-sm">Tráfico Total</span>
-            <Globe className="w-5 h-5 text-blue-400" />
+            <Globe className="w-5 h-5 text-emerald-400" />
           </div>
           <p className="text-3xl font-bold text-white mb-2">{formatNumber(totalTraffic)}</p>
           <div className="flex items-center gap-1 text-emerald-400 text-sm">
@@ -244,7 +244,7 @@ export default function SEOAnalyticsPage() {
             <h2 className="text-lg font-semibold text-white">Rendimiento de Palabras Clave</h2>
             <p className="text-sm text-gray-500">Términos de búsqueda que generan tráfico</p>
           </div>
-          <button className="text-blue-400 text-sm hover:text-blue-300 flex items-center gap-1">
+          <button className="text-emerald-400 text-sm hover:text-emerald-300 flex items-center gap-1">
             Ver informe completo
             <ExternalLink className="w-4 h-4" />
           </button>
@@ -311,7 +311,7 @@ export default function SEOAnalyticsPage() {
               {(searchData?.pages || []).slice(0, 5).map((page, i) => (
                 <tr key={i} className="hover:bg-gray-800/30">
                   <td className="py-3">
-                    <a href={page.page} target="_blank" className="text-white hover:text-blue-400 flex items-center gap-1">
+                    <a href={page.page} target="_blank" className="text-white hover:text-emerald-400 flex items-center gap-1">
                       {page.page.replace('https://achievingcoach.com', '')}
                       <ExternalLink className="w-3 h-3" />
                     </a>
@@ -353,7 +353,7 @@ export default function SEOAnalyticsPage() {
                   </div>
                   <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
                     <div 
-                      className="h-full bg-blue-500 rounded-full transition-all"
+                      className="h-full bg-emerald-500 rounded-full transition-all"
                       style={{ width: `${percentage}%` }}
                     />
                   </div>

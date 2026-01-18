@@ -96,7 +96,7 @@ export default function AdminDashboardPage() {
 
   const getRoleColor = (role: string) => {
     switch (role) {
-      case 'coach': return 'bg-blue-500/20 text-blue-400';
+      case 'coach': return 'bg-emerald-500/20 text-emerald-400';
       case 'coachee': return 'bg-emerald-500/20 text-emerald-400';
       case 'admin': return 'bg-violet-500/20 text-violet-400';
       default: return 'bg-gray-500/20 text-gray-400';
@@ -104,7 +104,7 @@ export default function AdminDashboardPage() {
   };
 
   const getAvatarColor = (name: string) => {
-    const colors = ['bg-blue-600', 'bg-emerald-600', 'bg-violet-600', 'bg-amber-600', 'bg-rose-600'];
+    const colors = ['bg-emerald-600', 'bg-emerald-600', 'bg-violet-600', 'bg-amber-600', 'bg-rose-600'];
     const index = name.charCodeAt(0) % colors.length;
     return colors[index];
   };
@@ -113,7 +113,7 @@ export default function AdminDashboardPage() {
     return (
       <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-400">Cargando dashboard...</p>
         </div>
       </div>
@@ -132,7 +132,7 @@ export default function AdminDashboardPage() {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {/* Coaches Activos */}
-          <div className="bg-gradient-to-br from-blue-600/20 to-blue-900/20 border border-blue-500/30 rounded-2xl p-6">
+          <div className="bg-gradient-to-br from-emerald-600/20 to-blue-900/20 border border-emerald-500/30 rounded-2xl p-6">
             <p className="text-gray-400 text-sm mb-1">Coaches Activos Totales</p>
             <p className="text-4xl font-bold text-white mb-2">{stats.totalCoaches}</p>
             <div className="flex items-center text-emerald-400 text-sm">
@@ -172,7 +172,7 @@ export default function AdminDashboardPage() {
           <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-semibold text-white">Nuevos Registros Recientes</h2>
-              <Link href="/admin/users" className="text-blue-400 hover:text-blue-300 text-sm flex items-center gap-1">
+              <Link href="/admin/users" className="text-emerald-400 hover:text-emerald-300 text-sm flex items-center gap-1">
                 Gestionar Usuarios <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -206,14 +206,14 @@ export default function AdminDashboardPage() {
           <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-semibold text-white">Resumen de Contenido</h2>
-              <Link href="/admin/blog" className="text-blue-400 hover:text-blue-300 text-sm flex items-center gap-1">
+              <Link href="/admin/blog" className="text-emerald-400 hover:text-emerald-300 text-sm flex items-center gap-1">
                 Gestionar Contenido <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-[#1a1b23] rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <FileText className="w-5 h-5 text-blue-400" />
+                  <FileText className="w-5 h-5 text-emerald-400" />
                   <span className="text-gray-400 text-sm">Entradas Blog</span>
                 </div>
                 <p className="text-3xl font-bold text-white">{stats.totalBlogPosts}</p>

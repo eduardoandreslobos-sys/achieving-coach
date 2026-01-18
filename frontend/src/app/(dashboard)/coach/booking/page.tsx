@@ -295,7 +295,7 @@ export default function BookingSettingsPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+        <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
       </div>
     );
   }
@@ -314,7 +314,7 @@ export default function BookingSettingsPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition-colors"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             Guardar Cambios
@@ -322,11 +322,11 @@ export default function BookingSettingsPage() {
         </div>
 
         {/* Booking Link Card */}
-        <div className="bg-gradient-to-r from-blue-600/20 to-violet-600/20 border border-blue-500/30 rounded-xl p-6 mb-6">
+        <div className="bg-gradient-to-r from-emerald-600/20 to-violet-600/20 border border-emerald-500/30 rounded-xl p-6 mb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
-                <Globe className="w-6 h-6 text-blue-400" />
+              <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center">
+                <Globe className="w-6 h-6 text-emerald-400" />
               </div>
               <div>
                 <h3 className="text-white font-semibold mb-1">Tu Link de Booking</h3>
@@ -345,7 +345,7 @@ export default function BookingSettingsPage() {
                   onChange={(e) => setSettings({ ...settings, enabled: e.target.checked })}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
               </label>
             </div>
           </div>
@@ -407,7 +407,7 @@ export default function BookingSettingsPage() {
               <button
                 onClick={handleConnectGoogleCalendar}
                 disabled={connectingCalendar}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition-colors"
               >
                 {connectingCalendar ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -439,7 +439,7 @@ export default function BookingSettingsPage() {
                     }))}
                     className="sr-only peer"
                   />
-                  <div className="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                  <div className="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
                 </label>
               </label>
 
@@ -461,7 +461,7 @@ export default function BookingSettingsPage() {
                     }))}
                     className="sr-only peer"
                   />
-                  <div className="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                  <div className="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
                 </label>
               </label>
             </div>
@@ -472,7 +472,7 @@ export default function BookingSettingsPage() {
           {/* Session Settings */}
           <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
             <div className="flex items-center gap-2 mb-6">
-              <Settings className="w-5 h-5 text-blue-400" />
+              <Settings className="w-5 h-5 text-emerald-400" />
               <h2 className="text-white font-semibold">Configuración de Sesión</h2>
             </div>
 
@@ -483,7 +483,7 @@ export default function BookingSettingsPage() {
                   type="text"
                   value={settings.title}
                   onChange={(e) => setSettings({ ...settings, title: e.target.value })}
-                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
@@ -493,7 +493,7 @@ export default function BookingSettingsPage() {
                   value={settings.description}
                   onChange={(e) => setSettings({ ...settings, description: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500 resize-none"
+                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500 resize-none"
                 />
               </div>
 
@@ -503,7 +503,7 @@ export default function BookingSettingsPage() {
                   <select
                     value={settings.duration}
                     onChange={(e) => setSettings({ ...settings, duration: parseInt(e.target.value) })}
-                    className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
                   >
                     <option value={30}>30 minutos</option>
                     <option value={45}>45 minutos</option>
@@ -517,7 +517,7 @@ export default function BookingSettingsPage() {
                   <select
                     value={settings.bufferAfter}
                     onChange={(e) => setSettings({ ...settings, bufferAfter: parseInt(e.target.value) })}
-                    className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
                   >
                     <option value={0}>Sin buffer</option>
                     <option value={5}>5 minutos</option>
@@ -534,7 +534,7 @@ export default function BookingSettingsPage() {
                   <select
                     value={settings.minNotice}
                     onChange={(e) => setSettings({ ...settings, minNotice: parseInt(e.target.value) })}
-                    className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
                   >
                     <option value={1}>1 hora</option>
                     <option value={2}>2 horas</option>
@@ -549,7 +549,7 @@ export default function BookingSettingsPage() {
                   <select
                     value={settings.maxAdvance}
                     onChange={(e) => setSettings({ ...settings, maxAdvance: parseInt(e.target.value) })}
-                    className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
                   >
                     <option value={7}>7 días</option>
                     <option value={14}>14 días</option>
@@ -570,7 +570,7 @@ export default function BookingSettingsPage() {
                   value={settings.meetingLink}
                   onChange={(e) => setSettings({ ...settings, meetingLink: e.target.value })}
                   placeholder="https://zoom.us/j/..."
-                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
                 />
               </div>
             </div>
@@ -604,7 +604,7 @@ export default function BookingSettingsPage() {
                     {settings.availability[key]?.enabled && (
                       <button
                         onClick={() => addSlot(key)}
-                        className="text-blue-400 hover:text-blue-300 text-sm flex items-center gap-1"
+                        className="text-emerald-400 hover:text-emerald-300 text-sm flex items-center gap-1"
                       >
                         <Plus className="w-3 h-3" />
                         Agregar
@@ -620,14 +620,14 @@ export default function BookingSettingsPage() {
                             type="time"
                             value={slot.start}
                             onChange={(e) => updateSlot(key, index, 'start', e.target.value)}
-                            className="px-3 py-1.5 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500"
+                            className="px-3 py-1.5 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-emerald-500"
                           />
                           <span className="text-gray-500">-</span>
                           <input
                             type="time"
                             value={slot.end}
                             onChange={(e) => updateSlot(key, index, 'end', e.target.value)}
-                            className="px-3 py-1.5 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500"
+                            className="px-3 py-1.5 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-emerald-500"
                           />
                           {settings.availability[key].slots.length > 1 && (
                             <button

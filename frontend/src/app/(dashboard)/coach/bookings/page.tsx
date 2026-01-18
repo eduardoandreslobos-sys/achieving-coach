@@ -67,7 +67,7 @@ const STATUS_CONFIG = {
   },
   completed: {
     label: 'Completada',
-    color: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+    color: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
     icon: CheckCircle,
   },
   no_show: {
@@ -267,7 +267,7 @@ export default function BookingsPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+        <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
       </div>
     );
   }
@@ -285,7 +285,7 @@ export default function BookingsPage() {
           </div>
           <Link
             href="/coach/booking"
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
           >
             <Calendar className="w-4 h-4" />
             Configurar Disponibilidad
@@ -318,8 +318,8 @@ export default function BookingsPage() {
           </div>
           <div className="bg-[#111111] border border-gray-800 rounded-xl p-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                <Calendar className="w-5 h-5 text-blue-400" />
+              <div className="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                <Calendar className="w-5 h-5 text-emerald-400" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-white">{stats.total}</p>
@@ -338,7 +338,7 @@ export default function BookingsPage() {
               placeholder="Buscar por nombre o email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-[#111111] border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+              className="w-full pl-10 pr-4 py-2 bg-[#111111] border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
             />
           </div>
           <div className="flex gap-2 flex-wrap">
@@ -348,7 +348,7 @@ export default function BookingsPage() {
                 onClick={() => setFilterStatus(status)}
                 className={`px-4 py-2 rounded-lg text-sm transition-colors ${
                   filterStatus === status
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-emerald-600 text-white'
                     : 'bg-[#111111] border border-gray-800 text-gray-400 hover:text-white'
                 }`}
               >
@@ -384,7 +384,7 @@ export default function BookingsPage() {
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-4">
                       {/* Avatar */}
-                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-violet-500 rounded-full flex items-center justify-center text-white font-bold">
+                      <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-violet-500 rounded-full flex items-center justify-center text-white font-bold">
                         {booking.clientName.charAt(0).toUpperCase()}
                       </div>
 
@@ -399,7 +399,7 @@ export default function BookingsPage() {
                         </div>
                         <div className="flex items-center gap-4 text-sm text-gray-300 mt-2">
                           <span className="flex items-center gap-1">
-                            <Calendar className="w-4 h-4 text-blue-400" />
+                            <Calendar className="w-4 h-4 text-emerald-400" />
                             {formatDate(booking.date)}
                           </span>
                           <span className="flex items-center gap-1">
@@ -455,7 +455,7 @@ export default function BookingsPage() {
                           href={booking.meetingLink}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 flex items-center gap-1"
+                          className="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-sm hover:bg-emerald-700 flex items-center gap-1"
                         >
                           <Video className="w-3 h-3" />
                           Unirse
@@ -467,7 +467,7 @@ export default function BookingsPage() {
                           <button
                             onClick={() => updateBookingStatus(booking.id, 'completed')}
                             disabled={updating === booking.id}
-                            className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 disabled:opacity-50 flex items-center gap-1"
+                            className="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-sm hover:bg-emerald-700 disabled:opacity-50 flex items-center gap-1"
                           >
                             <CheckCircle className="w-3 h-3" />
                             Completada

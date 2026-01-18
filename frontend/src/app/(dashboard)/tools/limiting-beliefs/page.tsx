@@ -188,7 +188,7 @@ export default function LimitingBeliefsPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -198,8 +198,8 @@ export default function LimitingBeliefsPage() {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-8">
         <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 max-w-md text-center">
-          <div className={`w-16 h-16 ${isCoach ? 'bg-blue-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
-            <Lightbulb className={`w-8 h-8 ${isCoach ? 'text-blue-400' : 'text-yellow-400'}`} />
+          <div className={`w-16 h-16 ${isCoach ? 'bg-emerald-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
+            <Lightbulb className={`w-8 h-8 ${isCoach ? 'text-emerald-400' : 'text-yellow-400'}`} />
           </div>
           <h2 className="text-2xl font-bold text-white mb-4">
             {isCoach ? 'Tool for Coachees Only' : 'Tool Not Assigned'}
@@ -211,7 +211,7 @@ export default function LimitingBeliefsPage() {
           </p>
           <button
             onClick={() => router.push(isCoach ? '/coach/clients' : '/dashboard')}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
           >
             {isCoach ? 'Go to Clients' : 'Back to Dashboard'}
           </button>
@@ -242,8 +242,8 @@ export default function LimitingBeliefsPage() {
         </div>
 
         {lastResult && (
-          <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 mb-6">
-            <p className="text-sm text-blue-300">
+          <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 mb-6">
+            <p className="text-sm text-emerald-300">
               📊 Last completed: {lastResult.completedAt?.toDate?.()?.toLocaleDateString() || 'Recently'}
               {' - '}Transformed {lastResult.results.totalTransformed} beliefs
             </p>
@@ -291,7 +291,7 @@ export default function LimitingBeliefsPage() {
                     value={belief.limiting}
                     onChange={(e) => updateBelief(index, 'limiting', e.target.value)}
                     placeholder="e.g., I'm not good enough to succeed..."
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none"
                     rows={2}
                   />
                 </div>
@@ -307,14 +307,14 @@ export default function LimitingBeliefsPage() {
                     value={belief.empowering}
                     onChange={(e) => updateBelief(index, 'empowering', e.target.value)}
                     placeholder="e.g., I have unique skills and experiences that make me capable..."
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none"
                     rows={2}
                   />
                 </div>
 
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <Lightbulb className="text-blue-400" size={20} />
+                    <Lightbulb className="text-emerald-400" size={20} />
                     <label className="block text-sm font-medium text-gray-400">
                       Evidence for Empowering Belief
                     </label>
@@ -323,7 +323,7 @@ export default function LimitingBeliefsPage() {
                     value={belief.evidence}
                     onChange={(e) => updateBelief(index, 'evidence', e.target.value)}
                     placeholder="e.g., I successfully completed X project, my colleagues value my input..."
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none"
                     rows={3}
                   />
                 </div>
@@ -335,14 +335,14 @@ export default function LimitingBeliefsPage() {
         <div className="flex gap-4">
           <button
             onClick={addBelief}
-            className="px-6 py-3 border border-blue-500 text-blue-400 rounded-lg font-medium hover:bg-blue-500/10 transition-colors"
+            className="px-6 py-3 border border-emerald-500 text-emerald-400 rounded-lg font-medium hover:bg-emerald-500/10 transition-colors"
           >
             + Add Another Belief
           </button>
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex-1 px-8 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-700 disabled:text-gray-500 transition-colors"
+            className="flex-1 px-8 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 disabled:bg-gray-700 disabled:text-gray-500 transition-colors"
           >
             {saving ? 'Saving...' : 'Save Results'}
           </button>

@@ -296,7 +296,7 @@ export default function StakeholderManager({
             </div>
             <div className="flex flex-wrap gap-2">
               {DEFAULT_PERMISSIONS[form.role].map(permission => (
-                <span key={permission} className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">
+                <span key={permission} className="px-2 py-1 bg-emerald-100 text-blue-700 text-xs rounded">
                   {permission.replace(/_/g, ' ')}
                 </span>
               ))}

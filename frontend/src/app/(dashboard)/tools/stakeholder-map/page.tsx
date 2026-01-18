@@ -151,14 +151,14 @@ export default function StakeholderMapPage() {
   const getQuadrant = (influence: number, support: number) => {
     if (influence >= 3 && support >= 3) return { label: 'Key Players', color: 'bg-emerald-500/20 border-emerald-500/50' };
     if (influence >= 3 && support < 3) return { label: 'Keep Satisfied', color: 'bg-yellow-500/20 border-yellow-500/50' };
-    if (influence < 3 && support >= 3) return { label: 'Show Consideration', color: 'bg-blue-500/20 border-blue-500/50' };
+    if (influence < 3 && support >= 3) return { label: 'Show Consideration', color: 'bg-emerald-500/20 border-emerald-500/50' };
     return { label: 'Monitor', color: 'bg-gray-500/20 border-gray-500/50' };
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -169,8 +169,8 @@ export default function StakeholderMapPage() {
       <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
-            <div className={`w-16 h-16 ${isCoach ? 'bg-blue-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
-              <Users className={`w-8 h-8 ${isCoach ? 'text-blue-400' : 'text-yellow-400'}`} />
+            <div className={`w-16 h-16 ${isCoach ? 'bg-emerald-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
+              <Users className={`w-8 h-8 ${isCoach ? 'text-emerald-400' : 'text-yellow-400'}`} />
             </div>
             <h2 className="text-2xl font-bold text-white mb-4">
               {isCoach ? 'Tool for Coachees Only' : 'Access Required'}
@@ -183,7 +183,7 @@ export default function StakeholderMapPage() {
             <div className="flex gap-4 justify-center">
               <Link
                 href={isCoach ? '/coach/clients' : '/dashboard'}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 {isCoach ? 'Go to Clients' : 'Return to Dashboard'}
               </Link>
@@ -210,7 +210,7 @@ export default function StakeholderMapPage() {
             <div className="flex gap-4 justify-center">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 Return to Dashboard
               </Link>
@@ -240,7 +240,7 @@ export default function StakeholderMapPage() {
 
         <div className="bg-[#111111] border border-gray-800 rounded-xl p-6 mb-6">
           <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-            <Plus size={24} className="text-blue-400" />
+            <Plus size={24} className="text-emerald-400" />
             Add Stakeholder
           </h2>
 
@@ -252,7 +252,7 @@ export default function StakeholderMapPage() {
                 value={newStakeholder.name}
                 onChange={(e) => setNewStakeholder({ ...newStakeholder, name: e.target.value })}
                 placeholder="Stakeholder name"
-                className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               />
             </div>
 
@@ -263,7 +263,7 @@ export default function StakeholderMapPage() {
                 value={newStakeholder.role}
                 onChange={(e) => setNewStakeholder({ ...newStakeholder, role: e.target.value })}
                 placeholder="Their role or position"
-                className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               />
             </div>
 
@@ -277,7 +277,7 @@ export default function StakeholderMapPage() {
                 max="5"
                 value={newStakeholder.influence}
                 onChange={(e) => setNewStakeholder({ ...newStakeholder, influence: parseInt(e.target.value) })}
-                className="w-full accent-blue-500"
+                className="w-full accent-emerald-500"
               />
               <div className="flex justify-between text-xs text-gray-500">
                 <span>Low</span>
@@ -295,7 +295,7 @@ export default function StakeholderMapPage() {
                 max="5"
                 value={newStakeholder.support}
                 onChange={(e) => setNewStakeholder({ ...newStakeholder, support: parseInt(e.target.value) })}
-                className="w-full accent-blue-500"
+                className="w-full accent-emerald-500"
               />
               <div className="flex justify-between text-xs text-gray-500">
                 <span>Blocker</span>
@@ -310,7 +310,7 @@ export default function StakeholderMapPage() {
                 onChange={(e) => setNewStakeholder({ ...newStakeholder, strategy: e.target.value })}
                 placeholder="How will you engage with this stakeholder?"
                 rows={2}
-                className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               />
             </div>
           </div>
@@ -318,7 +318,7 @@ export default function StakeholderMapPage() {
           <button
             onClick={addStakeholder}
             disabled={!newStakeholder.name || !newStakeholder.role}
-            className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
+            className="mt-4 px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
           >
             Add to Map
           </button>
@@ -376,7 +376,7 @@ export default function StakeholderMapPage() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="px-8 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-700 disabled:text-gray-500 flex items-center gap-2 transition-colors"
+                className="px-8 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 disabled:bg-gray-700 disabled:text-gray-500 flex items-center gap-2 transition-colors"
               >
                 {saving ? 'Saving...' : 'Save Map'}
               </button>

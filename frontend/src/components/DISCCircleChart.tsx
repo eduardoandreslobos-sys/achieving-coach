@@ -98,7 +98,7 @@ export function DISCCircleChart({ coordinates, percentages }: DISCCircleChartPro
           <span className="text-gray-700">I - Influyente</span>
         </div>
         <div className="flex items-center gap-2 p-2 bg-blue-50 rounded">
-          <span className="w-3 h-3 bg-blue-500 rounded-sm"></span>
+          <span className="w-3 h-3 bg-emerald-500 rounded-sm"></span>
           <span className="text-gray-700">C - Concienzudo</span>
         </div>
         <div className="flex items-center gap-2 p-2 bg-green-50 rounded">

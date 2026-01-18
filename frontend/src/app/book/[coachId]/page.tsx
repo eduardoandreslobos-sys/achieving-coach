@@ -398,7 +398,7 @@ export default function PublicBookingPage() {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-10 h-10 text-blue-500 animate-spin mx-auto mb-4" />
+          <Loader2 className="w-10 h-10 text-emerald-500 animate-spin mx-auto mb-4" />
           <p className="text-gray-400">Cargando disponibilidad...</p>
         </div>
       </div>
@@ -416,7 +416,7 @@ export default function PublicBookingPage() {
           <p className="text-gray-400 mb-6">{error}</p>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Volver al Inicio
@@ -440,7 +440,7 @@ export default function PublicBookingPage() {
 
           <div className="bg-[#0a0a0a] border border-gray-800 rounded-xl p-4 mb-6 text-left">
             <div className="flex items-center gap-3 mb-3">
-              <Calendar className="w-5 h-5 text-blue-400" />
+              <Calendar className="w-5 h-5 text-emerald-400" />
               <span className="text-white">
                 {selectedDate?.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
               </span>
@@ -452,7 +452,7 @@ export default function PublicBookingPage() {
             {settings?.meetingLink && (
               <div className="flex items-center gap-3">
                 <Video className="w-5 h-5 text-violet-400" />
-                <a href={settings.meetingLink} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 truncate">
+                <a href={settings.meetingLink} target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:text-emerald-300 truncate">
                   Link de Videollamada
                 </a>
               </div>
@@ -461,7 +461,7 @@ export default function PublicBookingPage() {
 
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
           >
             Volver al Inicio
           </Link>
@@ -478,7 +478,7 @@ export default function PublicBookingPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">A</span>
             </div>
             <span className="font-semibold text-white text-xl">AchievingCoach</span>
@@ -498,7 +498,7 @@ export default function PublicBookingPage() {
                     className="w-24 h-24 rounded-full object-cover mb-4"
                   />
                 ) : (
-                  <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-violet-500 rounded-full flex items-center justify-center text-white text-3xl font-bold mb-4">
+                  <div className="w-24 h-24 bg-gradient-to-br from-emerald-500 to-violet-500 rounded-full flex items-center justify-center text-white text-3xl font-bold mb-4">
                     {(coachInfo?.displayName || settings?.coachName || 'C').charAt(0).toUpperCase()}
                   </div>
                 )}
@@ -515,7 +515,7 @@ export default function PublicBookingPage() {
 
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 text-gray-300">
-                    <Clock className="w-5 h-5 text-blue-400" />
+                    <Clock className="w-5 h-5 text-emerald-400" />
                     <span>{settings?.duration} minutos</span>
                   </div>
                   <div className="flex items-center gap-3 text-gray-300">
@@ -541,7 +541,7 @@ export default function PublicBookingPage() {
                     {coachInfo.coachProfile.specialties.map((specialty, index) => (
                       <span
                         key={index}
-                        className="px-3 py-1 bg-blue-500/10 text-blue-400 rounded-full text-xs"
+                        className="px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full text-xs"
                       >
                         {specialty}
                       </span>
@@ -607,12 +607,12 @@ export default function PublicBookingPage() {
                           className={`
                             p-3 rounded-lg text-center transition-all
                             ${isSelected
-                              ? 'bg-blue-600 text-white'
+                              ? 'bg-emerald-600 text-white'
                               : isAvailable
                                 ? 'text-white hover:bg-gray-800'
                                 : 'text-gray-600 cursor-not-allowed'
                             }
-                            ${isToday && !isSelected ? 'ring-1 ring-blue-500' : ''}
+                            ${isToday && !isSelected ? 'ring-1 ring-emerald-500' : ''}
                           `}
                         >
                           {date.getDate()}
@@ -638,8 +638,8 @@ export default function PublicBookingPage() {
                             className={`
                               py-3 px-4 rounded-lg border transition-all text-sm font-medium
                               ${selectedTime === time
-                                ? 'bg-blue-600 border-blue-600 text-white'
-                                : 'border-gray-700 text-gray-300 hover:border-blue-500 hover:text-white'
+                                ? 'bg-emerald-600 border-emerald-600 text-white'
+                                : 'border-gray-700 text-gray-300 hover:border-emerald-500 hover:text-white'
                               }
                             `}
                           >
@@ -683,7 +683,7 @@ export default function PublicBookingPage() {
                       required
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-3 bg-[#0a0a0a] border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                      className="w-full px-4 py-3 bg-[#0a0a0a] border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
                       placeholder="Tu nombre completo"
                     />
                   </div>
@@ -698,7 +698,7 @@ export default function PublicBookingPage() {
                       required
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 bg-[#0a0a0a] border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                      className="w-full px-4 py-3 bg-[#0a0a0a] border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
                       placeholder="tu@email.com"
                     />
                   </div>
@@ -712,7 +712,7 @@ export default function PublicBookingPage() {
                       value={formData.notes}
                       onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                       rows={4}
-                      className="w-full px-4 py-3 bg-[#0a0a0a] border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 resize-none"
+                      className="w-full px-4 py-3 bg-[#0a0a0a] border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 resize-none"
                       placeholder="Cuéntale al coach sobre qué te gustaría hablar..."
                     />
                   </div>
@@ -726,7 +726,7 @@ export default function PublicBookingPage() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-colors"
+                    className="w-full py-3 bg-emerald-600 text-white rounded-xl font-semibold hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-colors"
                   >
                     {submitting ? (
                       <>
@@ -753,7 +753,7 @@ export default function PublicBookingPage() {
         {/* Footer */}
         <div className="text-center mt-12">
           <p className="text-gray-600 text-sm">
-            Powered by <Link href="/" className="text-blue-400 hover:text-blue-300">AchievingCoach</Link>
+            Powered by <Link href="/" className="text-emerald-400 hover:text-emerald-300">AchievingCoach</Link>
           </p>
         </div>
       </div>

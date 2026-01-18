@@ -41,7 +41,7 @@ export default function AdminSettingsPage() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:opacity-50 transition-colors font-medium"
+          className="flex items-center gap-2 px-5 py-2.5 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 disabled:opacity-50 transition-colors font-medium"
         >
           <Save className="w-4 h-4" />
           {saving ? 'Guardando...' : saved ? '¡Guardado!' : 'Guardar Cambios'}
@@ -72,7 +72,7 @@ export default function AdminSettingsPage() {
                   type="text"
                   value={settings.siteName}
                   onChange={(e) => handleChange('siteName', e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                  className="w-full pl-10 pr-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-xl text-white focus:outline-none focus:border-emerald-500"
                 />
               </div>
               <p className="text-xs text-gray-500 mt-2">Este nombre aparecerá en la barra de título del navegador.</p>
@@ -88,7 +88,7 @@ export default function AdminSettingsPage() {
                   type="email"
                   value={settings.supportEmail}
                   onChange={(e) => handleChange('supportEmail', e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                  className="w-full pl-10 pr-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-xl text-white focus:outline-none focus:border-emerald-500"
                 />
               </div>
               <p className="text-xs text-gray-500 mt-2">Dirección para recibir consultas de los usuarios.</p>
@@ -104,7 +104,7 @@ export default function AdminSettingsPage() {
             <button
               onClick={() => handleChange('maintenanceMode', !settings.maintenanceMode)}
               className={`relative w-12 h-6 rounded-full transition-colors ${
-                settings.maintenanceMode ? 'bg-blue-600' : 'bg-gray-700'
+                settings.maintenanceMode ? 'bg-emerald-600' : 'bg-gray-700'
               }`}
             >
               <span 
@@ -137,7 +137,7 @@ export default function AdminSettingsPage() {
             <button
               onClick={() => handleChange('allowSignups', !settings.allowSignups)}
               className={`relative w-12 h-6 rounded-full transition-colors ${
-                settings.allowSignups ? 'bg-blue-600' : 'bg-gray-700'
+                settings.allowSignups ? 'bg-emerald-600' : 'bg-gray-700'
               }`}
             >
               <span 
@@ -157,7 +157,7 @@ export default function AdminSettingsPage() {
             <button
               onClick={() => handleChange('requireEmailVerification', !settings.requireEmailVerification)}
               className={`relative w-12 h-6 rounded-full transition-colors ${
-                settings.requireEmailVerification ? 'bg-blue-600' : 'bg-gray-700'
+                settings.requireEmailVerification ? 'bg-emerald-600' : 'bg-gray-700'
               }`}
             >
               <span 
@@ -179,7 +179,7 @@ export default function AdminSettingsPage() {
                 type="number"
                 value={settings.defaultTrialDays}
                 onChange={(e) => handleChange('defaultTrialDays', parseInt(e.target.value) || 0)}
-                className="w-20 px-3 py-2 bg-[#1a1b23] border border-gray-700 rounded-xl text-white text-center focus:outline-none focus:border-blue-500"
+                className="w-20 px-3 py-2 bg-[#1a1b23] border border-gray-700 rounded-xl text-white text-center focus:outline-none focus:border-emerald-500"
               />
               <span className="text-gray-400 text-sm">DÍAS</span>
             </div>

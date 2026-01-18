@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import AnalyticsProvider from "@/components/analytics";
 import PreloadResources from "@/components/PreloadResources";
 import GEOSchemas from "@/components/seo/GEOMetadata";
@@ -218,13 +219,15 @@ export default function RootLayout({
         )}
       </head>
       <body className={inter.className}>
-        {/* Analytics - loads after interactive */}
-        <AnalyticsProvider />
+        <ThemeProvider>
+          {/* Analytics - loads after interactive */}
+          <AnalyticsProvider />
 
-        {/* Auth context and app content */}
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+          {/* Auth context and app content */}
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

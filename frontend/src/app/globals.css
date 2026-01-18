@@ -4,13 +4,126 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
+    /* Light Mode Colors */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f9fafb;
+    --bg-tertiary: #f3f4f6;
+    --bg-card: #ffffff;
+
+    --fg-primary: #111827;
+    --fg-secondary: #374151;
+    --fg-muted: #6b7280;
+
+    --border-color: #e5e7eb;
+
+    /* Input specific */
+    --input-bg: #f9fafb;
+    --input-border: #d1d5db;
+    --input-focus-border: rgba(16, 185, 129, 0.5);
+    --input-focus-ring: rgba(16, 185, 129, 0.5);
+  }
+
+  .dark {
+    /* Dark Mode Colors (matching sign-in page) */
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #111111;
+    --bg-tertiary: #1a1a1a;
+    --bg-card: #111111;
+
+    --fg-primary: #ffffff;
+    --fg-secondary: #d1d5db;
+    --fg-muted: #6b7280;
+
+    --border-color: #374151;
+
+    /* Input specific */
+    --input-bg: #1a1a1a;
+    --input-border: #374151;
+    --input-focus-border: rgba(52, 211, 153, 0.5);
+    --input-focus-ring: rgba(52, 211, 153, 0.5);
+  }
+
+  html {
+    @apply scroll-smooth;
   }
 
   body {
-    @apply bg-white text-gray-900;
+    background-color: var(--bg-primary);
+    color: var(--fg-primary);
+    @apply transition-colors duration-200;
+  }
+}
+
+/* Utility classes for consistent styling */
+@layer components {
+  .card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    @apply rounded-2xl shadow-2xl;
+  }
+
+  .card-bordered {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    @apply rounded-xl;
+  }
+
+  .input-base {
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--fg-primary);
+    @apply w-full rounded-lg px-4 py-3 focus:outline-none transition-colors;
+  }
+
+  .input-base::placeholder {
+    color: var(--fg-muted);
+  }
+
+  .input-base:focus {
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 1px var(--input-focus-ring);
+  }
+
+  .btn-primary {
+    @apply bg-white text-black font-medium py-3 px-4 rounded-lg
+           hover:bg-gray-100 transition-colors
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply bg-emerald-600 text-white font-medium py-3 px-4 rounded-lg
+           hover:bg-emerald-700 transition-colors
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-ghost {
+    color: var(--fg-secondary);
+    @apply bg-transparent font-medium py-2 px-3 rounded-lg transition-colors;
+  }
+
+  .btn-ghost:hover {
+    background-color: var(--bg-tertiary);
+  }
+
+  .label-base {
+    color: var(--fg-muted);
+    @apply block text-xs tracking-wider uppercase mb-2;
+  }
+
+  /* Status badges */
+  .badge-success {
+    @apply px-2 py-0.5 text-xs font-medium rounded-full bg-emerald-500/20 text-emerald-400;
+  }
+
+  .badge-warning {
+    @apply px-2 py-0.5 text-xs font-medium rounded-full bg-amber-500/20 text-amber-400;
+  }
+
+  .badge-error {
+    @apply px-2 py-0.5 text-xs font-medium rounded-full bg-red-500/20 text-red-400;
+  }
+
+  .badge-info {
+    @apply px-2 py-0.5 text-xs font-medium rounded-full bg-emerald-500/20 text-emerald-400;
   }
 }

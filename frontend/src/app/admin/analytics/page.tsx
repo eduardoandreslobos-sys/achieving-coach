@@ -376,7 +376,7 @@ export default function AdminAnalyticsPage() {
       case 'branded': return 'bg-violet-500/20 text-violet-400';
       case 'commercial': return 'bg-amber-500/20 text-amber-400';
       case 'comparison': return 'bg-cyan-500/20 text-cyan-400';
-      default: return 'bg-blue-500/20 text-blue-400';
+      default: return 'bg-emerald-500/20 text-emerald-400';
     }
   };
 
@@ -430,7 +430,7 @@ export default function AdminAnalyticsPage() {
     return (
       <div className="p-8 flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-400">Cargando analíticas...</p>
         </div>
       </div>
@@ -449,7 +449,7 @@ export default function AdminAnalyticsPage() {
           <select
             value={timeRange}
             onChange={(e) => setTimeRange(parseInt(e.target.value))}
-            className="bg-[#12131a] border border-gray-800 rounded-xl px-4 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+            className="bg-[#12131a] border border-gray-800 rounded-xl px-4 py-2 text-white text-sm focus:outline-none focus:border-emerald-500"
           >
             <option value={7}>7 días</option>
             <option value={14}>14 días</option>
@@ -460,7 +460,7 @@ export default function AdminAnalyticsPage() {
           <button
             onClick={handleRefresh}
             disabled={refreshing}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-sm transition-colors disabled:opacity-50"
           >
             <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
             Actualizar
@@ -478,7 +478,7 @@ export default function AdminAnalyticsPage() {
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                 activeTab === tab.id
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-emerald-600 text-white'
                   : 'bg-[#12131a] text-gray-400 hover:text-white hover:bg-gray-800'
               }`}
             >
@@ -496,8 +496,8 @@ export default function AdminAnalyticsPage() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-5">
               <div className="flex items-center justify-between mb-3">
-                <div className="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center">
-                  <Users className="w-5 h-5 text-blue-400" />
+                <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center">
+                  <Users className="w-5 h-5 text-emerald-400" />
                 </div>
                 <ChangeIndicator value={ga4Data?.changes.users || '0'} />
               </div>
@@ -596,7 +596,7 @@ export default function AdminAnalyticsPage() {
                       <span className="text-white font-medium">{kw.clicks}</span>
                       <span className={`px-1.5 py-0.5 rounded text-xs ${
                         parseFloat(kw.position) <= 3 ? 'bg-emerald-500/20 text-emerald-400' :
-                        parseFloat(kw.position) <= 10 ? 'bg-blue-500/20 text-blue-400' :
+                        parseFloat(kw.position) <= 10 ? 'bg-emerald-500/20 text-emerald-400' :
                         'bg-gray-500/20 text-gray-400'
                       }`}>#{kw.position}</span>
                     </div>
@@ -634,7 +634,7 @@ export default function AdminAnalyticsPage() {
             {/* Top Countries */}
             <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Globe className="w-5 h-5 text-blue-400" />
+                <Globe className="w-5 h-5 text-emerald-400" />
                 <h3 className="text-lg font-semibold text-white">Top Mercados</h3>
               </div>
               <div className="space-y-3">
@@ -675,7 +675,7 @@ export default function AdminAnalyticsPage() {
             <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-5">
               <p className="text-gray-400 text-sm mb-1">Sesiones</p>
               <p className="text-3xl font-bold text-white">{formatNumber(ga4Data?.metrics.sessions || 0)}</p>
-              <p className="text-blue-400 text-sm mt-2">{ga4Data?.metrics.sessionsPerUser?.toFixed(1) || 0} por usuario</p>
+              <p className="text-emerald-400 text-sm mt-2">{ga4Data?.metrics.sessionsPerUser?.toFixed(1) || 0} por usuario</p>
             </div>
             <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-5">
               <p className="text-gray-400 text-sm mb-1">Page Views</p>
@@ -730,7 +730,7 @@ export default function AdminAnalyticsPage() {
                         <div
                           className={`h-full rounded-full ${
                             channel.channel.toLowerCase().includes('organic') ? 'bg-emerald-500' :
-                            channel.channel.toLowerCase().includes('direct') ? 'bg-blue-500' :
+                            channel.channel.toLowerCase().includes('direct') ? 'bg-emerald-500' :
                             channel.channel.toLowerCase().includes('social') ? 'bg-pink-500' :
                             channel.channel.toLowerCase().includes('referral') ? 'bg-violet-500' :
                             channel.channel.toLowerCase().includes('paid') ? 'bg-amber-500' :
@@ -758,7 +758,7 @@ export default function AdminAnalyticsPage() {
                   const percentage = total > 0 ? ((device.sessions / total) * 100).toFixed(1) : '0';
                   return (
                     <div key={i} className="bg-[#0a0a0a] rounded-xl p-4 text-center">
-                      <Icon className="w-8 h-8 text-blue-400 mx-auto mb-2" />
+                      <Icon className="w-8 h-8 text-emerald-400 mx-auto mb-2" />
                       <p className="text-white font-medium capitalize">{device.device}</p>
                       <p className="text-2xl font-bold text-white mt-1">{percentage}%</p>
                       <p className="text-gray-500 text-xs">{formatNumber(device.sessions)} sesiones</p>
@@ -996,7 +996,7 @@ export default function AdminAnalyticsPage() {
                       <td className="py-3 text-right">
                         <span className={`px-2 py-1 rounded text-sm ${
                           parseFloat(kw.position) <= 3 ? 'bg-emerald-500/20 text-emerald-400' :
-                          parseFloat(kw.position) <= 10 ? 'bg-blue-500/20 text-blue-400' :
+                          parseFloat(kw.position) <= 10 ? 'bg-emerald-500/20 text-emerald-400' :
                           parseFloat(kw.position) <= 20 ? 'bg-amber-500/20 text-amber-400' :
                           'bg-gray-500/20 text-gray-400'
                         }`}>
@@ -1020,7 +1020,7 @@ export default function AdminAnalyticsPage() {
           {/* Pages Performance */}
           <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-6">
             <div className="flex items-center gap-2 mb-4">
-              <FileText className="w-5 h-5 text-blue-400" />
+              <FileText className="w-5 h-5 text-emerald-400" />
               <h3 className="text-lg font-semibold text-white">Rendimiento por Página</h3>
             </div>
             <div className="space-y-4">
@@ -1106,7 +1106,7 @@ export default function AdminAnalyticsPage() {
           {/* Countries with expandable cities */}
           <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-6">
             <div className="flex items-center gap-2 mb-4">
-              <Globe className="w-5 h-5 text-blue-400" />
+              <Globe className="w-5 h-5 text-emerald-400" />
               <h3 className="text-lg font-semibold text-white">Tráfico por País</h3>
             </div>
             <div className="space-y-4">
@@ -1135,7 +1135,7 @@ export default function AdminAnalyticsPage() {
                             <span className="text-gray-500 ml-1">users</span>
                           </div>
                           <div className="text-right">
-                            <span className="text-blue-400">{country.sessions}</span>
+                            <span className="text-emerald-400">{country.sessions}</span>
                             <span className="text-gray-500 ml-1">sessions</span>
                           </div>
                           <div className="text-right">
@@ -1149,7 +1149,7 @@ export default function AdminAnalyticsPage() {
                       </div>
                       <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-blue-500 rounded-full"
+                          className="h-full bg-emerald-500 rounded-full"
                           style={{ width: `${(country.sessions / maxSessions) * 100}%` }}
                         />
                       </div>
@@ -1168,7 +1168,7 @@ export default function AdminAnalyticsPage() {
                               <p className="text-white text-sm font-medium">{city.city}</p>
                               <div className="flex items-center gap-3 mt-1 text-xs">
                                 <span className="text-gray-500">{city.users} users</span>
-                                <span className="text-blue-400">{city.sessions} sessions</span>
+                                <span className="text-emerald-400">{city.sessions} sessions</span>
                               </div>
                             </div>
                           ))}
@@ -1262,7 +1262,7 @@ export default function AdminAnalyticsPage() {
                   </div>
                   <div className="flex items-center gap-3 text-xs">
                     <span className="text-gray-500">{city.users} users</span>
-                    <span className="text-blue-400">{city.sessions} sessions</span>
+                    <span className="text-emerald-400">{city.sessions} sessions</span>
                   </div>
                 </div>
               ))}
@@ -1312,8 +1312,8 @@ export default function AdminAnalyticsPage() {
               <p className="text-violet-400 text-xs mt-1">{((clarityData?.metrics?.quickbackRate || 0) * 100).toFixed(1)}% de sesiones</p>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border border-blue-500/20 rounded-2xl p-5">
-              <div className="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center mb-3">
+            <div className="bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 border border-emerald-500/20 rounded-2xl p-5">
+              <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center mb-3">
                 <span className="text-xl">📜</span>
               </div>
               <p className="text-gray-400 text-sm mb-1">Excessive Scrolls</p>
@@ -1382,7 +1382,7 @@ export default function AdminAnalyticsPage() {
           {/* What these metrics mean */}
           <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-6">
             <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <AlertCircle className="w-5 h-5 text-blue-400" />
+              <AlertCircle className="w-5 h-5 text-emerald-400" />
               ¿Qué significan estas métricas?
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
@@ -1418,11 +1418,11 @@ export default function AdminAnalyticsPage() {
           </div>
 
           {/* Link to Clarity Dashboard */}
-          <div className="bg-gradient-to-r from-blue-500/10 to-violet-500/10 border border-blue-500/20 rounded-2xl p-6">
+          <div className="bg-gradient-to-r from-emerald-500/10 to-violet-500/10 border border-emerald-500/20 rounded-2xl p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
-                  <MousePointer className="w-6 h-6 text-blue-400" />
+                <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center">
+                  <MousePointer className="w-6 h-6 text-emerald-400" />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-white">Microsoft Clarity</h3>
@@ -1433,7 +1433,7 @@ export default function AdminAnalyticsPage() {
                 href="https://clarity.microsoft.com/projects/view/v2wz3f64o1/dashboard"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
               >
                 Abrir Dashboard
                 <ChevronRight className="w-4 h-4" />
@@ -1453,8 +1453,8 @@ export default function AdminAnalyticsPage() {
           {/* Platform KPIs */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-5">
-              <div className="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center mb-3">
-                <Users className="w-5 h-5 text-blue-400" />
+              <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center mb-3">
+                <Users className="w-5 h-5 text-emerald-400" />
               </div>
               <p className="text-gray-400 text-sm mb-1">Usuarios Totales</p>
               <p className="text-3xl font-bold text-white">{platformData?.totalUsers || 0}</p>
@@ -1492,7 +1492,7 @@ export default function AdminAnalyticsPage() {
                   return (
                     <div key={i} className="flex-1 flex flex-col items-center gap-2">
                       <div
-                        className="w-full bg-blue-500 rounded-t-lg transition-all hover:bg-blue-400"
+                        className="w-full bg-emerald-500 rounded-t-lg transition-all hover:bg-emerald-400"
                         style={{ height: `${Math.max((week.count / maxCount) * 100, 4)}%` }}
                       />
                       <span className="text-xs text-gray-500 whitespace-nowrap">{week.week}</span>
@@ -1515,7 +1515,7 @@ export default function AdminAnalyticsPage() {
                     <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
                       <div
                         className={`h-full rounded-full ${
-                          role.role === 'Coaches' ? 'bg-blue-500' :
+                          role.role === 'Coaches' ? 'bg-emerald-500' :
                           role.role === 'Coachees' ? 'bg-emerald-500' : 'bg-violet-500'
                         }`}
                         style={{ width: `${role.percentage}%` }}
@@ -1543,7 +1543,7 @@ export default function AdminAnalyticsPage() {
                       </div>
                       <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-blue-500 rounded-full"
+                          className="h-full bg-emerald-500 rounded-full"
                           style={{ width: `${(tool.completions / maxCount) * 100}%` }}
                         />
                       </div>

@@ -114,13 +114,13 @@ export default function PricingPage() {
                 key={plan.name}
                 className={`relative bg-[#111111] border rounded-2xl p-8 ${
                   plan.popular 
-                    ? 'border-blue-500 ring-1 ring-blue-500' 
+                    ? 'border-emerald-500 ring-1 ring-emerald-500' 
                     : 'border-gray-800'
                 }`}
               >
                 {plan.popular && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded-full">
+                    <span className="px-3 py-1 bg-emerald-600 text-white text-xs font-medium rounded-full">
                       MÁS POPULAR
                     </span>
                   </div>
@@ -149,7 +149,7 @@ export default function PricingPage() {
                   href={plan.href}
                   className={`block w-full py-3 rounded-lg font-medium text-center transition-colors ${
                     plan.popular
-                      ? 'bg-blue-600 text-white hover:bg-blue-700'
+                      ? 'bg-emerald-600 text-white hover:bg-emerald-700'
                       : 'bg-[#1a1a1a] border border-gray-700 text-white hover:bg-[#222]'
                   }`}
                 >
@@ -167,8 +167,8 @@ export default function PricingPage() {
           <h2 className="text-2xl font-bold mb-4">Todos los Planes Incluyen</h2>
           <div className="grid md:grid-cols-3 gap-6 mt-12">
             <div className="text-center">
-              <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Sparkles className="w-6 h-6 text-blue-400" />
+              <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="w-6 h-6 text-emerald-400" />
               </div>
               <h3 className="text-white font-semibold mb-2">Actualizaciones Gratis</h3>
               <p className="text-gray-500 text-sm">Acceso a todas las nuevas funciones sin costo adicional.</p>
@@ -211,7 +211,7 @@ export default function PricingPage() {
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-4">¿Listo para Empezar?</h2>
           <p className="text-gray-400 mb-8">Únete a cientos de coaches que ya transforman sus prácticas con AchievingCoach.</p>
-          <Link href="/sign-up" className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+          <Link href="/sign-up" className="inline-flex items-center gap-2 px-8 py-4 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors">
             Comenzar Prueba Gratuita
             <ArrowRight className="w-4 h-4" />
           </Link>

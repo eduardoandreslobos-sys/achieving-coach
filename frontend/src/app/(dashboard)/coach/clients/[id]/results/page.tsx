@@ -90,7 +90,7 @@ export default function ClientToolResultsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-[#0a0a0f]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -115,7 +115,7 @@ export default function ClientToolResultsPage() {
         </div>
 
         {results.length === 0 ? (
-          <div className="bg-[#12131a] border border-blue-900/30 rounded-xl p-12 text-center">
+          <div className="bg-[#12131a] border border-gray-800 rounded-xl p-12 text-center">
             <Grid className="w-12 h-12 text-gray-600 mx-auto mb-4" />
             <h3 className="text-white font-semibold mb-2">Sin resultados aún</h3>
             <p className="text-gray-400">Este cliente no ha completado ninguna herramienta todavía.</p>
@@ -135,8 +135,8 @@ export default function ClientToolResultsPage() {
                     onClick={() => setSelectedResult(result)}
                     className={'w-full text-left p-4 rounded-xl border transition-colors ' +
                       (isSelected 
-                        ? 'bg-blue-600/20 border-blue-500' 
-                        : 'bg-[#12131a] border-blue-900/30 hover:bg-[#1a1b23]')
+                        ? 'bg-emerald-600/20 border-emerald-500' 
+                        : 'bg-[#12131a] border-gray-800 hover:bg-[#1a1b23]')
                     }
                   >
                     <div className="flex items-center gap-3">
@@ -156,14 +156,14 @@ export default function ClientToolResultsPage() {
             {/* Result Detail */}
             <div className="lg:col-span-2">
               {!selectedResult ? (
-                <div className="bg-[#12131a] border border-blue-900/30 rounded-xl p-12 text-center h-full flex items-center justify-center">
+                <div className="bg-[#12131a] border border-gray-800 rounded-xl p-12 text-center h-full flex items-center justify-center">
                   <div>
                     <BarChart3 className="w-12 h-12 text-gray-600 mx-auto mb-4" />
                     <p className="text-gray-400">Selecciona una herramienta para ver sus resultados</p>
                   </div>
                 </div>
               ) : (
-                <div className="bg-[#12131a] border border-blue-900/30 rounded-xl p-6">
+                <div className="bg-[#12131a] border border-gray-800 rounded-xl p-6">
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-3">
                       {(() => {
@@ -185,7 +185,7 @@ export default function ClientToolResultsPage() {
                   </div>
 
                   {/* Results Display */}
-                  <div className="border-t border-blue-900/30 pt-6">
+                  <div className="border-t border-gray-800 pt-6">
                     {selectedResult.toolId === 'wheel-of-life' && selectedResult.results?.areas && (
                       <div className="grid grid-cols-2 gap-4">
                         {Object.entries(selectedResult.results.areas).map(([area, score]: [string, any]) => (
@@ -196,7 +196,7 @@ export default function ClientToolResultsPage() {
                             </div>
                             <div className="h-2 bg-gray-700 rounded-full">
                               <div 
-                                className="h-full bg-blue-500 rounded-full" 
+                                className="h-full bg-emerald-500 rounded-full" 
                                 style={{ width: (Number(score) * 10) + '%' }} 
                               />
                             </div>

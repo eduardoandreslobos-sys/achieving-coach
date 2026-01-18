@@ -23,7 +23,7 @@ export function Navbar() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2" aria-label="AchievingCoach - Inicio">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">A</span>
             </div>
             <span className="font-semibold text-white">AchievingCoach</span>
@@ -51,7 +51,7 @@ export function Navbar() {
             <Link href="/sign-in" className="text-gray-400 hover:text-white text-sm transition-colors">
               Iniciar Sesión
             </Link>
-            <Link href="/sign-up" className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
+            <Link href="/sign-up" className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors">
               Comenzar Gratis
             </Link>
           </div>
@@ -88,7 +88,7 @@ export function Navbar() {
                 <Link href="/sign-in" className="text-gray-400 hover:text-white text-sm">
                   Iniciar Sesión
                 </Link>
-                <Link href="/sign-up" className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors text-center">
+                <Link href="/sign-up" className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors text-center">
                   Comenzar Gratis
                 </Link>
               </div>

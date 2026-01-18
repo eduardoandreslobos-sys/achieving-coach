@@ -34,12 +34,12 @@ export default function ToolsPage() {
 
   const getIcon = (icon: string, color: string) => {
     const colorClass = {
-      blue: 'text-blue-400 bg-blue-500/20',
+      blue: 'text-emerald-400 bg-emerald-500/20',
       emerald: 'text-emerald-400 bg-emerald-500/20',
       cyan: 'text-cyan-400 bg-cyan-500/20',
       violet: 'text-violet-400 bg-violet-500/20',
       amber: 'text-amber-400 bg-amber-500/20',
-    }[color] || 'text-blue-400 bg-blue-500/20';
+    }[color] || 'text-emerald-400 bg-emerald-500/20';
 
     const iconMap: Record<string, any> = {
       refresh: RefreshCw,
@@ -80,14 +80,14 @@ export default function ToolsPage() {
               placeholder="Buscar herramienta..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-[#12131a] border border-blue-900/30 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+              className="w-full pl-12 pr-4 py-3 bg-[#12131a] border border-gray-800 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
             />
           </div>
-          <button className="flex items-center gap-2 px-4 py-3 bg-[#12131a] border border-blue-900/30 rounded-xl text-white hover:bg-[#1a1b23] transition-colors">
+          <button className="flex items-center gap-2 px-4 py-3 bg-[#12131a] border border-gray-800 rounded-xl text-white hover:bg-[#1a1b23] transition-colors">
             <Filter className="w-5 h-5" />
             Filtrar
           </button>
-          <button className="flex items-center gap-2 px-4 py-3 bg-[#12131a] border border-blue-900/30 rounded-xl text-white hover:bg-[#1a1b23] transition-colors">
+          <button className="flex items-center gap-2 px-4 py-3 bg-[#12131a] border border-gray-800 rounded-xl text-white hover:bg-[#1a1b23] transition-colors">
             <SlidersHorizontal className="w-5 h-5" />
             Ordenar
           </button>
@@ -96,7 +96,7 @@ export default function ToolsPage() {
         {/* Tools Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredTools.map((tool) => (
-            <div key={tool.id} className="bg-[#12131a] border border-blue-900/30 rounded-xl p-5 flex flex-col">
+            <div key={tool.id} className="bg-[#12131a] border border-gray-800 rounded-xl p-5 flex flex-col">
               <div className="flex items-start justify-between mb-4">
                 {getIcon(tool.icon, tool.color)}
                 <span className={tool.status === 'completed' 
@@ -111,11 +111,11 @@ export default function ToolsPage() {
               <h3 className="text-white font-semibold text-lg mb-2">{tool.name}</h3>
               <p className="text-gray-400 text-sm mb-4 flex-1">{tool.description}</p>
 
-              <div className="flex items-center justify-between pt-3 border-t border-blue-900/20">
+              <div className="flex items-center justify-between pt-3 border-t border-gray-800">
                 <span className="text-gray-500 text-xs uppercase tracking-wider">{tool.category}</span>
                 <Link 
                   href={'/tools/' + tool.id}
-                  className="text-blue-400 hover:text-blue-300 text-sm font-medium flex items-center gap-1"
+                  className="text-emerald-400 hover:text-emerald-300 text-sm font-medium flex items-center gap-1"
                 >
                   {tool.status === 'completed' ? 'Ver Resultados' : 'Iniciar Herramienta'}
                   <ChevronRight className="w-4 h-4" />

@@ -275,7 +275,7 @@ export default function ICFSimulatorPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-[#0a0a0a]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -291,7 +291,7 @@ export default function ICFSimulatorPage() {
               <h1 className="text-3xl font-bold mb-2">Simulador de Competencias ICF</h1>
               <p className="text-gray-400">
                 Entrena y evalúa tus habilidades de coaching ejecutivo alineadas estrictamente al{' '}
-                <span className="text-blue-400">Nuevo Modelo ICF 2026</span>.
+                <span className="text-emerald-400">Nuevo Modelo ICF 2026</span>.
               </p>
             </div>
             <button className="flex items-center gap-2 px-4 py-2 bg-[#1a1a1a] border border-gray-700 text-white rounded-lg hover:bg-[#222] transition-colors">
@@ -303,11 +303,11 @@ export default function ICFSimulatorPage() {
           {/* Three Mode Cards */}
           <div className="grid md:grid-cols-3 gap-4 mb-10">
             {/* Explorar Escenarios */}
-            <div className="bg-[#111111] border border-gray-800 rounded-xl p-6 hover:border-blue-500/50 transition-colors">
+            <div className="bg-[#111111] border border-gray-800 rounded-xl p-6 hover:border-emerald-500/50 transition-colors">
               <div className="flex items-start justify-between mb-4">
                 <h3 className="text-lg font-semibold text-white">Explorar Escenarios</h3>
-                <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
-                  <Gamepad2 className="w-5 h-5 text-blue-400" />
+                <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
+                  <Gamepad2 className="w-5 h-5 text-emerald-400" />
                 </div>
               </div>
               <p className="text-gray-500 text-sm mb-4">
@@ -320,7 +320,7 @@ export default function ICFSimulatorPage() {
               <button 
                 onClick={startExam}
                 disabled={allQuestions.length < 60}
-                className="w-full py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-2.5 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Empezar Simulación
                 <ArrowRight className="w-4 h-4" />
@@ -382,7 +382,7 @@ export default function ICFSimulatorPage() {
                     (Última sesión: {recentResults[0]?.date.toLocaleDateString('es-CL')})
                   </span>
                 </div>
-                <Link href={`/coach/icf-simulator/results/${recentResults[0]?.id}`} className="text-blue-400 text-sm hover:text-blue-300 flex items-center gap-1">
+                <Link href={`/coach/icf-simulator/results/${recentResults[0]?.id}`} className="text-emerald-400 text-sm hover:text-emerald-300 flex items-center gap-1">
                   Revisar Sesión Completa
                   <ExternalLink className="w-4 h-4" />
                 </Link>
@@ -430,7 +430,7 @@ export default function ICFSimulatorPage() {
                 {/* Quick Stats */}
                 <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
                   <div className="flex items-center gap-2 mb-6">
-                    <BarChart3 className="w-5 h-5 text-blue-400" />
+                    <BarChart3 className="w-5 h-5 text-emerald-400" />
                     <h3 className="font-semibold text-white">Historial de Simulaciones</h3>
                   </div>
                   <div className="space-y-3">
@@ -482,7 +482,7 @@ export default function ICFSimulatorPage() {
   if (saving) {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-[#0a0a0a]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500 mb-4"></div>
         <p className="text-white">Guardando resultados...</p>
       </div>
     );
@@ -500,7 +500,7 @@ export default function ICFSimulatorPage() {
           <div className="w-48">
             <p className="text-sm text-gray-400">Pregunta {currentIndex + 1} de 60</p>
             <div className="w-full bg-[#1a1a1a] rounded-full h-2 mt-2">
-              <div className="bg-blue-500 h-2 rounded-full transition-all" style={{ width: `${progress}%` }} />
+              <div className="bg-emerald-500 h-2 rounded-full transition-all" style={{ width: `${progress}%` }} />
             </div>
           </div>
           <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 px-4 py-2 rounded-lg">
@@ -512,7 +512,7 @@ export default function ICFSimulatorPage() {
         {/* Question Card */}
         <div className="bg-[#111111] border border-gray-800 rounded-xl p-8 mb-6">
           {currentQuestion?.competencyName && (
-            <p className="text-blue-400 text-xs uppercase tracking-wider mb-4">
+            <p className="text-emerald-400 text-xs uppercase tracking-wider mb-4">
               {currentQuestion.domainName} • {currentQuestion.competencyName}
             </p>
           )}
@@ -525,7 +525,7 @@ export default function ICFSimulatorPage() {
                 onClick={() => setAnswers({ ...answers, [currentIndex]: option })} 
                 className={`w-full text-left p-4 rounded-lg border-2 transition-colors ${
                   answers[currentIndex] === option 
-                    ? 'border-blue-500 bg-blue-500/10' 
+                    ? 'border-emerald-500 bg-emerald-500/10' 
                     : 'border-gray-700 hover:border-gray-600 bg-[#1a1a1a]'
                 }`}
               >
@@ -549,7 +549,7 @@ export default function ICFSimulatorPage() {
             <button 
               onClick={() => setCurrentIndex(currentIndex + 1)} 
               disabled={!answers[currentIndex]} 
-              className="flex-1 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Siguiente
             </button>

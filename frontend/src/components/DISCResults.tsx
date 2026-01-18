@@ -37,7 +37,7 @@ export function DISCResults({ resultId }: DISCResultsProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
       </div>
     );
   }
@@ -49,7 +49,7 @@ export function DISCResults({ resultId }: DISCResultsProps) {
           No se encontraron resultados.
         </p>
         <div className="text-center mt-4">
-          <Link href="/tools/disc" className="text-blue-600 hover:underline">
+          <Link href="/tools/disc" className="text-emerald-600 hover:underline">
             Realizar evaluación DISC
           </Link>
         </div>
@@ -70,7 +70,7 @@ export function DISCResults({ resultId }: DISCResultsProps) {
           <div>
             <Link 
               href="/tools/disc" 
-              className="text-blue-600 hover:underline text-sm flex items-center gap-1 mb-2"
+              className="text-emerald-600 hover:underline text-sm flex items-center gap-1 mb-2"
             >
               <ArrowLeft className="h-4 w-4" />
               Volver a DISC
@@ -96,7 +96,7 @@ export function DISCResults({ resultId }: DISCResultsProps) {
       </div>
 
       {/* Perfil Principal */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-sm p-6 text-white">
+      <div className="bg-gradient-to-r from-emerald-600 to-purple-600 rounded-xl shadow-sm p-6 text-white">
         <div className="flex items-center gap-4 mb-4">
           <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-3xl font-bold">
             {profile.primaryStyle}
@@ -188,7 +188,7 @@ export function DISCResults({ resultId }: DISCResultsProps) {
         <div className="flex justify-center gap-4">
           <Link 
             href="/tools/disc"
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700"
           >
             Nueva Evaluación
           </Link>

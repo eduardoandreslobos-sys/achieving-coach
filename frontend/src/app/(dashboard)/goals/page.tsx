@@ -70,7 +70,7 @@ export default function GoalsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-[#0a0a0f]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -86,12 +86,12 @@ export default function GoalsPage() {
 
         {goals.length === 0 ? (
           /* Empty State */
-          <div className="bg-[#12131a] border border-blue-900/30 rounded-2xl p-12">
+          <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-12">
             <div className="flex flex-col items-center text-center">
               {/* Stacked Icons Illustration */}
               <div className="relative mb-8">
-                <div className="w-20 h-20 bg-blue-600/20 rounded-2xl flex items-center justify-center">
-                  <Flag className="w-10 h-10 text-blue-500" />
+                <div className="w-20 h-20 bg-emerald-600/20 rounded-2xl flex items-center justify-center">
+                  <Flag className="w-10 h-10 text-emerald-500" />
                 </div>
                 <div className="absolute -top-2 -right-4 w-8 h-8 bg-amber-500/20 rounded-lg flex items-center justify-center">
                   <Star className="w-4 h-4 text-amber-400" />
@@ -108,7 +108,7 @@ export default function GoalsPage() {
 
               <button
                 onClick={() => setShowModal(true)}
-                className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors"
+                className="flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 transition-colors"
               >
                 Crea tu Primer Objetivo
                 <Plus className="w-5 h-5" />
@@ -120,23 +120,23 @@ export default function GoalsPage() {
           <div className="space-y-4">
             <button
               onClick={() => setShowModal(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors mb-6"
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors mb-6"
             >
               <Plus className="w-4 h-4" />
               Nuevo Objetivo
             </button>
 
             {goals.map((goal) => (
-              <div key={goal.id} className="bg-[#12131a] border border-blue-900/30 rounded-xl p-6">
+              <div key={goal.id} className="bg-[#12131a] border border-gray-800 rounded-xl p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                      goal.status === 'completed' ? 'bg-emerald-500/20' : 'bg-blue-500/20'
+                      goal.status === 'completed' ? 'bg-emerald-500/20' : 'bg-emerald-500/20'
                     }`}>
                       {goal.status === 'completed' ? (
                         <CheckCircle className="w-5 h-5 text-emerald-400" />
                       ) : (
-                        <Target className="w-5 h-5 text-blue-400" />
+                        <Target className="w-5 h-5 text-emerald-400" />
                       )}
                     </div>
                     <div>
@@ -147,7 +147,7 @@ export default function GoalsPage() {
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                     goal.status === 'completed' 
                       ? 'bg-emerald-500/20 text-emerald-400' 
-                      : 'bg-blue-500/20 text-blue-400'
+                      : 'bg-emerald-500/20 text-emerald-400'
                   }`}>
                     {goal.status === 'completed' ? 'Completado' : `${goal.progress}%`}
                   </span>
@@ -156,7 +156,7 @@ export default function GoalsPage() {
                 {goal.status !== 'completed' && (
                   <div className="h-2 bg-[#1a1b23] rounded-full overflow-hidden">
                     <div 
-                      className="h-full bg-blue-500 rounded-full transition-all"
+                      className="h-full bg-emerald-500 rounded-full transition-all"
                       style={{ width: `${goal.progress}%` }}
                     />
                   </div>
@@ -170,7 +170,7 @@ export default function GoalsPage() {
         <div className="text-center mt-8">
           <p className="text-gray-500 text-sm">
             ¿Necesitas ayuda para definir tus objetivos?{' '}
-            <Link href="/messages" className="text-blue-400 hover:text-blue-300">
+            <Link href="/messages" className="text-emerald-400 hover:text-emerald-300">
               Consulta a tu coach
             </Link>
           </p>
@@ -179,7 +179,7 @@ export default function GoalsPage() {
         {/* Modal */}
         {showModal && (
           <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-            <div className="bg-[#12131a] border border-blue-900/30 rounded-2xl p-6 w-full max-w-md">
+            <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-6 w-full max-w-md">
               <h2 className="text-xl font-bold text-white mb-6">Nuevo Objetivo</h2>
               
               <div className="space-y-4">
@@ -190,7 +190,7 @@ export default function GoalsPage() {
                     value={newGoal.title}
                     onChange={(e) => setNewGoal({ ...newGoal, title: e.target.value })}
                     placeholder="Ej: Mejorar comunicación"
-                    className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-800 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
                 <div>
@@ -200,7 +200,7 @@ export default function GoalsPage() {
                     onChange={(e) => setNewGoal({ ...newGoal, description: e.target.value })}
                     rows={3}
                     placeholder="Describe tu objetivo..."
-                    className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 resize-none"
+                    className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-800 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-emerald-500 resize-none"
                   />
                 </div>
                 <div>
@@ -209,7 +209,7 @@ export default function GoalsPage() {
                     type="date"
                     value={newGoal.dueDate}
                     onChange={(e) => setNewGoal({ ...newGoal, dueDate: e.target.value })}
-                    className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-800 rounded-xl text-white focus:outline-none focus:border-emerald-500"
                   />
                 </div>
               </div>
@@ -217,14 +217,14 @@ export default function GoalsPage() {
               <div className="flex gap-3 mt-6">
                 <button
                   onClick={() => setShowModal(false)}
-                  className="flex-1 px-4 py-3 bg-[#1a1b23] border border-blue-900/30 text-white rounded-xl hover:bg-[#22232d] transition-colors"
+                  className="flex-1 px-4 py-3 bg-[#1a1b23] border border-gray-800 text-white rounded-xl hover:bg-[#22232d] transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={handleCreateGoal}
                   disabled={!newGoal.title.trim()}
-                  className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+                  className="flex-1 px-4 py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50"
                 >
                   Crear Objetivo
                 </button>

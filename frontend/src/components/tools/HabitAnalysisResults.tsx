@@ -38,7 +38,7 @@ export default function HabitAnalysisResults({ habit, onReset }: HabitAnalysisRe
             icon: <RefreshCw className="w-5 h-5" />,
             title: 'Replace the Routine',
             description: 'Keep the cue and reward, but change the behavior to something healthier.',
-            color: 'text-blue-600'
+            color: 'text-emerald-600'
           },
           {
             icon: <Target className="w-5 h-5" />,
@@ -122,7 +122,7 @@ export default function HabitAnalysisResults({ habit, onReset }: HabitAnalysisRe
           {/* Routine */}
           <div className="bg-blue-50 rounded-xl p-6 border-2 border-blue-300">
             <div className="flex items-center gap-2 mb-3">
-              <RefreshCw className="w-6 h-6 text-blue-600" />
+              <RefreshCw className="w-6 h-6 text-emerald-600" />
               <h4 className="text-lg font-bold text-blue-900">
                 2. Routine (Behavior)
               </h4>

@@ -59,7 +59,7 @@ export default function OnboardingPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2">
-            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">A</span>
             </div>
             <span className="font-semibold text-white text-xl">AchievingCoach</span>
@@ -83,14 +83,14 @@ export default function OnboardingPage() {
                   onClick={() => setRole('coachee')}
                   className={`p-4 border-2 rounded-xl text-center transition-all ${
                     role === 'coachee'
-                      ? 'border-blue-500 bg-blue-500/10'
+                      ? 'border-emerald-500 bg-emerald-500/10'
                       : 'border-gray-700 hover:border-gray-600 bg-[#1a1a1a]'
                   }`}
                 >
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center mx-auto mb-2 ${
-                    role === 'coachee' ? 'bg-blue-500/20' : 'bg-gray-700'
+                    role === 'coachee' ? 'bg-emerald-500/20' : 'bg-gray-700'
                   }`}>
-                    <User className={`w-5 h-5 ${role === 'coachee' ? 'text-blue-400' : 'text-gray-400'}`} />
+                    <User className={`w-5 h-5 ${role === 'coachee' ? 'text-emerald-400' : 'text-gray-400'}`} />
                   </div>
                   <div className={`font-semibold mb-1 ${role === 'coachee' ? 'text-white' : 'text-gray-300'}`}>
                     Coachee
@@ -128,7 +128,7 @@ export default function OnboardingPage() {
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                 placeholder="Tu nombre completo"
                 required
               />
@@ -145,7 +145,7 @@ export default function OnboardingPage() {
                     value={formData.bio}
                     onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                     rows={4}
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none"
+                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 resize-none"
                     placeholder="Cuéntanos sobre tu experiencia en coaching..."
                     required
                   />
@@ -159,7 +159,7 @@ export default function OnboardingPage() {
                     type="text"
                     value={formData.specialties}
                     onChange={(e) => setFormData({ ...formData, specialties: e.target.value })}
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                     placeholder="Liderazgo, Carrera, Vida (separado por comas)"
                     required
                   />

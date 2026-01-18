@@ -294,7 +294,7 @@ function TabButton({
 function SessionStatusBadge({ status }: { status: Session['status'] }) {
   const config = {
     scheduled: { bg: 'bg-gray-100', text: 'text-gray-800', label: 'Programada' },
-    'in-progress': { bg: 'bg-blue-100', text: 'text-blue-800', label: 'En Progreso' },
+    'in-progress': { bg: 'bg-emerald-100', text: 'text-blue-800', label: 'En Progreso' },
     completed: { bg: 'bg-green-100', text: 'text-green-800', label: 'Completada' },
     cancelled: { bg: 'bg-red-100', text: 'text-red-800', label: 'Cancelada' },
     'no-show': { bg: 'bg-orange-100', text: 'text-orange-800', label: 'No asistió' },

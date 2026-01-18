@@ -30,7 +30,7 @@ export default function GrowWorksheet({ sessionId, coacheeId, coachId, onSave, o
   const [isSaving, setIsSaving] = useState(false);
 
   const steps = [
-    { id: 'goal', name: 'Goal', icon: Target, color: 'bg-blue-500' },
+    { id: 'goal', name: 'Goal', icon: Target, color: 'bg-emerald-500' },
     { id: 'reality', name: 'Reality', icon: Eye, color: 'bg-green-500' },
     { id: 'options', name: 'Options', icon: Lightbulb, color: 'bg-yellow-500' },
     { id: 'will', name: 'Will', icon: Zap, color: 'bg-purple-500' },
@@ -135,7 +135,7 @@ export default function GrowWorksheet({ sessionId, coacheeId, coachId, onSave, o
   if (!session) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -235,7 +235,7 @@ export default function GrowWorksheet({ sessionId, coacheeId, coachId, onSave, o
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors"
+            className="flex items-center gap-2 px-6 py-3 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 disabled:opacity-50 transition-colors"
           >
             <Save className="w-5 h-5" />
             {isSaving ? 'Saving...' : 'Save Progress'}
@@ -278,7 +278,7 @@ function GoalStep({ session, updateField, addArrayItem, updateArrayItem, removeA
         <textarea
           value={session.goal.description}
           onChange={(e) => updateField('goal', 'description', e.target.value)}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
           rows={3}
           placeholder="Describe your goal in detail..."
         />
@@ -292,7 +292,7 @@ function GoalStep({ session, updateField, addArrayItem, updateArrayItem, removeA
             type="text"
             value={session.goal.specificGoal}
             onChange={(e) => updateField('goal', 'specificGoal', e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
             placeholder="What exactly do you want to accomplish?"
           />
         </div>
@@ -302,7 +302,7 @@ function GoalStep({ session, updateField, addArrayItem, updateArrayItem, removeA
             type="text"
             value={session.goal.measurableOutcome}
             onChange={(e) => updateField('goal', 'measurableOutcome', e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
             placeholder="How will you measure success?"
           />
         </div>
@@ -314,7 +314,7 @@ function GoalStep({ session, updateField, addArrayItem, updateArrayItem, removeA
           <label className="block text-sm font-medium text-gray-700">Achievable Steps</label>
           <button
             onClick={() => addArrayItem('goal', 'achievableSteps', '')}
-            className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700"
+            className="flex items-center gap-1 text-sm text-emerald-600 hover:text-blue-700"
           >
             <Plus className="w-4 h-4" />
             Add Step
@@ -329,7 +329,7 @@ function GoalStep({ session, updateField, addArrayItem, updateArrayItem, removeA
               type="text"
               value={step}
               onChange={(e) => updateArrayItem('goal', 'achievableSteps', index, e.target.value)}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
               placeholder={`Step ${index + 1}`}
             />
             {session.goal.achievableSteps.length > 1 && (
@@ -352,7 +352,7 @@ function GoalStep({ session, updateField, addArrayItem, updateArrayItem, removeA
             type="text"
             value={session.goal.timeframe}
             onChange={(e) => updateField('goal', 'timeframe', e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
             placeholder="When do you want to achieve this? (e.g., 3 months, Q2 2025)"
           />
         </div>
@@ -361,7 +361,7 @@ function GoalStep({ session, updateField, addArrayItem, updateArrayItem, removeA
           <select
             value={session.goal.priority}
             onChange={(e) => updateField('goal', 'priority', e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
           >
             <option value="low">Low</option>
             <option value="medium">Medium</option>
@@ -378,7 +378,7 @@ function GoalStep({ session, updateField, addArrayItem, updateArrayItem, removeA
         <textarea
           value={session.goal.relevance}
           onChange={(e) => updateField('goal', 'relevance', e.target.value)}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"
           rows={3}
           placeholder="Explain why this goal matters and how it aligns with your broader objectives..."
         />

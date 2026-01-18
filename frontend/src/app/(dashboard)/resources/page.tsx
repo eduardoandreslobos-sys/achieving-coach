@@ -97,7 +97,7 @@ export default function ResourcesPage() {
   const getIconColor = (type: string) => {
     switch (type) {
       case 'pdf': return 'bg-red-500/20 text-red-400';
-      case 'video': return 'bg-blue-500/20 text-blue-400';
+      case 'video': return 'bg-emerald-500/20 text-emerald-400';
       case 'document': return 'bg-emerald-500/20 text-emerald-400';
       case 'link': return 'bg-violet-500/20 text-violet-400';
       default: return 'bg-gray-500/20 text-gray-400';
@@ -126,7 +126,7 @@ export default function ResourcesPage() {
     return (
       <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-blue-500 animate-spin mx-auto mb-4" />
+          <Loader2 className="w-8 h-8 text-emerald-500 animate-spin mx-auto mb-4" />
           <p className="text-gray-400">Cargando recursos...</p>
         </div>
       </div>
@@ -152,7 +152,7 @@ export default function ResourcesPage() {
                 placeholder="Buscar recursos..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-[#12131a] border border-blue-900/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                className="w-full pl-10 pr-4 py-2 bg-[#12131a] border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
               />
             </div>
             <div className="flex gap-2 flex-wrap">
@@ -162,8 +162,8 @@ export default function ResourcesPage() {
                   onClick={() => setSelectedCategory(category)}
                   className={`px-4 py-2 rounded-lg text-sm transition-colors ${
                     selectedCategory === category
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-[#12131a] border border-blue-900/30 text-gray-400 hover:text-white'
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-[#12131a] border border-gray-800 text-gray-400 hover:text-white'
                   }`}
                 >
                   {category === 'all' ? 'Todos' : category}
@@ -175,9 +175,9 @@ export default function ResourcesPage() {
 
         {/* Empty State */}
         {resources.length === 0 ? (
-          <div className="bg-[#12131a] border border-blue-900/30 rounded-xl p-12 text-center">
-            <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Folder className="w-8 h-8 text-blue-400" />
+          <div className="bg-[#12131a] border border-gray-800 rounded-xl p-12 text-center">
+            <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Folder className="w-8 h-8 text-emerald-400" />
             </div>
             <h3 className="text-xl font-semibold text-white mb-2">No hay recursos disponibles</h3>
             <p className="text-gray-400 max-w-md mx-auto">
@@ -187,7 +187,7 @@ export default function ResourcesPage() {
             </p>
           </div>
         ) : filteredResources.length === 0 ? (
-          <div className="bg-[#12131a] border border-blue-900/30 rounded-xl p-12 text-center">
+          <div className="bg-[#12131a] border border-gray-800 rounded-xl p-12 text-center">
             <div className="w-16 h-16 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <Search className="w-8 h-8 text-amber-400" />
             </div>
@@ -206,7 +206,7 @@ export default function ResourcesPage() {
               return (
                 <div
                   key={resource.id}
-                  className="bg-[#12131a] border border-blue-900/30 rounded-xl p-5 hover:border-blue-800/50 transition-colors"
+                  className="bg-[#12131a] border border-gray-800 rounded-xl p-5 hover:border-blue-800/50 transition-colors"
                 >
                   <div className="flex items-start gap-4">
                     <div className={iconColor + ' p-3 rounded-xl'}>
@@ -224,7 +224,7 @@ export default function ResourcesPage() {
                         <button
                           onClick={() => handleResourceClick(resource)}
                           className={resource.type === 'link'
-                            ? 'flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium'
+                            ? 'flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-medium'
                             : 'flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-medium'
                           }
                         >
@@ -242,7 +242,7 @@ export default function ResourcesPage() {
 
         {/* Stats */}
         {resources.length > 0 && (
-          <div className="mt-8 pt-6 border-t border-blue-900/20">
+          <div className="mt-8 pt-6 border-t border-gray-800">
             <p className="text-gray-500 text-sm text-center">
               {filteredResources.length} de {resources.length} recursos
             </p>

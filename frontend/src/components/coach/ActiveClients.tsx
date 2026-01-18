@@ -46,7 +46,7 @@ export default function ActiveClients({
 
   const getAvatarColor = (index: number) => {
     const colors = [
-      'from-blue-400 to-blue-600',
+      'from-blue-400 to-emerald-600',
       'from-green-400 to-green-600',
       'from-purple-400 to-purple-600',
       'from-pink-400 to-pink-600',

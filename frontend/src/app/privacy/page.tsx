@@ -23,8 +23,8 @@ export default function PrivacyPage() {
           </Link>
 
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center">
-              <Shield className="w-6 h-6 text-blue-400" />
+            <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center">
+              <Shield className="w-6 h-6 text-emerald-400" />
             </div>
             <div>
               <h1 className="text-3xl font-bold">Política de Privacidad</h1>
@@ -129,8 +129,8 @@ export default function PrivacyPage() {
 
             <section className="bg-[#111111] border border-gray-800 rounded-xl p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
-                  <Mail className="w-5 h-5 text-blue-400" />
+                <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
+                  <Mail className="w-5 h-5 text-emerald-400" />
                 </div>
                 <h2 className="text-xl font-semibold">6. Contacto</h2>
               </div>

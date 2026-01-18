@@ -17,7 +17,7 @@ export default function FeaturesPage() {
       {/* Hero */}
       <section className="pt-32 pb-20 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-xs mb-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-xs mb-6">
             <Sparkles className="w-3 h-3" />
             PLATAFORMA COMPLETA
           </div>
@@ -41,8 +41,8 @@ export default function FeaturesPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-[#111111] border border-gray-800 rounded-xl p-6 hover:border-gray-700 transition-colors">
-              <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-4">
-                <Users className="w-6 h-6 text-blue-400" />
+              <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-4">
+                <Users className="w-6 h-6 text-emerald-400" />
               </div>
               <h3 className="text-white font-semibold text-lg mb-2">Gestión de Clientes</h3>
               <p className="text-gray-500 text-sm">Perfiles completos, historial de sesiones, progreso de objetivos y documentación centralizada para cada coachee.</p>
@@ -128,8 +128,8 @@ export default function FeaturesPage() {
               <div className="grid grid-cols-2 gap-4">
                 {['Wheel of Life', 'DISC', 'GROW Model', 'Values', 'Beliefs', 'Resilience', 'Stakeholders', 'Habits'].map((tool, i) => (
                   <div key={i} className="bg-[#1a1a1a] border border-gray-700 rounded-lg p-4 text-center">
-                    <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center mx-auto mb-2">
-                      <BookOpen className="w-5 h-5 text-blue-400" />
+                    <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center mx-auto mb-2">
+                      <BookOpen className="w-5 h-5 text-emerald-400" />
                     </div>
                     <p className="text-sm text-gray-300">{tool}</p>
                   </div>
@@ -146,8 +146,8 @@ export default function FeaturesPage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Award className="w-5 h-5 text-blue-400" />
-                <span className="text-blue-400 text-sm font-medium">SIMULADOR ICF</span>
+                <Award className="w-5 h-5 text-emerald-400" />
+                <span className="text-emerald-400 text-sm font-medium">SIMULADOR ICF</span>
               </div>
               <div className="h-48 bg-[#1a1a1a] rounded-lg flex items-center justify-center mb-4">
                 <div className="text-center">
@@ -192,7 +192,7 @@ export default function FeaturesPage() {
                   Análisis de IA con recomendaciones
                 </li>
               </ul>
-              <Link href="/sign-up" className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+              <Link href="/sign-up" className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors">
                 Probar Simulador
                 <ArrowRight className="w-4 h-4" />
               </Link>
@@ -249,7 +249,7 @@ export default function FeaturesPage() {
           </p>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-[#111111] border border-gray-800 rounded-xl p-6 text-left">
-              <Shield className="w-10 h-10 text-blue-400 mb-4" />
+              <Shield className="w-10 h-10 text-emerald-400 mb-4" />
               <h3 className="text-white font-semibold mb-2">Encriptación AES-256</h3>
               <p className="text-gray-500 text-sm">Todos los datos en reposo y en tránsito están protegidos con encriptación de nivel bancario.</p>
             </div>
@@ -272,7 +272,7 @@ export default function FeaturesPage() {
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-4">Empieza a Transformar tu Práctica Hoy</h2>
           <p className="text-gray-400 mb-8">14 días de prueba gratuita. Sin tarjeta de crédito. Cancela cuando quieras.</p>
-          <Link href="/sign-up" className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+          <Link href="/sign-up" className="inline-flex items-center gap-2 px-8 py-4 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors">
             Comenzar Prueba Gratuita
             <ArrowRight className="w-4 h-4" />
           </Link>

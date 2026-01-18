@@ -44,7 +44,7 @@ export default function ResilienceResults({
     const categoryColors: Record<string, string> = {
       'Emotional': 'bg-pink-500',
       'Physical': 'bg-green-500',
-      'Mental': 'bg-blue-500',
+      'Mental': 'bg-emerald-500',
       'Social': 'bg-purple-500'
     };
 
@@ -74,7 +74,7 @@ export default function ResilienceResults({
   // Determine overall level
   const getResilienceLevel = (percentage: number): { label: string; color: string } => {
     if (percentage >= 80) return { label: 'Excellent', color: 'text-green-600' };
-    if (percentage >= 60) return { label: 'Good', color: 'text-blue-600' };
+    if (percentage >= 60) return { label: 'Good', color: 'text-emerald-600' };
     if (percentage >= 40) return { label: 'Moderate', color: 'text-yellow-600' };
     return { label: 'Needs Attention', color: 'text-red-600' };
   };

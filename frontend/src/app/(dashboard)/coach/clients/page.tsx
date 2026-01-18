@@ -79,7 +79,7 @@ export default function CoachClientsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-[#0a0a0a]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -109,7 +109,7 @@ export default function CoachClientsPage() {
                 placeholder="Buscar..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 w-64"
+                className="pl-10 pr-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 w-64"
               />
             </div>
           </div>
@@ -126,7 +126,7 @@ export default function CoachClientsPage() {
             </div>
             <Link
               href="/coach/invite"
-              className="px-5 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center gap-2"
+              className="px-5 py-2.5 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors flex items-center gap-2"
             >
               <Plus className="w-5 h-5" />
               Invitar Cliente
@@ -159,10 +159,10 @@ export default function CoachClientsPage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/20 rounded-xl p-5">
+            <div className="bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/20 rounded-xl p-5">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                  <Users className="w-6 h-6 text-blue-400" />
+                <div className="w-12 h-12 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                  <Users className="w-6 h-6 text-emerald-400" />
                 </div>
                 <div>
                   <p className="text-gray-400 text-xs uppercase tracking-wider">Total Clientes</p>
@@ -180,7 +180,7 @@ export default function CoachClientsPage() {
               <p className="text-gray-400 mb-6">Comienza a construir tu práctica de coaching invitando a tu primer cliente</p>
               <Link
                 href="/coach/invite"
-                className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors"
               >
                 <Plus className="w-5 h-5 mr-2" />
                 Invitar Primer Cliente
@@ -206,7 +206,7 @@ export default function CoachClientsPage() {
                           />
                         </div>
                       ) : (
-                        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg ring-2 ring-gray-700">
+                        <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-lg ring-2 ring-gray-700">
                           {getInitials(client)}
                         </div>
                       )}
@@ -240,7 +240,7 @@ export default function CoachClientsPage() {
 
                   <Link
                     href={`/coach/clients/${client.uid}`}
-                    className="flex items-center justify-end gap-1 text-sm text-blue-400 hover:text-blue-300 transition-colors font-medium"
+                    className="flex items-center justify-end gap-1 text-sm text-emerald-400 hover:text-emerald-300 transition-colors font-medium"
                   >
                     Ver Detalles
                     <ArrowRight className="w-4 h-4" />

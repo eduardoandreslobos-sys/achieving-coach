@@ -77,14 +77,14 @@ export default function ICFSimulatorResultsPage() {
 
   const getScoreColor = (score: number) => {
     if (score >= 90) return 'text-emerald-400';
-    if (score >= 80) return 'text-blue-400';
+    if (score >= 80) return 'text-emerald-400';
     if (score >= 70) return 'text-amber-400';
     return 'text-red-400';
   };
 
   const getProgressColor = (score: number) => {
     if (score >= 90) return 'bg-emerald-500';
-    if (score >= 80) return 'bg-blue-500';
+    if (score >= 80) return 'bg-emerald-500';
     if (score >= 70) return 'bg-amber-500';
     return 'bg-red-500';
   };
@@ -93,7 +93,7 @@ export default function ICFSimulatorResultsPage() {
     const colors: Record<number, { bg: string; text: string; border: string }> = {
       1: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/30' },
       2: { bg: 'bg-orange-500/10', text: 'text-orange-400', border: 'border-orange-500/30' },
-      3: { bg: 'bg-blue-500/10', text: 'text-blue-400', border: 'border-blue-500/30' },
+      3: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/30' },
       4: { bg: 'bg-violet-500/10', text: 'text-violet-400', border: 'border-violet-500/30' },
     };
     return colors[domainId] || colors[1];
@@ -118,7 +118,7 @@ export default function ICFSimulatorResultsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-[#0a0a0a]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -129,7 +129,7 @@ export default function ICFSimulatorResultsPage() {
         <div className="text-center">
           <XCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
           <h1 className="text-2xl font-bold mb-2">{error || 'Resultado no encontrado'}</h1>
-          <Link href="/coach/icf-simulator" className="text-blue-400 hover:text-blue-300">
+          <Link href="/coach/icf-simulator" className="text-emerald-400 hover:text-emerald-300">
             Volver al simulador
           </Link>
         </div>
@@ -233,7 +233,7 @@ export default function ICFSimulatorResultsPage() {
             {/* Desglose por Competencia - 2 columns */}
             <div className="lg:col-span-2 bg-[#111111] border border-gray-800 rounded-xl p-6">
               <div className="flex items-center gap-2 mb-6">
-                <BarChart3 className="w-5 h-5 text-blue-400" />
+                <BarChart3 className="w-5 h-5 text-emerald-400" />
                 <h2 className="text-lg font-semibold text-white">Desglose por Competencia ICF</h2>
               </div>
 
@@ -296,8 +296,8 @@ export default function ICFSimulatorResultsPage() {
                 {/* Próximos Pasos */}
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <div className="w-8 h-8 bg-blue-500/10 rounded-lg flex items-center justify-center">
-                      <TrendingUp className="w-4 h-4 text-blue-400" />
+                    <div className="w-8 h-8 bg-emerald-500/10 rounded-lg flex items-center justify-center">
+                      <TrendingUp className="w-4 h-4 text-emerald-400" />
                     </div>
                     <h3 className="text-white font-medium">Recomendación</h3>
                   </div>
@@ -319,7 +319,7 @@ export default function ICFSimulatorResultsPage() {
                 </div>
 
                 {/* CTA Button */}
-                <button className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+                <button className="w-full py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2">
                   <BookOpen className="w-4 h-4" />
                   Ir al Módulo de Refuerzo
                 </button>
@@ -338,7 +338,7 @@ export default function ICFSimulatorResultsPage() {
                     <span className="text-sm text-gray-300">Ver historial completo</span>
                   </Link>
                   <Link href="/coach/tools" className="flex items-center gap-3 p-3 bg-[#1a1a1a] rounded-lg hover:bg-[#222] transition-colors">
-                    <Clock className="w-5 h-5 text-blue-400" />
+                    <Clock className="w-5 h-5 text-emerald-400" />
                     <span className="text-sm text-gray-300">Explorar herramientas</span>
                   </Link>
                 </div>

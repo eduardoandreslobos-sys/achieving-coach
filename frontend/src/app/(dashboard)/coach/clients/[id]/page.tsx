@@ -240,7 +240,7 @@ export default function ClientAnalyticsPage() {
   if (loading || !client) {
     return (
       <div className="flex items-center justify-center h-screen bg-[#0a0a0a]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -252,7 +252,7 @@ export default function ClientAnalyticsPage() {
         <div className="mb-8">
           <Link
             href="/coach/clients"
-            className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 mb-4 font-medium"
+            className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 mb-4 font-medium"
           >
             <ArrowLeft size={20} />
             Back to clients
@@ -271,7 +271,7 @@ export default function ClientAnalyticsPage() {
             <div className="flex gap-3">
               <Link
                 href={`/coach/clients/${clientId}/results`}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 <BarChart3 size={20} />
                 Ver Resultados
@@ -298,7 +298,7 @@ export default function ClientAnalyticsPage() {
                 </div>
                 <Link
                   href={"/coach/programs/" + program.id}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
                 >
                   <ExternalLink size={18} />
                   View Program
@@ -325,7 +325,7 @@ export default function ClientAnalyticsPage() {
                 <ul className="space-y-1">
                   {program.overallGoals.map((goal: string, idx: number) => (
                     <li key={idx} className="flex items-start gap-2">
-                      <Target className="text-blue-400 flex-shrink-0 mt-1" size={16} />
+                      <Target className="text-emerald-400 flex-shrink-0 mt-1" size={16} />
                       <span className="text-gray-300">{goal}</span>
                     </li>
                   ))}
@@ -341,7 +341,7 @@ export default function ClientAnalyticsPage() {
               </p>
               <Link
                 href={"/coach/programs/new?coacheeId=" + clientId}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium transition-colors"
               >
                 <Plus size={20} />
                 Create Coaching Program
@@ -413,7 +413,7 @@ export default function ClientAnalyticsPage() {
                                 type="checkbox"
                                 checked={visibleMetrics.includes(metric.id)}
                                 onChange={() => toggleMetric(metric.id)}
-                                className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600"
+                                className="w-4 h-4 text-emerald-600 bg-gray-700 border-gray-600"
                               />
                               <Icon size={16} className="text-gray-400" />
                               <span className="text-sm text-gray-300">{metric.label}</span>
@@ -435,8 +435,8 @@ export default function ClientAnalyticsPage() {
                   value={`${analytics.goalCompletionRate}%`}
                   subtitle={`${analytics.completedGoals}/${analytics.totalGoals} completed`}
                   icon={Target}
-                  color="text-blue-400"
-                  bgColor="bg-blue-500/10"
+                  color="text-emerald-400"
+                  bgColor="bg-emerald-500/10"
                 />
               )}
 
@@ -495,7 +495,7 @@ export default function ClientAnalyticsPage() {
                       label="Goals"
                       value={analytics.completedGoals}
                       max={analytics.totalGoals}
-                      color="bg-blue-500"
+                      color="bg-emerald-500"
                     />
                   )}
                   {visibleMetrics.includes('tools') && (
@@ -540,7 +540,7 @@ export default function ClientAnalyticsPage() {
         {sessions.length > 0 && (
           <div className="bg-[#111111] border border-gray-800 rounded-xl p-6 mt-8">
             <div className="flex items-center gap-2 mb-4">
-              <FileText className="text-blue-400" size={24} />
+              <FileText className="text-emerald-400" size={24} />
               <h2 className="text-2xl font-bold text-white">Session Notes</h2>
               <span className="text-sm text-gray-500 ml-2">
                 ({sessions.filter(s => s.sessionReport || s.sessionAgreement).length} with notes)
@@ -577,26 +577,26 @@ export default function ClientAnalyticsPage() {
                     {expandedSession === session.id && (
                       <div className="p-4 space-y-4 bg-[#0d0d0d] border-t border-gray-800">
                         {session.sessionAgreement && (
-                          <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-                            <h4 className="font-semibold text-blue-400 mb-3 flex items-center gap-2">
+                          <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4">
+                            <h4 className="font-semibold text-emerald-400 mb-3 flex items-center gap-2">
                               <ClipboardList size={16} />
                               Acuerdo de Sesión
                             </h4>
-                            <div className="space-y-2 text-sm text-blue-300">
+                            <div className="space-y-2 text-sm text-emerald-300">
                               {session.sessionAgreement.previousSessionLink && (
-                                <div><strong className="text-blue-400">Enganche con sesión anterior:</strong> {session.sessionAgreement.previousSessionLink}</div>
+                                <div><strong className="text-emerald-400">Enganche con sesión anterior:</strong> {session.sessionAgreement.previousSessionLink}</div>
                               )}
                               {session.sessionAgreement.sessionFocus && (
-                                <div><strong className="text-blue-400">Foco de la sesión:</strong> {session.sessionAgreement.sessionFocus}</div>
+                                <div><strong className="text-emerald-400">Foco de la sesión:</strong> {session.sessionAgreement.sessionFocus}</div>
                               )}
                               {session.sessionAgreement.relevanceToProcess && (
-                                <div><strong className="text-blue-400">Relevancia:</strong> {session.sessionAgreement.relevanceToProcess}</div>
+                                <div><strong className="text-emerald-400">Relevancia:</strong> {session.sessionAgreement.relevanceToProcess}</div>
                               )}
                               {session.sessionAgreement.practicesOrCompetencies && (
-                                <div><strong className="text-blue-400">Prácticas/Competencias:</strong> {session.sessionAgreement.practicesOrCompetencies}</div>
+                                <div><strong className="text-emerald-400">Prácticas/Competencias:</strong> {session.sessionAgreement.practicesOrCompetencies}</div>
                               )}
                               {session.sessionAgreement.sessionIndicators && (
-                                <div><strong className="text-blue-400">Indicadores:</strong> {session.sessionAgreement.sessionIndicators}</div>
+                                <div><strong className="text-emerald-400">Indicadores:</strong> {session.sessionAgreement.sessionIndicators}</div>
                               )}
                             </div>
                           </div>
@@ -637,7 +637,7 @@ export default function ClientAnalyticsPage() {
                         <div className="flex justify-end pt-2">
                           <Link
                             href={`/sessions/${session.id}`}
-                            className="text-blue-400 hover:text-blue-300 text-sm font-medium flex items-center gap-1"
+                            className="text-emerald-400 hover:text-emerald-300 text-sm font-medium flex items-center gap-1"
                           >
                             Ver sesión completa
                             <ExternalLink size={14} />

@@ -71,7 +71,7 @@ export default function SessionsPage() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'scheduled': return <span className="px-2 py-1 bg-blue-500/20 text-blue-400 text-xs rounded-full">Programada</span>;
+      case 'scheduled': return <span className="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded-full">Programada</span>;
       case 'completed': return <span className="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded-full flex items-center gap-1"><CheckCircle className="w-3 h-3" />Completada</span>;
       case 'cancelled': return <span className="px-2 py-1 bg-red-500/20 text-red-400 text-xs rounded-full flex items-center gap-1"><XCircle className="w-3 h-3" />Cancelada</span>;
       default: return null;
@@ -81,7 +81,7 @@ export default function SessionsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-[#0a0a0f]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -95,7 +95,7 @@ export default function SessionsPage() {
             <h1 className="text-3xl font-bold text-white mb-2">Mis Sesiones</h1>
             <p className="text-gray-400">Visualiza y gestiona tus sesiones de coaching</p>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors">
             <Plus className="w-4 h-4" />
             Reservar Nueva Sesión
           </button>
@@ -106,7 +106,7 @@ export default function SessionsPage() {
           <h2 className="text-xl font-semibold text-white mb-4">Próximas Sesiones</h2>
           
           {upcomingSessions.length === 0 ? (
-            <div className="bg-[#12131a] border border-blue-900/30 rounded-xl p-8 text-center">
+            <div className="bg-[#12131a] border border-gray-800 rounded-xl p-8 text-center">
               <Calendar className="w-12 h-12 text-gray-600 mx-auto mb-4" />
               <p className="text-gray-400 mb-2">No tienes sesiones programadas</p>
               <p className="text-gray-500 text-sm">Tu coach te agendará próximas sesiones</p>
@@ -114,11 +114,11 @@ export default function SessionsPage() {
           ) : (
             <div className="space-y-3">
               {upcomingSessions.map((session) => (
-                <div key={session.id} className="bg-[#12131a] border border-blue-900/30 rounded-xl p-5">
+                <div key={session.id} className="bg-[#12131a] border border-gray-800 rounded-xl p-5">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-blue-600/20 rounded-xl flex items-center justify-center">
-                        <Calendar className="w-6 h-6 text-blue-400" />
+                      <div className="w-12 h-12 bg-emerald-600/20 rounded-xl flex items-center justify-center">
+                        <Calendar className="w-6 h-6 text-emerald-400" />
                       </div>
                       <div>
                         <h3 className="text-white font-medium">{session.title}</h3>
@@ -147,7 +147,7 @@ export default function SessionsPage() {
                           href={session.meetingUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors"
                         >
                           <Video className="w-4 h-4" />
                           Unirse
@@ -172,13 +172,13 @@ export default function SessionsPage() {
           <h2 className="text-xl font-semibold text-white mb-4">Sesiones Pasadas</h2>
           
           {pastSessions.length === 0 ? (
-            <div className="bg-[#12131a] border border-blue-900/30 rounded-xl p-8 text-center">
+            <div className="bg-[#12131a] border border-gray-800 rounded-xl p-8 text-center">
               <p className="text-gray-500">No hay sesiones pasadas</p>
             </div>
           ) : (
             <div className="space-y-3">
               {pastSessions.map((session) => (
-                <div key={session.id} className="bg-[#12131a] border border-blue-900/30 rounded-xl p-5">
+                <div key={session.id} className="bg-[#12131a] border border-gray-800 rounded-xl p-5">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className={'w-12 h-12 rounded-xl flex items-center justify-center ' + 

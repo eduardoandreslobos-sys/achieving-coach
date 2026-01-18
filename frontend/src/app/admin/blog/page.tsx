@@ -116,7 +116,7 @@ export default function AdminBlogPage() {
     return (
       <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-400">Cargando...</p>
         </div>
       </div>
@@ -134,7 +134,7 @@ export default function AdminBlogPage() {
           </div>
           <h1 className="text-2xl font-bold text-white mb-2">Acceso Denegado</h1>
           <p className="text-gray-400 mb-6">Esta área está restringida a administradores.</p>
-          <button onClick={() => router.push('/dashboard')} className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+          <button onClick={() => router.push('/dashboard')} className="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700">
             Ir al Dashboard
           </button>
         </div>
@@ -153,7 +153,7 @@ export default function AdminBlogPage() {
           </div>
           <button
             onClick={() => { setEditingPost(null); setShowEditor(true); }}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
           >
             <Plus className="w-4 h-4" />
             Nueva Publicación
@@ -178,7 +178,7 @@ export default function AdminBlogPage() {
                     placeholder="Buscar publicación..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 bg-[#1a1b23] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                    className="w-full pl-10 pr-4 py-2 bg-[#1a1b23] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
                 <div className="flex gap-2">
@@ -240,7 +240,7 @@ export default function AdminBlogPage() {
                     </td>
                     <td className="px-6 py-4 text-gray-400">{post.category}</td>
                     <td className="px-6 py-4">
-                      <span className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-xs font-medium">
+                      <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-full text-xs font-medium">
                         {post.type || 'Blog Post'}
                       </span>
                     </td>
@@ -282,7 +282,7 @@ export default function AdminBlogPage() {
                       key={page}
                       onClick={() => setCurrentPage(page)}
                       className={`w-8 h-8 rounded-lg text-sm ${
-                        currentPage === page ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-gray-800'
+                        currentPage === page ? 'bg-emerald-600 text-white' : 'text-gray-400 hover:bg-gray-800'
                       }`}
                     >
                       {page}
@@ -377,7 +377,7 @@ function BlogEditor({ post, onSave, onCancel }: { post: BlogPost | null; onSave:
           ) : showImageUpload ? (
             <ImageUpload onImageUploaded={handleImageUploaded} context={formData.title || 'blog post'} />
           ) : (
-            <button type="button" onClick={() => setShowImageUpload(true)} className="w-full border-2 border-dashed border-gray-700 rounded-lg p-8 text-center hover:border-blue-500 transition-all">
+            <button type="button" onClick={() => setShowImageUpload(true)} className="w-full border-2 border-dashed border-gray-700 rounded-lg p-8 text-center hover:border-emerald-500 transition-all">
               <ImageIcon className="w-12 h-12 text-gray-600 mx-auto mb-4" />
               <p className="text-gray-400">Agregar Imagen</p>
             </button>
@@ -387,39 +387,39 @@ function BlogEditor({ post, onSave, onCancel }: { post: BlogPost | null; onSave:
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">Título *</label>
-            <input type="text" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500" required />
+            <input type="text" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500" required />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">Slug</label>
-            <input type="text" value={formData.slug} onChange={(e) => setFormData({ ...formData, slug: e.target.value })} placeholder="auto-generado" className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500" />
+            <input type="text" value={formData.slug} onChange={(e) => setFormData({ ...formData, slug: e.target.value })} placeholder="auto-generado" className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500" />
           </div>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-2">Descripción *</label>
-          <textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} rows={3} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500" required />
+          <textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} rows={3} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500" required />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-2">Contenido (Markdown) *</label>
-          <textarea value={formData.content} onChange={(e) => setFormData({ ...formData, content: e.target.value })} rows={12} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white font-mono text-sm focus:outline-none focus:border-blue-500" required />
+          <textarea value={formData.content} onChange={(e) => setFormData({ ...formData, content: e.target.value })} rows={12} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white font-mono text-sm focus:outline-none focus:border-emerald-500" required />
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">Nombre del Autor *</label>
-            <input type="text" value={formData.authorName} onChange={(e) => setFormData({ ...formData, authorName: e.target.value })} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500" required />
+            <input type="text" value={formData.authorName} onChange={(e) => setFormData({ ...formData, authorName: e.target.value })} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500" required />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">Rol del Autor *</label>
-            <input type="text" value={formData.authorRole} onChange={(e) => setFormData({ ...formData, authorRole: e.target.value })} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500" required />
+            <input type="text" value={formData.authorRole} onChange={(e) => setFormData({ ...formData, authorRole: e.target.value })} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500" required />
           </div>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">Categoría</label>
-            <select value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500">
+            <select value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500">
               <option>Habilidades de Coaching</option>
               <option>Desarrollo de Liderazgo</option>
               <option>Tecnología</option>
@@ -429,7 +429,7 @@ function BlogEditor({ post, onSave, onCancel }: { post: BlogPost | null; onSave:
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">Tipo</label>
-            <select value={formData.type} onChange={(e) => setFormData({ ...formData, type: e.target.value as 'Blog Post' | 'Guide' | 'Webinar' })} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500">
+            <select value={formData.type} onChange={(e) => setFormData({ ...formData, type: e.target.value as 'Blog Post' | 'Guide' | 'Webinar' })} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500">
               <option>Blog Post</option>
               <option>Guide</option>
               <option>Webinar</option>
@@ -437,17 +437,17 @@ function BlogEditor({ post, onSave, onCancel }: { post: BlogPost | null; onSave:
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">Tiempo de Lectura</label>
-            <input type="text" value={formData.readTime} onChange={(e) => setFormData({ ...formData, readTime: e.target.value })} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500" />
+            <input type="text" value={formData.readTime} onChange={(e) => setFormData({ ...formData, readTime: e.target.value })} className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500" />
           </div>
         </div>
 
         <div className="flex items-center gap-2">
-          <input type="checkbox" id="published" checked={formData.published} onChange={(e) => setFormData({ ...formData, published: e.target.checked })} className="w-4 h-4 rounded border-gray-600 bg-gray-700 text-blue-600 focus:ring-blue-500" />
+          <input type="checkbox" id="published" checked={formData.published} onChange={(e) => setFormData({ ...formData, published: e.target.checked })} className="w-4 h-4 rounded border-gray-600 bg-gray-700 text-emerald-600 focus:ring-emerald-500" />
           <label htmlFor="published" className="text-sm text-gray-300">Publicar inmediatamente</label>
         </div>
 
         <div className="flex gap-4 pt-6 border-t border-gray-700">
-          <button type="submit" className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
+          <button type="submit" className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium">
             {post ? 'Actualizar' : 'Crear Publicación'}
           </button>
           <button type="button" onClick={onCancel} className="px-6 py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-800">

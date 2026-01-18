@@ -128,7 +128,7 @@ export default function BeliefReframeResults({ belief, onReset }: BeliefReframeR
       {/* Key Insights */}
       <div className="bg-blue-50 rounded-xl p-6 border-2 border-blue-200">
         <div className="flex items-center gap-2 mb-4">
-          <TrendingUp className="w-6 h-6 text-blue-600" />
+          <TrendingUp className="w-6 h-6 text-emerald-600" />
           <h3 className="text-xl font-bold text-blue-900">
             Remember
           </h3>

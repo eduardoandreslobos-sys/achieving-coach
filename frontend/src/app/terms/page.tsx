@@ -42,8 +42,8 @@ export default function TermsPage() {
           <div className="space-y-8">
             <section className="bg-[#111111] border border-gray-800 rounded-xl p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
-                  <CheckCircle className="w-5 h-5 text-blue-400" />
+                <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
+                  <CheckCircle className="w-5 h-5 text-emerald-400" />
                 </div>
                 <h2 className="text-xl font-semibold">1. Aceptación de Términos</h2>
               </div>
@@ -161,8 +161,8 @@ export default function TermsPage() {
 
             <section className="bg-[#111111] border border-gray-800 rounded-xl p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
-                  <Mail className="w-5 h-5 text-blue-400" />
+                <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
+                  <Mail className="w-5 h-5 text-emerald-400" />
                 </div>
                 <h2 className="text-xl font-semibold">8. Contacto</h2>
               </div>

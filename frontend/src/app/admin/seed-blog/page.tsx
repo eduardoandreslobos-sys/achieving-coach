@@ -125,7 +125,7 @@ export default function SeedBlogPage() {
         <div className="text-center">
           <h1 className="text-2xl mb-4">Acceso Denegado</h1>
           <p className="text-gray-400 mb-4">Debes iniciar sesión como administrador</p>
-          <Link href="/sign-in" className="text-blue-400 hover:underline">Iniciar Sesión</Link>
+          <Link href="/sign-in" className="text-emerald-400 hover:underline">Iniciar Sesión</Link>
         </div>
       </div>
     );
@@ -149,7 +149,7 @@ export default function SeedBlogPage() {
         <button
           onClick={handleSeed}
           disabled={status === 'loading'}
-          className="w-full px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="w-full px-6 py-3 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {status === 'loading' ? 'Creando posts...' : 'Ejecutar Seed'}
         </button>

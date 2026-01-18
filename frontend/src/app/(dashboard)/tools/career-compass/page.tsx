@@ -121,7 +121,7 @@ export default function CareerCompassPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -132,8 +132,8 @@ export default function CareerCompassPage() {
       <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
-            <div className={`w-16 h-16 ${isCoach ? 'bg-blue-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
-              <Compass className={`w-8 h-8 ${isCoach ? 'text-blue-400' : 'text-yellow-400'}`} />
+            <div className={`w-16 h-16 ${isCoach ? 'bg-emerald-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
+              <Compass className={`w-8 h-8 ${isCoach ? 'text-emerald-400' : 'text-yellow-400'}`} />
             </div>
             <h2 className="text-2xl font-bold text-white mb-4">
               {isCoach ? 'Tool for Coachees Only' : 'Access Required'}
@@ -145,7 +145,7 @@ export default function CareerCompassPage() {
             </p>
             <Link
               href={isCoach ? '/coach/clients' : '/dashboard'}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
             >
               {isCoach ? 'Go to Clients' : 'Return to Dashboard'}
             </Link>
@@ -171,7 +171,7 @@ export default function CareerCompassPage() {
             <div className="flex gap-4 justify-center">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 Return to Dashboard
               </Link>
@@ -195,7 +195,7 @@ export default function CareerCompassPage() {
         <div className="max-w-6xl mx-auto mb-8">
           <Link
             href="/tools"
-            className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium"
+            className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-medium"
           >
             <ArrowLeft size={20} />
             Back to Tools
@@ -216,7 +216,7 @@ export default function CareerCompassPage() {
         <div className="mb-8">
           <Link
             href="/tools"
-            className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium mb-6"
+            className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-medium mb-6"
           >
             <ArrowLeft size={20} />
             Back to Tools

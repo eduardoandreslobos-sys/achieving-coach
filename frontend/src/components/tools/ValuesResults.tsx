@@ -91,7 +91,7 @@ export default function ValuesResults({ ratings, values, onReset }: ValuesResult
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Alignment:</span>
-                  <span className="font-bold text-blue-600">{value.alignment}/5</span>
+                  <span className="font-bold text-emerald-600">{value.alignment}/5</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Gap:</span>
@@ -165,7 +165,7 @@ export default function ValuesResults({ ratings, values, onReset }: ValuesResult
           {/* Consider (Aligned but not important) */}
           <div className="bg-blue-50 rounded-xl p-6 border-2 border-blue-200">
             <div className="flex items-center gap-2 mb-4">
-              <TrendingUp className="w-6 h-6 text-blue-600" />
+              <TrendingUp className="w-6 h-6 text-emerald-600" />
               <h4 className="text-xl font-bold text-blue-900">
                 Well Developed
               </h4>
@@ -182,7 +182,7 @@ export default function ValuesResults({ ratings, values, onReset }: ValuesResult
                 ))}
               </ul>
             ) : (
-              <p className="text-sm text-blue-600 italic">No values in this category</p>
+              <p className="text-sm text-emerald-600 italic">No values in this category</p>
             )}
           </div>
 

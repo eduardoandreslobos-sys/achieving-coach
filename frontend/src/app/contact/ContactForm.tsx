@@ -102,8 +102,8 @@ export default function ContactForm() {
               {/* Contact Info */}
               <div className="space-y-4 mb-12">
                 <div className="flex items-center gap-4 p-4 bg-[#111111] border border-gray-800 rounded-xl">
-                  <div className="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center">
-                    <Mail className="w-5 h-5 text-blue-400" />
+                  <div className="w-12 h-12 bg-emerald-500/10 rounded-lg flex items-center justify-center">
+                    <Mail className="w-5 h-5 text-emerald-400" />
                   </div>
                   <div>
                     <p className="text-gray-500 text-xs uppercase tracking-wider">Correo Electrónico</p>
@@ -126,10 +126,10 @@ export default function ContactForm() {
               <div>
                 <p className="text-gray-500 text-xs uppercase tracking-wider mb-4">Síguenos</p>
                 <div className="flex gap-3">
-                  <a href="#" className="w-10 h-10 bg-[#111111] border border-gray-800 rounded-lg flex items-center justify-center hover:bg-blue-500/10 hover:border-blue-500/30 transition-colors">
+                  <a href="#" className="w-10 h-10 bg-[#111111] border border-gray-800 rounded-lg flex items-center justify-center hover:bg-emerald-500/10 hover:border-emerald-500/30 transition-colors">
                     <Linkedin className="w-4 h-4 text-gray-400" />
                   </a>
-                  <a href="#" className="w-10 h-10 bg-[#111111] border border-gray-800 rounded-lg flex items-center justify-center hover:bg-blue-500/10 hover:border-blue-500/30 transition-colors">
+                  <a href="#" className="w-10 h-10 bg-[#111111] border border-gray-800 rounded-lg flex items-center justify-center hover:bg-emerald-500/10 hover:border-emerald-500/30 transition-colors">
                     <Twitter className="w-4 h-4 text-gray-400" />
                   </a>
                   <a href="#" className="w-10 h-10 bg-[#111111] border border-gray-800 rounded-lg flex items-center justify-center hover:bg-red-500/10 hover:border-red-500/30 transition-colors">
@@ -169,7 +169,7 @@ export default function ContactForm() {
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         required
-                        className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                        className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
                       />
                     </div>
                     <div>
@@ -179,7 +179,7 @@ export default function ContactForm() {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         required
-                        className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                        className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
                       />
                     </div>
                   </div>
@@ -190,7 +190,7 @@ export default function ContactForm() {
                       <select
                         value={formData.subject}
                         onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                        className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white appearance-none focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors cursor-pointer"
+                        className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white appearance-none focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors cursor-pointer"
                       >
                         <option value="Interés en Demo">Interés en Demo</option>
                         <option value="Consulta General">Consulta General</option>
@@ -210,14 +210,14 @@ export default function ContactForm() {
                       placeholder="Cuéntanos sobre tus objetivos y cómo podemos ayudarte..."
                       rows={5}
                       required
-                      className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors resize-none"
+                      className="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors resize-none"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-blue-600 text-white font-medium py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-emerald-600 text-white font-medium py-3 px-4 rounded-lg hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loading ? (
                       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>

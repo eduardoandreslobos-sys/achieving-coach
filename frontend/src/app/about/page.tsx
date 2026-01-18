@@ -54,7 +54,7 @@ const values = [
     icon: Shield,
     title: 'Confianza',
     description: 'La confidencialidad y seguridad de datos es nuestra prioridad absoluta.',
-    color: 'bg-blue-500/10 text-blue-400',
+    color: 'bg-emerald-500/10 text-emerald-400',
   },
   {
     icon: Lightbulb,
@@ -117,8 +117,8 @@ export default function AboutPage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12">
             <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8">
-              <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-6">
-                <Target className="w-6 h-6 text-blue-400" />
+              <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-6">
+                <Target className="w-6 h-6 text-emerald-400" />
               </div>
               <h2 className="text-2xl font-bold mb-4">Nuestra Misión</h2>
               <p className="text-gray-400 leading-relaxed">
@@ -173,7 +173,7 @@ export default function AboutPage() {
             {timeline.map((item, index) => (
               <div key={index} className="flex gap-6">
                 <div className="flex flex-col items-center">
-                  <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                  <div className="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
                     {item.year.slice(2)}
                   </div>
                   {index < timeline.length - 1 && (
@@ -182,7 +182,7 @@ export default function AboutPage() {
                 </div>
                 <div className="flex-1 pb-8">
                   <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
-                    <p className="text-blue-400 text-sm font-medium mb-1">{item.year}</p>
+                    <p className="text-emerald-400 text-sm font-medium mb-1">{item.year}</p>
                     <h3 className="text-white font-semibold text-lg mb-2">{item.title}</h3>
                     <p className="text-gray-500 text-sm">{item.description}</p>
                   </div>
@@ -227,11 +227,11 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-3 gap-6">
             {team.map((member, index) => (
               <div key={index} className="bg-[#111111] border border-gray-800 rounded-xl p-6 text-center">
-                <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-violet-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-violet-500 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl font-bold text-white">{member.name.split(' ').map(n => n[0]).join('')}</span>
                 </div>
                 <h3 className="text-white font-semibold text-lg">{member.name}</h3>
-                <p className="text-blue-400 text-sm mb-3">{member.role}</p>
+                <p className="text-emerald-400 text-sm mb-3">{member.role}</p>
                 <p className="text-gray-500 text-sm">{member.bio}</p>
               </div>
             ))}
@@ -245,7 +245,7 @@ export default function AboutPage() {
           <h2 className="text-3xl font-bold mb-4">¿Listo para Unirte a Nosotros?</h2>
           <p className="text-gray-400 mb-8">Forma parte de la comunidad de coaches que están transformando vidas con AchievingCoach.</p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/sign-up" className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+            <Link href="/sign-up" className="inline-flex items-center gap-2 px-8 py-4 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors">
               Comenzar Gratis
               <ArrowRight className="w-4 h-4" />
             </Link>

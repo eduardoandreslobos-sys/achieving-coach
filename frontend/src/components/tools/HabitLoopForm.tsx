@@ -120,7 +120,7 @@ export default function HabitLoopForm({ onComplete }: HabitLoopFormProps) {
 
             <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
               <div className="flex gap-3">
-                <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                <AlertCircle className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
                 <div className="text-sm text-blue-800">
                   <p className="font-medium mb-1">Tip:</p>
                   <p>Be specific! Instead of "eating unhealthy," try "eating chips while watching TV at night"</p>

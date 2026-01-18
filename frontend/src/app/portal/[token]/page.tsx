@@ -199,8 +199,8 @@ export default function StakeholderPortalPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white rounded-xl p-4 border border-gray-200">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Calendar className="text-blue-600" size={20} />
+              <div className="p-2 bg-emerald-100 rounded-lg">
+                <Calendar className="text-emerald-600" size={20} />
               </div>
               <div>
                 <p className="text-2xl font-bold text-gray-900">

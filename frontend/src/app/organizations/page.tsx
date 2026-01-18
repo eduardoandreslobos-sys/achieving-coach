@@ -31,7 +31,7 @@ const features = [
     icon: Shield,
     title: 'Compliance & Security',
     description: 'SSO integration, role-based access controls, audit logs. GDPR compliant, HIPAA-ready, SOC 2 Type II certified.',
-    color: 'bg-blue-100 text-blue-600',
+    color: 'bg-emerald-100 text-emerald-600',
   },
   {
     icon: Palette,
@@ -227,7 +227,7 @@ export default function OrganizationsPage() {
                   <p className="text-sm text-gray-500">Type II Certified</p>
                 </div>
                 <div className="text-center p-4 bg-gray-50 rounded-xl">
-                  <Shield className="w-10 h-10 text-blue-600 mx-auto mb-2" />
+                  <Shield className="w-10 h-10 text-emerald-600 mx-auto mb-2" />
                   <p className="font-semibold text-gray-900">GDPR</p>
                   <p className="text-sm text-gray-500">Compliant</p>
                 </div>

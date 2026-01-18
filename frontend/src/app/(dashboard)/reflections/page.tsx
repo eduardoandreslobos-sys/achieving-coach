@@ -62,7 +62,7 @@ export default function ReflectionsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-[#0a0a0f]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -78,7 +78,7 @@ export default function ReflectionsPage() {
           </div>
           <button
             onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
             Nueva Reflexión
@@ -88,10 +88,10 @@ export default function ReflectionsPage() {
         {reflections.length === 0 ? (
           <>
             {/* Empty State */}
-            <div className="bg-[#12131a] border border-blue-900/30 rounded-2xl p-12 mb-6">
+            <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-12 mb-6">
               <div className="flex flex-col items-center text-center">
-                <div className="w-16 h-16 bg-blue-600/20 rounded-2xl flex items-center justify-center mb-6">
-                  <FileText className="w-8 h-8 text-blue-400" />
+                <div className="w-16 h-16 bg-emerald-600/20 rounded-2xl flex items-center justify-center mb-6">
+                  <FileText className="w-8 h-8 text-emerald-400" />
                 </div>
                 <h2 className="text-xl font-semibold text-white mb-3">Aún no hay reflexiones</h2>
                 <p className="text-gray-400 mb-8 max-w-md">
@@ -99,7 +99,7 @@ export default function ReflectionsPage() {
                 </p>
                 <button
                   onClick={() => setShowModal(true)}
-                  className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors"
+                  className="flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 transition-colors"
                 >
                   <PenTool className="w-5 h-5" />
                   Escribe tu Primera Reflexión
@@ -109,7 +109,7 @@ export default function ReflectionsPage() {
 
             {/* Info Cards */}
             <div className="grid md:grid-cols-3 gap-4">
-              <div className="bg-[#12131a] border border-blue-900/30 rounded-xl p-5">
+              <div className="bg-[#12131a] border border-gray-800 rounded-xl p-5">
                 <div className="w-10 h-10 bg-violet-500/20 rounded-lg flex items-center justify-center mb-4">
                   <Lightbulb className="w-5 h-5 text-violet-400" />
                 </div>
@@ -119,7 +119,7 @@ export default function ReflectionsPage() {
                 </p>
               </div>
 
-              <div className="bg-[#12131a] border border-blue-900/30 rounded-xl p-5">
+              <div className="bg-[#12131a] border border-gray-800 rounded-xl p-5">
                 <div className="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center mb-4">
                   <PenTool className="w-5 h-5 text-emerald-400" />
                 </div>
@@ -129,7 +129,7 @@ export default function ReflectionsPage() {
                 </p>
               </div>
 
-              <div className="bg-[#12131a] border border-blue-900/30 rounded-xl p-5">
+              <div className="bg-[#12131a] border border-gray-800 rounded-xl p-5">
                 <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center mb-4">
                   <Lock className="w-5 h-5 text-amber-400" />
                 </div>
@@ -144,7 +144,7 @@ export default function ReflectionsPage() {
           /* Reflections List */
           <div className="space-y-4">
             {reflections.map((r) => (
-              <div key={r.id} className="bg-[#12131a] border border-blue-900/30 rounded-xl p-6">
+              <div key={r.id} className="bg-[#12131a] border border-gray-800 rounded-xl p-6">
                 <h3 className="text-white font-semibold mb-2">{r.title}</h3>
                 <p className="text-gray-400 text-sm mb-3 line-clamp-3">{r.content}</p>
                 <span className="text-gray-500 text-xs">
@@ -158,7 +158,7 @@ export default function ReflectionsPage() {
         {/* Modal */}
         {showModal && (
           <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-            <div className="bg-[#12131a] border border-blue-900/30 rounded-2xl p-6 w-full max-w-lg">
+            <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-6 w-full max-w-lg">
               <h2 className="text-xl font-bold text-white mb-6">Nueva Reflexión</h2>
               
               <div className="space-y-4">
@@ -169,7 +169,7 @@ export default function ReflectionsPage() {
                     value={newReflection.title}
                     onChange={(e) => setNewReflection({ ...newReflection, title: e.target.value })}
                     placeholder="¿Sobre qué reflexionas hoy?"
-                    className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-800 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
                 <div>
@@ -179,7 +179,7 @@ export default function ReflectionsPage() {
                     onChange={(e) => setNewReflection({ ...newReflection, content: e.target.value })}
                     rows={6}
                     placeholder="Escribe tus pensamientos..."
-                    className="w-full px-4 py-3 bg-[#1a1b23] border border-blue-900/30 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 resize-none"
+                    className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-800 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-emerald-500 resize-none"
                   />
                 </div>
               </div>
@@ -187,14 +187,14 @@ export default function ReflectionsPage() {
               <div className="flex gap-3 mt-6">
                 <button
                   onClick={() => setShowModal(false)}
-                  className="flex-1 px-4 py-3 bg-[#1a1b23] border border-blue-900/30 text-white rounded-xl hover:bg-[#22232d] transition-colors"
+                  className="flex-1 px-4 py-3 bg-[#1a1b23] border border-gray-800 text-white rounded-xl hover:bg-[#22232d] transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={handleCreate}
                   disabled={!newReflection.title.trim() || !newReflection.content.trim()}
-                  className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+                  className="flex-1 px-4 py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50"
                 >
                   Guardar
                 </button>

@@ -227,7 +227,7 @@ export default function CoachAnalyticsDashboard() {
   if (loading || !analytics) {
     return (
       <div className="flex items-center justify-center h-screen bg-[#0a0a0a]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -293,7 +293,7 @@ export default function CoachAnalyticsDashboard() {
                 type="date"
                 value={customStartDate}
                 onChange={(e) => setCustomStartDate(e.target.value)}
-                className="px-3 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                className="px-3 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
               />
             </div>
             <div>
@@ -302,12 +302,12 @@ export default function CoachAnalyticsDashboard() {
                 type="date"
                 value={customEndDate}
                 onChange={(e) => setCustomEndDate(e.target.value)}
-                className="px-3 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                className="px-3 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
               />
             </div>
             <button
               onClick={() => { if (customStartDate && customEndDate) { setTimeRange('custom'); setShowCustomPicker(false); }}}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
+              className="px-4 py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700"
             >
               Apply
             </button>
@@ -319,8 +319,8 @@ export default function CoachAnalyticsDashboard() {
           <div className="bg-[#111111] border border-gray-800 rounded-xl p-5">
             <div className="flex items-center justify-between mb-3">
               <p className="text-gray-400 text-xs uppercase tracking-wider">Total Active Coachees</p>
-              <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
-                <Users className="w-5 h-5 text-blue-400" />
+              <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
+                <Users className="w-5 h-5 text-emerald-400" />
               </div>
             </div>
             <div className="flex items-baseline gap-2">
@@ -400,7 +400,7 @@ export default function CoachAnalyticsDashboard() {
               {analytics.sessionVolume.map((val, i) => (
                 <div key={i} className="flex-1 flex flex-col items-center gap-2">
                   <div 
-                    className="w-full bg-blue-500 rounded-t-md transition-all duration-500 hover:bg-blue-400"
+                    className="w-full bg-emerald-500 rounded-t-md transition-all duration-500 hover:bg-emerald-400"
                     style={{ height: `${Math.max((val / maxVolume) * 100, 5)}%` }}
                   />
                 </div>
@@ -429,7 +429,7 @@ export default function CoachAnalyticsDashboard() {
                   </div>
                   <div className="h-2 bg-[#1a1a1a] rounded-full overflow-hidden">
                     <div 
-                      className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full transition-all duration-500"
+                      className="h-full bg-gradient-to-r from-emerald-500 to-blue-400 rounded-full transition-all duration-500"
                       style={{ width: `${coachee.rate}%` }}
                     />
                   </div>
@@ -480,7 +480,7 @@ export default function CoachAnalyticsDashboard() {
               </div>
               <div className="text-center">
                 <p className="text-gray-500 text-sm mb-1">Completed</p>
-                <p className="text-2xl font-bold text-blue-400">{analytics.goalsCompleted || 24}</p>
+                <p className="text-2xl font-bold text-emerald-400">{analytics.goalsCompleted || 24}</p>
               </div>
               <div className="text-center">
                 <p className="text-gray-500 text-sm mb-1">Delayed</p>

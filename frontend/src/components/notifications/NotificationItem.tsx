@@ -19,7 +19,7 @@ const iconMap = {
 };
 
 const colorMap = {
-  tool_assigned: 'text-blue-600 bg-blue-100',
+  tool_assigned: 'text-emerald-600 bg-emerald-100',
   tool_completed: 'text-green-600 bg-green-100',
   session_scheduled: 'text-purple-600 bg-purple-100',
   goal_updated: 'text-orange-600 bg-orange-100',
@@ -65,7 +65,7 @@ export default function NotificationItem({ notification, onClose }: Notification
               {notification.title}
             </p>
             {!notification.read && (
-              <span className="flex-shrink-0 w-2 h-2 bg-blue-600 rounded-full" />
+              <span className="flex-shrink-0 w-2 h-2 bg-emerald-600 rounded-full" />
             )}
           </div>
           <p className="text-sm text-gray-600 mt-1">{notification.message}</p>

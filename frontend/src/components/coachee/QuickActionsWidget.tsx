@@ -15,7 +15,7 @@ const quickActions = [
     icon: Calendar,
     label: 'Book Session',
     href: '/sessions',
-    color: 'bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100',
+    color: 'bg-blue-50 text-emerald-600 border-blue-200 hover:bg-emerald-100',
   },
   {
     icon: FileText,
