@@ -91,7 +91,7 @@ export default function SessionDetailPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Sesión no encontrada</h1>
+          <h1 className="text-2xl font-bold text-[var(--fg-primary)] mb-2">Sesión no encontrada</h1>
           <button onClick={() => router.back()} className="text-primary-600 hover:underline">
             Volver
           </button>
@@ -103,7 +103,7 @@ export default function SessionDetailPage() {
   const template = SESSION_TEMPLATES[session.type];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-[var(--bg-secondary)] p-6">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <button
@@ -114,17 +114,17 @@ export default function SessionDetailPage() {
           Volver
         </button>
 
-        <div className="bg-white rounded-xl border-2 border-gray-200 p-6 mb-6">
+        <div className="bg-white rounded-xl border-2 border-[var(--border-color)] p-6 mb-6">
           <div className="flex items-start justify-between">
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-2xl font-bold text-gray-900">{session.title}</h1>
+                <h1 className="text-2xl font-bold text-[var(--fg-primary)]">{session.title}</h1>
                 <SessionStatusBadge status={session.status} />
               </div>
-              <p className="text-gray-600">
+              <p className="text-[var(--fg-muted)]">
                 {session.coacheeName} • Sesión {session.sessionNumber || 1}
               </p>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-[var(--fg-muted)] mt-1">
                 {session.scheduledDate?.toDate?.()?.toLocaleDateString('es-CL')} - {session.scheduledTime}
                 {session.location && ` • ${session.location}`}
               </p>
@@ -134,7 +134,7 @@ export default function SessionDetailPage() {
               <button
                 onClick={handleStartSession}
                 disabled={saving}
-                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-[var(--fg-primary)] rounded-lg hover:bg-green-700 disabled:opacity-50"
               >
                 <Play size={18} />
                 Iniciar Sesión
@@ -144,16 +144,16 @@ export default function SessionDetailPage() {
 
           {/* Progress indicators */}
           <div className="mt-4 pt-4 border-t flex items-center gap-6 text-sm">
-            <span className={`flex items-center gap-1 ${session.sessionAgreement ? 'text-green-600' : 'text-gray-400'}`}>
+            <span className={`flex items-center gap-1 ${session.sessionAgreement ? 'text-green-600' : 'text-[var(--fg-muted)]'}`}>
               {session.sessionAgreement ? <Check size={16} /> : <Clock size={16} />}
               Acuerdo de Sesión
             </span>
-            <span className={`flex items-center gap-1 ${session.sessionReport ? 'text-green-600' : 'text-gray-400'}`}>
+            <span className={`flex items-center gap-1 ${session.sessionReport ? 'text-green-600' : 'text-[var(--fg-muted)]'}`}>
               {session.sessionReport ? <Check size={16} /> : <Clock size={16} />}
               Tabla de Seguimiento
             </span>
             {session.type === 'observed' && (
-              <span className={`flex items-center gap-1 ${session.observedMeetingReport ? 'text-green-600' : 'text-gray-400'}`}>
+              <span className={`flex items-center gap-1 ${session.observedMeetingReport ? 'text-green-600' : 'text-[var(--fg-muted)]'}`}>
                 {session.observedMeetingReport ? <Check size={16} /> : <Clock size={16} />}
                 Reporte Observación
               </span>
@@ -162,8 +162,8 @@ export default function SessionDetailPage() {
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-xl border-2 border-gray-200 overflow-hidden">
-          <div className="border-b border-gray-200 flex">
+        <div className="bg-white rounded-xl border-2 border-[var(--border-color)] overflow-hidden">
+          <div className="border-b border-[var(--border-color)] flex">
             <TabButton 
               active={activeTab === 'overview'} 
               onClick={() => setActiveTab('overview')}
@@ -282,7 +282,7 @@ function TabButton({
       className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
         active
           ? 'border-primary-600 text-primary-600 bg-primary-50'
-          : 'border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+          : 'border-transparent text-[var(--fg-muted)] hover:text-[var(--fg-primary)] hover:bg-[var(--bg-secondary)]'
       }`}
     >
       {completed ? <Check size={16} className="text-green-500" /> : <Icon size={16} />}
@@ -293,7 +293,7 @@ function TabButton({
 
 function SessionStatusBadge({ status }: { status: Session['status'] }) {
   const config = {
-    scheduled: { bg: 'bg-gray-100', text: 'text-gray-800', label: 'Programada' },
+    scheduled: { bg: 'bg-[var(--bg-secondary)]', text: 'text-[var(--fg-secondary)]', label: 'Programada' },
     'in-progress': { bg: 'bg-emerald-100', text: 'text-blue-800', label: 'En Progreso' },
     completed: { bg: 'bg-green-100', text: 'text-green-800', label: 'Completada' },
     cancelled: { bg: 'bg-red-100', text: 'text-red-800', label: 'Cancelada' },
@@ -322,17 +322,17 @@ function OverviewTab({
     <div className="space-y-6">
       {/* Objective */}
       <div>
-        <h3 className="font-semibold text-gray-900 mb-2">Objetivo de la Sesión</h3>
-        <p className="text-gray-700">{session.goal || session.objective || 'No definido'}</p>
+        <h3 className="font-semibold text-[var(--fg-primary)] mb-2">Objetivo de la Sesión</h3>
+        <p className="text-[var(--fg-muted)]">{session.goal || session.objective || 'No definido'}</p>
       </div>
 
       {/* Suggested Agenda */}
       {template && (
         <div>
-          <h3 className="font-semibold text-gray-900 mb-2">Agenda Sugerida</h3>
+          <h3 className="font-semibold text-[var(--fg-primary)] mb-2">Agenda Sugerida</h3>
           <ul className="space-y-2">
             {template.suggestedAgenda.map((item: string, idx: number) => (
-              <li key={idx} className="flex items-start gap-2 text-gray-700">
+              <li key={idx} className="flex items-start gap-2 text-[var(--fg-muted)]">
                 <span className="text-primary-600 font-medium">{idx + 1}.</span>
                 {item}
               </li>
@@ -415,7 +415,7 @@ function SessionAgreementTab({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
           {getPreviousSessionHint()} *
         </label>
         <textarea
@@ -428,7 +428,7 @@ function SessionAgreementTab({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
           Qué es lo que se trabajará en la sesión *
         </label>
         <textarea
@@ -441,7 +441,7 @@ function SessionAgreementTab({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
           Relevancia dentro del proceso *
         </label>
         <textarea
@@ -454,7 +454,7 @@ function SessionAgreementTab({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
           Prácticas o competencias observables a trabajar *
         </label>
         <textarea
@@ -467,7 +467,7 @@ function SessionAgreementTab({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
           Indicadores particulares para la sesión *
         </label>
         <textarea
@@ -480,7 +480,7 @@ function SessionAgreementTab({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
           Contexto para experiencias de aprendizaje
         </label>
         <textarea
@@ -503,7 +503,7 @@ function SessionAgreementTab({
         <button
           onClick={() => onSave(form)}
           disabled={saving || !form.previousSessionLink.trim() || !form.sessionFocus.trim() || !form.relevanceToProcess.trim() || !form.practicesOrCompetencies.trim() || !form.sessionIndicators.trim()}
-          className="flex items-center gap-2 px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-6 py-2 bg-primary-600 text-[var(--fg-primary)] rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Save size={18} />
           {saving ? 'Guardando...' : 'Guardar Acuerdo'}
@@ -550,7 +550,7 @@ function SessionReportTab({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
             Tema de la sesión *
           </label>
           <textarea
@@ -562,7 +562,7 @@ function SessionReportTab({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
             Prácticas elegidas para trabajar *
           </label>
           <textarea
@@ -575,7 +575,7 @@ function SessionReportTab({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
           Enganche con sesión anterior * *
         </label>
         <textarea
@@ -587,7 +587,7 @@ function SessionReportTab({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
           Contextos o circunstancias donde se trabaja la práctica *
         </label>
         <textarea
@@ -599,7 +599,7 @@ function SessionReportTab({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
           Indicadores de avance *
         </label>
         <textarea
@@ -611,7 +611,7 @@ function SessionReportTab({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
           Descubrimientos y aprendizajes de la sesión *
         </label>
         <textarea
@@ -623,7 +623,7 @@ function SessionReportTab({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
           Tareas propuestas para próxima sesión *
         </label>
         <textarea
@@ -635,7 +635,7 @@ function SessionReportTab({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
           Observaciones
         </label>
         <textarea
@@ -657,7 +657,7 @@ function SessionReportTab({
         <button
           onClick={() => onSave(form)}
           disabled={saving || !form.sessionTopic.trim() || !form.practicesWorked.trim() || !form.previousSessionLink.trim() || !form.practiceContext.trim() || !form.progressIndicators.trim() || !form.discoveriesAndLearnings.trim() || !form.tasksForNextSession.trim()}
-          className="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-6 py-2 bg-green-600 text-[var(--fg-primary)] rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Check size={18} />
           {saving ? 'Guardando...' : 'Completar Sesión'}
@@ -723,18 +723,18 @@ function ObservedMeetingTab({
 
       {/* Participants */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-[var(--fg-muted)] mb-2">
           Integrantes de la reunión observada
         </label>
         
         {form.meetingParticipants.length > 0 && (
           <div className="mb-3 space-y-2">
             {form.meetingParticipants.map((p, idx) => (
-              <div key={idx} className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg">
-                <Users size={16} className="text-gray-400" />
+              <div key={idx} className="flex items-center gap-2 bg-[var(--bg-secondary)] px-3 py-2 rounded-lg">
+                <Users size={16} className="text-[var(--fg-muted)]" />
                 <span className="font-medium">{p.name}</span>
-                <span className="text-gray-500">-</span>
-                <span className="text-gray-600">{p.role}</span>
+                <span className="text-[var(--fg-muted)]">-</span>
+                <span className="text-[var(--fg-muted)]">{p.role}</span>
                 <button
                   type="button"
                   onClick={() => removeParticipant(idx)}
@@ -765,7 +765,7 @@ function ObservedMeetingTab({
           <button
             type="button"
             onClick={addParticipant}
-            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+            className="px-4 py-2 bg-[var(--bg-tertiary)] text-[var(--fg-muted)] rounded-lg hover:bg-[var(--bg-tertiary)]"
           >
             Agregar
           </button>
@@ -773,7 +773,7 @@ function ObservedMeetingTab({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
           Antecedentes generales de la reunión
         </label>
         <textarea
@@ -787,7 +787,7 @@ function ObservedMeetingTab({
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
             Hora de inicio
           </label>
           <input
@@ -798,7 +798,7 @@ function ObservedMeetingTab({
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
             Hora de término
           </label>
           <input
@@ -811,7 +811,7 @@ function ObservedMeetingTab({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
           Observación del armado e inicio de la reunión
         </label>
         <textarea
@@ -824,7 +824,7 @@ function ObservedMeetingTab({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
           Observaciones generales del setup
         </label>
         <textarea
@@ -836,7 +836,7 @@ function ObservedMeetingTab({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
           Presencia y aplicación de prácticas/competencias vistas en las sesiones
         </label>
         <textarea
@@ -849,7 +849,7 @@ function ObservedMeetingTab({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
           Observaciones de las prácticas
         </label>
         <textarea
@@ -861,7 +861,7 @@ function ObservedMeetingTab({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
           Áreas de aprendizaje identificadas
         </label>
         <textarea
@@ -877,7 +877,7 @@ function ObservedMeetingTab({
         <button
           onClick={() => onSave(form)}
           disabled={saving}
-          className="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-2 bg-green-600 text-[var(--fg-primary)] rounded-lg hover:bg-green-700 disabled:opacity-50"
         >
           <Check size={18} />
           {saving ? 'Guardando...' : 'Guardar Reporte de Observación'}

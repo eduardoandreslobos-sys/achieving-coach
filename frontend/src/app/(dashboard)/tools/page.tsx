@@ -61,12 +61,12 @@ export default function ToolsPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] p-8">
+    <div className="min-h-screen bg-[var(--bg-primary)] p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-white mb-2">Tu caja de herramientas de desarrollo</h1>
-          <p className="text-gray-400">
+          <h1 className="text-3xl font-bold text-[var(--fg-primary)] mb-2">Tu caja de herramientas de desarrollo</h1>
+          <p className="text-[var(--fg-muted)]">
             Herramientas asignadas por tu coach para apoyar tu crecimiento, reflexión y auto-descubrimiento. Completa los ejercicios pendientes para avanzar en tu programa.
           </p>
         </div>
@@ -74,20 +74,20 @@ export default function ToolsPage() {
         {/* Search and Filters */}
         <div className="flex flex-col md:flex-row gap-3 mb-8">
           <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--fg-muted)]" />
             <input
               type="text"
               placeholder="Buscar herramienta..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-[#12131a] border border-gray-800 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
+              className="w-full pl-12 pr-4 py-3 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500"
             />
           </div>
-          <button className="flex items-center gap-2 px-4 py-3 bg-[#12131a] border border-gray-800 rounded-xl text-white hover:bg-[#1a1b23] transition-colors">
+          <button className="flex items-center gap-2 px-4 py-3 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl text-[var(--fg-primary)] hover:bg-[var(--bg-tertiary)] transition-colors">
             <Filter className="w-5 h-5" />
             Filtrar
           </button>
-          <button className="flex items-center gap-2 px-4 py-3 bg-[#12131a] border border-gray-800 rounded-xl text-white hover:bg-[#1a1b23] transition-colors">
+          <button className="flex items-center gap-2 px-4 py-3 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl text-[var(--fg-primary)] hover:bg-[var(--bg-tertiary)] transition-colors">
             <SlidersHorizontal className="w-5 h-5" />
             Ordenar
           </button>
@@ -96,7 +96,7 @@ export default function ToolsPage() {
         {/* Tools Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredTools.map((tool) => (
-            <div key={tool.id} className="bg-[#12131a] border border-gray-800 rounded-xl p-5 flex flex-col">
+            <div key={tool.id} className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5 flex flex-col">
               <div className="flex items-start justify-between mb-4">
                 {getIcon(tool.icon, tool.color)}
                 <span className={tool.status === 'completed' 
@@ -108,11 +108,11 @@ export default function ToolsPage() {
                 </span>
               </div>
 
-              <h3 className="text-white font-semibold text-lg mb-2">{tool.name}</h3>
-              <p className="text-gray-400 text-sm mb-4 flex-1">{tool.description}</p>
+              <h3 className="text-[var(--fg-primary)] font-semibold text-lg mb-2">{tool.name}</h3>
+              <p className="text-[var(--fg-muted)] text-sm mb-4 flex-1">{tool.description}</p>
 
-              <div className="flex items-center justify-between pt-3 border-t border-gray-800">
-                <span className="text-gray-500 text-xs uppercase tracking-wider">{tool.category}</span>
+              <div className="flex items-center justify-between pt-3 border-t border-[var(--border-color)]">
+                <span className="text-[var(--fg-muted)] text-xs uppercase tracking-wider">{tool.category}</span>
                 <Link 
                   href={'/tools/' + tool.id}
                   className="text-emerald-400 hover:text-emerald-300 text-sm font-medium flex items-center gap-1"

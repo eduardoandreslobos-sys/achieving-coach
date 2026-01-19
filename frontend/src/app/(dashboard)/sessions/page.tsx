@@ -80,22 +80,22 @@ export default function SessionsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-[#0a0a0f]">
+      <div className="flex items-center justify-center h-screen bg-[var(--bg-primary)]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] p-8">
+    <div className="min-h-screen bg-[var(--bg-primary)] p-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-white mb-2">Mis Sesiones</h1>
-            <p className="text-gray-400">Visualiza y gestiona tus sesiones de coaching</p>
+            <h1 className="text-3xl font-bold text-[var(--fg-primary)] mb-2">Mis Sesiones</h1>
+            <p className="text-[var(--fg-muted)]">Visualiza y gestiona tus sesiones de coaching</p>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 transition-colors">
             <Plus className="w-4 h-4" />
             Reservar Nueva Sesión
           </button>
@@ -103,26 +103,26 @@ export default function SessionsPage() {
 
         {/* Próximas Sesiones */}
         <div className="mb-8">
-          <h2 className="text-xl font-semibold text-white mb-4">Próximas Sesiones</h2>
+          <h2 className="text-xl font-semibold text-[var(--fg-primary)] mb-4">Próximas Sesiones</h2>
           
           {upcomingSessions.length === 0 ? (
-            <div className="bg-[#12131a] border border-gray-800 rounded-xl p-8 text-center">
-              <Calendar className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-              <p className="text-gray-400 mb-2">No tienes sesiones programadas</p>
-              <p className="text-gray-500 text-sm">Tu coach te agendará próximas sesiones</p>
+            <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-8 text-center">
+              <Calendar className="w-12 h-12 text-[var(--fg-muted)] mx-auto mb-4" />
+              <p className="text-[var(--fg-muted)] mb-2">No tienes sesiones programadas</p>
+              <p className="text-[var(--fg-muted)] text-sm">Tu coach te agendará próximas sesiones</p>
             </div>
           ) : (
             <div className="space-y-3">
               {upcomingSessions.map((session) => (
-                <div key={session.id} className="bg-[#12131a] border border-gray-800 rounded-xl p-5">
+                <div key={session.id} className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 bg-emerald-600/20 rounded-xl flex items-center justify-center">
                         <Calendar className="w-6 h-6 text-emerald-400" />
                       </div>
                       <div>
-                        <h3 className="text-white font-medium">{session.title}</h3>
-                        <div className="flex items-center gap-3 text-gray-400 text-sm mt-1">
+                        <h3 className="text-[var(--fg-primary)] font-medium">{session.title}</h3>
+                        <div className="flex items-center gap-3 text-[var(--fg-muted)] text-sm mt-1">
                           <span className="flex items-center gap-1">
                             <Calendar className="w-4 h-4" />
                             {formatDate(session.date)}
@@ -133,8 +133,8 @@ export default function SessionsPage() {
                           </span>
                         </div>
                         <div className="flex items-center gap-2 mt-2">
-                          <User className="w-4 h-4 text-gray-500" />
-                          <span className="text-gray-400 text-sm">{session.coachName}</span>
+                          <User className="w-4 h-4 text-[var(--fg-muted)]" />
+                          <span className="text-[var(--fg-muted)] text-sm">{session.coachName}</span>
                           {session.confirmed && (
                             <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs rounded-full">Confirmada</span>
                           )}
@@ -147,7 +147,7 @@ export default function SessionsPage() {
                           href={session.meetingUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 transition-colors"
                         >
                           <Video className="w-4 h-4" />
                           Unirse
@@ -155,7 +155,7 @@ export default function SessionsPage() {
                       )}
                       <Link
                         href={'/sessions/' + session.id}
-                        className="px-4 py-2 bg-[#1a1b23] text-white rounded-lg hover:bg-[#22232d] transition-colors"
+                        className="px-4 py-2 bg-[var(--bg-tertiary)] text-[var(--fg-primary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
                       >
                         Ver Detalles
                       </Link>
@@ -169,16 +169,16 @@ export default function SessionsPage() {
 
         {/* Sesiones Pasadas */}
         <div>
-          <h2 className="text-xl font-semibold text-white mb-4">Sesiones Pasadas</h2>
+          <h2 className="text-xl font-semibold text-[var(--fg-primary)] mb-4">Sesiones Pasadas</h2>
           
           {pastSessions.length === 0 ? (
-            <div className="bg-[#12131a] border border-gray-800 rounded-xl p-8 text-center">
-              <p className="text-gray-500">No hay sesiones pasadas</p>
+            <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-8 text-center">
+              <p className="text-[var(--fg-muted)]">No hay sesiones pasadas</p>
             </div>
           ) : (
             <div className="space-y-3">
               {pastSessions.map((session) => (
-                <div key={session.id} className="bg-[#12131a] border border-gray-800 rounded-xl p-5">
+                <div key={session.id} className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className={'w-12 h-12 rounded-xl flex items-center justify-center ' + 
@@ -192,10 +192,10 @@ export default function SessionsPage() {
                       </div>
                       <div>
                         <div className="flex items-center gap-3">
-                          <h3 className="text-white font-medium">{session.title}</h3>
+                          <h3 className="text-[var(--fg-primary)] font-medium">{session.title}</h3>
                           {getStatusBadge(session.status)}
                         </div>
-                        <div className="flex items-center gap-3 text-gray-400 text-sm mt-1">
+                        <div className="flex items-center gap-3 text-[var(--fg-muted)] text-sm mt-1">
                           <span className="flex items-center gap-1">
                             <Calendar className="w-4 h-4" />
                             {formatDate(session.date)}
@@ -210,7 +210,7 @@ export default function SessionsPage() {
                     {session.status === 'completed' && (
                       <Link
                         href={'/sessions/' + session.id}
-                        className="px-4 py-2 bg-[#1a1b23] text-white rounded-lg hover:bg-[#22232d] transition-colors"
+                        className="px-4 py-2 bg-[var(--bg-tertiary)] text-[var(--fg-primary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
                       >
                         Ver Notas
                       </Link>

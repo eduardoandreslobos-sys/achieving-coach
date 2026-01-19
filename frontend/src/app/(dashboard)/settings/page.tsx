@@ -186,21 +186,21 @@ export default function SettingsPage() {
   const hasChanges = name !== (userProfile?.displayName || user?.displayName || '');
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] p-8">
+    <div className="min-h-screen bg-[var(--bg-primary)] p-8">
       <Toaster position="top-center" richColors />
 
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-white mb-2">Ajustes</h1>
-            <p className="text-gray-400">Gestiona la configuración de tu perfil y cuenta</p>
+            <h1 className="text-3xl font-bold text-[var(--fg-primary)] mb-2">Ajustes</h1>
+            <p className="text-[var(--fg-muted)]">Gestiona la configuración de tu perfil y cuenta</p>
           </div>
           {hasChanges && (
             <button
               onClick={handleSaveProfile}
               disabled={saving}
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition-colors"
             >
               {saving ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -213,16 +213,16 @@ export default function SettingsPage() {
         </div>
 
         {/* Profile Section */}
-        <div className="bg-[#12131a] border border-gray-800 rounded-xl p-6 mb-6">
+        <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6 mb-6">
           <div className="flex items-center gap-2 mb-6">
             <User className="w-5 h-5 text-emerald-400" />
-            <h2 className="text-white font-semibold">Información de Perfil</h2>
+            <h2 className="text-[var(--fg-primary)] font-semibold">Información de Perfil</h2>
           </div>
 
           {/* Profile Photo */}
           <div className="flex items-start gap-6 mb-6">
             <div className="relative">
-              <div className="w-20 h-20 bg-gray-700 rounded-full flex items-center justify-center text-white text-2xl font-medium overflow-hidden">
+              <div className="w-20 h-20 bg-[var(--bg-tertiary)] rounded-full flex items-center justify-center text-[var(--fg-primary)] text-2xl font-medium overflow-hidden">
                 {userProfile?.photoURL ? (
                   <img src={userProfile.photoURL} alt="Profile" className="w-full h-full object-cover" />
                 ) : (
@@ -232,15 +232,15 @@ export default function SettingsPage() {
               {userProfile?.photoURL && (
                 <button
                   onClick={handleRemovePhoto}
-                  className="absolute -bottom-1 -right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white text-xs hover:bg-red-600 transition-colors"
+                  className="absolute -bottom-1 -right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-[var(--fg-primary)] text-xs hover:bg-red-600 transition-colors"
                 >
                   <X className="w-3 h-3" />
                 </button>
               )}
             </div>
             <div>
-              <h3 className="text-white font-medium mb-1">Foto de Perfil</h3>
-              <p className="text-gray-400 text-sm mb-3">Sube una foto profesional para ayudar a tu coach a reconocerte.</p>
+              <h3 className="text-[var(--fg-primary)] font-medium mb-1">Foto de Perfil</h3>
+              <p className="text-[var(--fg-muted)] text-sm mb-3">Sube una foto profesional para ayudar a tu coach a reconocerte.</p>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -251,7 +251,7 @@ export default function SettingsPage() {
               <button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploadingPhoto}
-                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 disabled:opacity-50 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg text-sm font-medium hover:bg-emerald-700 disabled:opacity-50 transition-colors"
               >
                 {uploadingPhoto ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -264,42 +264,42 @@ export default function SettingsPage() {
           </div>
 
           {/* Photo Requirements */}
-          <div className="bg-[#1a1b23] border border-gray-800 rounded-lg p-4 mb-6">
-            <p className="text-gray-400 text-xs font-medium uppercase tracking-wider mb-2">REQUISITOS DE LA FOTO:</p>
-            <ul className="text-gray-500 text-sm space-y-1">
+          <div className="bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg p-4 mb-6">
+            <p className="text-[var(--fg-muted)] text-xs font-medium uppercase tracking-wider mb-2">REQUISITOS DE LA FOTO:</p>
+            <ul className="text-[var(--fg-muted)] text-sm space-y-1">
               <li>• Formato: JPG, PNG, o WebP</li>
               <li>• Tamaño máximo: 2MB</li>
               <li>• Recomendado: 400×400 píxeles (cuadrado)</li>
             </ul>
           </div>
 
-          <div className="border-t border-gray-800 pt-6 space-y-5">
+          <div className="border-t border-[var(--border-color)] pt-6 space-y-5">
             {/* Name */}
             <div>
-              <label className="block text-gray-400 text-sm mb-2">Nombre Visible</label>
+              <label className="block text-[var(--fg-muted)] text-sm mb-2">Nombre Visible</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-800 rounded-xl text-white focus:outline-none focus:border-emerald-500"
+                className="w-full px-4 py-3 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-xl text-[var(--fg-primary)] focus:outline-none focus:border-emerald-500"
               />
             </div>
 
             {/* Email */}
             <div>
-              <label className="block text-gray-400 text-sm mb-2">Correo Electrónico</label>
+              <label className="block text-[var(--fg-muted)] text-sm mb-2">Correo Electrónico</label>
               <input
                 type="email"
                 value={email}
                 disabled
-                className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-800 rounded-xl text-gray-500 cursor-not-allowed"
+                className="w-full px-4 py-3 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-xl text-[var(--fg-muted)] cursor-not-allowed"
               />
-              <p className="text-gray-600 text-xs mt-1">El correo electrónico no se puede cambiar.</p>
+              <p className="text-[var(--fg-muted)] text-xs mt-1">El correo electrónico no se puede cambiar.</p>
             </div>
 
             {/* Role */}
             <div>
-              <label className="block text-gray-400 text-sm mb-2">Rol</label>
+              <label className="block text-[var(--fg-muted)] text-sm mb-2">Rol</label>
               <span className="inline-block px-3 py-1 bg-emerald-600/20 text-emerald-400 text-sm rounded-lg capitalize">
                 {userProfile?.role || 'Coachee'}
               </span>
@@ -308,8 +308,8 @@ export default function SettingsPage() {
             {/* Coach Info */}
             {userProfile?.role === 'coachee' && (
               <div>
-                <label className="block text-gray-400 text-sm mb-2">Tu Coach</label>
-                <p className="text-gray-400 text-sm">
+                <label className="block text-[var(--fg-muted)] text-sm mb-2">Tu Coach</label>
+                <p className="text-[var(--fg-muted)] text-sm">
                   Estás conectado con un coach. Ver{' '}
                   <Link href="/dashboard" className="text-emerald-400 hover:text-emerald-300">dashboard</Link>
                   {' '}para más detalles.
@@ -320,16 +320,16 @@ export default function SettingsPage() {
         </div>
 
         {/* Account Section */}
-        <div className="bg-[#12131a] border border-gray-800 rounded-xl p-6">
+        <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
           <div className="flex items-center gap-2 mb-6">
             <Shield className="w-5 h-5 text-emerald-400" />
-            <h2 className="text-white font-semibold">Cuenta</h2>
+            <h2 className="text-[var(--fg-primary)] font-semibold">Cuenta</h2>
           </div>
 
           <div className="space-y-4">
             <button
               onClick={() => setShowPasswordModal(true)}
-              className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-800 text-white rounded-xl text-left hover:bg-[#22232d] transition-colors"
+              className="w-full px-4 py-3 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] rounded-xl text-left hover:bg-[var(--bg-tertiary)] transition-colors"
             >
               Cambiar contraseña
             </button>
@@ -346,9 +346,9 @@ export default function SettingsPage() {
       {/* Password Change Modal */}
       {showPasswordModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-[#12131a] border border-gray-800 rounded-2xl w-full max-w-md">
-            <div className="flex items-center justify-between p-6 border-b border-gray-800">
-              <h2 className="text-xl font-bold text-white">Cambiar Contraseña</h2>
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl w-full max-w-md">
+            <div className="flex items-center justify-between p-6 border-b border-[var(--border-color)]">
+              <h2 className="text-xl font-bold text-[var(--fg-primary)]">Cambiar Contraseña</h2>
               <button
                 onClick={() => {
                   setShowPasswordModal(false);
@@ -356,57 +356,57 @@ export default function SettingsPage() {
                   setNewPassword('');
                   setConfirmPassword('');
                 }}
-                className="p-2 text-gray-400 hover:text-white rounded-lg"
+                className="p-2 text-[var(--fg-muted)] hover:text-[var(--fg-primary)] rounded-lg"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-gray-400 text-sm mb-2">Contraseña Actual</label>
+                <label className="block text-[var(--fg-muted)] text-sm mb-2">Contraseña Actual</label>
                 <div className="relative">
                   <input
                     type={showCurrentPassword ? 'text' : 'password'}
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
-                    className="w-full px-4 py-3 pr-12 bg-[#1a1b23] border border-gray-800 rounded-xl text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-4 py-3 pr-12 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-xl text-[var(--fg-primary)] focus:outline-none focus:border-emerald-500"
                   />
                   <button
                     type="button"
                     onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--fg-muted)] hover:text-[var(--fg-primary)]"
                   >
                     {showCurrentPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
                 </div>
               </div>
               <div>
-                <label className="block text-gray-400 text-sm mb-2">Nueva Contraseña</label>
+                <label className="block text-[var(--fg-muted)] text-sm mb-2">Nueva Contraseña</label>
                 <div className="relative">
                   <input
                     type={showNewPassword ? 'text' : 'password'}
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full px-4 py-3 pr-12 bg-[#1a1b23] border border-gray-800 rounded-xl text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-4 py-3 pr-12 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-xl text-[var(--fg-primary)] focus:outline-none focus:border-emerald-500"
                   />
                   <button
                     type="button"
                     onClick={() => setShowNewPassword(!showNewPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--fg-muted)] hover:text-[var(--fg-primary)]"
                   >
                     {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
                 </div>
-                <p className="text-gray-500 text-xs mt-1">Mínimo 8 caracteres</p>
+                <p className="text-[var(--fg-muted)] text-xs mt-1">Mínimo 8 caracteres</p>
               </div>
               <div>
-                <label className="block text-gray-400 text-sm mb-2">Confirmar Nueva Contraseña</label>
+                <label className="block text-[var(--fg-muted)] text-sm mb-2">Confirmar Nueva Contraseña</label>
                 <div className="relative">
                   <input
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full px-4 py-3 pr-12 bg-[#1a1b23] border border-gray-800 rounded-xl text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-4 py-3 pr-12 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-xl text-[var(--fg-primary)] focus:outline-none focus:border-emerald-500"
                   />
                   {confirmPassword && (
                     <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -420,7 +420,7 @@ export default function SettingsPage() {
                 </div>
               </div>
             </div>
-            <div className="flex justify-end gap-3 p-6 border-t border-gray-800">
+            <div className="flex justify-end gap-3 p-6 border-t border-[var(--border-color)]">
               <button
                 onClick={() => {
                   setShowPasswordModal(false);
@@ -428,14 +428,14 @@ export default function SettingsPage() {
                   setNewPassword('');
                   setConfirmPassword('');
                 }}
-                className="px-4 py-2 text-gray-400 hover:text-white transition-colors"
+                className="px-4 py-2 text-[var(--fg-muted)] hover:text-[var(--fg-primary)] transition-colors"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleChangePassword}
                 disabled={changingPassword || !currentPassword || !newPassword || newPassword !== confirmPassword}
-                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition-colors"
               >
                 {changingPassword ? (
                   <Loader2 className="w-4 h-4 animate-spin" />

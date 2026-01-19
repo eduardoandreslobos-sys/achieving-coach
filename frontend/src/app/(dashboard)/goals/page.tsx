@@ -69,24 +69,24 @@ export default function GoalsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-[#0a0a0f]">
+      <div className="flex items-center justify-center h-screen bg-[var(--bg-primary)]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] p-8">
+    <div className="min-h-screen bg-[var(--bg-primary)] p-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Mis Objetivos</h1>
-          <p className="text-gray-400">Rastrea y gestiona tus objetivos de coaching</p>
+          <h1 className="text-3xl font-bold text-[var(--fg-primary)] mb-2">Mis Objetivos</h1>
+          <p className="text-[var(--fg-muted)]">Rastrea y gestiona tus objetivos de coaching</p>
         </div>
 
         {goals.length === 0 ? (
           /* Empty State */
-          <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-12">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-12">
             <div className="flex flex-col items-center text-center">
               {/* Stacked Icons Illustration */}
               <div className="relative mb-8">
@@ -101,14 +101,14 @@ export default function GoalsPage() {
                 </div>
               </div>
 
-              <h2 className="text-xl font-semibold text-white mb-3">No tienes objetivos aún</h2>
-              <p className="text-gray-400 mb-8 max-w-md">
+              <h2 className="text-xl font-semibold text-[var(--fg-primary)] mb-3">No tienes objetivos aún</h2>
+              <p className="text-[var(--fg-muted)] mb-8 max-w-md">
                 Define tu camino hacia el éxito. Comienza creando tu primer objetivo claro y alcanzable para iniciar tu transformación.
               </p>
 
               <button
                 onClick={() => setShowModal(true)}
-                className="flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 transition-colors"
+                className="flex items-center gap-2 px-6 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-xl font-medium hover:bg-emerald-700 transition-colors"
               >
                 Crea tu Primer Objetivo
                 <Plus className="w-5 h-5" />
@@ -120,14 +120,14 @@ export default function GoalsPage() {
           <div className="space-y-4">
             <button
               onClick={() => setShowModal(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors mb-6"
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 transition-colors mb-6"
             >
               <Plus className="w-4 h-4" />
               Nuevo Objetivo
             </button>
 
             {goals.map((goal) => (
-              <div key={goal.id} className="bg-[#12131a] border border-gray-800 rounded-xl p-6">
+              <div key={goal.id} className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
@@ -140,8 +140,8 @@ export default function GoalsPage() {
                       )}
                     </div>
                     <div>
-                      <h3 className="text-white font-semibold">{goal.title}</h3>
-                      {goal.description && <p className="text-gray-500 text-sm">{goal.description}</p>}
+                      <h3 className="text-[var(--fg-primary)] font-semibold">{goal.title}</h3>
+                      {goal.description && <p className="text-[var(--fg-muted)] text-sm">{goal.description}</p>}
                     </div>
                   </div>
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${
@@ -154,7 +154,7 @@ export default function GoalsPage() {
                 </div>
                 
                 {goal.status !== 'completed' && (
-                  <div className="h-2 bg-[#1a1b23] rounded-full overflow-hidden">
+                  <div className="h-2 bg-[var(--bg-tertiary)] rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-emerald-500 rounded-full transition-all"
                       style={{ width: `${goal.progress}%` }}
@@ -168,7 +168,7 @@ export default function GoalsPage() {
 
         {/* Footer Link */}
         <div className="text-center mt-8">
-          <p className="text-gray-500 text-sm">
+          <p className="text-[var(--fg-muted)] text-sm">
             ¿Necesitas ayuda para definir tus objetivos?{' '}
             <Link href="/messages" className="text-emerald-400 hover:text-emerald-300">
               Consulta a tu coach
@@ -179,37 +179,37 @@ export default function GoalsPage() {
         {/* Modal */}
         {showModal && (
           <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-            <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-6 w-full max-w-md">
-              <h2 className="text-xl font-bold text-white mb-6">Nuevo Objetivo</h2>
+            <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-6 w-full max-w-md">
+              <h2 className="text-xl font-bold text-[var(--fg-primary)] mb-6">Nuevo Objetivo</h2>
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm text-gray-400 mb-2">Título del objetivo</label>
+                  <label className="block text-sm text-[var(--fg-muted)] mb-2">Título del objetivo</label>
                   <input
                     type="text"
                     value={newGoal.title}
                     onChange={(e) => setNewGoal({ ...newGoal, title: e.target.value })}
                     placeholder="Ej: Mejorar comunicación"
-                    className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-800 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-emerald-500"
+                    className="w-full px-4 py-3 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-xl text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-400 mb-2">Descripción (opcional)</label>
+                  <label className="block text-sm text-[var(--fg-muted)] mb-2">Descripción (opcional)</label>
                   <textarea
                     value={newGoal.description}
                     onChange={(e) => setNewGoal({ ...newGoal, description: e.target.value })}
                     rows={3}
                     placeholder="Describe tu objetivo..."
-                    className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-800 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-emerald-500 resize-none"
+                    className="w-full px-4 py-3 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-xl text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500 resize-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-400 mb-2">Fecha límite</label>
+                  <label className="block text-sm text-[var(--fg-muted)] mb-2">Fecha límite</label>
                   <input
                     type="date"
                     value={newGoal.dueDate}
                     onChange={(e) => setNewGoal({ ...newGoal, dueDate: e.target.value })}
-                    className="w-full px-4 py-3 bg-[#1a1b23] border border-gray-800 rounded-xl text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-4 py-3 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-xl text-[var(--fg-primary)] focus:outline-none focus:border-emerald-500"
                   />
                 </div>
               </div>
@@ -217,14 +217,14 @@ export default function GoalsPage() {
               <div className="flex gap-3 mt-6">
                 <button
                   onClick={() => setShowModal(false)}
-                  className="flex-1 px-4 py-3 bg-[#1a1b23] border border-gray-800 text-white rounded-xl hover:bg-[#22232d] transition-colors"
+                  className="flex-1 px-4 py-3 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] rounded-xl hover:bg-[var(--bg-tertiary)] transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={handleCreateGoal}
                   disabled={!newGoal.title.trim()}
-                  className="flex-1 px-4 py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50"
+                  className="flex-1 px-4 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-xl font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50"
                 >
                   Crear Objetivo
                 </button>

@@ -140,7 +140,7 @@ export default function WheelOfLifePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
@@ -149,16 +149,16 @@ export default function WheelOfLifePage() {
   if (!hasAccess) {
     const isCoach = userProfile?.role === 'coach';
     return (
-      <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
+      <div className="min-h-screen bg-[var(--bg-primary)] py-12 px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 text-center">
             <div className={`w-16 h-16 ${isCoach ? 'bg-emerald-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
               <Target className={`w-8 h-8 ${isCoach ? 'text-emerald-400' : 'text-yellow-400'}`} />
             </div>
-            <h2 className="text-2xl font-bold text-white mb-4">
+            <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">
               {isCoach ? 'Tool for Coachees Only' : 'Access Required'}
             </h2>
-            <p className="text-gray-400 mb-6">
+            <p className="text-[var(--fg-muted)] mb-6">
               {isCoach
                 ? 'This tool is designed to be completed by coachees. You can assign it to your clients from the client management page.'
                 : 'This tool needs to be assigned by your coach before you can access it.'}
@@ -166,14 +166,14 @@ export default function WheelOfLifePage() {
             <div className="flex gap-4 justify-center">
               <Link
                 href={isCoach ? '/coach/clients' : '/dashboard'}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 {isCoach ? 'Go to Clients' : 'Return to Dashboard'}
               </Link>
               {isCoach && (
                 <Link
                   href="/coach/tools"
-                  className="inline-flex items-center gap-2 px-6 py-3 border border-gray-700 text-gray-300 rounded-lg hover:bg-[#1a1a1a] transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 border border-[var(--border-color)] text-[var(--fg-secondary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
                 >
                   View Tools Library
                 </Link>
@@ -187,27 +187,27 @@ export default function WheelOfLifePage() {
 
   if (isCompleted) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
+      <div className="min-h-screen bg-[var(--bg-primary)] py-12 px-4">
         <Toaster position="top-center" richColors />
         <div className="max-w-4xl mx-auto">
-          <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 text-center">
             <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle2 className="w-8 h-8 text-emerald-400" />
             </div>
-            <h2 className="text-2xl font-bold text-white mb-4">Tool Completed!</h2>
-            <p className="text-gray-400 mb-6">
+            <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">Tool Completed!</h2>
+            <p className="text-[var(--fg-muted)] mb-6">
               You've successfully completed the Wheel of Life assessment. Your coach has been notified and can review your results.
             </p>
             <div className="flex gap-4 justify-center">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 Return to Dashboard
               </Link>
               <Link
                 href="/tools"
-                className="inline-flex items-center gap-2 px-6 py-3 border border-gray-700 text-gray-300 rounded-lg hover:bg-[#1a1a1a] transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-[var(--border-color)] text-[var(--fg-secondary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
               >
                 View Other Tools
               </Link>
@@ -223,7 +223,7 @@ export default function WheelOfLifePage() {
     : 0;
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white py-12 px-4">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--fg-primary)] py-12 px-4">
       <Toaster position="top-center" richColors />
       <div className="max-w-5xl mx-auto">
         {/* Header */}
@@ -239,8 +239,8 @@ export default function WheelOfLifePage() {
               <Target className="w-6 h-6 text-emerald-400" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-white">Wheel of Life</h1>
-              <p className="text-gray-400">Assess your life balance across key areas</p>
+              <h1 className="text-3xl font-bold text-[var(--fg-primary)]">Wheel of Life</h1>
+              <p className="text-[var(--fg-muted)]">Assess your life balance across key areas</p>
             </div>
           </div>
         </div>
@@ -259,16 +259,16 @@ export default function WheelOfLifePage() {
           {lifeAreas.map((area) => {
             const Icon = area.icon;
             return (
-              <div key={area.id} className="bg-[#111111] rounded-xl border border-gray-800 p-6 hover:border-emerald-500/50 transition-colors">
+              <div key={area.id} className="bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] p-6 hover:border-emerald-500/50 transition-colors">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className={`w-10 h-10 rounded-lg bg-[#1a1a1a] flex items-center justify-center`}>
+                  <div className={`w-10 h-10 rounded-lg bg-[var(--bg-tertiary)] flex items-center justify-center`}>
                     <Icon className={`w-5 h-5 ${area.color}`} />
                   </div>
-                  <h3 className="text-lg font-semibold text-white">{area.name}</h3>
+                  <h3 className="text-lg font-semibold text-[var(--fg-primary)]">{area.name}</h3>
                 </div>
 
                 <div className="space-y-2">
-                  <div className="flex justify-between text-sm text-gray-500">
+                  <div className="flex justify-between text-sm text-[var(--fg-muted)]">
                     <span>Unsatisfied</span>
                     <span>Satisfied</span>
                   </div>
@@ -278,13 +278,13 @@ export default function WheelOfLifePage() {
                     max="10"
                     value={scores[area.id] || 0}
                     onChange={(e) => setScores({ ...scores, [area.id]: parseInt(e.target.value) })}
-                    className="w-full h-2 bg-[#1a1a1a] rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                    className="w-full h-2 bg-[var(--bg-tertiary)] rounded-lg appearance-none cursor-pointer accent-emerald-500"
                   />
                   <div className="text-center">
                     <span className="text-2xl font-bold text-emerald-400">
                       {scores[area.id] !== undefined ? scores[area.id] : '-'}
                     </span>
-                    <span className="text-gray-500">/10</span>
+                    <span className="text-[var(--fg-muted)]">/10</span>
                   </div>
                 </div>
               </div>
@@ -297,12 +297,12 @@ export default function WheelOfLifePage() {
           <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 mb-8">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-semibold text-white mb-1">Average Score</h3>
-                <p className="text-gray-400">Overall life satisfaction</p>
+                <h3 className="text-lg font-semibold text-[var(--fg-primary)] mb-1">Average Score</h3>
+                <p className="text-[var(--fg-muted)]">Overall life satisfaction</p>
               </div>
               <div className="text-right">
                 <div className="text-4xl font-bold text-emerald-400">{averageScore.toFixed(1)}</div>
-                <div className="text-sm text-gray-500">out of 10</div>
+                <div className="text-sm text-[var(--fg-muted)]">out of 10</div>
               </div>
             </div>
           </div>
@@ -312,7 +312,7 @@ export default function WheelOfLifePage() {
         <button
           onClick={handleSave}
           disabled={saving || Object.keys(scores).length !== lifeAreas.length}
-          className="w-full bg-emerald-600 text-white py-4 rounded-lg font-semibold hover:bg-emerald-700 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
+          className="w-full bg-emerald-600 text-[var(--fg-primary)] py-4 rounded-lg font-semibold hover:bg-emerald-700 disabled:bg-[var(--bg-tertiary)] disabled:text-[var(--fg-muted)] disabled:cursor-not-allowed transition-colors"
         >
           {saving ? 'Saving...' : 'Save Results'}
         </button>

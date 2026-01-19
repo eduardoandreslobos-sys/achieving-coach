@@ -187,7 +187,7 @@ export default function LimitingBeliefsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
@@ -196,22 +196,22 @@ export default function LimitingBeliefsPage() {
   if (!hasAccess) {
     const isCoach = userProfile?.role === 'coach';
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-8">
-        <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 max-w-md text-center">
+      <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center p-8">
+        <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 max-w-md text-center">
           <div className={`w-16 h-16 ${isCoach ? 'bg-emerald-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
             <Lightbulb className={`w-8 h-8 ${isCoach ? 'text-emerald-400' : 'text-yellow-400'}`} />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-4">
+          <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">
             {isCoach ? 'Tool for Coachees Only' : 'Tool Not Assigned'}
           </h2>
-          <p className="text-gray-400 mb-6">
+          <p className="text-[var(--fg-muted)] mb-6">
             {isCoach
               ? 'This tool is designed to be completed by coachees. You can assign it to your clients from the client management page.'
               : "This tool hasn't been assigned to you yet. Please contact your coach to get access."}
           </p>
           <button
             onClick={() => router.push(isCoach ? '/coach/clients' : '/dashboard')}
-            className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+            className="px-6 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 transition-colors"
           >
             {isCoach ? 'Go to Clients' : 'Back to Dashboard'}
           </button>
@@ -221,7 +221,7 @@ export default function LimitingBeliefsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white p-8">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--fg-primary)] p-8">
       {/* Toast de éxito */}
       {showSuccess && (
         <div className="fixed top-4 right-4 bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 px-6 py-4 rounded-lg shadow-lg z-50 flex items-center gap-3 animate-slide-in">
@@ -235,8 +235,8 @@ export default function LimitingBeliefsPage() {
 
       <div className="max-w-5xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Limiting Beliefs Transformation</h1>
-          <p className="text-gray-400">
+          <h1 className="text-3xl font-bold text-[var(--fg-primary)] mb-2">Limiting Beliefs Transformation</h1>
+          <p className="text-[var(--fg-muted)]">
             Identify limiting beliefs and transform them into empowering ones
           </p>
         </div>
@@ -266,9 +266,9 @@ export default function LimitingBeliefsPage() {
 
         <div className="space-y-6 mb-8">
           {beliefs.map((belief, index) => (
-            <div key={index} className="bg-[#111111] rounded-xl border border-gray-800 p-6">
+            <div key={index} className="bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-white">Belief #{index + 1}</h3>
+                <h3 className="text-lg font-bold text-[var(--fg-primary)]">Belief #{index + 1}</h3>
                 {beliefs.length > 1 && (
                   <button
                     onClick={() => removeBelief(index)}
@@ -283,7 +283,7 @@ export default function LimitingBeliefsPage() {
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <AlertCircle className="text-red-400" size={20} />
-                    <label className="block text-sm font-medium text-gray-400">
+                    <label className="block text-sm font-medium text-[var(--fg-muted)]">
                       Limiting Belief
                     </label>
                   </div>
@@ -291,7 +291,7 @@ export default function LimitingBeliefsPage() {
                     value={belief.limiting}
                     onChange={(e) => updateBelief(index, 'limiting', e.target.value)}
                     placeholder="e.g., I'm not good enough to succeed..."
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none"
+                    className="w-full px-4 py-3 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none"
                     rows={2}
                   />
                 </div>
@@ -299,7 +299,7 @@ export default function LimitingBeliefsPage() {
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <CheckCircle className="text-emerald-400" size={20} />
-                    <label className="block text-sm font-medium text-gray-400">
+                    <label className="block text-sm font-medium text-[var(--fg-muted)]">
                       Empowering Belief
                     </label>
                   </div>
@@ -307,7 +307,7 @@ export default function LimitingBeliefsPage() {
                     value={belief.empowering}
                     onChange={(e) => updateBelief(index, 'empowering', e.target.value)}
                     placeholder="e.g., I have unique skills and experiences that make me capable..."
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none"
+                    className="w-full px-4 py-3 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none"
                     rows={2}
                   />
                 </div>
@@ -315,7 +315,7 @@ export default function LimitingBeliefsPage() {
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <Lightbulb className="text-emerald-400" size={20} />
-                    <label className="block text-sm font-medium text-gray-400">
+                    <label className="block text-sm font-medium text-[var(--fg-muted)]">
                       Evidence for Empowering Belief
                     </label>
                   </div>
@@ -323,7 +323,7 @@ export default function LimitingBeliefsPage() {
                     value={belief.evidence}
                     onChange={(e) => updateBelief(index, 'evidence', e.target.value)}
                     placeholder="e.g., I successfully completed X project, my colleagues value my input..."
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none"
+                    className="w-full px-4 py-3 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none"
                     rows={3}
                   />
                 </div>
@@ -342,7 +342,7 @@ export default function LimitingBeliefsPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex-1 px-8 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 disabled:bg-gray-700 disabled:text-gray-500 transition-colors"
+            className="flex-1 px-8 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 disabled:bg-[var(--bg-tertiary)] disabled:text-[var(--fg-muted)] transition-colors"
           >
             {saving ? 'Saving...' : 'Save Results'}
           </button>

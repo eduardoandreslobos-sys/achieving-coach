@@ -100,7 +100,7 @@ export default function ResourcesPage() {
       case 'video': return 'bg-emerald-500/20 text-emerald-400';
       case 'document': return 'bg-emerald-500/20 text-emerald-400';
       case 'link': return 'bg-violet-500/20 text-violet-400';
-      default: return 'bg-gray-500/20 text-gray-400';
+      default: return 'bg-[var(--bg-tertiary)]/20 text-[var(--fg-muted)]';
     }
   };
 
@@ -124,35 +124,35 @@ export default function ResourcesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 text-emerald-500 animate-spin mx-auto mb-4" />
-          <p className="text-gray-400">Cargando recursos...</p>
+          <p className="text-[var(--fg-muted)]">Cargando recursos...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] py-8 px-6">
+    <div className="min-h-screen bg-[var(--bg-primary)] py-8 px-6">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Recursos</h1>
-          <p className="text-gray-400">Herramientas, guías y materiales para apoyar tu crecimiento.</p>
+          <h1 className="text-3xl font-bold text-[var(--fg-primary)] mb-2">Recursos</h1>
+          <p className="text-[var(--fg-muted)]">Herramientas, guías y materiales para apoyar tu crecimiento.</p>
         </div>
 
         {/* Search and Filter */}
         {resources.length > 0 && (
           <div className="flex flex-col md:flex-row gap-4 mb-6">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--fg-muted)]" />
               <input
                 type="text"
                 placeholder="Buscar recursos..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-[#12131a] border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
+                className="w-full pl-10 pr-4 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500"
               />
             </div>
             <div className="flex gap-2 flex-wrap">
@@ -162,8 +162,8 @@ export default function ResourcesPage() {
                   onClick={() => setSelectedCategory(category)}
                   className={`px-4 py-2 rounded-lg text-sm transition-colors ${
                     selectedCategory === category
-                      ? 'bg-emerald-600 text-white'
-                      : 'bg-[#12131a] border border-gray-800 text-gray-400 hover:text-white'
+                      ? 'bg-emerald-600 text-[var(--fg-primary)]'
+                      : 'bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--fg-muted)] hover:text-[var(--fg-primary)]'
                   }`}
                 >
                   {category === 'all' ? 'Todos' : category}
@@ -175,24 +175,24 @@ export default function ResourcesPage() {
 
         {/* Empty State */}
         {resources.length === 0 ? (
-          <div className="bg-[#12131a] border border-gray-800 rounded-xl p-12 text-center">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-12 text-center">
             <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <Folder className="w-8 h-8 text-emerald-400" />
             </div>
-            <h3 className="text-xl font-semibold text-white mb-2">No hay recursos disponibles</h3>
-            <p className="text-gray-400 max-w-md mx-auto">
+            <h3 className="text-xl font-semibold text-[var(--fg-primary)] mb-2">No hay recursos disponibles</h3>
+            <p className="text-[var(--fg-muted)] max-w-md mx-auto">
               {userProfile?.role === 'coach'
                 ? 'Aún no has compartido recursos con tus coachees. Puedes agregar guías, videos y enlaces desde el panel de administración.'
                 : 'Tu coach aún no ha compartido recursos contigo. Los recursos aparecerán aquí cuando estén disponibles.'}
             </p>
           </div>
         ) : filteredResources.length === 0 ? (
-          <div className="bg-[#12131a] border border-gray-800 rounded-xl p-12 text-center">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-12 text-center">
             <div className="w-16 h-16 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <Search className="w-8 h-8 text-amber-400" />
             </div>
-            <h3 className="text-xl font-semibold text-white mb-2">No se encontraron resultados</h3>
-            <p className="text-gray-400">
+            <h3 className="text-xl font-semibold text-[var(--fg-primary)] mb-2">No se encontraron resultados</h3>
+            <p className="text-[var(--fg-muted)]">
               No hay recursos que coincidan con tu búsqueda. Intenta con otros términos.
             </p>
           </div>
@@ -206,26 +206,26 @@ export default function ResourcesPage() {
               return (
                 <div
                   key={resource.id}
-                  className="bg-[#12131a] border border-gray-800 rounded-xl p-5 hover:border-blue-800/50 transition-colors"
+                  className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5 hover:border-blue-800/50 transition-colors"
                 >
                   <div className="flex items-start gap-4">
                     <div className={iconColor + ' p-3 rounded-xl'}>
                       <Icon className="w-6 h-6" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-white font-semibold mb-1 truncate">{resource.title}</h3>
-                      <p className="text-gray-400 text-sm mb-3 line-clamp-2">{resource.description}</p>
+                      <h3 className="text-[var(--fg-primary)] font-semibold mb-1 truncate">{resource.title}</h3>
+                      <p className="text-[var(--fg-muted)] text-sm mb-3 line-clamp-2">{resource.description}</p>
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3 text-xs text-gray-500">
-                          <span className="px-2 py-0.5 bg-gray-800 rounded">{resource.category}</span>
+                        <div className="flex items-center gap-3 text-xs text-[var(--fg-muted)]">
+                          <span className="px-2 py-0.5 bg-[var(--bg-secondary)] rounded">{resource.category}</span>
                           {resource.size && <span>{resource.size}</span>}
                           {resource.duration && <span>{resource.duration}</span>}
                         </div>
                         <button
                           onClick={() => handleResourceClick(resource)}
                           className={resource.type === 'link'
-                            ? 'flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-medium'
-                            : 'flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-medium'
+                            ? 'flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 transition-colors text-sm font-medium'
+                            : 'flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 transition-colors text-sm font-medium'
                           }
                         >
                           {resource.type === 'link' ? <ExternalLink size={14} /> : <Download size={14} />}
@@ -242,8 +242,8 @@ export default function ResourcesPage() {
 
         {/* Stats */}
         {resources.length > 0 && (
-          <div className="mt-8 pt-6 border-t border-gray-800">
-            <p className="text-gray-500 text-sm text-center">
+          <div className="mt-8 pt-6 border-t border-[var(--border-color)]">
+            <p className="text-[var(--fg-muted)] text-sm text-center">
               {filteredResources.length} de {resources.length} recursos
             </p>
           </div>

@@ -72,7 +72,7 @@ const STATUS_CONFIG = {
   },
   no_show: {
     label: 'No Asistió',
-    color: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
+    color: 'bg-[var(--bg-tertiary)]/20 text-[var(--fg-muted)] border-[var(--border-color)]',
     icon: XCircle,
   },
 };
@@ -266,14 +266,14 @@ export default function BookingsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white p-8">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--fg-primary)] p-8">
       <Toaster position="top-center" richColors />
 
       <div className="max-w-6xl mx-auto">
@@ -281,11 +281,11 @@ export default function BookingsPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold mb-2">Reservas</h1>
-            <p className="text-gray-400">Gestiona las reservas de tus clientes</p>
+            <p className="text-[var(--fg-muted)]">Gestiona las reservas de tus clientes</p>
           </div>
           <Link
             href="/coach/booking"
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 transition-colors"
           >
             <Calendar className="w-4 h-4" />
             Configurar Disponibilidad
@@ -294,36 +294,36 @@ export default function BookingsPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4 mb-8">
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-4">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
                 <AlertCircle className="w-5 h-5 text-amber-400" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-white">{stats.pending}</p>
-                <p className="text-sm text-gray-400">Pendientes</p>
+                <p className="text-2xl font-bold text-[var(--fg-primary)]">{stats.pending}</p>
+                <p className="text-sm text-[var(--fg-muted)]">Pendientes</p>
               </div>
             </div>
           </div>
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-4">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
                 <CheckCircle className="w-5 h-5 text-emerald-400" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-white">{stats.confirmed}</p>
-                <p className="text-sm text-gray-400">Confirmadas</p>
+                <p className="text-2xl font-bold text-[var(--fg-primary)]">{stats.confirmed}</p>
+                <p className="text-sm text-[var(--fg-muted)]">Confirmadas</p>
               </div>
             </div>
           </div>
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-4">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
                 <Calendar className="w-5 h-5 text-emerald-400" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-white">{stats.total}</p>
-                <p className="text-sm text-gray-400">Total</p>
+                <p className="text-2xl font-bold text-[var(--fg-primary)]">{stats.total}</p>
+                <p className="text-sm text-[var(--fg-muted)]">Total</p>
               </div>
             </div>
           </div>
@@ -332,13 +332,13 @@ export default function BookingsPage() {
         {/* Filters */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--fg-muted)]" />
             <input
               type="text"
               placeholder="Buscar por nombre o email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-[#111111] border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
+              className="w-full pl-10 pr-4 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500"
             />
           </div>
           <div className="flex gap-2 flex-wrap">
@@ -348,8 +348,8 @@ export default function BookingsPage() {
                 onClick={() => setFilterStatus(status)}
                 className={`px-4 py-2 rounded-lg text-sm transition-colors ${
                   filterStatus === status
-                    ? 'bg-emerald-600 text-white'
-                    : 'bg-[#111111] border border-gray-800 text-gray-400 hover:text-white'
+                    ? 'bg-emerald-600 text-[var(--fg-primary)]'
+                    : 'bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--fg-muted)] hover:text-[var(--fg-primary)]'
                 }`}
               >
                 {status === 'all' ? 'Todas' : STATUS_CONFIG[status as keyof typeof STATUS_CONFIG]?.label}
@@ -360,10 +360,10 @@ export default function BookingsPage() {
 
         {/* Bookings List */}
         {filteredBookings.length === 0 ? (
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-12 text-center">
-            <Calendar className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-white mb-2">No hay reservas</h3>
-            <p className="text-gray-400">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-12 text-center">
+            <Calendar className="w-12 h-12 text-[var(--fg-muted)] mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-[var(--fg-primary)] mb-2">No hay reservas</h3>
+            <p className="text-[var(--fg-muted)]">
               {filterStatus !== 'all'
                 ? 'No hay reservas con este estado.'
                 : 'Aún no tienes reservas. Comparte tu link de booking para recibir reservas.'}
@@ -379,25 +379,25 @@ export default function BookingsPage() {
               return (
                 <div
                   key={booking.id}
-                  className="bg-[#111111] border border-gray-800 rounded-xl p-5 hover:border-gray-700 transition-colors"
+                  className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5 hover:border-[var(--border-color)] transition-colors"
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-4">
                       {/* Avatar */}
-                      <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-violet-500 rounded-full flex items-center justify-center text-white font-bold">
+                      <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-violet-500 rounded-full flex items-center justify-center text-[var(--fg-primary)] font-bold">
                         {booking.clientName.charAt(0).toUpperCase()}
                       </div>
 
                       {/* Info */}
                       <div>
-                        <h3 className="text-white font-semibold text-lg">{booking.clientName}</h3>
-                        <div className="flex items-center gap-4 text-sm text-gray-400 mt-1">
+                        <h3 className="text-[var(--fg-primary)] font-semibold text-lg">{booking.clientName}</h3>
+                        <div className="flex items-center gap-4 text-sm text-[var(--fg-muted)] mt-1">
                           <span className="flex items-center gap-1">
                             <Mail className="w-4 h-4" />
                             {booking.clientEmail}
                           </span>
                         </div>
-                        <div className="flex items-center gap-4 text-sm text-gray-300 mt-2">
+                        <div className="flex items-center gap-4 text-sm text-[var(--fg-secondary)] mt-2">
                           <span className="flex items-center gap-1">
                             <Calendar className="w-4 h-4 text-emerald-400" />
                             {formatDate(booking.date)}
@@ -408,8 +408,8 @@ export default function BookingsPage() {
                           </span>
                         </div>
                         {booking.notes && (
-                          <div className="mt-3 p-3 bg-[#0a0a0a] rounded-lg">
-                            <p className="text-sm text-gray-400">
+                          <div className="mt-3 p-3 bg-[var(--bg-primary)] rounded-lg">
+                            <p className="text-sm text-[var(--fg-muted)]">
                               <MessageSquare className="w-4 h-4 inline mr-1" />
                               {booking.notes}
                             </p>
@@ -430,7 +430,7 @@ export default function BookingsPage() {
                           <button
                             onClick={() => updateBookingStatus(booking.id, 'confirmed')}
                             disabled={updating === booking.id}
-                            className="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-sm hover:bg-emerald-700 disabled:opacity-50 flex items-center gap-1"
+                            className="px-3 py-1.5 bg-emerald-600 text-[var(--fg-primary)] rounded-lg text-sm hover:bg-emerald-700 disabled:opacity-50 flex items-center gap-1"
                           >
                             {updating === booking.id ? (
                               <Loader2 className="w-3 h-3 animate-spin" />
@@ -442,7 +442,7 @@ export default function BookingsPage() {
                           <button
                             onClick={() => updateBookingStatus(booking.id, 'cancelled')}
                             disabled={updating === booking.id}
-                            className="px-3 py-1.5 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 disabled:opacity-50 flex items-center gap-1"
+                            className="px-3 py-1.5 bg-red-600 text-[var(--fg-primary)] rounded-lg text-sm hover:bg-red-700 disabled:opacity-50 flex items-center gap-1"
                           >
                             <XCircle className="w-3 h-3" />
                             Cancelar
@@ -455,7 +455,7 @@ export default function BookingsPage() {
                           href={booking.meetingLink}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-sm hover:bg-emerald-700 flex items-center gap-1"
+                          className="px-3 py-1.5 bg-emerald-600 text-[var(--fg-primary)] rounded-lg text-sm hover:bg-emerald-700 flex items-center gap-1"
                         >
                           <Video className="w-3 h-3" />
                           Unirse
@@ -467,7 +467,7 @@ export default function BookingsPage() {
                           <button
                             onClick={() => updateBookingStatus(booking.id, 'completed')}
                             disabled={updating === booking.id}
-                            className="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-sm hover:bg-emerald-700 disabled:opacity-50 flex items-center gap-1"
+                            className="px-3 py-1.5 bg-emerald-600 text-[var(--fg-primary)] rounded-lg text-sm hover:bg-emerald-700 disabled:opacity-50 flex items-center gap-1"
                           >
                             <CheckCircle className="w-3 h-3" />
                             Completada
@@ -475,7 +475,7 @@ export default function BookingsPage() {
                           <button
                             onClick={() => updateBookingStatus(booking.id, 'no_show')}
                             disabled={updating === booking.id}
-                            className="px-3 py-1.5 bg-gray-600 text-white rounded-lg text-sm hover:bg-gray-700 disabled:opacity-50 flex items-center gap-1"
+                            className="px-3 py-1.5 bg-[var(--bg-tertiary)] text-[var(--fg-primary)] rounded-lg text-sm hover:bg-[var(--bg-tertiary)] disabled:opacity-50 flex items-center gap-1"
                           >
                             <XCircle className="w-3 h-3" />
                             No Asistió

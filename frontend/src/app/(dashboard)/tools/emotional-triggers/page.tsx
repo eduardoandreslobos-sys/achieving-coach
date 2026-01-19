@@ -164,7 +164,7 @@ export default function EmotionalTriggersPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
@@ -173,23 +173,23 @@ export default function EmotionalTriggersPage() {
   if (!hasAccess) {
     const isCoach = userProfile?.role === 'coach';
     return (
-      <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
+      <div className="min-h-screen bg-[var(--bg-primary)] py-12 px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 text-center">
             <div className={`w-16 h-16 ${isCoach ? 'bg-emerald-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
               <Heart className={`w-8 h-8 ${isCoach ? 'text-emerald-400' : 'text-yellow-400'}`} />
             </div>
-            <h2 className="text-2xl font-bold text-white mb-4">
+            <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">
               {isCoach ? 'Tool for Coachees Only' : 'Access Required'}
             </h2>
-            <p className="text-gray-400 mb-6">
+            <p className="text-[var(--fg-muted)] mb-6">
               {isCoach
                 ? 'This tool is designed to be completed by coachees. You can assign it to your clients from the client management page.'
                 : 'This tool needs to be assigned by your coach before you can access it.'}
             </p>
             <Link
               href={isCoach ? '/coach/clients' : '/dashboard'}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 transition-colors"
             >
               {isCoach ? 'Go to Clients' : 'Return to Dashboard'}
             </Link>
@@ -201,27 +201,27 @@ export default function EmotionalTriggersPage() {
 
   if (isCompleted) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
+      <div className="min-h-screen bg-[var(--bg-primary)] py-12 px-4">
         <Toaster position="top-center" richColors />
         <div className="max-w-4xl mx-auto">
-          <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 text-center">
             <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle2 className="w-8 h-8 text-emerald-400" />
             </div>
-            <h2 className="text-2xl font-bold text-white mb-4">Tool Completed!</h2>
-            <p className="text-gray-400 mb-6">
+            <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">Tool Completed!</h2>
+            <p className="text-[var(--fg-muted)] mb-6">
               You've successfully completed the Emotional Triggers Journal. Your coach has been notified.
             </p>
             <div className="flex gap-4 justify-center">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 Return to Dashboard
               </Link>
               <Link
                 href="/tools"
-                className="inline-flex items-center gap-2 px-6 py-3 border border-gray-700 text-gray-300 rounded-lg hover:bg-[#1a1a1a] transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-[var(--border-color)] text-[var(--fg-secondary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
               >
                 View Other Tools
               </Link>
@@ -233,12 +233,12 @@ export default function EmotionalTriggersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white p-8">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--fg-primary)] p-8">
       <Toaster position="top-center" richColors />
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Emotional Triggers Journal</h1>
-          <p className="text-gray-400">
+          <h1 className="text-3xl font-bold text-[var(--fg-primary)] mb-2">Emotional Triggers Journal</h1>
+          <p className="text-[var(--fg-muted)]">
             Identify patterns and develop healthier responses to emotional triggers
           </p>
         </div>
@@ -256,11 +256,11 @@ export default function EmotionalTriggersPage() {
           </div>
         </div>
 
-        <div className="bg-[#111111] rounded-xl border border-gray-800 p-6 mb-6">
-          <h2 className="text-xl font-bold text-white mb-4">New Trigger Entry</h2>
+        <div className="bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] p-6 mb-6">
+          <h2 className="text-xl font-bold text-[var(--fg-primary)] mb-4">New Trigger Entry</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">
+              <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
                 What triggered this emotion?
               </label>
               <input
@@ -268,18 +268,18 @@ export default function EmotionalTriggersPage() {
                 value={currentEntry.trigger}
                 onChange={(e) => setCurrentEntry({ ...currentEntry, trigger: e.target.value })}
                 placeholder="Describe the situation or event"
-                className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="w-full px-4 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">
+                <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
                   Primary Emotion
                 </label>
                 <select
                   value={currentEntry.emotion}
                   onChange={(e) => setCurrentEntry({ ...currentEntry, emotion: e.target.value })}
-                  className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                  className="w-full px-4 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                 >
                   <option value="">Select emotion</option>
                   {emotions.map(emotion => (
@@ -288,7 +288,7 @@ export default function EmotionalTriggersPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">
+                <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
                   Intensity (1-10): {currentEntry.intensity}
                 </label>
                 <input
@@ -299,7 +299,7 @@ export default function EmotionalTriggersPage() {
                   onChange={(e) => setCurrentEntry({ ...currentEntry, intensity: parseInt(e.target.value) })}
                   className="w-full accent-emerald-500"
                 />
-                <div className="flex justify-between text-xs text-gray-500">
+                <div className="flex justify-between text-xs text-[var(--fg-muted)]">
                   <span>Mild</span>
                   <span>Intense</span>
                 </div>
@@ -307,7 +307,7 @@ export default function EmotionalTriggersPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">
+              <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
                 Physical Sensations
               </label>
               <input
@@ -315,12 +315,12 @@ export default function EmotionalTriggersPage() {
                 value={currentEntry.physicalSensations}
                 onChange={(e) => setCurrentEntry({ ...currentEntry, physicalSensations: e.target.value })}
                 placeholder="e.g., tight chest, racing heart, tension in shoulders"
-                className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="w-full px-4 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">
+              <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
                 Automatic Thoughts
               </label>
               <textarea
@@ -328,12 +328,12 @@ export default function EmotionalTriggersPage() {
                 onChange={(e) => setCurrentEntry({ ...currentEntry, thoughts: e.target.value })}
                 placeholder="What thoughts came up immediately?"
                 rows={2}
-                className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="w-full px-4 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">
+              <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
                 How did you respond?
               </label>
               <textarea
@@ -341,7 +341,7 @@ export default function EmotionalTriggersPage() {
                 onChange={(e) => setCurrentEntry({ ...currentEntry, response: e.target.value })}
                 placeholder="What did you do or say?"
                 rows={2}
-                className="w-full px-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="w-full px-4 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               />
             </div>
 
@@ -355,7 +355,7 @@ export default function EmotionalTriggersPage() {
                 onChange={(e) => setCurrentEntry({ ...currentEntry, alternativeResponse: e.target.value })}
                 placeholder="How could you respond differently next time?"
                 rows={3}
-                className="w-full px-4 py-2 bg-[#1a1a1a] border border-emerald-500/30 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="w-full px-4 py-2 bg-[var(--bg-tertiary)] border border-emerald-500/30 rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               />
             </div>
           </div>
@@ -363,7 +363,7 @@ export default function EmotionalTriggersPage() {
           <button
             onClick={addEntry}
             disabled={!currentEntry.trigger || !currentEntry.emotion}
-            className="mt-4 px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
+            className="mt-4 px-6 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 disabled:bg-[var(--bg-tertiary)] disabled:text-[var(--fg-muted)] disabled:cursor-not-allowed transition-colors"
           >
             Add Entry
           </button>
@@ -373,18 +373,18 @@ export default function EmotionalTriggersPage() {
           <>
             <div className="space-y-4 mb-6">
               {entries.map((entry) => (
-                <div key={entry.id} className="bg-[#111111] rounded-xl border border-gray-800 p-6">
+                <div key={entry.id} className="bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <span className={`px-3 py-1 rounded-full text-sm font-medium border ${getIntensityColor(entry.intensity)}`}>
                           {entry.emotion} - {entry.intensity}/10
                         </span>
-                        <span className="text-sm text-gray-500">
+                        <span className="text-sm text-[var(--fg-muted)]">
                           {new Date(entry.date).toLocaleDateString()}
                         </span>
                       </div>
-                      <h3 className="font-bold text-white">{entry.trigger}</h3>
+                      <h3 className="font-bold text-[var(--fg-primary)]">{entry.trigger}</h3>
                     </div>
                   </div>
 
@@ -393,23 +393,23 @@ export default function EmotionalTriggersPage() {
                       <div className="flex items-start gap-2">
                         <AlertCircle className="text-emerald-400 flex-shrink-0 mt-0.5" size={16} />
                         <div>
-                          <span className="text-sm font-medium text-gray-300">Physical: </span>
-                          <span className="text-sm text-gray-400">{entry.physicalSensations}</span>
+                          <span className="text-sm font-medium text-[var(--fg-secondary)]">Physical: </span>
+                          <span className="text-sm text-[var(--fg-muted)]">{entry.physicalSensations}</span>
                         </div>
                       </div>
                     )}
 
                     {entry.thoughts && (
                       <div className="flex items-start gap-2">
-                        <span className="text-sm font-medium text-gray-300">Thoughts: </span>
-                        <span className="text-sm text-gray-400">{entry.thoughts}</span>
+                        <span className="text-sm font-medium text-[var(--fg-secondary)]">Thoughts: </span>
+                        <span className="text-sm text-[var(--fg-muted)]">{entry.thoughts}</span>
                       </div>
                     )}
 
                     {entry.response && (
                       <div className="flex items-start gap-2">
-                        <span className="text-sm font-medium text-gray-300">Response: </span>
-                        <span className="text-sm text-gray-400">{entry.response}</span>
+                        <span className="text-sm font-medium text-[var(--fg-secondary)]">Response: </span>
+                        <span className="text-sm text-[var(--fg-muted)]">{entry.response}</span>
                       </div>
                     )}
 
@@ -431,7 +431,7 @@ export default function EmotionalTriggersPage() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="px-8 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 disabled:bg-gray-700 disabled:text-gray-500 flex items-center gap-2 transition-colors"
+                className="px-8 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 disabled:bg-[var(--bg-tertiary)] disabled:text-[var(--fg-muted)] flex items-center gap-2 transition-colors"
               >
                 {saving ? 'Saving...' : 'Save Journal'}
               </button>

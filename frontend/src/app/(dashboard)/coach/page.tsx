@@ -226,7 +226,7 @@ export default function CoachAnalyticsDashboard() {
 
   if (loading || !analytics) {
     return (
-      <div className="flex items-center justify-center h-screen bg-[#0a0a0a]">
+      <div className="flex items-center justify-center h-screen bg-[var(--bg-primary)]">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
       </div>
     );
@@ -235,22 +235,22 @@ export default function CoachAnalyticsDashboard() {
   const maxVolume = Math.max(...analytics.sessionVolume, 1);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white p-6 lg:p-8">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--fg-primary)] p-6 lg:p-8">
       <div className="mx-auto max-w-7xl">
         
         {/* Header */}
         <div className="flex flex-wrap items-start justify-between gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-bold mb-2">Coach Dashboard</h1>
-            <p className="text-gray-400">Bienvenido de nuevo, aquí están tus métricas clave.</p>
+            <p className="text-[var(--fg-muted)]">Bienvenido de nuevo, aquí están tus métricas clave.</p>
           </div>
           
           <div className="flex items-center gap-3">
-            <div className="flex bg-[#1a1a1a] rounded-lg p-1">
+            <div className="flex bg-[var(--bg-tertiary)] rounded-lg p-1">
               <button
                 onClick={() => setTimeRange('30')}
                 className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-                  timeRange === '30' ? 'bg-[#2a2a2a] text-white' : 'text-gray-400 hover:text-white'
+                  timeRange === '30' ? 'bg-[var(--bg-tertiary)] text-[var(--fg-primary)]' : 'text-[var(--fg-muted)] hover:text-[var(--fg-primary)]'
                 }`}
               >
                 Last 30 Days
@@ -258,7 +258,7 @@ export default function CoachAnalyticsDashboard() {
               <button
                 onClick={() => setTimeRange('90')}
                 className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-                  timeRange === '90' ? 'bg-[#2a2a2a] text-white' : 'text-gray-400 hover:text-white'
+                  timeRange === '90' ? 'bg-[var(--bg-tertiary)] text-[var(--fg-primary)]' : 'text-[var(--fg-muted)] hover:text-[var(--fg-primary)]'
                 }`}
               >
                 Last 90 Days
@@ -266,7 +266,7 @@ export default function CoachAnalyticsDashboard() {
               <button
                 onClick={() => setShowCustomPicker(!showCustomPicker)}
                 className={`px-4 py-2 text-sm font-medium rounded-md transition-colors flex items-center gap-2 ${
-                  timeRange === 'custom' ? 'bg-[#2a2a2a] text-white' : 'text-gray-400 hover:text-white'
+                  timeRange === 'custom' ? 'bg-[var(--bg-tertiary)] text-[var(--fg-primary)]' : 'text-[var(--fg-muted)] hover:text-[var(--fg-primary)]'
                 }`}
               >
                 <Calendar className="w-4 h-4" />
@@ -276,7 +276,7 @@ export default function CoachAnalyticsDashboard() {
             
             <button 
               onClick={exportToPDF}
-              className="flex items-center gap-2 px-4 py-2 bg-[#1a1a1a] border border-gray-700 text-white rounded-lg hover:bg-[#2a2a2a] transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
             >
               <Download className="w-4 h-4" />
               Export Report
@@ -286,28 +286,28 @@ export default function CoachAnalyticsDashboard() {
 
         {/* Custom Date Picker */}
         {showCustomPicker && (
-          <div className="mb-6 p-4 bg-[#111111] border border-gray-800 rounded-xl inline-flex gap-4 items-end">
+          <div className="mb-6 p-4 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl inline-flex gap-4 items-end">
             <div>
-              <label className="block text-gray-400 text-xs mb-1">Start Date</label>
+              <label className="block text-[var(--fg-muted)] text-xs mb-1">Start Date</label>
               <input
                 type="date"
                 value={customStartDate}
                 onChange={(e) => setCustomStartDate(e.target.value)}
-                className="px-3 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
+                className="px-3 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] focus:outline-none focus:border-emerald-500"
               />
             </div>
             <div>
-              <label className="block text-gray-400 text-xs mb-1">End Date</label>
+              <label className="block text-[var(--fg-muted)] text-xs mb-1">End Date</label>
               <input
                 type="date"
                 value={customEndDate}
                 onChange={(e) => setCustomEndDate(e.target.value)}
-                className="px-3 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
+                className="px-3 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] focus:outline-none focus:border-emerald-500"
               />
             </div>
             <button
               onClick={() => { if (customStartDate && customEndDate) { setTimeRange('custom'); setShowCustomPicker(false); }}}
-              className="px-4 py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700"
+              className="px-4 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700"
             >
               Apply
             </button>
@@ -316,9 +316,9 @@ export default function CoachAnalyticsDashboard() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-5">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-gray-400 text-xs uppercase tracking-wider">Total Active Coachees</p>
+              <p className="text-[var(--fg-muted)] text-xs uppercase tracking-wider">Total Active Coachees</p>
               <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
                 <Users className="w-5 h-5 text-emerald-400" />
               </div>
@@ -332,22 +332,22 @@ export default function CoachAnalyticsDashboard() {
             </div>
           </div>
 
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-5">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-gray-400 text-xs uppercase tracking-wider">Sessions This Month</p>
+              <p className="text-[var(--fg-muted)] text-xs uppercase tracking-wider">Sessions This Month</p>
               <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
                 <Calendar className="w-5 h-5 text-emerald-400" />
               </div>
             </div>
             <div className="flex items-baseline gap-2">
               <p className="text-3xl font-bold">{analytics.sessionsThisMonth}</p>
-              <span className="text-gray-400 text-sm">0% vs last month</span>
+              <span className="text-[var(--fg-muted)] text-sm">0% vs last month</span>
             </div>
           </div>
 
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-5">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-gray-400 text-xs uppercase tracking-wider">Goal Completion Rate</p>
+              <p className="text-[var(--fg-muted)] text-xs uppercase tracking-wider">Goal Completion Rate</p>
               <div className="w-10 h-10 bg-violet-500/10 rounded-lg flex items-center justify-center">
                 <Target className="w-5 h-5 text-violet-400" />
               </div>
@@ -361,15 +361,15 @@ export default function CoachAnalyticsDashboard() {
             </div>
           </div>
 
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-5">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-gray-400 text-xs uppercase tracking-wider">Avg. Engagement Score</p>
+              <p className="text-[var(--fg-muted)] text-xs uppercase tracking-wider">Avg. Engagement Score</p>
               <div className="w-10 h-10 bg-pink-500/10 rounded-lg flex items-center justify-center">
                 <Heart className="w-5 h-5 text-pink-400" />
               </div>
             </div>
             <div className="flex items-baseline gap-2">
-              <p className="text-3xl font-bold">{analytics.avgEngagement}<span className="text-lg text-gray-500">/100</span></p>
+              <p className="text-3xl font-bold">{analytics.avgEngagement}<span className="text-lg text-[var(--fg-muted)]">/100</span></p>
               <span className="text-emerald-400 text-sm flex items-center gap-1">
                 +{analytics.engagementChange}
               </span>
@@ -381,16 +381,16 @@ export default function CoachAnalyticsDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           
           {/* Session Volume Trends */}
-          <div className="lg:col-span-2 bg-[#111111] border border-gray-800 rounded-xl p-6">
+          <div className="lg:col-span-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <p className="text-white font-medium">Session Volume Trends</p>
+                <p className="text-[var(--fg-primary)] font-medium">Session Volume Trends</p>
                 <div className="flex items-baseline gap-2 mt-1">
                   <p className="text-2xl font-bold">{analytics.sessionVolume.reduce((a, b) => a + b, 0)} Sessions</p>
                   <span className="text-emerald-400 text-sm">+12% increase</span>
                 </div>
               </div>
-              <button className="p-2 text-gray-500 hover:text-white transition-colors">
+              <button className="p-2 text-[var(--fg-muted)] hover:text-[var(--fg-primary)] transition-colors">
                 <MoreHorizontal className="w-5 h-5" />
               </button>
             </div>
@@ -406,7 +406,7 @@ export default function CoachAnalyticsDashboard() {
                 </div>
               ))}
             </div>
-            <div className="flex justify-between mt-2 text-xs text-gray-500">
+            <div className="flex justify-between mt-2 text-xs text-[var(--fg-muted)]">
               <span>0</span>
               <span>10</span>
               <span>20</span>
@@ -416,18 +416,18 @@ export default function CoachAnalyticsDashboard() {
           </div>
 
           {/* Coachee Engagement */}
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
-            <p className="text-white font-medium mb-1">Coachee Engagement</p>
-            <p className="text-gray-500 text-sm mb-6">Top active clients this week</p>
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
+            <p className="text-[var(--fg-primary)] font-medium mb-1">Coachee Engagement</p>
+            <p className="text-[var(--fg-muted)] text-sm mb-6">Top active clients this week</p>
             
             <div className="space-y-4">
               {analytics.coacheeEngagement.map((coachee, index) => (
                 <div key={index}>
                   <div className="flex justify-between mb-1">
-                    <span className="text-white text-sm">{coachee.name}</span>
-                    <span className="text-gray-400 text-sm">{coachee.rate}%</span>
+                    <span className="text-[var(--fg-primary)] text-sm">{coachee.name}</span>
+                    <span className="text-[var(--fg-muted)] text-sm">{coachee.rate}%</span>
                   </div>
-                  <div className="h-2 bg-[#1a1a1a] rounded-full overflow-hidden">
+                  <div className="h-2 bg-[var(--bg-tertiary)] rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-gradient-to-r from-emerald-500 to-blue-400 rounded-full transition-all duration-500"
                       style={{ width: `${coachee.rate}%` }}
@@ -437,15 +437,15 @@ export default function CoachAnalyticsDashboard() {
               ))}
             </div>
             
-            <Link href="/coach/clients" className="block text-center text-gray-400 text-sm mt-6 hover:text-white transition-colors">
+            <Link href="/coach/clients" className="block text-center text-[var(--fg-muted)] text-sm mt-6 hover:text-[var(--fg-primary)] transition-colors">
               View All Coachees
             </Link>
           </div>
         </div>
 
         {/* Goal Completion */}
-        <div className="mt-6 bg-[#111111] border border-gray-800 rounded-xl p-6">
-          <p className="text-white font-medium mb-6">Goal Completion Ratio</p>
+        <div className="mt-6 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
+          <p className="text-[var(--fg-primary)] font-medium mb-6">Goal Completion Ratio</p>
           
           <div className="flex items-center justify-center gap-12">
             {/* Circular Progress */}
@@ -468,22 +468,22 @@ export default function CoachAnalyticsDashboard() {
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <span className="text-4xl font-bold">{analytics.goalCompletionRate}%</span>
-                <span className="text-gray-500 text-sm uppercase tracking-wider">Completed</span>
+                <span className="text-[var(--fg-muted)] text-sm uppercase tracking-wider">Completed</span>
               </div>
             </div>
 
             {/* Stats */}
             <div className="flex gap-8">
               <div className="text-center">
-                <p className="text-gray-500 text-sm mb-1">Active</p>
+                <p className="text-[var(--fg-muted)] text-sm mb-1">Active</p>
                 <p className="text-2xl font-bold">{analytics.goalsActive || 12}</p>
               </div>
               <div className="text-center">
-                <p className="text-gray-500 text-sm mb-1">Completed</p>
+                <p className="text-[var(--fg-muted)] text-sm mb-1">Completed</p>
                 <p className="text-2xl font-bold text-emerald-400">{analytics.goalsCompleted || 24}</p>
               </div>
               <div className="text-center">
-                <p className="text-gray-500 text-sm mb-1">Delayed</p>
+                <p className="text-[var(--fg-muted)] text-sm mb-1">Delayed</p>
                 <p className="text-2xl font-bold text-red-400">{analytics.goalsDelayed || 3}</p>
               </div>
             </div>

@@ -78,38 +78,38 @@ export default function CoachClientsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-[#0a0a0a]">
+      <div className="flex items-center justify-center h-screen bg-[var(--bg-primary)]">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--fg-primary)]">
       {/* Top Bar */}
-      <div className="border-b border-gray-800 px-6 py-4">
+      <div className="border-b border-[var(--border-color)] px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm">
-            <Link href="/coach" className="text-gray-500 hover:text-white transition-colors">
+            <Link href="/coach" className="text-[var(--fg-muted)] hover:text-[var(--fg-primary)] transition-colors">
               <Home className="w-4 h-4" />
             </Link>
-            <ChevronRight className="w-4 h-4 text-gray-600" />
-            <span className="text-gray-500">Coach</span>
-            <ChevronRight className="w-4 h-4 text-gray-600" />
-            <span className="bg-[#1a1a1a] px-2 py-1 rounded text-white">Mis Clientes</span>
+            <ChevronRight className="w-4 h-4 text-[var(--fg-muted)]" />
+            <span className="text-[var(--fg-muted)]">Coach</span>
+            <ChevronRight className="w-4 h-4 text-[var(--fg-muted)]" />
+            <span className="bg-[var(--bg-tertiary)] px-2 py-1 rounded text-[var(--fg-primary)]">Mis Clientes</span>
           </div>
 
           {/* Search */}
           <div className="flex items-center gap-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--fg-muted)]" />
               <input
                 type="text"
                 placeholder="Buscar..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 w-64"
+                className="pl-10 pr-4 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500 w-64"
               />
             </div>
           </div>
@@ -122,11 +122,11 @@ export default function CoachClientsPage() {
           <div className="flex items-center justify-between mb-8">
             <div>
               <h1 className="text-3xl font-bold mb-2">Mis Clientes</h1>
-              <p className="text-gray-400">Gestiona tus relaciones de coaching y seguimiento.</p>
+              <p className="text-[var(--fg-muted)]">Gestiona tus relaciones de coaching y seguimiento.</p>
             </div>
             <Link
               href="/coach/invite"
-              className="px-5 py-2.5 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors flex items-center gap-2"
+              className="px-5 py-2.5 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 transition-colors flex items-center gap-2"
             >
               <Plus className="w-5 h-5" />
               Invitar Cliente
@@ -141,8 +141,8 @@ export default function CoachClientsPage() {
                   <CheckCircle className="w-6 h-6 text-emerald-400" />
                 </div>
                 <div>
-                  <p className="text-gray-400 text-xs uppercase tracking-wider">Activos</p>
-                  <p className="text-3xl font-bold text-white">{activeClients || clients.length}</p>
+                  <p className="text-[var(--fg-muted)] text-xs uppercase tracking-wider">Activos</p>
+                  <p className="text-3xl font-bold text-[var(--fg-primary)]">{activeClients || clients.length}</p>
                 </div>
               </div>
             </div>
@@ -153,8 +153,8 @@ export default function CoachClientsPage() {
                   <Clock className="w-6 h-6 text-amber-400" />
                 </div>
                 <div>
-                  <p className="text-gray-400 text-xs uppercase tracking-wider">Pendientes</p>
-                  <p className="text-3xl font-bold text-white">{pendingClients}</p>
+                  <p className="text-[var(--fg-muted)] text-xs uppercase tracking-wider">Pendientes</p>
+                  <p className="text-3xl font-bold text-[var(--fg-primary)]">{pendingClients}</p>
                 </div>
               </div>
             </div>
@@ -165,8 +165,8 @@ export default function CoachClientsPage() {
                   <Users className="w-6 h-6 text-emerald-400" />
                 </div>
                 <div>
-                  <p className="text-gray-400 text-xs uppercase tracking-wider">Total Clientes</p>
-                  <p className="text-3xl font-bold text-white">{clients.length}</p>
+                  <p className="text-[var(--fg-muted)] text-xs uppercase tracking-wider">Total Clientes</p>
+                  <p className="text-3xl font-bold text-[var(--fg-primary)]">{clients.length}</p>
                 </div>
               </div>
             </div>
@@ -174,13 +174,13 @@ export default function CoachClientsPage() {
 
           {/* Clients Grid */}
           {filteredClients.length === 0 && !searchQuery ? (
-            <div className="bg-[#111111] border border-gray-800 rounded-xl p-12 text-center">
-              <Users className="mx-auto text-gray-600 mb-4" size={64} />
-              <h2 className="text-2xl font-bold text-white mb-2">No tienes clientes aún</h2>
-              <p className="text-gray-400 mb-6">Comienza a construir tu práctica de coaching invitando a tu primer cliente</p>
+            <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-12 text-center">
+              <Users className="mx-auto text-[var(--fg-muted)] mb-4" size={64} />
+              <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-2">No tienes clientes aún</h2>
+              <p className="text-[var(--fg-muted)] mb-6">Comienza a construir tu práctica de coaching invitando a tu primer cliente</p>
               <Link
                 href="/coach/invite"
-                className="inline-flex items-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors"
+                className="inline-flex items-center px-6 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 transition-colors"
               >
                 <Plus className="w-5 h-5 mr-2" />
                 Invitar Primer Cliente
@@ -191,7 +191,7 @@ export default function CoachClientsPage() {
               {filteredClients.map((client) => (
                 <div
                   key={client.uid}
-                  className="bg-[#111111] border border-gray-800 rounded-xl p-5 hover:border-gray-700 transition-colors group"
+                  className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5 hover:border-[var(--border-color)] transition-colors group"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
@@ -206,33 +206,33 @@ export default function CoachClientsPage() {
                           />
                         </div>
                       ) : (
-                        <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-lg ring-2 ring-gray-700">
+                        <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center text-[var(--fg-primary)] font-bold text-lg ring-2 ring-gray-700">
                           {getInitials(client)}
                         </div>
                       )}
                       <div>
-                        <h3 className="font-semibold text-white">
+                        <h3 className="font-semibold text-[var(--fg-primary)]">
                           {client.displayName || `${client.firstName || ''} ${client.lastName || ''}`.trim() || 'Cliente'}
                         </h3>
                         <div className="flex items-center gap-1.5">
                           <span className={`w-2 h-2 rounded-full ${client.status === 'pending' ? 'bg-amber-400' : 'bg-emerald-400'}`}></span>
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-[var(--fg-muted)]">
                             {client.status === 'pending' ? 'Pendiente' : 'Activo'}
                           </span>
                         </div>
                       </div>
                     </div>
-                    <button className="p-1 text-gray-600 hover:text-white transition-colors opacity-0 group-hover:opacity-100">
+                    <button className="p-1 text-[var(--fg-muted)] hover:text-[var(--fg-primary)] transition-colors opacity-0 group-hover:opacity-100">
                       <MoreHorizontal className="w-5 h-5" />
                     </button>
                   </div>
 
                   <div className="space-y-2 mb-4">
-                    <div className="flex items-center gap-2 text-sm text-gray-400">
+                    <div className="flex items-center gap-2 text-sm text-[var(--fg-muted)]">
                       <Mail className="w-4 h-4" />
                       <span className="truncate">{client.email}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-400">
+                    <div className="flex items-center gap-2 text-sm text-[var(--fg-muted)]">
                       <Calendar className="w-4 h-4" />
                       <span>Desde {client.createdAt?.toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' }) || 'Recientemente'}</span>
                     </div>
@@ -251,13 +251,13 @@ export default function CoachClientsPage() {
               {/* Invite New Client Card */}
               <Link
                 href="/coach/invite"
-                className="bg-[#111111] border border-dashed border-gray-700 rounded-xl p-5 flex flex-col items-center justify-center min-h-[200px] hover:border-gray-600 hover:bg-[#151515] transition-colors group"
+                className="bg-[var(--bg-secondary)] border border-dashed border-[var(--border-color)] rounded-xl p-5 flex flex-col items-center justify-center min-h-[200px] hover:border-[var(--border-color)] hover:bg-[var(--bg-tertiary)] transition-colors group"
               >
-                <div className="w-12 h-12 bg-[#1a1a1a] rounded-full flex items-center justify-center mb-3 group-hover:bg-[#222] transition-colors">
-                  <Plus className="w-6 h-6 text-gray-500 group-hover:text-white transition-colors" />
+                <div className="w-12 h-12 bg-[var(--bg-tertiary)] rounded-full flex items-center justify-center mb-3 group-hover:bg-[var(--bg-tertiary)] transition-colors">
+                  <Plus className="w-6 h-6 text-[var(--fg-muted)] group-hover:text-[var(--fg-primary)] transition-colors" />
                 </div>
-                <p className="text-white font-medium mb-1">Invitar Nuevo Cliente</p>
-                <p className="text-gray-500 text-sm text-center">Envía una invitación por correo</p>
+                <p className="text-[var(--fg-primary)] font-medium mb-1">Invitar Nuevo Cliente</p>
+                <p className="text-[var(--fg-muted)] text-sm text-center">Envía una invitación por correo</p>
               </Link>
             </div>
           )}

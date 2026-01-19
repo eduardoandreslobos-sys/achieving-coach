@@ -126,7 +126,7 @@ export default function CoacheeProgramPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Programa no encontrado</h1>
+          <h1 className="text-2xl font-bold text-[var(--fg-primary)] mb-2">Programa no encontrado</h1>
           <button onClick={() => router.back()} className="text-primary-600 hover:underline">
             Volver
           </button>
@@ -136,7 +136,7 @@ export default function CoacheeProgramPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-[var(--bg-secondary)] p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <button
@@ -147,34 +147,34 @@ export default function CoacheeProgramPage() {
           Volver a mis programas
         </button>
 
-        <div className="bg-white rounded-xl border-2 border-gray-200 p-6 mb-6">
+        <div className="bg-white rounded-xl border-2 border-[var(--border-color)] p-6 mb-6">
           <div className="flex items-start justify-between mb-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">{program.title}</h1>
-              <p className="text-gray-600">{program.description}</p>
+              <h1 className="text-2xl font-bold text-[var(--fg-primary)]">{program.title}</h1>
+              <p className="text-[var(--fg-muted)]">{program.description}</p>
             </div>
             <StatusBadge status={program.status} />
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-            <div className="bg-gray-50 rounded-lg p-4">
+            <div className="bg-[var(--bg-secondary)] rounded-lg p-4">
               <Calendar className="text-primary-600 mb-2" size={24} />
-              <p className="text-sm text-gray-600">Inicio</p>
+              <p className="text-sm text-[var(--fg-muted)]">Inicio</p>
               <p className="font-semibold">{formatDate(program.startDate)}</p>
             </div>
-            <div className="bg-gray-50 rounded-lg p-4">
+            <div className="bg-[var(--bg-secondary)] rounded-lg p-4">
               <Target className="text-green-600 mb-2" size={24} />
-              <p className="text-sm text-gray-600">Sesiones</p>
+              <p className="text-sm text-[var(--fg-muted)]">Sesiones</p>
               <p className="font-semibold">{program.sessionsPlanned}</p>
             </div>
-            <div className="bg-gray-50 rounded-lg p-4">
+            <div className="bg-[var(--bg-secondary)] rounded-lg p-4">
               <Clock className="text-emerald-600 mb-2" size={24} />
-              <p className="text-sm text-gray-600">Duración</p>
+              <p className="text-sm text-[var(--fg-muted)]">Duración</p>
               <p className="font-semibold">{program.duration} meses</p>
             </div>
-            <div className="bg-gray-50 rounded-lg p-4">
+            <div className="bg-[var(--bg-secondary)] rounded-lg p-4">
               <FileText className="text-purple-600 mb-2" size={24} />
-              <p className="text-sm text-gray-600">Fase Actual</p>
+              <p className="text-sm text-[var(--fg-muted)]">Fase Actual</p>
               <p className="font-semibold">{program.currentPhase || 1}</p>
             </div>
           </div>
@@ -186,8 +186,8 @@ export default function CoacheeProgramPage() {
             <div className="flex items-center gap-3 mb-4">
               <AlertCircle className="text-yellow-600" size={28} />
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Acuerdo Pendiente de Firma</h2>
-                <p className="text-gray-600">Revisa y acepta los términos del acuerdo de coaching</p>
+                <h2 className="text-xl font-bold text-[var(--fg-primary)]">Acuerdo Pendiente de Firma</h2>
+                <p className="text-[var(--fg-muted)]">Revisa y acepta los términos del acuerdo de coaching</p>
               </div>
             </div>
 
@@ -204,14 +204,14 @@ export default function CoacheeProgramPage() {
             {showTerms && (
               <div className="bg-white rounded-lg p-4 mb-6 space-y-4">
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Objetivo General</h3>
-                  <p className="text-gray-700">{program.agreement.generalObjective}</p>
+                  <h3 className="font-semibold text-[var(--fg-primary)] mb-2">Objetivo General</h3>
+                  <p className="text-[var(--fg-muted)]">{program.agreement.generalObjective}</p>
                 </div>
                 
                 {program.agreement.expectedResults && program.agreement.expectedResults.length > 0 && (
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-2">Resultados Esperados</h3>
-                    <ul className="list-disc list-inside text-gray-700">
+                    <h3 className="font-semibold text-[var(--fg-primary)] mb-2">Resultados Esperados</h3>
+                    <ul className="list-disc list-inside text-[var(--fg-muted)]">
                       {program.agreement.expectedResults.map((result, idx) => (
                         <li key={idx}>{result}</li>
                       ))}
@@ -221,8 +221,8 @@ export default function CoacheeProgramPage() {
 
                 {program.agreement.competenciesToDevelop && program.agreement.competenciesToDevelop.length > 0 && (
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-2">Competencias a Desarrollar</h3>
-                    <ul className="list-disc list-inside text-gray-700">
+                    <h3 className="font-semibold text-[var(--fg-primary)] mb-2">Competencias a Desarrollar</h3>
+                    <ul className="list-disc list-inside text-[var(--fg-muted)]">
                       {program.agreement.competenciesToDevelop.map((comp, idx) => (
                         <li key={idx}>{comp}</li>
                       ))}
@@ -231,8 +231,8 @@ export default function CoacheeProgramPage() {
                 )}
 
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Tus Responsabilidades como Coachee</h3>
-                  <ul className="list-disc list-inside text-gray-700">
+                  <h3 className="font-semibold text-[var(--fg-primary)] mb-2">Tus Responsabilidades como Coachee</h3>
+                  <ul className="list-disc list-inside text-[var(--fg-muted)]">
                     {(program.agreement.coacheeResponsibilities || []).map((resp, idx) => (
                       <li key={idx}>{resp}</li>
                     ))}
@@ -244,7 +244,7 @@ export default function CoacheeProgramPage() {
             {/* Terms Acceptance */}
             <div className="space-y-4">
               {/* Confidentiality */}
-              <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <div className="bg-white rounded-lg p-4 border border-[var(--border-color)]">
                 <div className="flex items-start gap-3">
                   <input
                     type="checkbox"
@@ -254,11 +254,11 @@ export default function CoacheeProgramPage() {
                     className="mt-1 w-5 h-5 text-primary-600 rounded"
                   />
                   <div>
-                    <label htmlFor="confidentiality" className="font-semibold text-gray-900 flex items-center gap-2 cursor-pointer">
+                    <label htmlFor="confidentiality" className="font-semibold text-[var(--fg-primary)] flex items-center gap-2 cursor-pointer">
                       <Shield className="text-primary-600" size={18} />
                       Promesa de Confidencialidad
                     </label>
-                    <p className="text-sm text-gray-600 mt-2">
+                    <p className="text-sm text-[var(--fg-muted)] mt-2">
                       {program.agreement.confidentialityNote || DEFAULT_CONFIDENTIALITY_NOTE}
                     </p>
                   </div>
@@ -266,7 +266,7 @@ export default function CoacheeProgramPage() {
               </div>
 
               {/* Attendance Policy */}
-              <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <div className="bg-white rounded-lg p-4 border border-[var(--border-color)]">
                 <div className="flex items-start gap-3">
                   <input
                     type="checkbox"
@@ -276,14 +276,14 @@ export default function CoacheeProgramPage() {
                     className="mt-1 w-5 h-5 text-primary-600 rounded"
                   />
                   <div>
-                    <label htmlFor="attendance" className="font-semibold text-gray-900 flex items-center gap-2 cursor-pointer">
+                    <label htmlFor="attendance" className="font-semibold text-[var(--fg-primary)] flex items-center gap-2 cursor-pointer">
                       <Calendar className="text-primary-600" size={18} />
                       Política de Asistencia y Cancelación
                     </label>
-                    <p className="text-sm text-gray-600 mt-2">
+                    <p className="text-sm text-[var(--fg-muted)] mt-2">
                       {program.agreement.sessionAttendancePolicy}
                     </p>
-                    <p className="text-sm text-gray-700 mt-2">
+                    <p className="text-sm text-[var(--fg-muted)] mt-2">
                       <strong>Sesiones:</strong> {program.agreement.totalSessions} sesiones
                       {program.agreement.includesObservedSession && ' (incluye sesión de reunión observada)'}
                     </p>
@@ -292,7 +292,7 @@ export default function CoacheeProgramPage() {
               </div>
 
               {/* Validity */}
-              <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <div className="bg-white rounded-lg p-4 border border-[var(--border-color)]">
                 <div className="flex items-start gap-3">
                   <input
                     type="checkbox"
@@ -302,11 +302,11 @@ export default function CoacheeProgramPage() {
                     className="mt-1 w-5 h-5 text-primary-600 rounded"
                   />
                   <div>
-                    <label htmlFor="validity" className="font-semibold text-gray-900 flex items-center gap-2 cursor-pointer">
+                    <label htmlFor="validity" className="font-semibold text-[var(--fg-primary)] flex items-center gap-2 cursor-pointer">
                       <FileText className="text-primary-600" size={18} />
                       Vigencia del Acuerdo
                     </label>
-                    <p className="text-sm text-gray-700 mt-2">
+                    <p className="text-sm text-[var(--fg-muted)] mt-2">
                       Este acuerdo tiene vigencia desde el <strong>{formatDate(program.agreement.validFrom)}</strong> hasta el <strong>{formatDate(program.agreement.validUntil)}</strong>.
                     </p>
                   </div>
@@ -319,7 +319,7 @@ export default function CoacheeProgramPage() {
               <button
                 onClick={handleSign}
                 disabled={signing || !acceptConfidentiality || !acceptAttendance || !acceptValidity}
-                className="flex items-center gap-2 px-8 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+                className="flex items-center gap-2 px-8 py-3 bg-primary-600 text-[var(--fg-primary)] rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
               >
                 <FileSignature size={20} />
                 {signing ? 'Firmando...' : 'Firmar Acuerdo'}
@@ -334,8 +334,8 @@ export default function CoacheeProgramPage() {
             <div className="flex items-center gap-3">
               <Check className="text-green-600" size={28} />
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Acuerdo Firmado</h2>
-                <p className="text-gray-600">
+                <h2 className="text-xl font-bold text-[var(--fg-primary)]">Acuerdo Firmado</h2>
+                <p className="text-[var(--fg-muted)]">
                   Has firmado el acuerdo de coaching. 
                   {program.agreement?.signatures && (
                     <span>
@@ -350,8 +350,8 @@ export default function CoacheeProgramPage() {
 
         {/* Program Goals */}
         {program.overallGoals && program.overallGoals.length > 0 && (
-          <div className="bg-white rounded-xl border-2 border-gray-200 p-6 mb-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="bg-white rounded-xl border-2 border-[var(--border-color)] p-6 mb-6">
+            <h2 className="text-xl font-bold text-[var(--fg-primary)] mb-4 flex items-center gap-2">
               <Target className="text-primary-600" size={24} />
               Objetivos del Programa
             </h2>
@@ -359,7 +359,7 @@ export default function CoacheeProgramPage() {
               {program.overallGoals.map((goal, idx) => (
                 <li key={idx} className="flex items-start gap-2">
                   <Check className="text-green-500 flex-shrink-0 mt-1" size={18} />
-                  <span className="text-gray-700">{goal}</span>
+                  <span className="text-[var(--fg-muted)]">{goal}</span>
                 </li>
               ))}
             </ul>
@@ -368,8 +368,8 @@ export default function CoacheeProgramPage() {
 
         {/* Sessions */}
         {sessions.length > 0 && (
-          <div className="bg-white rounded-xl border-2 border-gray-200 p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="bg-white rounded-xl border-2 border-[var(--border-color)] p-6">
+            <h2 className="text-xl font-bold text-[var(--fg-primary)] mb-4 flex items-center gap-2">
               <Calendar className="text-primary-600" size={24} />
               Sesiones Programadas
             </h2>
@@ -377,11 +377,11 @@ export default function CoacheeProgramPage() {
               {sessions.map((session) => (
                 <div 
                   key={session.id} 
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                  className="flex items-center justify-between p-4 bg-[var(--bg-secondary)] rounded-lg"
                 >
                   <div>
-                    <p className="font-medium text-gray-900">{session.title}</p>
-                    <p className="text-sm text-gray-600">
+                    <p className="font-medium text-[var(--fg-primary)]">{session.title}</p>
+                    <p className="text-sm text-[var(--fg-muted)]">
                       {session.scheduledDate?.toDate?.()?.toLocaleDateString('es-CL')} - {session.scheduledTime}
                       {session.location && ` • ${session.location}`}
                     </p>
@@ -390,7 +390,7 @@ export default function CoacheeProgramPage() {
                     session.status === 'completed' ? 'bg-green-100 text-green-800' :
                     session.status === 'in-progress' ? 'bg-emerald-100 text-blue-800' :
                     session.status === 'cancelled' ? 'bg-red-100 text-red-800' :
-                    'bg-gray-100 text-gray-800'
+                    'bg-[var(--bg-secondary)] text-[var(--fg-secondary)]'
                   }`}>
                     {session.status === 'completed' ? 'Completada' :
                      session.status === 'in-progress' ? 'En Progreso' :
@@ -408,7 +408,7 @@ export default function CoacheeProgramPage() {
 
 function StatusBadge({ status }: { status: CoachingProgram['status'] }) {
   const config = {
-    draft: { bg: 'bg-gray-100', text: 'text-gray-800', label: 'Borrador' },
+    draft: { bg: 'bg-[var(--bg-secondary)]', text: 'text-[var(--fg-secondary)]', label: 'Borrador' },
     pending_acceptance: { bg: 'bg-yellow-100', text: 'text-yellow-800', label: 'Pendiente' },
     active: { bg: 'bg-emerald-100', text: 'text-blue-800', label: 'Activo' },
     completed: { bg: 'bg-green-100', text: 'text-green-800', label: 'Completado' },

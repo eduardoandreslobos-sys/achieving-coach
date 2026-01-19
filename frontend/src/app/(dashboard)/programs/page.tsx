@@ -43,24 +43,24 @@ export default function ProgramsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-[#0a0a0f]">
+      <div className="flex items-center justify-center h-screen bg-[var(--bg-primary)]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] p-8">
+    <div className="min-h-screen bg-[var(--bg-primary)] p-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Mis Programas de Coaching</h1>
-          <p className="text-gray-400">Gestiona tus programas de coaching ejecutivo.</p>
+          <h1 className="text-3xl font-bold text-[var(--fg-primary)] mb-2">Mis Programas de Coaching</h1>
+          <p className="text-[var(--fg-muted)]">Gestiona tus programas de coaching ejecutivo.</p>
         </div>
 
         {programs.length === 0 ? (
           /* Empty State */
-          <div className="bg-[#12131a] border border-gray-800 rounded-2xl p-16">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-16">
             <div className="flex flex-col items-center text-center">
               {/* Icon with gradient background */}
               <div className="relative mb-8">
@@ -69,14 +69,14 @@ export default function ProgramsPage() {
                 </div>
               </div>
 
-              <h2 className="text-xl font-semibold text-white mb-3">No tienes programas asignados</h2>
-              <p className="text-gray-400 mb-8 max-w-md">
+              <h2 className="text-xl font-semibold text-[var(--fg-primary)] mb-3">No tienes programas asignados</h2>
+              <p className="text-[var(--fg-muted)] mb-8 max-w-md">
                 Actualmente no estás inscrito en ningún programa de coaching activo. Los programas asignados por tu coach aparecerán aquí.
               </p>
 
               <button
                 onClick={() => loadPrograms()}
-                className="flex items-center gap-2 px-6 py-3 bg-[#1a1b23] border border-gray-800 text-white rounded-xl font-medium hover:bg-[#22232d] transition-colors"
+                className="flex items-center gap-2 px-6 py-3 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] rounded-xl font-medium hover:bg-[var(--bg-tertiary)] transition-colors"
               >
                 <RefreshCw className="w-5 h-5" />
                 Actualizar
@@ -87,13 +87,13 @@ export default function ProgramsPage() {
           /* Programs List */
           <div className="space-y-4">
             {programs.map((program) => (
-              <div key={program.id} className="bg-[#12131a] border border-gray-800 rounded-xl p-6">
+              <div key={program.id} className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-white font-semibold text-lg">{program.name}</h3>
+                  <h3 className="text-[var(--fg-primary)] font-semibold text-lg">{program.name}</h3>
                   <span className="text-emerald-400 text-sm">{program.progress}% completado</span>
                 </div>
-                <p className="text-gray-400 text-sm mb-4">{program.description}</p>
-                <div className="h-2 bg-[#1a1b23] rounded-full overflow-hidden">
+                <p className="text-[var(--fg-muted)] text-sm mb-4">{program.description}</p>
+                <div className="h-2 bg-[var(--bg-tertiary)] rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-emerald-500 rounded-full transition-all"
                     style={{ width: program.progress + '%' }}
@@ -106,7 +106,7 @@ export default function ProgramsPage() {
 
         {/* Footer */}
         <div className="text-center mt-16">
-          <p className="text-gray-600 text-xs uppercase tracking-wider">
+          <p className="text-[var(--fg-muted)] text-xs uppercase tracking-wider">
             © ACHIEVINGCOACH SYSTEMS 2026
           </p>
         </div>

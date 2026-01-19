@@ -119,7 +119,7 @@ export default function HabitLoopPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
@@ -128,23 +128,23 @@ export default function HabitLoopPage() {
   if (!hasAccess) {
     const isCoach = userProfile?.role === 'coach';
     return (
-      <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
+      <div className="min-h-screen bg-[var(--bg-primary)] py-12 px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 text-center">
             <div className={`w-16 h-16 ${isCoach ? 'bg-emerald-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
               <RefreshCw className={`w-8 h-8 ${isCoach ? 'text-emerald-400' : 'text-yellow-400'}`} />
             </div>
-            <h2 className="text-2xl font-bold text-white mb-4">
+            <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">
               {isCoach ? 'Tool for Coachees Only' : 'Access Required'}
             </h2>
-            <p className="text-gray-400 mb-6">
+            <p className="text-[var(--fg-muted)] mb-6">
               {isCoach
                 ? 'This tool is designed to be completed by coachees. You can assign it to your clients from the client management page.'
                 : 'This tool needs to be assigned by your coach before you can access it.'}
             </p>
             <Link
               href={isCoach ? '/coach/clients' : '/dashboard'}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 transition-colors"
             >
               {isCoach ? 'Go to Clients' : 'Return to Dashboard'}
             </Link>
@@ -156,27 +156,27 @@ export default function HabitLoopPage() {
 
   if (isCompleted && !showResults) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
+      <div className="min-h-screen bg-[var(--bg-primary)] py-12 px-4">
         <Toaster position="top-center" richColors />
         <div className="max-w-4xl mx-auto">
-          <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 text-center">
             <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle2 className="w-8 h-8 text-emerald-400" />
             </div>
-            <h2 className="text-2xl font-bold text-white mb-4">Tool Completed!</h2>
-            <p className="text-gray-400 mb-6">
+            <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">Tool Completed!</h2>
+            <p className="text-[var(--fg-muted)] mb-6">
               You've successfully completed Habit Loop Analyzer. Your coach has been notified.
             </p>
             <div className="flex gap-4 justify-center">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 Return to Dashboard
               </Link>
               <Link
                 href="/tools"
-                className="inline-flex items-center gap-2 px-6 py-3 border border-gray-700 text-gray-300 rounded-lg hover:bg-[#1a1a1a] transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-[var(--border-color)] text-[var(--fg-secondary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
               >
                 View Other Tools
               </Link>
@@ -189,7 +189,7 @@ export default function HabitLoopPage() {
 
   if (showResults && habit) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
+      <div className="min-h-screen bg-[var(--bg-primary)] py-12 px-4">
         <Toaster position="top-center" richColors />
         <div className="max-w-5xl mx-auto mb-8">
           <Link
@@ -209,7 +209,7 @@ export default function HabitLoopPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white py-12 px-4">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--fg-primary)] py-12 px-4">
       <Toaster position="top-center" richColors />
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
@@ -226,10 +226,10 @@ export default function HabitLoopPage() {
               <RefreshCw className="w-10 h-10 text-purple-400" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold text-white">
+              <h1 className="text-4xl font-bold text-[var(--fg-primary)]">
                 Habit Loop Analyzer
               </h1>
-              <p className="text-gray-400 mt-1">
+              <p className="text-[var(--fg-muted)] mt-1">
                 Break down habits into cue, routine, and reward to understand and change them
               </p>
             </div>
@@ -245,20 +245,20 @@ export default function HabitLoopPage() {
               Every habit follows a simple neurological loop with three parts:
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-              <div className="bg-[#1a1a1a] rounded-lg p-4">
+              <div className="bg-[var(--bg-tertiary)] rounded-lg p-4">
                 <div className="text-2xl mb-2">⚡</div>
-                <h3 className="font-bold mb-1 text-white">1. Cue</h3>
-                <p className="text-sm text-gray-400">The trigger that starts the behavior</p>
+                <h3 className="font-bold mb-1 text-[var(--fg-primary)]">1. Cue</h3>
+                <p className="text-sm text-[var(--fg-muted)]">The trigger that starts the behavior</p>
               </div>
-              <div className="bg-[#1a1a1a] rounded-lg p-4">
+              <div className="bg-[var(--bg-tertiary)] rounded-lg p-4">
                 <div className="text-2xl mb-2">🔄</div>
-                <h3 className="font-bold mb-1 text-white">2. Routine</h3>
-                <p className="text-sm text-gray-400">The behavior itself</p>
+                <h3 className="font-bold mb-1 text-[var(--fg-primary)]">2. Routine</h3>
+                <p className="text-sm text-[var(--fg-muted)]">The behavior itself</p>
               </div>
-              <div className="bg-[#1a1a1a] rounded-lg p-4">
+              <div className="bg-[var(--bg-tertiary)] rounded-lg p-4">
                 <div className="text-2xl mb-2">🎯</div>
-                <h3 className="font-bold mb-1 text-white">3. Reward</h3>
-                <p className="text-sm text-gray-400">The benefit you get from it</p>
+                <h3 className="font-bold mb-1 text-[var(--fg-primary)]">3. Reward</h3>
+                <p className="text-sm text-[var(--fg-muted)]">The benefit you get from it</p>
               </div>
             </div>
             <p className="text-sm mt-4">

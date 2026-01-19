@@ -13,7 +13,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
   const isCoach = userProfile?.role === 'coach';
 
   return (
-    <div className="flex h-screen bg-[#0a0a0a]">
+    <div className="flex h-screen bg-[var(--bg-primary)]">
       {isCoach ? <CoachSidebar /> : <DashboardSidebar />}
       
       <div className="flex-1 flex flex-col overflow-hidden">

@@ -239,14 +239,14 @@ export default function ClientAnalyticsPage() {
 
   if (loading || !client) {
     return (
-      <div className="flex items-center justify-center h-screen bg-[#0a0a0a]">
+      <div className="flex items-center justify-center h-screen bg-[var(--bg-primary)]">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white p-6 lg:p-8">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--fg-primary)] p-6 lg:p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header with Navigation */}
         <div className="mb-8">
@@ -260,10 +260,10 @@ export default function ClientAnalyticsPage() {
 
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-white mb-2">
+              <h1 className="text-3xl font-bold text-[var(--fg-primary)] mb-2">
                 {client.displayName || `${client.firstName} ${client.lastName}`}
               </h1>
-              <div className="flex items-center gap-2 text-gray-400">
+              <div className="flex items-center gap-2 text-[var(--fg-muted)]">
                 <Mail size={18} />
                 <span>{client.email}</span>
               </div>
@@ -271,14 +271,14 @@ export default function ClientAnalyticsPage() {
             <div className="flex gap-3">
               <Link
                 href={`/coach/clients/${clientId}/results`}
-                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 transition-colors"
               >
                 <BarChart3 size={20} />
                 Ver Resultados
               </Link>
               <Link
                 href={`/messages?userId=${clientId}`}
-                className="flex items-center gap-2 px-4 py-2 bg-[#1a1a1a] border border-gray-700 text-white rounded-lg hover:bg-[#2a2a2a] transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
               >
                 <MessageSquare size={20} />
                 Message
@@ -290,15 +290,15 @@ export default function ClientAnalyticsPage() {
         {/* Coaching Program Section */}
         <div className="mb-8">
           {program ? (
-            <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+            <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h2 className="text-2xl font-bold text-white mb-2">{program.title}</h2>
-                  <p className="text-gray-400">{program.description}</p>
+                  <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-2">{program.title}</h2>
+                  <p className="text-[var(--fg-muted)]">{program.description}</p>
                 </div>
                 <Link
                   href={"/coach/programs/" + program.id}
-                  className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 transition-colors"
                 >
                   <ExternalLink size={18} />
                   View Program
@@ -306,42 +306,42 @@ export default function ClientAnalyticsPage() {
               </div>
 
               <div className="grid grid-cols-3 gap-4 mb-4">
-                <div className="bg-[#1a1a1a] rounded-lg p-4">
-                  <p className="text-sm text-gray-400">Duration</p>
-                  <p className="text-xl font-bold text-white">{program.duration} months</p>
+                <div className="bg-[var(--bg-tertiary)] rounded-lg p-4">
+                  <p className="text-sm text-[var(--fg-muted)]">Duration</p>
+                  <p className="text-xl font-bold text-[var(--fg-primary)]">{program.duration} months</p>
                 </div>
-                <div className="bg-[#1a1a1a] rounded-lg p-4">
-                  <p className="text-sm text-gray-400">Sessions</p>
-                  <p className="text-xl font-bold text-white">{program.sessionsPlanned}</p>
+                <div className="bg-[var(--bg-tertiary)] rounded-lg p-4">
+                  <p className="text-sm text-[var(--fg-muted)]">Sessions</p>
+                  <p className="text-xl font-bold text-[var(--fg-primary)]">{program.sessionsPlanned}</p>
                 </div>
-                <div className="bg-[#1a1a1a] rounded-lg p-4">
-                  <p className="text-sm text-gray-400">Status</p>
-                  <p className="text-xl font-bold text-white capitalize">{program.status}</p>
+                <div className="bg-[var(--bg-tertiary)] rounded-lg p-4">
+                  <p className="text-sm text-[var(--fg-muted)]">Status</p>
+                  <p className="text-xl font-bold text-[var(--fg-primary)] capitalize">{program.status}</p>
                 </div>
               </div>
 
               <div>
-                <h3 className="font-bold text-white mb-2">Program Goals:</h3>
+                <h3 className="font-bold text-[var(--fg-primary)] mb-2">Program Goals:</h3>
                 <ul className="space-y-1">
                   {program.overallGoals.map((goal: string, idx: number) => (
                     <li key={idx} className="flex items-start gap-2">
                       <Target className="text-emerald-400 flex-shrink-0 mt-1" size={16} />
-                      <span className="text-gray-300">{goal}</span>
+                      <span className="text-[var(--fg-secondary)]">{goal}</span>
                     </li>
                   ))}
                 </ul>
               </div>
             </div>
           ) : (
-            <div className="bg-[#111111] border border-yellow-600/30 rounded-xl p-8 text-center">
+            <div className="bg-[var(--bg-secondary)] border border-yellow-600/30 rounded-xl p-8 text-center">
               <Calendar className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-white mb-2">No Coaching Program Yet</h3>
-              <p className="text-gray-400 mb-6">
+              <h3 className="text-xl font-bold text-[var(--fg-primary)] mb-2">No Coaching Program Yet</h3>
+              <p className="text-[var(--fg-muted)] mb-6">
                 Create a coaching program to define goals and schedule sessions
               </p>
               <Link
                 href={"/coach/programs/new?coacheeId=" + clientId}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 font-medium transition-colors"
               >
                 <Plus size={20} />
                 Create Coaching Program
@@ -355,16 +355,16 @@ export default function ClientAnalyticsPage() {
           <div className="space-y-6">
             {/* Header with controls */}
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-white">Analytics Dashboard</h2>
+              <h2 className="text-2xl font-bold text-[var(--fg-primary)]">Analytics Dashboard</h2>
               <div className="flex items-center gap-3">
                 {/* Time Range Filters */}
-                <div className="flex bg-[#1a1a1a] rounded-lg p-1">
+                <div className="flex bg-[var(--bg-tertiary)] rounded-lg p-1">
                   <button
                     onClick={() => setTimeRange('30')}
                     className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                       timeRange === '30'
-                        ? 'bg-[#2a2a2a] text-white'
-                        : 'text-gray-400 hover:text-white'
+                        ? 'bg-[var(--bg-tertiary)] text-[var(--fg-primary)]'
+                        : 'text-[var(--fg-muted)] hover:text-[var(--fg-primary)]'
                     }`}
                   >
                     Last 30 Days
@@ -373,8 +373,8 @@ export default function ClientAnalyticsPage() {
                     onClick={() => setTimeRange('90')}
                     className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                       timeRange === '90'
-                        ? 'bg-[#2a2a2a] text-white'
-                        : 'text-gray-400 hover:text-white'
+                        ? 'bg-[var(--bg-tertiary)] text-[var(--fg-primary)]'
+                        : 'text-[var(--fg-muted)] hover:text-[var(--fg-primary)]'
                     }`}
                   >
                     Last 90 Days
@@ -383,8 +383,8 @@ export default function ClientAnalyticsPage() {
                     onClick={() => setTimeRange('all')}
                     className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                       timeRange === 'all'
-                        ? 'bg-[#2a2a2a] text-white'
-                        : 'text-gray-400 hover:text-white'
+                        ? 'bg-[var(--bg-tertiary)] text-[var(--fg-primary)]'
+                        : 'text-[var(--fg-muted)] hover:text-[var(--fg-primary)]'
                     }`}
                   >
                     All Time
@@ -395,28 +395,28 @@ export default function ClientAnalyticsPage() {
                 <div className="relative">
                   <button
                     onClick={() => setShowMetricSelector(!showMetricSelector)}
-                    className="flex items-center gap-2 px-4 py-2 bg-[#1a1a1a] border border-gray-700 text-white rounded-lg hover:bg-[#2a2a2a] transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
                   >
                     <Settings size={18} />
                     Customize
                   </button>
 
                   {showMetricSelector && (
-                    <div className="absolute right-0 mt-2 w-64 bg-[#1a1a1a] border border-gray-700 rounded-lg shadow-lg z-10 p-4">
-                      <h3 className="font-bold text-white mb-3">Select Metrics</h3>
+                    <div className="absolute right-0 mt-2 w-64 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg shadow-lg z-10 p-4">
+                      <h3 className="font-bold text-[var(--fg-primary)] mb-3">Select Metrics</h3>
                       <div className="space-y-2">
                         {AVAILABLE_METRICS.map(metric => {
                           const Icon = metric.icon;
                           return (
-                            <label key={metric.id} className="flex items-center gap-3 cursor-pointer hover:bg-[#2a2a2a] p-2 rounded">
+                            <label key={metric.id} className="flex items-center gap-3 cursor-pointer hover:bg-[var(--bg-tertiary)] p-2 rounded">
                               <input
                                 type="checkbox"
                                 checked={visibleMetrics.includes(metric.id)}
                                 onChange={() => toggleMetric(metric.id)}
-                                className="w-4 h-4 text-emerald-600 bg-gray-700 border-gray-600"
+                                className="w-4 h-4 text-emerald-600 bg-[var(--bg-tertiary)] border-[var(--border-color)]"
                               />
-                              <Icon size={16} className="text-gray-400" />
-                              <span className="text-sm text-gray-300">{metric.label}</span>
+                              <Icon size={16} className="text-[var(--fg-muted)]" />
+                              <span className="text-sm text-[var(--fg-secondary)]">{metric.label}</span>
                             </label>
                           );
                         })}
@@ -487,8 +487,8 @@ export default function ClientAnalyticsPage() {
 
             {/* Detailed Progress Section */}
             {(visibleMetrics.includes('goals') || visibleMetrics.includes('tools') || visibleMetrics.includes('sessions')) && (
-              <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
-                <h3 className="text-lg font-bold text-white mb-4">Progress Overview</h3>
+              <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
+                <h3 className="text-lg font-bold text-[var(--fg-primary)] mb-4">Progress Overview</h3>
                 <div className="space-y-4">
                   {visibleMetrics.includes('goals') && (
                     <ProgressBar
@@ -520,14 +520,14 @@ export default function ClientAnalyticsPage() {
 
             {/* Activity Timeline */}
             {visibleMetrics.includes('timeline') && (
-              <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+              <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
                 <div className="flex items-center gap-2 mb-4">
-                  <Clock className="text-gray-400" size={20} />
-                  <h3 className="text-lg font-bold text-white">Activity Timeline</h3>
+                  <Clock className="text-[var(--fg-muted)]" size={20} />
+                  <h3 className="text-lg font-bold text-[var(--fg-primary)]">Activity Timeline</h3>
                 </div>
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-[var(--fg-muted)]">
                   <p className="text-sm">Last activity: {analytics.lastActivityDate}</p>
-                  <p className="text-xs text-gray-600 mt-2">Detailed timeline coming soon</p>
+                  <p className="text-xs text-[var(--fg-muted)] mt-2">Detailed timeline coming soon</p>
                 </div>
               </div>
             )}
@@ -538,44 +538,44 @@ export default function ClientAnalyticsPage() {
         
         {/* Session Notes Section */}
         {sessions.length > 0 && (
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-6 mt-8">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6 mt-8">
             <div className="flex items-center gap-2 mb-4">
               <FileText className="text-emerald-400" size={24} />
-              <h2 className="text-2xl font-bold text-white">Session Notes</h2>
-              <span className="text-sm text-gray-500 ml-2">
+              <h2 className="text-2xl font-bold text-[var(--fg-primary)]">Session Notes</h2>
+              <span className="text-sm text-[var(--fg-muted)] ml-2">
                 ({sessions.filter(s => s.sessionReport || s.sessionAgreement).length} with notes)
               </span>
             </div>
 
             {sessions.filter(s => s.sessionReport || s.sessionAgreement).length === 0 ? (
-              <p className="text-gray-500 text-center py-6">No session notes recorded yet</p>
+              <p className="text-[var(--fg-muted)] text-center py-6">No session notes recorded yet</p>
             ) : (
               <div className="space-y-3">
                 {sessions
                   .filter(s => s.sessionReport || s.sessionAgreement)
                   .sort((a, b) => (b.scheduledDate?.seconds || 0) - (a.scheduledDate?.seconds || 0))
                   .map((session) => (
-                  <div key={session.id} className="border border-gray-700 rounded-lg overflow-hidden">
+                  <div key={session.id} className="border border-[var(--border-color)] rounded-lg overflow-hidden">
                     <button
                       onClick={() => setExpandedSession(expandedSession === session.id ? null : session.id)}
-                      className="w-full px-4 py-3 bg-[#1a1a1a] hover:bg-[#2a2a2a] flex items-center justify-between transition-colors"
+                      className="w-full px-4 py-3 bg-[var(--bg-tertiary)] hover:bg-[var(--bg-tertiary)] flex items-center justify-between transition-colors"
                     >
                       <div className="flex items-center gap-3">
-                        <span className="font-medium text-white">
+                        <span className="font-medium text-[var(--fg-primary)]">
                           {session.title || `Sesión ${session.sessionNumber || ''}`}
                         </span>
-                        <span className="text-sm text-gray-500">
+                        <span className="text-sm text-[var(--fg-muted)]">
                           {session.scheduledDate?.toDate?.()?.toLocaleDateString('es-CL') || 'Sin fecha'}
                         </span>
                         {session.status === 'completed' && (
                           <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs rounded-full">Completada</span>
                         )}
                       </div>
-                      <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform ${expandedSession === session.id ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`w-5 h-5 text-[var(--fg-muted)] transition-transform ${expandedSession === session.id ? 'rotate-180' : ''}`} />
                     </button>
 
                     {expandedSession === session.id && (
-                      <div className="p-4 space-y-4 bg-[#0d0d0d] border-t border-gray-800">
+                      <div className="p-4 space-y-4 bg-[var(--bg-primary)] border-t border-[var(--border-color)]">
                         {session.sessionAgreement && (
                           <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4">
                             <h4 className="font-semibold text-emerald-400 mb-3 flex items-center gap-2">
@@ -653,13 +653,13 @@ export default function ClientAnalyticsPage() {
         )}
 
         {(client as any).coacheeInfo?.goals && (client as any).coacheeInfo.goals.length > 0 && (
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-6 mt-8">
-            <h2 className="text-2xl font-bold text-white mb-4">Client Goals</h2>
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6 mt-8">
+            <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">Client Goals</h2>
             <ul className="space-y-2">
               {(client as any).coacheeInfo.goals.map((goal: string, idx: number) => (
                 <li key={idx} className="flex items-start gap-2">
                   <Target className="text-emerald-400 flex-shrink-0 mt-1" size={18} />
-                  <span className="text-gray-300">{goal}</span>
+                  <span className="text-[var(--fg-secondary)]">{goal}</span>
                 </li>
               ))}
             </ul>
@@ -687,15 +687,15 @@ function StatCard({
   bgColor: string;
 }) {
   return (
-    <div className="bg-[#111111] border border-gray-800 rounded-xl p-5">
+    <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5">
       <div className="flex items-center justify-between mb-3">
-        <p className="text-gray-400 text-xs uppercase tracking-wider">{title}</p>
+        <p className="text-[var(--fg-muted)] text-xs uppercase tracking-wider">{title}</p>
         <div className={`w-10 h-10 ${bgColor} rounded-lg flex items-center justify-center`}>
           <Icon className={color} size={20} />
         </div>
       </div>
-      <p className="text-3xl font-bold text-white mb-1">{value}</p>
-      <p className="text-xs text-gray-500">{subtitle}</p>
+      <p className="text-3xl font-bold text-[var(--fg-primary)] mb-1">{value}</p>
+      <p className="text-xs text-[var(--fg-muted)]">{subtitle}</p>
     </div>
   );
 }
@@ -716,12 +716,12 @@ function ProgressBar({
   return (
     <div>
       <div className="flex items-center justify-between mb-2">
-        <span className="text-sm font-medium text-white">{label}</span>
-        <span className="text-sm text-gray-400">
+        <span className="text-sm font-medium text-[var(--fg-primary)]">{label}</span>
+        <span className="text-sm text-[var(--fg-muted)]">
           {value}/{max} ({Math.round(percentage)}%)
         </span>
       </div>
-      <div className="w-full bg-[#1a1a1a] rounded-full h-2 overflow-hidden">
+      <div className="w-full bg-[var(--bg-tertiary)] rounded-full h-2 overflow-hidden">
         <div
           className={`${color} h-2 rounded-full transition-all duration-500`}
           style={{ width: `${percentage}%` }}

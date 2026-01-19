@@ -99,7 +99,7 @@ export default function ProgramDetailPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Programa no encontrado</h1>
+          <h1 className="text-2xl font-bold text-[var(--fg-primary)] mb-2">Programa no encontrado</h1>
           <button onClick={() => router.back()} className="text-primary-600 hover:underline">
             Volver
           </button>
@@ -109,7 +109,7 @@ export default function ProgramDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-[var(--bg-secondary)] p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6">
@@ -120,15 +120,15 @@ export default function ProgramDetailPage() {
             <ArrowLeft size={20} />
             Volver al cliente
           </button>
-          <h1 className="text-3xl font-bold text-gray-900">{program.title}</h1>
-          <p className="text-gray-600">{program.coacheeName}</p>
+          <h1 className="text-3xl font-bold text-[var(--fg-primary)]">{program.title}</h1>
+          <p className="text-[var(--fg-muted)]">{program.coacheeName}</p>
         </div>
 
         {/* Progress Bar */}
-        <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
+        <div className="bg-white rounded-xl border border-[var(--border-color)] p-4 mb-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-700">Progreso del Proceso</span>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm font-medium text-[var(--fg-muted)]">Progreso del Proceso</span>
+            <span className="text-sm text-[var(--fg-muted)]">
               Fase {program.currentPhase || 1} de {PROGRAM_PHASES.length}
             </span>
           </div>
@@ -141,7 +141,7 @@ export default function ProgramDetailPage() {
                     ? 'bg-green-500'
                     : phase.id === program.currentPhase
                     ? 'bg-primary-500'
-                    : 'bg-gray-200'
+                    : 'bg-[var(--bg-tertiary)]'
                 }`}
               />
             ))}
@@ -160,9 +160,9 @@ export default function ProgramDetailPage() {
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-xl border border-[var(--border-color)] overflow-hidden">
           {/* Tab Headers */}
-          <div className="border-b border-gray-200 overflow-x-auto">
+          <div className="border-b border-[var(--border-color)] overflow-x-auto">
             <div className="flex">
               {PROGRAM_PHASES.map((phase) => {
                 const Icon = ICON_MAP[phase.icon] || FileText;
@@ -181,8 +181,8 @@ export default function ProgramDetailPage() {
                         : isCompleted
                         ? 'border-transparent text-green-600 hover:bg-green-50'
                         : isAccessible
-                        ? 'border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                        : 'border-transparent text-gray-300 cursor-not-allowed'
+                        ? 'border-transparent text-[var(--fg-muted)] hover:text-[var(--fg-primary)] hover:bg-[var(--bg-secondary)]'
+                        : 'border-transparent text-[var(--fg-secondary)] cursor-not-allowed'
                     }`}
                   >
                     {isCompleted ? (
@@ -399,16 +399,16 @@ function BackgroundInfoTab({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold text-gray-900 mb-2">Antecedentes Generales del Proceso</h2>
-        <p className="text-gray-600 text-sm">Complete la información general del coachee y los actores del proceso.</p>
+        <h2 className="text-xl font-bold text-[var(--fg-primary)] mb-2">Antecedentes Generales del Proceso</h2>
+        <p className="text-[var(--fg-muted)] text-sm">Complete la información general del coachee y los actores del proceso.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Coachee */}
         <div className="space-y-4">
-          <h3 className="font-semibold text-gray-900 border-b pb-2">Datos del Coachee</h3>
+          <h3 className="font-semibold text-[var(--fg-primary)] border-b pb-2">Datos del Coachee</h3>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Nombre</label>
             <input
               type="text"
               value={form.coacheeName || program.coacheeName || ''}
@@ -417,7 +417,7 @@ function BackgroundInfoTab({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Cargo</label>
+            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Cargo</label>
             <input
               type="text"
               value={form.coacheePosition || ''}
@@ -426,7 +426,7 @@ function BackgroundInfoTab({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Teléfono</label>
             <input
               type="tel"
               value={form.coacheePhone || ''}
@@ -435,7 +435,7 @@ function BackgroundInfoTab({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Email</label>
             <input
               type="email"
               value={form.coacheeEmail || ''}
@@ -444,7 +444,7 @@ function BackgroundInfoTab({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Organización</label>
+            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Organización</label>
             <input
               type="text"
               value={form.organizationName || ''}
@@ -456,9 +456,9 @@ function BackgroundInfoTab({
 
         {/* Supervisor */}
         <div className="space-y-4">
-          <h3 className="font-semibold text-gray-900 border-b pb-2">Jefe Directo / Sponsor</h3>
+          <h3 className="font-semibold text-[var(--fg-primary)] border-b pb-2">Jefe Directo / Sponsor</h3>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Nombre</label>
             <input
               type="text"
               value={form.supervisorName || ''}
@@ -467,7 +467,7 @@ function BackgroundInfoTab({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Cargo</label>
+            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Cargo</label>
             <input
               type="text"
               value={form.supervisorPosition || ''}
@@ -476,7 +476,7 @@ function BackgroundInfoTab({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Teléfono</label>
             <input
               type="tel"
               value={form.supervisorPhone || ''}
@@ -485,7 +485,7 @@ function BackgroundInfoTab({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Email</label>
             <input
               type="email"
               value={form.supervisorEmail || ''}
@@ -497,9 +497,9 @@ function BackgroundInfoTab({
 
         {/* HR */}
         <div className="space-y-4">
-          <h3 className="font-semibold text-gray-900 border-b pb-2">RRHH (Opcional)</h3>
+          <h3 className="font-semibold text-[var(--fg-primary)] border-b pb-2">RRHH (Opcional)</h3>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Nombre</label>
             <input
               type="text"
               value={form.hrName || ''}
@@ -508,7 +508,7 @@ function BackgroundInfoTab({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Teléfono</label>
             <input
               type="tel"
               value={form.hrPhone || ''}
@@ -517,7 +517,7 @@ function BackgroundInfoTab({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Email</label>
             <input
               type="email"
               value={form.hrEmail || ''}
@@ -529,9 +529,9 @@ function BackgroundInfoTab({
 
         {/* Coach */}
         <div className="space-y-4">
-          <h3 className="font-semibold text-gray-900 border-b pb-2">Coach</h3>
+          <h3 className="font-semibold text-[var(--fg-primary)] border-b pb-2">Coach</h3>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Nombre</label>
             <input
               type="text"
               value={form.coachName || ''}
@@ -546,7 +546,7 @@ function BackgroundInfoTab({
         <button
           onClick={() => onSave(form)}
           disabled={saving}
-          className="flex items-center gap-2 px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-2 bg-primary-600 text-[var(--fg-primary)] rounded-lg hover:bg-primary-700 disabled:opacity-50"
         >
           <Save size={18} />
           {saving ? 'Guardando...' : 'Guardar y Continuar'}
@@ -590,13 +590,13 @@ function TripartiteMeetingTab({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold text-gray-900 mb-2">Reunión Tripartita</h2>
-        <p className="text-gray-600 text-sm">Pauta de preguntas para la reunión con el coachee, sponsor y RRHH.</p>
+        <h2 className="text-xl font-bold text-[var(--fg-primary)] mb-2">Reunión Tripartita</h2>
+        <p className="text-[var(--fg-muted)] text-sm">Pauta de preguntas para la reunión con el coachee, sponsor y RRHH.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de la reunión</label>
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Fecha de la reunión</label>
           <input
             type="date"
             value={form.date ? new Date(form.date.seconds * 1000).toISOString().split('T')[0] : ''}
@@ -605,7 +605,7 @@ function TripartiteMeetingTab({
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Lugar</label>
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Lugar</label>
           <input
             type="text"
             value={form.location || ''}
@@ -620,8 +620,8 @@ function TripartiteMeetingTab({
           const response = form.responses.find(r => r.questionId === question.id);
           
           return (
-            <div key={question.id} className="bg-gray-50 rounded-xl p-4">
-              <h3 className="font-semibold text-gray-900 mb-4">
+            <div key={question.id} className="bg-[var(--bg-secondary)] rounded-xl p-4">
+              <h3 className="font-semibold text-[var(--fg-primary)] mb-4">
                 {question.id}. {question.question}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -668,7 +668,7 @@ function TripartiteMeetingTab({
         <button
           onClick={() => onSave(form)}
           disabled={saving}
-          className="flex items-center gap-2 px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-2 bg-primary-600 text-[var(--fg-primary)] rounded-lg hover:bg-primary-700 disabled:opacity-50"
         >
           <Save size={18} />
           {saving ? 'Guardando...' : 'Guardar y Continuar'}
@@ -724,8 +724,8 @@ function AgreementTab({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold text-gray-900 mb-2">Acuerdo de Coaching CE</h2>
-        <p className="text-gray-600 text-sm">
+        <h2 className="text-xl font-bold text-[var(--fg-primary)] mb-2">Acuerdo de Coaching CE</h2>
+        <p className="text-[var(--fg-muted)] text-sm">
           Este acuerdo es para darle estructura de formalidad al proceso de Coaching Ejecutivo.
         </p>
       </div>
@@ -735,7 +735,7 @@ function AgreementTab({
         <div className={`p-4 rounded-lg ${
           program.agreement.status === 'signed' ? 'bg-green-50 border border-green-200' :
           program.agreement.status === 'pending_signatures' ? 'bg-yellow-50 border border-yellow-200' :
-          'bg-gray-50 border border-gray-200'
+          'bg-[var(--bg-secondary)] border border-[var(--border-color)]'
         }`}>
           <div className="flex items-center gap-2">
             {program.agreement.status === 'signed' ? (
@@ -752,7 +752,7 @@ function AgreementTab({
             </span>
           </div>
           {program.agreement.signatures && program.agreement.signatures.length > 0 && (
-            <div className="mt-2 text-sm text-gray-600">
+            <div className="mt-2 text-sm text-[var(--fg-muted)]">
               Firmas: {program.agreement.signatures.map(s => `${s.name} (${s.role})`).join(', ')}
             </div>
           )}
@@ -761,9 +761,9 @@ function AgreementTab({
 
       {/* Objetivos */}
       <div className="space-y-4">
-        <h3 className="font-semibold text-gray-900">Objetivos del Proceso</h3>
+        <h3 className="font-semibold text-[var(--fg-primary)]">Objetivos del Proceso</h3>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Objetivo General</label>
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Objetivo General</label>
           <textarea
             value={form.generalObjective || ''}
             onChange={(e) => setForm({ ...form, generalObjective: e.target.value })}
@@ -776,7 +776,7 @@ function AgreementTab({
         {/* Dominios de trabajo */}
         <div>
           <div className="flex items-center justify-between mb-1">
-            <label className="block text-sm font-medium text-gray-700">Dominios de Trabajo</label>
+            <label className="block text-sm font-medium text-[var(--fg-muted)]">Dominios de Trabajo</label>
             <button
               type="button"
               onClick={() => addToArray('workDomains')}
@@ -809,7 +809,7 @@ function AgreementTab({
         {/* Resultados esperados */}
         <div>
           <div className="flex items-center justify-between mb-1">
-            <label className="block text-sm font-medium text-gray-700">Resultados Esperados</label>
+            <label className="block text-sm font-medium text-[var(--fg-muted)]">Resultados Esperados</label>
             <button
               type="button"
               onClick={() => addToArray('expectedResults')}
@@ -842,7 +842,7 @@ function AgreementTab({
         {/* Competencias */}
         <div>
           <div className="flex items-center justify-between mb-1">
-            <label className="block text-sm font-medium text-gray-700">Prácticas o Competencias a Desarrollar</label>
+            <label className="block text-sm font-medium text-[var(--fg-muted)]">Prácticas o Competencias a Desarrollar</label>
             <button
               type="button"
               onClick={() => addToArray('competenciesToDevelop')}
@@ -875,7 +875,7 @@ function AgreementTab({
         {/* Indicadores */}
         <div>
           <div className="flex items-center justify-between mb-1">
-            <label className="block text-sm font-medium text-gray-700">Indicadores de Progreso</label>
+            <label className="block text-sm font-medium text-[var(--fg-muted)]">Indicadores de Progreso</label>
             <button
               type="button"
               onClick={() => addToArray('progressIndicators')}
@@ -908,11 +908,11 @@ function AgreementTab({
 
       {/* Confidencialidad */}
       <div className="space-y-4 bg-yellow-50 rounded-xl p-4 border border-yellow-200">
-        <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+        <h3 className="font-semibold text-[var(--fg-primary)] flex items-center gap-2">
           <AlertCircle className="text-yellow-600" size={20} />
           Promesa de Confidencialidad
         </h3>
-        <p className="text-sm text-gray-600">Este texto será mostrado al coachee para su aceptación.</p>
+        <p className="text-sm text-[var(--fg-muted)]">Este texto será mostrado al coachee para su aceptación.</p>
         <textarea
           value={form.confidentialityNote || ''}
           onChange={(e) => setForm({ ...form, confidentialityNote: e.target.value })}
@@ -923,10 +923,10 @@ function AgreementTab({
 
       {/* Sesiones */}
       <div className="space-y-4 bg-blue-50 rounded-xl p-4 border border-blue-200">
-        <h3 className="font-semibold text-gray-900">Acerca de las Sesiones</h3>
+        <h3 className="font-semibold text-[var(--fg-primary)]">Acerca de las Sesiones</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Número de Sesiones</label>
+            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Número de Sesiones</label>
             <input
               type="number"
               value={form.totalSessions || 6}
@@ -944,12 +944,12 @@ function AgreementTab({
                 onChange={(e) => setForm({ ...form, includesObservedSession: e.target.checked })}
                 className="w-4 h-4 text-primary-600 rounded"
               />
-              <span className="text-sm text-gray-700">Incluye sesión de reunión observada</span>
+              <span className="text-sm text-[var(--fg-muted)]">Incluye sesión de reunión observada</span>
             </label>
           </div>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Política de Asistencia y Cancelación</label>
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Política de Asistencia y Cancelación</label>
           <textarea
             value={form.sessionAttendancePolicy || ''}
             onChange={(e) => setForm({ ...form, sessionAttendancePolicy: e.target.value })}
@@ -962,7 +962,7 @@ function AgreementTab({
       {/* Vigencia */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Vigencia Desde</label>
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Vigencia Desde</label>
           <input
             type="date"
             value={form.validFrom ? new Date((form.validFrom as any).seconds * 1000).toISOString().split('T')[0] : ''}
@@ -971,7 +971,7 @@ function AgreementTab({
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Vigencia Hasta</label>
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Vigencia Hasta</label>
           <input
             type="date"
             value={form.validUntil ? new Date((form.validUntil as any).seconds * 1000).toISOString().split('T')[0] : ''}
@@ -985,7 +985,7 @@ function AgreementTab({
         <button
           onClick={() => onSave(form as Omit<CoachingAgreement, 'signatures' | 'status'>)}
           disabled={saving}
-          className="flex items-center gap-2 px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-2 bg-primary-600 text-[var(--fg-primary)] rounded-lg hover:bg-primary-700 disabled:opacity-50"
         >
           <Save size={18} />
           {saving ? 'Guardando...' : 'Guardar y Enviar para Firma'}
@@ -1024,19 +1024,19 @@ function CalendarTab({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold text-gray-900 mb-2">Calendarización de Sesiones</h2>
-        <p className="text-gray-600 text-sm">Establezca la línea del tiempo del proceso completo.</p>
+        <h2 className="text-xl font-bold text-[var(--fg-primary)] mb-2">Calendarización de Sesiones</h2>
+        <p className="text-[var(--fg-muted)] text-sm">Establezca la línea del tiempo del proceso completo.</p>
       </div>
 
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
-            <tr className="bg-gray-50">
-              <th className="border p-3 text-left text-sm font-medium text-gray-700">N° Sesión</th>
-              <th className="border p-3 text-left text-sm font-medium text-gray-700">Fecha</th>
-              <th className="border p-3 text-left text-sm font-medium text-gray-700">Hora</th>
-              <th className="border p-3 text-left text-sm font-medium text-gray-700">Lugar</th>
-              <th className="border p-3 text-left text-sm font-medium text-gray-700">Tipo</th>
+            <tr className="bg-[var(--bg-secondary)]">
+              <th className="border p-3 text-left text-sm font-medium text-[var(--fg-muted)]">N° Sesión</th>
+              <th className="border p-3 text-left text-sm font-medium text-[var(--fg-muted)]">Fecha</th>
+              <th className="border p-3 text-left text-sm font-medium text-[var(--fg-muted)]">Hora</th>
+              <th className="border p-3 text-left text-sm font-medium text-[var(--fg-muted)]">Lugar</th>
+              <th className="border p-3 text-left text-sm font-medium text-[var(--fg-muted)]">Tipo</th>
             </tr>
           </thead>
           <tbody>
@@ -1085,7 +1085,7 @@ function CalendarTab({
         <button
           onClick={() => onSave(calendar)}
           disabled={saving}
-          className="flex items-center gap-2 px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-2 bg-primary-600 text-[var(--fg-primary)] rounded-lg hover:bg-primary-700 disabled:opacity-50"
         >
           <Save size={18} />
           {saving ? 'Guardando...' : 'Guardar Calendario'}
@@ -1109,10 +1109,10 @@ function SessionsTab({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold text-gray-900 mb-2">
+        <h2 className="text-xl font-bold text-[var(--fg-primary)] mb-2">
           {isObserved ? 'Sesión de Reunión Observada' : 'Sesiones de Coaching'}
         </h2>
-        <p className="text-gray-600 text-sm">
+        <p className="text-[var(--fg-muted)] text-sm">
           {isObserved 
             ? 'Sesión especial de observación en contexto de trabajo real.'
             : 'Gestione las sesiones del proceso de coaching.'}
@@ -1120,7 +1120,7 @@ function SessionsTab({
       </div>
 
       {sessions.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">
+        <div className="text-center py-8 text-[var(--fg-muted)]">
           <Calendar className="w-12 h-12 mx-auto mb-3 opacity-50" />
           <p>No hay sesiones programadas</p>
         </div>
@@ -1130,19 +1130,19 @@ function SessionsTab({
             <div key={session.id} className="bg-white border rounded-xl p-4 hover:border-primary-300 transition-colors">
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="font-semibold text-gray-900">{session.title}</h3>
-                  <p className="text-sm text-gray-500">
+                  <h3 className="font-semibold text-[var(--fg-primary)]">{session.title}</h3>
+                  <p className="text-sm text-[var(--fg-muted)]">
                     {session.scheduledDate?.toDate?.()?.toLocaleDateString()} - {session.scheduledTime}
                   </p>
                   {session.location && (
-                    <p className="text-sm text-gray-500">{session.location}</p>
+                    <p className="text-sm text-[var(--fg-muted)]">{session.location}</p>
                   )}
                 </div>
                 <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                   session.status === 'completed' ? 'bg-green-100 text-green-800' :
                   session.status === 'in-progress' ? 'bg-emerald-100 text-blue-800' :
                   session.status === 'cancelled' ? 'bg-red-100 text-red-800' :
-                  'bg-gray-100 text-gray-800'
+                  'bg-[var(--bg-secondary)] text-[var(--fg-secondary)]'
                 }`}>
                   {session.status === 'completed' ? 'Completada' :
                    session.status === 'in-progress' ? 'En Progreso' :
@@ -1152,16 +1152,16 @@ function SessionsTab({
               
               {/* Session Report Status */}
               <div className="mt-3 pt-3 border-t flex items-center gap-4 text-sm">
-                <span className={`flex items-center gap-1 ${session.sessionAgreement ? 'text-green-600' : 'text-gray-400'}`}>
+                <span className={`flex items-center gap-1 ${session.sessionAgreement ? 'text-green-600' : 'text-[var(--fg-muted)]'}`}>
                   {session.sessionAgreement ? <Check size={16} /> : <Clock size={16} />}
                   Acuerdo de Sesión
                 </span>
-                <span className={`flex items-center gap-1 ${session.sessionReport ? 'text-green-600' : 'text-gray-400'}`}>
+                <span className={`flex items-center gap-1 ${session.sessionReport ? 'text-green-600' : 'text-[var(--fg-muted)]'}`}>
                   {session.sessionReport ? <Check size={16} /> : <Clock size={16} />}
                   Tabla de Seguimiento
                 </span>
                 {isObserved && (
-                  <span className={`flex items-center gap-1 ${session.observedMeetingReport ? 'text-green-600' : 'text-gray-400'}`}>
+                  <span className={`flex items-center gap-1 ${session.observedMeetingReport ? 'text-green-600' : 'text-[var(--fg-muted)]'}`}>
                     {session.observedMeetingReport ? <Check size={16} /> : <Clock size={16} />}
                     Reporte Observación
                   </span>
@@ -1194,15 +1194,15 @@ function ProcessReportTab({
   if (!report) {
     return (
       <div className="text-center py-12">
-        <ClipboardList className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-        <h2 className="text-xl font-bold text-gray-900 mb-2">Reporte de Seguimiento del Proceso</h2>
-        <p className="text-gray-600 mb-6">
+        <ClipboardList className="w-16 h-16 mx-auto mb-4 text-[var(--fg-secondary)]" />
+        <h2 className="text-xl font-bold text-[var(--fg-primary)] mb-2">Reporte de Seguimiento del Proceso</h2>
+        <p className="text-[var(--fg-muted)] mb-6">
           Este reporte se genera automáticamente después de completar la Sesión 3.
         </p>
         <button
           onClick={onGenerate}
           disabled={saving}
-          className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
+          className="px-6 py-3 bg-primary-600 text-[var(--fg-primary)] rounded-lg hover:bg-primary-700 disabled:opacity-50"
         >
           {saving ? 'Generando...' : 'Generar Reporte'}
         </button>
@@ -1214,7 +1214,7 @@ function ProcessReportTab({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Reporte de Seguimiento del Proceso</h2>
+          <h2 className="text-xl font-bold text-[var(--fg-primary)]">Reporte de Seguimiento del Proceso</h2>
           {report.autoGenerated && !report.editedByCoach && (
             <p className="text-sm text-yellow-600">
               Auto-generado. Puede editar los campos según sea necesario.
@@ -1225,7 +1225,7 @@ function ProcessReportTab({
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Temas Centrales que se están tratando</label>
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Temas Centrales que se están tratando</label>
           <textarea
             value={form.centralThemes || ''}
             onChange={(e) => setForm({ ...form, centralThemes: e.target.value })}
@@ -1289,7 +1289,7 @@ function ProcessReportTab({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Descubrimientos Relevantes</label>
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Descubrimientos Relevantes</label>
           <textarea
             value={form.relevantDiscoveries || ''}
             onChange={(e) => setForm({ ...form, relevantDiscoveries: e.target.value })}
@@ -1299,7 +1299,7 @@ function ProcessReportTab({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Observaciones</label>
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Observaciones</label>
           <textarea
             value={form.observations || ''}
             onChange={(e) => setForm({ ...form, observations: e.target.value })}
@@ -1317,7 +1317,7 @@ function ProcessReportTab({
             );
             downloadPDF(doc, `reporte-proceso-${program.title.replace(/\s+/g, "-")}.pdf`);
           }}
-          className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+          className="flex items-center gap-2 px-4 py-2 border border-[var(--border-color)] text-[var(--fg-muted)] rounded-lg hover:bg-[var(--bg-secondary)]"
         >
           <Download size={18} />
           Exportar PDF
@@ -1325,7 +1325,7 @@ function ProcessReportTab({
         <button
           onClick={() => onUpdate(form)}
           disabled={saving}
-          className="flex items-center gap-2 px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-2 bg-primary-600 text-[var(--fg-primary)] rounded-lg hover:bg-primary-700 disabled:opacity-50"
         >
           <Save size={18} />
           {saving ? "Guardando..." : "Guardar Cambios"}
@@ -1356,15 +1356,15 @@ function FinalReportTab({
   if (!report) {
     return (
       <div className="text-center py-12">
-        <Award className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-        <h2 className="text-xl font-bold text-gray-900 mb-2">Informe Final CE</h2>
-        <p className="text-gray-600 mb-6">
+        <Award className="w-16 h-16 mx-auto mb-4 text-[var(--fg-secondary)]" />
+        <h2 className="text-xl font-bold text-[var(--fg-primary)] mb-2">Informe Final CE</h2>
+        <p className="text-[var(--fg-muted)] mb-6">
           Este informe se genera automáticamente al completar todas las sesiones.
         </p>
         <button
           onClick={onGenerate}
           disabled={saving}
-          className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
+          className="px-6 py-3 bg-primary-600 text-[var(--fg-primary)] rounded-lg hover:bg-primary-700 disabled:opacity-50"
         >
           {saving ? 'Generando...' : 'Generar Informe Final'}
         </button>
@@ -1376,7 +1376,7 @@ function FinalReportTab({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Informe Final CE</h2>
+          <h2 className="text-xl font-bold text-[var(--fg-primary)]">Informe Final CE</h2>
           {report.completedAt && (
             <p className="text-sm text-green-600">
               Completado el {report.completedAt.toDate().toLocaleDateString()}
@@ -1387,7 +1387,7 @@ function FinalReportTab({
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Datos del Punto de Partida</label>
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Datos del Punto de Partida</label>
           <textarea
             value={form.startingPointData || ''}
             onChange={(e) => setForm({ ...form, startingPointData: e.target.value })}
@@ -1397,7 +1397,7 @@ function FinalReportTab({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
             Tres aspectos del coachee que hacen visible el punto de cierre
           </label>
           <textarea
@@ -1409,7 +1409,7 @@ function FinalReportTab({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
             Prácticas Organizacionales Incorporadas
           </label>
           <textarea
@@ -1421,7 +1421,7 @@ function FinalReportTab({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
             Brechas que el coachee debiera reforzar a futuro
           </label>
           <textarea
@@ -1433,7 +1433,7 @@ function FinalReportTab({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
             Recomendaciones para sostener los aprendizajes
           </label>
           <textarea
@@ -1445,7 +1445,7 @@ function FinalReportTab({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Observaciones Finales</label>
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Observaciones Finales</label>
           <textarea
             value={form.finalObservations || ''}
             onChange={(e) => setForm({ ...form, finalObservations: e.target.value })}
@@ -1463,7 +1463,7 @@ function FinalReportTab({
             );
             downloadPDF(doc, `informe-final-${program.title.replace(/\s+/g, "-")}.pdf`);
           }}
-          className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+          className="flex items-center gap-2 px-4 py-2 border border-[var(--border-color)] text-[var(--fg-muted)] rounded-lg hover:bg-[var(--bg-secondary)]"
         >
           <Download size={18} />
           Exportar PDF
@@ -1471,7 +1471,7 @@ function FinalReportTab({
         <button
           onClick={() => onUpdate(form)}
           disabled={saving}
-          className="flex items-center gap-2 px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-2 bg-[var(--bg-tertiary)] text-[var(--fg-muted)] rounded-lg hover:bg-[var(--bg-tertiary)] disabled:opacity-50"
         >
           <Save size={18} />
           Guardar Borrador
@@ -1480,7 +1480,7 @@ function FinalReportTab({
           <button
             onClick={onComplete}
             disabled={saving}
-            className="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+            className="flex items-center gap-2 px-6 py-2 bg-green-600 text-[var(--fg-primary)] rounded-lg hover:bg-green-700 disabled:opacity-50"
           >
             <Check size={18} />
             {saving ? "Completando..." : "Completar Proceso"}

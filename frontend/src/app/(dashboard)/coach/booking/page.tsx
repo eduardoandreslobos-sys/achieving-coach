@@ -294,14 +294,14 @@ export default function BookingSettingsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white p-8">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--fg-primary)] p-8">
       <Toaster position="top-center" richColors />
 
       <div className="max-w-4xl mx-auto">
@@ -309,12 +309,12 @@ export default function BookingSettingsPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold mb-2">Booking Público</h1>
-            <p className="text-gray-400">Configura tu disponibilidad y permite que clientes reserven sesiones</p>
+            <p className="text-[var(--fg-muted)]">Configura tu disponibilidad y permite que clientes reserven sesiones</p>
           </div>
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition-colors"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             Guardar Cambios
@@ -329,14 +329,14 @@ export default function BookingSettingsPage() {
                 <Globe className="w-6 h-6 text-emerald-400" />
               </div>
               <div>
-                <h3 className="text-white font-semibold mb-1">Tu Link de Booking</h3>
-                <p className="text-gray-400 text-sm">Comparte este link con tus clientes potenciales</p>
+                <h3 className="text-[var(--fg-primary)] font-semibold mb-1">Tu Link de Booking</h3>
+                <p className="text-[var(--fg-muted)] text-sm">Comparte este link con tus clientes potenciales</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">
-                <span className={`w-2 h-2 rounded-full ${settings.enabled ? 'bg-emerald-400' : 'bg-gray-500'}`}></span>
-                <span className="text-sm text-gray-400">{settings.enabled ? 'Activo' : 'Inactivo'}</span>
+                <span className={`w-2 h-2 rounded-full ${settings.enabled ? 'bg-emerald-400' : 'bg-[var(--bg-tertiary)]'}`}></span>
+                <span className="text-sm text-[var(--fg-muted)]">{settings.enabled ? 'Activo' : 'Inactivo'}</span>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
@@ -345,7 +345,7 @@ export default function BookingSettingsPage() {
                   onChange={(e) => setSettings({ ...settings, enabled: e.target.checked })}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                <div className="w-11 h-6 bg-[var(--bg-tertiary)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
               </label>
             </div>
           </div>
@@ -354,11 +354,11 @@ export default function BookingSettingsPage() {
               type="text"
               value={bookingUrl}
               readOnly
-              className="flex-1 px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-gray-300 text-sm"
+              className="flex-1 px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-secondary)] text-sm"
             />
             <button
               onClick={handleCopyLink}
-              className="px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-2"
+              className="px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg hover:bg-[var(--bg-secondary)] transition-colors flex items-center gap-2"
             >
               {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
               {copied ? 'Copiado' : 'Copiar'}
@@ -366,7 +366,7 @@ export default function BookingSettingsPage() {
             <Link
               href={`/book/${user?.uid}`}
               target="_blank"
-              className="px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-2"
+              className="px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg hover:bg-[var(--bg-secondary)] transition-colors flex items-center gap-2"
             >
               <ExternalLink className="w-4 h-4" />
               Ver
@@ -375,7 +375,7 @@ export default function BookingSettingsPage() {
         </div>
 
         {/* Google Calendar Integration */}
-        <div className="bg-[#111111] border border-gray-800 rounded-xl p-6 mb-6">
+        <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
@@ -387,8 +387,8 @@ export default function BookingSettingsPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="text-white font-semibold">Google Calendar</h3>
-                <p className="text-gray-400 text-sm">
+                <h3 className="text-[var(--fg-primary)] font-semibold">Google Calendar</h3>
+                <p className="text-[var(--fg-muted)] text-sm">
                   {settings.googleCalendar?.connected
                     ? 'Conectado - Las reservas se sincronizarán automáticamente'
                     : 'Sincroniza reservas automáticamente con tu calendario'}
@@ -407,7 +407,7 @@ export default function BookingSettingsPage() {
               <button
                 onClick={handleConnectGoogleCalendar}
                 disabled={connectingCalendar}
-                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition-colors"
               >
                 {connectingCalendar ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -420,11 +420,11 @@ export default function BookingSettingsPage() {
           </div>
 
           {settings.googleCalendar?.connected && (
-            <div className="border-t border-gray-800 pt-4 mt-4 space-y-3">
+            <div className="border-t border-[var(--border-color)] pt-4 mt-4 space-y-3">
               <label className="flex items-center justify-between">
                 <div>
-                  <span className="text-white text-sm">Crear eventos en calendario</span>
-                  <p className="text-gray-500 text-xs">Crea un evento cuando se confirma una reserva</p>
+                  <span className="text-[var(--fg-primary)] text-sm">Crear eventos en calendario</span>
+                  <p className="text-[var(--fg-muted)] text-xs">Crea un evento cuando se confirma una reserva</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -439,14 +439,14 @@ export default function BookingSettingsPage() {
                     }))}
                     className="sr-only peer"
                   />
-                  <div className="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                  <div className="w-9 h-5 bg-[var(--bg-tertiary)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
                 </label>
               </label>
 
               <label className="flex items-center justify-between">
                 <div>
-                  <span className="text-white text-sm">Verificar disponibilidad</span>
-                  <p className="text-gray-500 text-xs">Bloquea horarios ocupados en tu calendario</p>
+                  <span className="text-[var(--fg-primary)] text-sm">Verificar disponibilidad</span>
+                  <p className="text-[var(--fg-muted)] text-xs">Bloquea horarios ocupados en tu calendario</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -461,7 +461,7 @@ export default function BookingSettingsPage() {
                     }))}
                     className="sr-only peer"
                   />
-                  <div className="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                  <div className="w-9 h-5 bg-[var(--bg-tertiary)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
                 </label>
               </label>
             </div>
@@ -470,40 +470,40 @@ export default function BookingSettingsPage() {
 
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Session Settings */}
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
             <div className="flex items-center gap-2 mb-6">
               <Settings className="w-5 h-5 text-emerald-400" />
-              <h2 className="text-white font-semibold">Configuración de Sesión</h2>
+              <h2 className="text-[var(--fg-primary)] font-semibold">Configuración de Sesión</h2>
             </div>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">Título de la Sesión</label>
+                <label className="block text-sm font-medium text-[var(--fg-muted)] mb-2">Título de la Sesión</label>
                 <input
                   type="text"
                   value={settings.title}
                   onChange={(e) => setSettings({ ...settings, title: e.target.value })}
-                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">Descripción</label>
+                <label className="block text-sm font-medium text-[var(--fg-muted)] mb-2">Descripción</label>
                 <textarea
                   value={settings.description}
                   onChange={(e) => setSettings({ ...settings, description: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500 resize-none"
+                  className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] focus:outline-none focus:border-emerald-500 resize-none"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">Duración (min)</label>
+                  <label className="block text-sm font-medium text-[var(--fg-muted)] mb-2">Duración (min)</label>
                   <select
                     value={settings.duration}
                     onChange={(e) => setSettings({ ...settings, duration: parseInt(e.target.value) })}
-                    className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] focus:outline-none focus:border-emerald-500"
                   >
                     <option value={30}>30 minutos</option>
                     <option value={45}>45 minutos</option>
@@ -513,11 +513,11 @@ export default function BookingSettingsPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">Buffer después (min)</label>
+                  <label className="block text-sm font-medium text-[var(--fg-muted)] mb-2">Buffer después (min)</label>
                   <select
                     value={settings.bufferAfter}
                     onChange={(e) => setSettings({ ...settings, bufferAfter: parseInt(e.target.value) })}
-                    className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] focus:outline-none focus:border-emerald-500"
                   >
                     <option value={0}>Sin buffer</option>
                     <option value={5}>5 minutos</option>
@@ -530,11 +530,11 @@ export default function BookingSettingsPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">Aviso mínimo (horas)</label>
+                  <label className="block text-sm font-medium text-[var(--fg-muted)] mb-2">Aviso mínimo (horas)</label>
                   <select
                     value={settings.minNotice}
                     onChange={(e) => setSettings({ ...settings, minNotice: parseInt(e.target.value) })}
-                    className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] focus:outline-none focus:border-emerald-500"
                   >
                     <option value={1}>1 hora</option>
                     <option value={2}>2 horas</option>
@@ -545,11 +545,11 @@ export default function BookingSettingsPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">Máximo anticipación (días)</label>
+                  <label className="block text-sm font-medium text-[var(--fg-muted)] mb-2">Máximo anticipación (días)</label>
                   <select
                     value={settings.maxAdvance}
                     onChange={(e) => setSettings({ ...settings, maxAdvance: parseInt(e.target.value) })}
-                    className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] focus:outline-none focus:border-emerald-500"
                   >
                     <option value={7}>7 días</option>
                     <option value={14}>14 días</option>
@@ -561,7 +561,7 @@ export default function BookingSettingsPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
+                <label className="block text-sm font-medium text-[var(--fg-muted)] mb-2">
                   <Video className="w-4 h-4 inline mr-1" />
                   Link de Videollamada (Zoom, Meet, etc.)
                 </label>
@@ -570,22 +570,22 @@ export default function BookingSettingsPage() {
                   value={settings.meetingLink}
                   onChange={(e) => setSettings({ ...settings, meetingLink: e.target.value })}
                   placeholder="https://zoom.us/j/..."
-                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
+                  className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500"
                 />
               </div>
             </div>
           </div>
 
           {/* Availability Settings */}
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
             <div className="flex items-center gap-2 mb-6">
               <Calendar className="w-5 h-5 text-emerald-400" />
-              <h2 className="text-white font-semibold">Disponibilidad Semanal</h2>
+              <h2 className="text-[var(--fg-primary)] font-semibold">Disponibilidad Semanal</h2>
             </div>
 
             <div className="space-y-4">
               {DAYS.map(({ key, label }) => (
-                <div key={key} className="border border-gray-800 rounded-lg p-4">
+                <div key={key} className="border border-[var(--border-color)] rounded-lg p-4">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <label className="relative inline-flex items-center cursor-pointer">
@@ -595,9 +595,9 @@ export default function BookingSettingsPage() {
                           onChange={() => toggleDay(key)}
                           className="sr-only peer"
                         />
-                        <div className="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
+                        <div className="w-9 h-5 bg-[var(--bg-tertiary)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
                       </label>
-                      <span className={`font-medium ${settings.availability[key]?.enabled ? 'text-white' : 'text-gray-500'}`}>
+                      <span className={`font-medium ${settings.availability[key]?.enabled ? 'text-[var(--fg-primary)]' : 'text-[var(--fg-muted)]'}`}>
                         {label}
                       </span>
                     </div>
@@ -620,19 +620,19 @@ export default function BookingSettingsPage() {
                             type="time"
                             value={slot.start}
                             onChange={(e) => updateSlot(key, index, 'start', e.target.value)}
-                            className="px-3 py-1.5 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-emerald-500"
+                            className="px-3 py-1.5 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] text-sm focus:outline-none focus:border-emerald-500"
                           />
-                          <span className="text-gray-500">-</span>
+                          <span className="text-[var(--fg-muted)]">-</span>
                           <input
                             type="time"
                             value={slot.end}
                             onChange={(e) => updateSlot(key, index, 'end', e.target.value)}
-                            className="px-3 py-1.5 bg-[#0a0a0a] border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-emerald-500"
+                            className="px-3 py-1.5 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] text-sm focus:outline-none focus:border-emerald-500"
                           />
                           {settings.availability[key].slots.length > 1 && (
                             <button
                               onClick={() => removeSlot(key, index)}
-                              className="p-1.5 text-gray-500 hover:text-red-400 transition-colors"
+                              className="p-1.5 text-[var(--fg-muted)] hover:text-red-400 transition-colors"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>

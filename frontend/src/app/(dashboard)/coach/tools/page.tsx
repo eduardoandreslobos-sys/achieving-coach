@@ -146,23 +146,23 @@ export default function CoachToolsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--fg-primary)]">
       <div className="max-w-7xl mx-auto p-6 lg:p-8">
         
         {/* Header */}
         <div className="flex items-start justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold mb-2">Biblioteca de Herramientas</h1>
-            <p className="text-gray-400 max-w-2xl">
+            <p className="text-[var(--fg-muted)] max-w-2xl">
               Accede a una colección curada de recursos, ejercicios y plantillas diseñados para potenciar el proceso de coaching y maximizar el impacto en tus clientes.
             </p>
           </div>
           <div className="flex gap-3">
-            <button className="flex items-center gap-2 px-4 py-2 bg-[#1a1a1a] border border-gray-700 text-white rounded-lg hover:bg-[#222] transition-colors">
+            <button className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors">
               <Upload className="w-4 h-4" />
               Importar
             </button>
-            <button className="flex items-center gap-2 px-5 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium">
+            <button className="flex items-center gap-2 px-5 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 transition-colors font-medium">
               <Plus className="w-4 h-4" />
               Crear Herramienta
             </button>
@@ -170,15 +170,15 @@ export default function CoachToolsPage() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-6 border-b border-gray-800 mb-6">
+        <div className="flex gap-6 border-b border-[var(--border-color)] mb-6">
           {TABS.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`pb-3 px-1 text-sm font-medium transition-colors relative ${
                 activeTab === tab.id 
-                  ? 'text-white' 
-                  : 'text-gray-500 hover:text-gray-300'
+                  ? 'text-[var(--fg-primary)]' 
+                  : 'text-[var(--fg-muted)] hover:text-[var(--fg-secondary)]'
               }`}
             >
               {tab.name}
@@ -192,44 +192,44 @@ export default function CoachToolsPage() {
         {/* Search & Filters */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--fg-muted)] w-5 h-5" />
             <input
               type="text"
               placeholder="Buscar por nombre, categoría o etiqueta..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
+              className="w-full pl-10 pr-4 py-2.5 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500"
             />
           </div>
           <div className="flex gap-3">
             <div className="relative">
-              <select className="appearance-none px-4 py-2.5 pr-10 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500 cursor-pointer">
+              <select className="appearance-none px-4 py-2.5 pr-10 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] focus:outline-none focus:border-emerald-500 cursor-pointer">
                 <option>Categoría</option>
                 <option>Evaluación</option>
                 <option>Reflexión</option>
                 <option>Cognitivo</option>
               </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--fg-muted)] pointer-events-none" />
             </div>
             <div className="relative">
-              <select className="appearance-none px-4 py-2.5 pr-10 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500 cursor-pointer">
+              <select className="appearance-none px-4 py-2.5 pr-10 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] focus:outline-none focus:border-emerald-500 cursor-pointer">
                 <option>Tipo</option>
                 <option>Herramienta</option>
                 <option>Ejercicio</option>
                 <option>Plantilla</option>
               </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--fg-muted)] pointer-events-none" />
             </div>
-            <div className="flex bg-[#1a1a1a] border border-gray-700 rounded-lg">
+            <div className="flex bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-2.5 ${viewMode === 'grid' ? 'text-white bg-[#2a2a2a]' : 'text-gray-500'} rounded-l-lg transition-colors`}
+                className={`p-2.5 ${viewMode === 'grid' ? 'text-[var(--fg-primary)] bg-[var(--bg-tertiary)]' : 'text-[var(--fg-muted)]'} rounded-l-lg transition-colors`}
               >
                 <Grid className="w-5 h-5" />
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`p-2.5 ${viewMode === 'list' ? 'text-white bg-[#2a2a2a]' : 'text-gray-500'} rounded-r-lg transition-colors`}
+                className={`p-2.5 ${viewMode === 'list' ? 'text-[var(--fg-primary)] bg-[var(--bg-tertiary)]' : 'text-[var(--fg-muted)]'} rounded-r-lg transition-colors`}
               >
                 <List className="w-5 h-5" />
               </button>
@@ -246,7 +246,7 @@ export default function CoachToolsPage() {
               className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
                 selectedCategory === category.id
                   ? 'bg-white text-black'
-                  : 'bg-[#1a1a1a] text-gray-400 border border-gray-700 hover:border-gray-600'
+                  : 'bg-[var(--bg-tertiary)] text-[var(--fg-muted)] border border-[var(--border-color)] hover:border-[var(--border-color)]'
               }`}
             >
               {category.name}
@@ -258,15 +258,15 @@ export default function CoachToolsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {filteredTools.map((tool) => {
             const Icon = tool.icon;
-            const catColor = CATEGORY_COLORS[tool.category] || { bg: 'bg-gray-500/20', text: 'text-gray-400' };
+            const catColor = CATEGORY_COLORS[tool.category] || { bg: 'bg-[var(--bg-tertiary)]/20', text: 'text-[var(--fg-muted)]' };
             
             return (
               <div
                 key={tool.id}
-                className="bg-[#111111] border border-gray-800 rounded-xl overflow-hidden hover:border-gray-700 transition-colors group"
+                className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl overflow-hidden hover:border-[var(--border-color)] transition-colors group"
               >
                 {/* Header with icon */}
-                <div className="h-28 bg-[#0d0d0d] flex items-center justify-center relative">
+                <div className="h-28 bg-[var(--bg-primary)] flex items-center justify-center relative">
                   <div className={`w-14 h-14 ${tool.color} rounded-xl flex items-center justify-center`}>
                     <Icon className={`w-7 h-7 ${tool.iconColor}`} />
                   </div>
@@ -280,11 +280,11 @@ export default function CoachToolsPage() {
                     </span>
                   </div>
                   
-                  <h3 className="text-white font-semibold mb-1">{tool.name}</h3>
-                  <p className="text-gray-500 text-sm line-clamp-2 mb-4">{tool.description}</p>
+                  <h3 className="text-[var(--fg-primary)] font-semibold mb-1">{tool.name}</h3>
+                  <p className="text-[var(--fg-muted)] text-sm line-clamp-2 mb-4">{tool.description}</p>
 
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1 text-gray-500 text-sm">
+                    <div className="flex items-center gap-1 text-[var(--fg-muted)] text-sm">
                       <Clock className="w-4 h-4" />
                       {tool.time} min
                     </div>
@@ -304,7 +304,7 @@ export default function CoachToolsPage() {
 
         {filteredTools.length === 0 && (
           <div className="text-center py-16">
-            <p className="text-gray-500 text-lg">No se encontraron herramientas.</p>
+            <p className="text-[var(--fg-muted)] text-lg">No se encontraron herramientas.</p>
           </div>
         )}
       </div>
@@ -312,8 +312,8 @@ export default function CoachToolsPage() {
       {/* Preview Modal */}
       {previewTool && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#111111] border border-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-[#111111] border-b border-gray-800 p-6 flex items-start justify-between">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] p-6 flex items-start justify-between">
               <div className="flex items-center gap-3">
                 <div className={`w-12 h-12 ${previewTool.color} rounded-xl flex items-center justify-center`}>
                   {(() => {
@@ -322,26 +322,26 @@ export default function CoachToolsPage() {
                   })()}
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-white">{previewTool.name}</h2>
-                  <p className="text-sm text-gray-500">{previewTool.category}</p>
+                  <h2 className="text-xl font-bold text-[var(--fg-primary)]">{previewTool.name}</h2>
+                  <p className="text-sm text-[var(--fg-muted)]">{previewTool.category}</p>
                 </div>
               </div>
-              <button onClick={() => setPreviewTool(null)} className="text-gray-500 hover:text-white transition-colors">
+              <button onClick={() => setPreviewTool(null)} className="text-[var(--fg-muted)] hover:text-[var(--fg-primary)] transition-colors">
                 <X className="w-6 h-6" />
               </button>
             </div>
             <div className="p-6">
-              <p className="text-gray-300 mb-6">{previewTool.description}</p>
+              <p className="text-[var(--fg-secondary)] mb-6">{previewTool.description}</p>
               <div className="flex gap-3">
                 <Link
                   href={`/tools/${previewTool.id}`}
-                  className="flex-1 px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 text-center transition-colors"
+                  className="flex-1 px-6 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 text-center transition-colors"
                 >
                   Probar Herramienta
                 </Link>
                 <button
                   onClick={() => setPreviewTool(null)}
-                  className="px-6 py-3 bg-[#1a1a1a] text-gray-300 rounded-lg font-medium hover:bg-[#222] transition-colors"
+                  className="px-6 py-3 bg-[var(--bg-tertiary)] text-[var(--fg-secondary)] rounded-lg font-medium hover:bg-[var(--bg-tertiary)] transition-colors"
                 >
                   Cerrar
                 </button>
@@ -354,16 +354,16 @@ export default function CoachToolsPage() {
       {/* Assign Modal */}
       {assignTool && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#111111] border border-gray-800 rounded-2xl max-w-md w-full">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl max-w-md w-full">
             {showSuccess ? (
               <div className="p-8 text-center">
                 <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-white mb-2">¡Herramienta Asignada!</h3>
-                <p className="text-gray-400">El coachee ha sido notificado</p>
+                <h3 className="text-xl font-bold text-[var(--fg-primary)] mb-2">¡Herramienta Asignada!</h3>
+                <p className="text-[var(--fg-muted)]">El coachee ha sido notificado</p>
               </div>
             ) : (
               <>
-                <div className="p-6 border-b border-gray-800 flex items-start justify-between">
+                <div className="p-6 border-b border-[var(--border-color)] flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 ${assignTool.color} rounded-xl flex items-center justify-center`}>
                       {(() => {
@@ -372,20 +372,20 @@ export default function CoachToolsPage() {
                       })()}
                     </div>
                     <div>
-                      <h2 className="text-lg font-bold text-white">Asignar Herramienta</h2>
-                      <p className="text-sm text-gray-500">{assignTool.name}</p>
+                      <h2 className="text-lg font-bold text-[var(--fg-primary)]">Asignar Herramienta</h2>
+                      <p className="text-sm text-[var(--fg-muted)]">{assignTool.name}</p>
                     </div>
                   </div>
-                  <button onClick={() => setAssignTool(null)} className="text-gray-500 hover:text-white">
+                  <button onClick={() => setAssignTool(null)} className="text-[var(--fg-muted)] hover:text-[var(--fg-primary)]">
                     <X className="w-6 h-6" />
                   </button>
                 </div>
                 <div className="p-6">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Seleccionar Cliente</label>
+                  <label className="block text-sm font-medium text-[var(--fg-secondary)] mb-2">Seleccionar Cliente</label>
                   <select
                     value={selectedClient}
                     onChange={(e) => setSelectedClient(e.target.value)}
-                    className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-4 py-3 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] focus:outline-none focus:border-emerald-500"
                   >
                     <option value="">Elegir cliente...</option>
                     {clients.map((client) => (
@@ -395,14 +395,14 @@ export default function CoachToolsPage() {
                   <div className="mt-6 flex gap-3">
                     <button
                       onClick={() => setAssignTool(null)}
-                      className="flex-1 px-4 py-3 bg-[#1a1a1a] text-gray-300 rounded-lg font-medium hover:bg-[#222]"
+                      className="flex-1 px-4 py-3 bg-[var(--bg-tertiary)] text-[var(--fg-secondary)] rounded-lg font-medium hover:bg-[var(--bg-tertiary)]"
                     >
                       Cancelar
                     </button>
                     <button
                       onClick={handleAssignTool}
                       disabled={!selectedClient || assigning}
-                      className="flex-1 px-4 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 disabled:bg-gray-700 disabled:cursor-not-allowed"
+                      className="flex-1 px-4 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 disabled:bg-[var(--bg-tertiary)] disabled:cursor-not-allowed"
                     >
                       {assigning ? 'Asignando...' : 'Asignar'}
                     </button>

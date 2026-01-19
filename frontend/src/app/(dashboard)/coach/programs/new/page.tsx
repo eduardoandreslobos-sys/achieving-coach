@@ -125,7 +125,7 @@ export default function NewProgramPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--bg-secondary)] flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
       </div>
     );
@@ -133,9 +133,9 @@ export default function NewProgramPage() {
 
   if (!coachee) {
     return (
-      <div className="min-h-screen bg-gray-50 p-8">
+      <div className="min-h-screen bg-[var(--bg-secondary)] p-8">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Coachee not found</h1>
+          <h1 className="text-2xl font-bold text-[var(--fg-primary)] mb-2">Coachee not found</h1>
           <button
             onClick={() => router.push('/coach/clients')}
             className="text-primary-600 hover:text-primary-700"
@@ -148,7 +148,7 @@ export default function NewProgramPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-[var(--bg-secondary)] p-8">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
           <button
@@ -157,20 +157,20 @@ export default function NewProgramPage() {
           >
             ← Back to client
           </button>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Coaching Program</h1>
-          <p className="text-gray-600">
+          <h1 className="text-3xl font-bold text-[var(--fg-primary)] mb-2">Create Coaching Program</h1>
+          <p className="text-[var(--fg-muted)]">
             For: {coachee.displayName || coachee.email}
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Info */}
-          <div className="bg-white rounded-xl border-2 border-gray-200 p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Program Details</h2>
+          <div className="bg-white rounded-xl border-2 border-[var(--border-color)] p-6">
+            <h2 className="text-xl font-bold text-[var(--fg-primary)] mb-4">Program Details</h2>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
                   Program Title *
                 </label>
                 <input
@@ -179,12 +179,12 @@ export default function NewProgramPage() {
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="e.g., Leadership Development Program"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-2 border border-[var(--border-color)] rounded-lg focus:ring-2 focus:ring-primary-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
                   Description (Optional)
                 </label>
                 <textarea
@@ -192,13 +192,13 @@ export default function NewProgramPage() {
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={3}
                   placeholder="Brief description of the coaching program..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-2 border border-[var(--border-color)] rounded-lg focus:ring-2 focus:ring-primary-500"
                 />
               </div>
 
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
                     Duration (months) *
                   </label>
                   <input
@@ -208,12 +208,12 @@ export default function NewProgramPage() {
                     max="24"
                     value={formData.duration}
                     onChange={(e) => setFormData({ ...formData, duration: parseInt(e.target.value) })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2 border border-[var(--border-color)] rounded-lg focus:ring-2 focus:ring-primary-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
                     Sessions Planned *
                   </label>
                   <input
@@ -223,12 +223,12 @@ export default function NewProgramPage() {
                     max="100"
                     value={formData.sessionsPlanned}
                     onChange={(e) => setFormData({ ...formData, sessionsPlanned: parseInt(e.target.value) })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2 border border-[var(--border-color)] rounded-lg focus:ring-2 focus:ring-primary-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
                     Start Date *
                   </label>
                   <input
@@ -236,7 +236,7 @@ export default function NewProgramPage() {
                     required
                     value={formData.startDate}
                     onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2 border border-[var(--border-color)] rounded-lg focus:ring-2 focus:ring-primary-500"
                   />
                 </div>
               </div>
@@ -244,20 +244,20 @@ export default function NewProgramPage() {
           </div>
 
           {/* Program Goals */}
-          <div className="bg-white rounded-xl border-2 border-gray-200 p-6">
+          <div className="bg-white rounded-xl border-2 border-[var(--border-color)] p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-gray-900">Program Goals</h2>
+              <h2 className="text-xl font-bold text-[var(--fg-primary)]">Program Goals</h2>
               <button
                 type="button"
                 onClick={addGoal}
-                className="flex items-center gap-1 px-3 py-1 text-sm bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+                className="flex items-center gap-1 px-3 py-1 text-sm bg-primary-600 text-[var(--fg-primary)] rounded-lg hover:bg-primary-700"
               >
                 <Plus size={16} />
                 Add Goal
               </button>
             </div>
 
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-[var(--fg-muted)] mb-4">
               What are the main objectives for this coaching program?
             </p>
 
@@ -270,7 +270,7 @@ export default function NewProgramPage() {
                     onChange={(e) => updateGoal(index, e.target.value)}
                     rows={2}
                     placeholder={`Program goal ${index + 1}`}
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="flex-1 px-4 py-2 border border-[var(--border-color)] rounded-lg focus:ring-2 focus:ring-primary-500"
                   />
                   {formData.goals.length > 1 && (
                     <button
@@ -291,14 +291,14 @@ export default function NewProgramPage() {
             <button
               type="button"
               onClick={() => router.back()}
-              className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+              className="px-6 py-3 bg-[var(--bg-tertiary)] text-[var(--fg-muted)] rounded-lg hover:bg-[var(--bg-tertiary)]"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
+              className="px-6 py-3 bg-primary-600 text-[var(--fg-primary)] rounded-lg hover:bg-primary-700 disabled:opacity-50"
             >
               {saving ? 'Creating...' : 'Create Program'}
             </button>

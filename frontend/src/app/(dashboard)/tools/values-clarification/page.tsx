@@ -212,7 +212,7 @@ export default function ValuesClarificationPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-[#0a0a0a]">
+      <div className="flex items-center justify-center h-screen bg-[var(--bg-primary)]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
@@ -221,15 +221,15 @@ export default function ValuesClarificationPage() {
   if (!hasAccess) {
     const isCoach = userProfile?.role === 'coach';
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center py-12 px-4">
-        <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center max-w-md">
+      <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center py-12 px-4">
+        <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 text-center max-w-md">
           <div className={`w-16 h-16 ${isCoach ? 'bg-emerald-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
             <Heart className={`w-8 h-8 ${isCoach ? 'text-emerald-400' : 'text-yellow-400'}`} />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-4">
+          <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">
             {isCoach ? 'Tool for Coachees Only' : 'Access Required'}
           </h2>
-          <p className="text-gray-400 mb-6">
+          <p className="text-[var(--fg-muted)] mb-6">
             {isCoach
               ? 'This tool is designed to be completed by coachees. You can assign it to your clients from the client management page.'
               : 'This tool has not been assigned to you yet.'}
@@ -237,7 +237,7 @@ export default function ValuesClarificationPage() {
           <div className="flex gap-4 justify-center">
             <Link
               href={isCoach ? '/coach/clients' : '/dashboard'}
-              className="px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors"
+              className="px-6 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 transition-colors"
             >
               {isCoach ? 'Go to Clients' : 'Return to Dashboard'}
             </Link>
@@ -249,27 +249,27 @@ export default function ValuesClarificationPage() {
 
   if (isCompleted) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] py-12 px-4">
+      <div className="min-h-screen bg-[var(--bg-primary)] py-12 px-4">
         <Toaster position="top-center" richColors />
         <div className="max-w-4xl mx-auto">
-          <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8 text-center">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 text-center">
             <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle2 className="w-8 h-8 text-emerald-400" />
             </div>
-            <h2 className="text-2xl font-bold text-white mb-4">Tool Completed!</h2>
-            <p className="text-gray-400 mb-6">
+            <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">Tool Completed!</h2>
+            <p className="text-[var(--fg-muted)] mb-6">
               You've successfully completed the Values Clarification exercise. Your coach has been notified and can review your results.
             </p>
             <div className="flex gap-4 justify-center">
               <Link
                 href="/dashboard"
-                className="px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors"
+                className="px-6 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 transition-colors"
               >
                 Return to Dashboard
               </Link>
               <Link
                 href="/tools"
-                className="px-6 py-3 border border-gray-700 text-gray-300 rounded-lg font-medium hover:bg-[#1a1a1a] transition-colors"
+                className="px-6 py-3 border border-[var(--border-color)] text-[var(--fg-secondary)] rounded-lg font-medium hover:bg-[var(--bg-tertiary)] transition-colors"
               >
                 Explore More Tools
               </Link>
@@ -281,22 +281,22 @@ export default function ValuesClarificationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white py-12 px-4">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--fg-primary)] py-12 px-4">
       <Toaster position="top-center" richColors />
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-white mb-4">Values Clarification</h1>
-          <p className="text-xl text-gray-400">
+          <h1 className="text-4xl font-bold text-[var(--fg-primary)] mb-4">Values Clarification</h1>
+          <p className="text-xl text-[var(--fg-muted)]">
             Discover and prioritize your core values to guide your decisions and actions
           </p>
         </div>
 
         {step === 'select' && (
           <div className="space-y-8">
-            <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8">
+            <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8">
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-white mb-2">Step 1: Select Your Values</h2>
-                <p className="text-gray-400">
+                <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-2">Step 1: Select Your Values</h2>
+                <p className="text-[var(--fg-muted)]">
                   Choose up to 10 values that resonate most with you. Selected: {selectedValues.length}/10
                 </p>
               </div>
@@ -312,14 +312,14 @@ export default function ValuesClarificationPage() {
                       className={`p-4 rounded-xl border transition-all text-left ${
                         isSelected
                           ? 'border-emerald-500 bg-emerald-500/10'
-                          : 'border-gray-700 hover:border-gray-600 bg-[#1a1a1a]'
+                          : 'border-[var(--border-color)] hover:border-[var(--border-color)] bg-[var(--bg-tertiary)]'
                       }`}
                     >
                       <div className="flex items-start gap-3">
-                        <Icon className={`w-6 h-6 ${isSelected ? 'text-emerald-400' : 'text-gray-500'}`} />
+                        <Icon className={`w-6 h-6 ${isSelected ? 'text-emerald-400' : 'text-[var(--fg-muted)]'}`} />
                         <div>
-                          <h3 className="font-semibold text-white">{value.name}</h3>
-                          <p className="text-sm text-gray-400">{value.description}</p>
+                          <h3 className="font-semibold text-[var(--fg-primary)]">{value.name}</h3>
+                          <p className="text-sm text-[var(--fg-muted)]">{value.description}</p>
                         </div>
                       </div>
                     </button>
@@ -330,7 +330,7 @@ export default function ValuesClarificationPage() {
               <button
                 onClick={proceedToRanking}
                 disabled={selectedValues.length < 5}
-                className="w-full py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed"
+                className="w-full py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 transition-colors disabled:bg-[var(--bg-tertiary)] disabled:text-[var(--fg-muted)] disabled:cursor-not-allowed"
               >
                 Continue to Ranking
               </button>
@@ -340,10 +340,10 @@ export default function ValuesClarificationPage() {
 
         {step === 'rank' && (
           <div className="space-y-8">
-            <div className="bg-[#111111] border border-gray-800 rounded-2xl p-8">
+            <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8">
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-white mb-2">Step 2: Rank Your Values</h2>
-                <p className="text-gray-400">
+                <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-2">Step 2: Rank Your Values</h2>
+                <p className="text-[var(--fg-muted)]">
                   Arrange your selected values in order of importance (most important at the top)
                 </p>
               </div>
@@ -355,25 +355,25 @@ export default function ValuesClarificationPage() {
                   const Icon = value.icon;
 
                   return (
-                    <div key={valueId} className="flex items-center gap-4 p-4 bg-[#1a1a1a] border border-gray-800 rounded-xl">
+                    <div key={valueId} className="flex items-center gap-4 p-4 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-xl">
                       <span className="text-2xl font-bold text-emerald-400 w-8">{index + 1}</span>
-                      <Icon className="w-6 h-6 text-gray-500" />
+                      <Icon className="w-6 h-6 text-[var(--fg-muted)]" />
                       <div className="flex-1">
-                        <h3 className="font-semibold text-white">{value.name}</h3>
-                        <p className="text-sm text-gray-400">{value.description}</p>
+                        <h3 className="font-semibold text-[var(--fg-primary)]">{value.name}</h3>
+                        <p className="text-sm text-[var(--fg-muted)]">{value.description}</p>
                       </div>
                       <div className="flex flex-col gap-1">
                         <button
                           onClick={() => moveValue(index, 'up')}
                           disabled={index === 0}
-                          className="p-1 hover:bg-[#2a2a2a] rounded disabled:opacity-30 text-gray-400"
+                          className="p-1 hover:bg-[var(--bg-tertiary)] rounded disabled:opacity-30 text-[var(--fg-muted)]"
                         >
                           ▲
                         </button>
                         <button
                           onClick={() => moveValue(index, 'down')}
                           disabled={index === topValues.length - 1}
-                          className="p-1 hover:bg-[#2a2a2a] rounded disabled:opacity-30 text-gray-400"
+                          className="p-1 hover:bg-[var(--bg-tertiary)] rounded disabled:opacity-30 text-[var(--fg-muted)]"
                         >
                           ▼
                         </button>
@@ -386,14 +386,14 @@ export default function ValuesClarificationPage() {
               <div className="flex gap-4">
                 <button
                   onClick={() => setStep('select')}
-                  className="flex-1 py-3 border border-gray-700 text-gray-300 rounded-lg font-medium hover:bg-[#1a1a1a] transition-colors"
+                  className="flex-1 py-3 border border-[var(--border-color)] text-[var(--fg-secondary)] rounded-lg font-medium hover:bg-[var(--bg-tertiary)] transition-colors"
                 >
                   Back
                 </button>
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="flex-1 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors disabled:bg-gray-700 disabled:text-gray-500"
+                  className="flex-1 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 transition-colors disabled:bg-[var(--bg-tertiary)] disabled:text-[var(--fg-muted)]"
                 >
                   {saving ? 'Saving...' : 'Save Results'}
                 </button>

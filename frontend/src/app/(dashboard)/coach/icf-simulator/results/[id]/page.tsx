@@ -117,7 +117,7 @@ export default function ICFSimulatorResultsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-[#0a0a0a]">
+      <div className="flex items-center justify-center h-screen bg-[var(--bg-primary)]">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
       </div>
     );
@@ -125,7 +125,7 @@ export default function ICFSimulatorResultsPage() {
 
   if (error || !result) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--fg-primary)] flex items-center justify-center">
         <div className="text-center">
           <XCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
           <h1 className="text-2xl font-bold mb-2">{error || 'Resultado no encontrado'}</h1>
@@ -138,20 +138,20 @@ export default function ICFSimulatorResultsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--fg-primary)]">
       {/* Breadcrumb */}
-      <div className="border-b border-gray-800 px-6 py-4">
+      <div className="border-b border-[var(--border-color)] px-6 py-4">
         <div className="flex items-center gap-2 text-sm">
-          <Link href="/coach" className="text-gray-500 hover:text-white transition-colors flex items-center gap-1">
+          <Link href="/coach" className="text-[var(--fg-muted)] hover:text-[var(--fg-primary)] transition-colors flex items-center gap-1">
             <Home className="w-4 h-4" />
             Inicio
           </Link>
-          <ChevronRight className="w-4 h-4 text-gray-600" />
-          <Link href="/coach/icf-simulator" className="text-gray-500 hover:text-white transition-colors">
+          <ChevronRight className="w-4 h-4 text-[var(--fg-muted)]" />
+          <Link href="/coach/icf-simulator" className="text-[var(--fg-muted)] hover:text-[var(--fg-primary)] transition-colors">
             Simulador ICF
           </Link>
-          <ChevronRight className="w-4 h-4 text-gray-600" />
-          <span className="text-white">Resultados</span>
+          <ChevronRight className="w-4 h-4 text-[var(--fg-muted)]" />
+          <span className="text-[var(--fg-primary)]">Resultados</span>
         </div>
       </div>
 
@@ -160,13 +160,13 @@ export default function ICFSimulatorResultsPage() {
           {/* Header */}
           <div className="flex items-start justify-between mb-8">
             <div>
-              <Link href="/coach/icf-simulator" className="inline-flex items-center gap-1 text-gray-500 hover:text-white text-sm mb-4 transition-colors">
+              <Link href="/coach/icf-simulator" className="inline-flex items-center gap-1 text-[var(--fg-muted)] hover:text-[var(--fg-primary)] text-sm mb-4 transition-colors">
                 <ArrowLeft className="w-4 h-4" />
                 Volver al simulador
               </Link>
               <h1 className="text-3xl font-bold mb-2">Resultados de la Simulación</h1>
-              <p className="text-gray-400">
-                Resumen detallado del intento realizado el <span className="text-white">{formatDate(result.completedAt)}</span>. 
+              <p className="text-[var(--fg-muted)]">
+                Resumen detallado del intento realizado el <span className="text-[var(--fg-primary)]">{formatDate(result.completedAt)}</span>. 
                 Los resultados se basan en la estructura de competencias ICF actualizada.
               </p>
             </div>
@@ -189,18 +189,18 @@ export default function ICFSimulatorResultsPage() {
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             {/* Calificación Final */}
-            <div className="bg-[#111111] border border-gray-800 rounded-xl p-5">
-              <p className="text-gray-500 text-xs uppercase tracking-wider mb-2">Calificación Final</p>
+            <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5">
+              <p className="text-[var(--fg-muted)] text-xs uppercase tracking-wider mb-2">Calificación Final</p>
               <p className={`text-5xl font-bold mb-2 ${getScoreColor(result.score)}`}>{result.score}%</p>
-              <div className="h-1.5 bg-[#1a1a1a] rounded-full overflow-hidden">
+              <div className="h-1.5 bg-[var(--bg-tertiary)] rounded-full overflow-hidden">
                 <div className={`h-full rounded-full ${getProgressColor(result.score)}`} style={{ width: `${result.score}%` }}></div>
               </div>
             </div>
 
             {/* Estado/Nivel */}
-            <div className="bg-[#111111] border border-gray-800 rounded-xl p-5">
-              <p className="text-gray-500 text-xs uppercase tracking-wider mb-2">Nivel Alcanzado</p>
-              <p className="text-2xl font-bold text-white mb-1">{result.level}</p>
+            <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5">
+              <p className="text-[var(--fg-muted)] text-xs uppercase tracking-wider mb-2">Nivel Alcanzado</p>
+              <p className="text-2xl font-bold text-[var(--fg-primary)] mb-1">{result.level}</p>
               <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs ${
                 result.passed 
                   ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400' 
@@ -212,29 +212,29 @@ export default function ICFSimulatorResultsPage() {
             </div>
 
             {/* Tiempo */}
-            <div className="bg-[#111111] border border-gray-800 rounded-xl p-5">
-              <p className="text-gray-500 text-xs uppercase tracking-wider mb-2">Tiempo</p>
-              <p className="text-3xl font-bold text-white mb-1">{formatTime(result.timeSpent)}</p>
-              <p className="text-gray-500 text-sm">Límite: 60m 00s</p>
+            <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5">
+              <p className="text-[var(--fg-muted)] text-xs uppercase tracking-wider mb-2">Tiempo</p>
+              <p className="text-3xl font-bold text-[var(--fg-primary)] mb-1">{formatTime(result.timeSpent)}</p>
+              <p className="text-[var(--fg-muted)] text-sm">Límite: 60m 00s</p>
             </div>
 
             {/* Aciertos */}
-            <div className="bg-[#111111] border border-gray-800 rounded-xl p-5">
-              <p className="text-gray-500 text-xs uppercase tracking-wider mb-2">Aciertos</p>
-              <p className="text-3xl font-bold text-white mb-1">
-                {result.correctAnswers}<span className="text-gray-500 text-lg">/ {result.totalQuestions}</span>
+            <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5">
+              <p className="text-[var(--fg-muted)] text-xs uppercase tracking-wider mb-2">Aciertos</p>
+              <p className="text-3xl font-bold text-[var(--fg-primary)] mb-1">
+                {result.correctAnswers}<span className="text-[var(--fg-muted)] text-lg">/ {result.totalQuestions}</span>
               </p>
-              <p className="text-gray-500 text-sm">70% mínimo requerido</p>
+              <p className="text-[var(--fg-muted)] text-sm">70% mínimo requerido</p>
             </div>
           </div>
 
           {/* Main Content Grid */}
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Desglose por Competencia - 2 columns */}
-            <div className="lg:col-span-2 bg-[#111111] border border-gray-800 rounded-xl p-6">
+            <div className="lg:col-span-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
               <div className="flex items-center gap-2 mb-6">
                 <BarChart3 className="w-5 h-5 text-emerald-400" />
-                <h2 className="text-lg font-semibold text-white">Desglose por Competencia ICF</h2>
+                <h2 className="text-lg font-semibold text-[var(--fg-primary)]">Desglose por Competencia ICF</h2>
               </div>
 
               <div className="space-y-8">
@@ -247,22 +247,22 @@ export default function ICFSimulatorResultsPage() {
                           <span className={`px-2 py-1 ${colors.bg} ${colors.text} text-xs font-medium rounded`}>
                             DOMINIO {domain.domainId}
                           </span>
-                          <span className="text-white font-medium text-sm uppercase">{domain.domainName}</span>
+                          <span className="text-[var(--fg-primary)] font-medium text-sm uppercase">{domain.domainName}</span>
                         </div>
                         <span className={`text-lg font-bold ${getScoreColor(domain.score)}`}>{domain.score}%</span>
                       </div>
 
                       <div className="grid md:grid-cols-2 gap-4">
                         {domain.competencies?.map((comp) => (
-                          <div key={comp.competencyId} className="bg-[#1a1a1a] rounded-lg p-4">
+                          <div key={comp.competencyId} className="bg-[var(--bg-tertiary)] rounded-lg p-4">
                             <div className="flex justify-between items-start mb-2">
-                              <p className="text-white text-sm font-medium">{comp.competencyId}. {comp.competencyName}</p>
+                              <p className="text-[var(--fg-primary)] text-sm font-medium">{comp.competencyId}. {comp.competencyName}</p>
                               <span className={`text-sm font-bold ${getScoreColor(comp.score)}`}>{comp.score}%</span>
                             </div>
-                            <div className="h-1.5 bg-[#0a0a0a] rounded-full overflow-hidden mb-2">
+                            <div className="h-1.5 bg-[var(--bg-primary)] rounded-full overflow-hidden mb-2">
                               <div className={`h-full rounded-full ${getProgressColor(comp.score)}`} style={{ width: `${comp.score}%` }}></div>
                             </div>
-                            <p className="text-gray-500 text-xs">{comp.correct}/{comp.total} respuestas correctas</p>
+                            <p className="text-[var(--fg-muted)] text-xs">{comp.correct}/{comp.total} respuestas correctas</p>
                           </div>
                         ))}
                       </div>
@@ -274,10 +274,10 @@ export default function ICFSimulatorResultsPage() {
 
             {/* Análisis de IA - 1 column */}
             <div className="space-y-6">
-              <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+              <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
                 <div className="flex items-center gap-2 mb-6">
                   <Sparkles className="w-5 h-5 text-violet-400" />
-                  <h2 className="text-lg font-semibold text-white">Análisis de IA</h2>
+                  <h2 className="text-lg font-semibold text-[var(--fg-primary)]">Análisis de IA</h2>
                 </div>
 
                 {/* Feedback Personalizado */}
@@ -286,9 +286,9 @@ export default function ICFSimulatorResultsPage() {
                     <div className="w-8 h-8 bg-amber-500/10 rounded-lg flex items-center justify-center">
                       <Lightbulb className="w-4 h-4 text-amber-400" />
                     </div>
-                    <h3 className="text-white font-medium">Feedback Personalizado</h3>
+                    <h3 className="text-[var(--fg-primary)] font-medium">Feedback Personalizado</h3>
                   </div>
-                  <p className="text-gray-400 text-sm leading-relaxed">
+                  <p className="text-[var(--fg-muted)] text-sm leading-relaxed">
                     {result.aiAnalysis?.feedback}
                   </p>
                 </div>
@@ -299,9 +299,9 @@ export default function ICFSimulatorResultsPage() {
                     <div className="w-8 h-8 bg-emerald-500/10 rounded-lg flex items-center justify-center">
                       <TrendingUp className="w-4 h-4 text-emerald-400" />
                     </div>
-                    <h3 className="text-white font-medium">Recomendación</h3>
+                    <h3 className="text-[var(--fg-primary)] font-medium">Recomendación</h3>
                   </div>
-                  <p className="text-gray-400 text-sm leading-relaxed">
+                  <p className="text-[var(--fg-muted)] text-sm leading-relaxed">
                     {result.aiAnalysis?.recommendation}
                   </p>
                 </div>
@@ -310,36 +310,36 @@ export default function ICFSimulatorResultsPage() {
                 <div className="grid grid-cols-2 gap-3 mb-6">
                   <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-lg p-3">
                     <p className="text-emerald-400 text-xs uppercase mb-1">Fortaleza</p>
-                    <p className="text-white text-sm font-medium">{result.aiAnalysis?.strongestArea}</p>
+                    <p className="text-[var(--fg-primary)] text-sm font-medium">{result.aiAnalysis?.strongestArea}</p>
                   </div>
                   <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3">
                     <p className="text-amber-400 text-xs uppercase mb-1">A Mejorar</p>
-                    <p className="text-white text-sm font-medium">{result.aiAnalysis?.weakestArea}</p>
+                    <p className="text-[var(--fg-primary)] text-sm font-medium">{result.aiAnalysis?.weakestArea}</p>
                   </div>
                 </div>
 
                 {/* CTA Button */}
-                <button className="w-full py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2">
+                <button className="w-full py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2">
                   <BookOpen className="w-4 h-4" />
                   Ir al Módulo de Refuerzo
                 </button>
               </div>
 
               {/* Quick Actions */}
-              <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
-                <h3 className="text-white font-medium mb-4">Acciones Rápidas</h3>
+              <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
+                <h3 className="text-[var(--fg-primary)] font-medium mb-4">Acciones Rápidas</h3>
                 <div className="space-y-2">
-                  <Link href="/coach/icf-simulator" className="flex items-center gap-3 p-3 bg-[#1a1a1a] rounded-lg hover:bg-[#222] transition-colors">
+                  <Link href="/coach/icf-simulator" className="flex items-center gap-3 p-3 bg-[var(--bg-tertiary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors">
                     <Target className="w-5 h-5 text-emerald-400" />
-                    <span className="text-sm text-gray-300">Intentar nueva simulación</span>
+                    <span className="text-sm text-[var(--fg-secondary)]">Intentar nueva simulación</span>
                   </Link>
-                  <Link href="/coach/icf-simulator" className="flex items-center gap-3 p-3 bg-[#1a1a1a] rounded-lg hover:bg-[#222] transition-colors">
+                  <Link href="/coach/icf-simulator" className="flex items-center gap-3 p-3 bg-[var(--bg-tertiary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors">
                     <Award className="w-5 h-5 text-amber-400" />
-                    <span className="text-sm text-gray-300">Ver historial completo</span>
+                    <span className="text-sm text-[var(--fg-secondary)]">Ver historial completo</span>
                   </Link>
-                  <Link href="/coach/tools" className="flex items-center gap-3 p-3 bg-[#1a1a1a] rounded-lg hover:bg-[#222] transition-colors">
+                  <Link href="/coach/tools" className="flex items-center gap-3 p-3 bg-[var(--bg-tertiary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors">
                     <Clock className="w-5 h-5 text-emerald-400" />
-                    <span className="text-sm text-gray-300">Explorar herramientas</span>
+                    <span className="text-sm text-[var(--fg-secondary)]">Explorar herramientas</span>
                   </Link>
                 </div>
               </div>

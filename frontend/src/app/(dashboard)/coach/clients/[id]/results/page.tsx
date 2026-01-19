@@ -89,36 +89,36 @@ export default function ClientToolResultsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-[#0a0a0f]">
+      <div className="flex items-center justify-center h-screen bg-[var(--bg-primary)]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] p-8">
+    <div className="min-h-screen bg-[var(--bg-primary)] p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
           <Link
             href={'/coach/clients/' + clientId}
-            className="p-2 text-gray-400 hover:text-white hover:bg-[#12131a] rounded-lg transition-colors"
+            className="p-2 text-[var(--fg-muted)] hover:text-[var(--fg-primary)] hover:bg-[var(--bg-secondary)] rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="text-3xl font-bold text-white">Resultados de Herramientas</h1>
-            <p className="text-gray-400">
+            <h1 className="text-3xl font-bold text-[var(--fg-primary)]">Resultados de Herramientas</h1>
+            <p className="text-[var(--fg-muted)]">
               {client?.displayName || client?.firstName || 'Cliente'} - {results.length} herramientas completadas
             </p>
           </div>
         </div>
 
         {results.length === 0 ? (
-          <div className="bg-[#12131a] border border-gray-800 rounded-xl p-12 text-center">
-            <Grid className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-            <h3 className="text-white font-semibold mb-2">Sin resultados aún</h3>
-            <p className="text-gray-400">Este cliente no ha completado ninguna herramienta todavía.</p>
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-12 text-center">
+            <Grid className="w-12 h-12 text-[var(--fg-muted)] mx-auto mb-4" />
+            <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Sin resultados aún</h3>
+            <p className="text-[var(--fg-muted)]">Este cliente no ha completado ninguna herramienta todavía.</p>
           </div>
         ) : (
           <div className="grid lg:grid-cols-3 gap-6">
@@ -136,7 +136,7 @@ export default function ClientToolResultsPage() {
                     className={'w-full text-left p-4 rounded-xl border transition-colors ' +
                       (isSelected 
                         ? 'bg-emerald-600/20 border-emerald-500' 
-                        : 'bg-[#12131a] border-gray-800 hover:bg-[#1a1b23]')
+                        : 'bg-[var(--bg-secondary)] border-[var(--border-color)] hover:bg-[var(--bg-tertiary)]')
                     }
                   >
                     <div className="flex items-center gap-3">
@@ -144,8 +144,8 @@ export default function ClientToolResultsPage() {
                         <Icon className={'w-5 h-5 text-' + info.color + '-400'} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-white font-medium truncate">{info.name}</h4>
-                        <p className="text-gray-500 text-sm">{formatDate(result.completedAt)}</p>
+                        <h4 className="text-[var(--fg-primary)] font-medium truncate">{info.name}</h4>
+                        <p className="text-[var(--fg-muted)] text-sm">{formatDate(result.completedAt)}</p>
                       </div>
                     </div>
                   </button>
@@ -156,14 +156,14 @@ export default function ClientToolResultsPage() {
             {/* Result Detail */}
             <div className="lg:col-span-2">
               {!selectedResult ? (
-                <div className="bg-[#12131a] border border-gray-800 rounded-xl p-12 text-center h-full flex items-center justify-center">
+                <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-12 text-center h-full flex items-center justify-center">
                   <div>
-                    <BarChart3 className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-                    <p className="text-gray-400">Selecciona una herramienta para ver sus resultados</p>
+                    <BarChart3 className="w-12 h-12 text-[var(--fg-muted)] mx-auto mb-4" />
+                    <p className="text-[var(--fg-muted)]">Selecciona una herramienta para ver sus resultados</p>
                   </div>
                 </div>
               ) : (
-                <div className="bg-[#12131a] border border-gray-800 rounded-xl p-6">
+                <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-3">
                       {(() => {
@@ -175,8 +175,8 @@ export default function ClientToolResultsPage() {
                               <Icon className={'w-6 h-6 text-' + info.color + '-400'} />
                             </div>
                             <div>
-                              <h3 className="text-white font-semibold text-lg">{info.name}</h3>
-                              <p className="text-gray-500 text-sm">{formatDate(selectedResult.completedAt)}</p>
+                              <h3 className="text-[var(--fg-primary)] font-semibold text-lg">{info.name}</h3>
+                              <p className="text-[var(--fg-muted)] text-sm">{formatDate(selectedResult.completedAt)}</p>
                             </div>
                           </>
                         );
@@ -185,16 +185,16 @@ export default function ClientToolResultsPage() {
                   </div>
 
                   {/* Results Display */}
-                  <div className="border-t border-gray-800 pt-6">
+                  <div className="border-t border-[var(--border-color)] pt-6">
                     {selectedResult.toolId === 'wheel-of-life' && selectedResult.results?.areas && (
                       <div className="grid grid-cols-2 gap-4">
                         {Object.entries(selectedResult.results.areas).map(([area, score]: [string, any]) => (
-                          <div key={area} className="bg-[#1a1b23] rounded-lg p-4">
+                          <div key={area} className="bg-[var(--bg-tertiary)] rounded-lg p-4">
                             <div className="flex items-center justify-between mb-2">
-                              <span className="text-gray-400 text-sm capitalize">{area.replace(/_/g, ' ')}</span>
-                              <span className="text-white font-bold">{score}/10</span>
+                              <span className="text-[var(--fg-muted)] text-sm capitalize">{area.replace(/_/g, ' ')}</span>
+                              <span className="text-[var(--fg-primary)] font-bold">{score}/10</span>
                             </div>
-                            <div className="h-2 bg-gray-700 rounded-full">
+                            <div className="h-2 bg-[var(--bg-tertiary)] rounded-full">
                               <div 
                                 className="h-full bg-emerald-500 rounded-full" 
                                 style={{ width: (Number(score) * 10) + '%' }} 
@@ -212,17 +212,17 @@ export default function ClientToolResultsPage() {
                             const score = selectedResult.results[type.toLowerCase()] || selectedResult.results[type] || 0;
                             const colors: Record<string, string> = { D: 'red', I: 'yellow', S: 'green', C: 'blue' };
                             return (
-                              <div key={type} className="bg-[#1a1b23] rounded-lg p-4 text-center">
+                              <div key={type} className="bg-[var(--bg-tertiary)] rounded-lg p-4 text-center">
                                 <span className={'text-3xl font-bold text-' + colors[type] + '-400'}>{score}%</span>
-                                <p className="text-gray-400 mt-1">{type}</p>
+                                <p className="text-[var(--fg-muted)] mt-1">{type}</p>
                               </div>
                             );
                           })}
                         </div>
                         {selectedResult.results.dominantType && (
-                          <div className="bg-[#1a1b23] rounded-lg p-4">
-                            <p className="text-gray-400 text-sm">Tipo Dominante</p>
-                            <p className="text-white text-xl font-bold">{selectedResult.results.dominantType}</p>
+                          <div className="bg-[var(--bg-tertiary)] rounded-lg p-4">
+                            <p className="text-[var(--fg-muted)] text-sm">Tipo Dominante</p>
+                            <p className="text-[var(--fg-primary)] text-xl font-bold">{selectedResult.results.dominantType}</p>
                           </div>
                         )}
                       </div>
@@ -230,13 +230,13 @@ export default function ClientToolResultsPage() {
 
                     {selectedResult.toolId === 'values-clarification' && selectedResult.results?.values && (
                       <div className="space-y-3">
-                        <h4 className="text-white font-medium mb-3">Valores Principales</h4>
+                        <h4 className="text-[var(--fg-primary)] font-medium mb-3">Valores Principales</h4>
                         {selectedResult.results.values.slice(0, 5).map((value: any, idx: number) => (
-                          <div key={idx} className="flex items-center gap-3 bg-[#1a1b23] rounded-lg p-3">
+                          <div key={idx} className="flex items-center gap-3 bg-[var(--bg-tertiary)] rounded-lg p-3">
                             <span className="w-8 h-8 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center font-bold">
                               {idx + 1}
                             </span>
-                            <span className="text-white">{value.name || value}</span>
+                            <span className="text-[var(--fg-primary)]">{value.name || value}</span>
                           </div>
                         ))}
                       </div>
@@ -245,9 +245,9 @@ export default function ClientToolResultsPage() {
                     {selectedResult.toolId === 'grow-model' && selectedResult.results && (
                       <div className="space-y-4">
                         {['goal', 'reality', 'options', 'will'].map((section) => (
-                          <div key={section} className="bg-[#1a1b23] rounded-lg p-4">
+                          <div key={section} className="bg-[var(--bg-tertiary)] rounded-lg p-4">
                             <h4 className="text-violet-400 font-medium uppercase mb-2">{section}</h4>
-                            <p className="text-white">{selectedResult.results[section] || 'No completado'}</p>
+                            <p className="text-[var(--fg-primary)]">{selectedResult.results[section] || 'No completado'}</p>
                           </div>
                         ))}
                       </div>
@@ -255,8 +255,8 @@ export default function ClientToolResultsPage() {
 
                     {/* Generic fallback for other tools */}
                     {!['wheel-of-life', 'disc', 'values-clarification', 'grow-model'].includes(selectedResult.toolId) && (
-                      <div className="bg-[#1a1b23] rounded-lg p-4">
-                        <pre className="text-gray-300 text-sm whitespace-pre-wrap overflow-auto max-h-96">
+                      <div className="bg-[var(--bg-tertiary)] rounded-lg p-4">
+                        <pre className="text-[var(--fg-secondary)] text-sm whitespace-pre-wrap overflow-auto max-h-96">
                           {JSON.stringify(selectedResult.results, null, 2)}
                         </pre>
                       </div>

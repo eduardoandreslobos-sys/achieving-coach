@@ -155,71 +155,71 @@ export default function CoacheeDashboard() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-[#0a0a0a]">
+      <div className="flex items-center justify-center h-screen bg-[var(--bg-primary)]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="p-6 lg:p-8 bg-[#0a0a0a] min-h-screen">
+    <div className="p-6 lg:p-8 bg-[var(--bg-primary)] min-h-screen">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-white mb-1">
+          <h1 className="text-2xl font-bold text-[var(--fg-primary)] mb-1">
             {getGreeting()}, {userProfile?.displayName?.split(' ')[0] || 'Coachee'}
           </h1>
-          <p className="text-gray-400">Tu progreso de coaching de un vistazo.</p>
+          <p className="text-[var(--fg-muted)]">Tu progreso de coaching de un vistazo.</p>
         </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-5">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
                 <CheckCircle className="w-5 h-5 text-emerald-400" />
               </div>
             </div>
-            <p className="text-2xl font-bold text-white">{stats.completedGoals}</p>
-            <p className="text-gray-500 text-sm">Metas Completadas</p>
+            <p className="text-2xl font-bold text-[var(--fg-primary)]">{stats.completedGoals}</p>
+            <p className="text-[var(--fg-muted)] text-sm">Metas Completadas</p>
           </div>
 
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-5">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
                 <Calendar className="w-5 h-5 text-emerald-400" />
               </div>
             </div>
-            <p className="text-2xl font-bold text-white">{stats.totalSessions}</p>
-            <p className="text-gray-500 text-sm">Sesiones Completadas</p>
+            <p className="text-2xl font-bold text-[var(--fg-primary)]">{stats.totalSessions}</p>
+            <p className="text-[var(--fg-muted)] text-sm">Sesiones Completadas</p>
           </div>
 
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-5">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 bg-orange-500/10 rounded-lg flex items-center justify-center">
                 <Flame className="w-5 h-5 text-orange-400" />
               </div>
             </div>
-            <p className="text-2xl font-bold text-white">{stats.streak} días</p>
-            <p className="text-gray-500 text-sm">Racha Activa</p>
+            <p className="text-2xl font-bold text-[var(--fg-primary)]">{stats.streak} días</p>
+            <p className="text-[var(--fg-muted)] text-sm">Racha Activa</p>
           </div>
 
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-5">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 bg-violet-500/10 rounded-lg flex items-center justify-center">
                 <Award className="w-5 h-5 text-violet-400" />
               </div>
             </div>
-            <p className="text-2xl font-bold text-white">{stats.toolsCompleted}</p>
-            <p className="text-gray-500 text-sm">Herramientas Usadas</p>
+            <p className="text-2xl font-bold text-[var(--fg-primary)]">{stats.toolsCompleted}</p>
+            <p className="text-[var(--fg-muted)] text-sm">Herramientas Usadas</p>
           </div>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Upcoming Sessions */}
-          <div className="lg:col-span-2 bg-[#111111] border border-gray-800 rounded-xl p-6">
+          <div className="lg:col-span-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-[var(--fg-primary)] flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-emerald-400" />
                 Próximas Sesiones
               </h2>
@@ -232,24 +232,24 @@ export default function CoacheeDashboard() {
             {upcomingSessions.length > 0 ? (
               <div className="space-y-3">
                 {upcomingSessions.map((session) => (
-                  <div key={session.id} className="flex items-center justify-between p-4 bg-[#1a1a1a] rounded-lg">
+                  <div key={session.id} className="flex items-center justify-between p-4 bg-[var(--bg-tertiary)] rounded-lg">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 bg-emerald-500/10 rounded-lg flex flex-col items-center justify-center">
                         <span className="text-emerald-400 text-xs font-medium">
                           {session.date.toLocaleDateString('es-CL', { weekday: 'short' })}
                         </span>
-                        <span className="text-white font-bold">
+                        <span className="text-[var(--fg-primary)] font-bold">
                           {session.date.getDate()}
                         </span>
                       </div>
                       <div>
-                        <p className="text-white font-medium">Sesión con {session.coachName}</p>
-                        <p className="text-gray-500 text-sm">{formatTime(session.date)}</p>
+                        <p className="text-[var(--fg-primary)] font-medium">Sesión con {session.coachName}</p>
+                        <p className="text-[var(--fg-muted)] text-sm">{formatTime(session.date)}</p>
                       </div>
                     </div>
                     <Link
                       href={`/sessions/${session.id}`}
-                      className="px-4 py-2 bg-emerald-600 text-white text-sm rounded-lg hover:bg-emerald-700 transition-colors"
+                      className="px-4 py-2 bg-emerald-600 text-[var(--fg-primary)] text-sm rounded-lg hover:bg-emerald-700 transition-colors"
                     >
                       Unirse
                     </Link>
@@ -258,8 +258,8 @@ export default function CoacheeDashboard() {
               </div>
             ) : (
               <div className="text-center py-8">
-                <Calendar className="w-12 h-12 text-gray-700 mx-auto mb-3" />
-                <p className="text-gray-500">No tienes sesiones programadas</p>
+                <Calendar className="w-12 h-12 text-[var(--fg-muted)] mx-auto mb-3" />
+                <p className="text-[var(--fg-muted)]">No tienes sesiones programadas</p>
                 <Link href="/sessions" className="text-emerald-400 text-sm mt-2 inline-block hover:text-emerald-300">
                   Solicitar sesión
                 </Link>
@@ -268,9 +268,9 @@ export default function CoacheeDashboard() {
           </div>
 
           {/* Assigned Tools */}
-          <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-[var(--fg-primary)] flex items-center gap-2">
                 <BookOpen className="w-5 h-5 text-emerald-400" />
                 Herramientas
               </h2>
@@ -286,32 +286,32 @@ export default function CoacheeDashboard() {
                   <Link
                     key={tool.id}
                     href={`/tools/${tool.toolId}`}
-                    className="flex items-center gap-3 p-3 bg-[#1a1a1a] rounded-lg hover:bg-[#222] transition-colors"
+                    className="flex items-center gap-3 p-3 bg-[var(--bg-tertiary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
                   >
                     <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
                       <Star className="w-5 h-5 text-emerald-400" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-white text-sm font-medium">{tool.toolName}</p>
-                      <p className="text-gray-500 text-xs">Pendiente</p>
+                      <p className="text-[var(--fg-primary)] text-sm font-medium">{tool.toolName}</p>
+                      <p className="text-[var(--fg-muted)] text-xs">Pendiente</p>
                     </div>
-                    <ArrowRight className="w-4 h-4 text-gray-500" />
+                    <ArrowRight className="w-4 h-4 text-[var(--fg-muted)]" />
                   </Link>
                 ))}
               </div>
             ) : (
               <div className="text-center py-6">
-                <BookOpen className="w-10 h-10 text-gray-700 mx-auto mb-2" />
-                <p className="text-gray-500 text-sm">Sin herramientas asignadas</p>
+                <BookOpen className="w-10 h-10 text-[var(--fg-muted)] mx-auto mb-2" />
+                <p className="text-[var(--fg-muted)] text-sm">Sin herramientas asignadas</p>
               </div>
             )}
           </div>
         </div>
 
         {/* Goals Section */}
-        <div className="mt-6 bg-[#111111] border border-gray-800 rounded-xl p-6">
+        <div className="mt-6 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-[var(--fg-primary)] flex items-center gap-2">
               <Target className="w-5 h-5 text-violet-400" />
               Mis Metas
             </h2>
@@ -324,21 +324,21 @@ export default function CoacheeDashboard() {
           {goals.length > 0 ? (
             <div className="grid md:grid-cols-3 gap-4">
               {goals.map((goal) => (
-                <div key={goal.id} className="bg-[#1a1a1a] rounded-lg p-4">
-                  <h3 className="text-white font-medium mb-3 line-clamp-2">{goal.title}</h3>
+                <div key={goal.id} className="bg-[var(--bg-tertiary)] rounded-lg p-4">
+                  <h3 className="text-[var(--fg-primary)] font-medium mb-3 line-clamp-2">{goal.title}</h3>
                   <div className="mb-2">
                     <div className="flex justify-between text-xs mb-1">
-                      <span className="text-gray-500">Progreso</span>
-                      <span className="text-white">{goal.progress}%</span>
+                      <span className="text-[var(--fg-muted)]">Progreso</span>
+                      <span className="text-[var(--fg-primary)]">{goal.progress}%</span>
                     </div>
-                    <div className="h-2 bg-[#0a0a0a] rounded-full overflow-hidden">
+                    <div className="h-2 bg-[var(--bg-primary)] rounded-full overflow-hidden">
                       <div
                         className="h-full bg-violet-500 rounded-full"
                         style={{ width: `${goal.progress}%` }}
                       />
                     </div>
                   </div>
-                  <p className="text-gray-500 text-xs flex items-center gap-1">
+                  <p className="text-[var(--fg-muted)] text-xs flex items-center gap-1">
                     <Clock className="w-3 h-3" />
                     Vence: {formatDate(goal.dueDate)}
                   </p>
@@ -347,8 +347,8 @@ export default function CoacheeDashboard() {
             </div>
           ) : (
             <div className="text-center py-8">
-              <Target className="w-12 h-12 text-gray-700 mx-auto mb-3" />
-              <p className="text-gray-500">No tienes metas activas</p>
+              <Target className="w-12 h-12 text-[var(--fg-muted)] mx-auto mb-3" />
+              <p className="text-[var(--fg-muted)]">No tienes metas activas</p>
               <Link href="/goals" className="text-emerald-400 text-sm mt-2 inline-block hover:text-emerald-300">
                 Crear una meta
               </Link>
