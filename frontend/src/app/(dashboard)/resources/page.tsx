@@ -97,8 +97,8 @@ export default function ResourcesPage() {
   const getIconColor = (type: string) => {
     switch (type) {
       case 'pdf': return 'bg-red-500/20 text-red-400';
-      case 'video': return 'bg-emerald-500/20 text-emerald-400';
-      case 'document': return 'bg-emerald-500/20 text-emerald-400';
+      case 'video': return 'bg-emerald-500/20 text-[var(--accent-primary)]';
+      case 'document': return 'bg-emerald-500/20 text-[var(--accent-primary)]';
       case 'link': return 'bg-violet-500/20 text-violet-400';
       default: return 'bg-[var(--bg-tertiary)]/20 text-[var(--fg-muted)]';
     }
@@ -177,7 +177,7 @@ export default function ResourcesPage() {
         {resources.length === 0 ? (
           <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-12 text-center">
             <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Folder className="w-8 h-8 text-emerald-400" />
+              <Folder className="w-8 h-8 text-[var(--accent-primary)]" />
             </div>
             <h3 className="text-xl font-semibold text-[var(--fg-primary)] mb-2">No hay recursos disponibles</h3>
             <p className="text-[var(--fg-muted)] max-w-md mx-auto">

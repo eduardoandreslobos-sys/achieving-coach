@@ -70,7 +70,7 @@ export default function DashboardSidebar({ isOpen = false, onClose }: DashboardS
           <div className="w-9 h-9 bg-emerald-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">
             A
           </div>
-          {!collapsed && <span className="text-lg font-semibold text-emerald-400">AchievingCoach</span>}
+          {!collapsed && <span className="text-lg font-semibold text-[var(--accent-primary)]">AchievingCoach</span>}
         </div>
         {/* Mobile close button */}
         {!collapsed && onClose && (
@@ -104,7 +104,7 @@ export default function DashboardSidebar({ isOpen = false, onClose }: DashboardS
               title={collapsed ? item.name : undefined}
               className={`flex items-center ${collapsed ? 'justify-center px-2' : 'px-4'} py-3 text-sm font-medium rounded-lg transition-colors ${
                 isActive
-                  ? 'bg-emerald-600/20 text-emerald-400 border-l-2 border-emerald-500 -ml-[2px]'
+                  ? 'bg-emerald-600/20 text-[var(--accent-primary)] border-l-2 border-emerald-500 -ml-[2px]'
                   : 'text-[var(--fg-muted)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--fg-primary)]'
               }`}
             >
@@ -135,7 +135,7 @@ export default function DashboardSidebar({ isOpen = false, onClose }: DashboardS
               {userProfile.photoURL ? (
                 <img src={userProfile.photoURL} alt="Profile" className="w-full h-full object-cover" />
               ) : (
-                <span className="text-emerald-400 font-medium">
+                <span className="text-[var(--accent-primary)] font-medium">
                   {userProfile.displayName?.charAt(0) || userProfile.firstName?.charAt(0) || 'U'}
                 </span>
               )}

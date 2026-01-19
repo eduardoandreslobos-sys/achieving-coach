@@ -73,7 +73,7 @@ export default function CoachProfilePage() {
         {/* Profile Information Section */}
         <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6 mb-6">
           <div className="flex items-center gap-2 mb-6">
-            <User className="w-5 h-5 text-emerald-400" />
+            <User className="w-5 h-5 text-[var(--accent-primary)]" />
             <h2 className="text-[var(--fg-primary)] font-semibold">Información del Perfil</h2>
           </div>
 
@@ -92,7 +92,7 @@ export default function CoachProfilePage() {
                   <Camera className="w-4 h-4" />
                 </button>
               </div>
-              <button className="text-emerald-400 text-sm hover:text-emerald-300">Eliminar foto</button>
+              <button className="text-[var(--accent-primary)] text-sm hover:text-emerald-300">Eliminar foto</button>
             </div>
 
             {/* Form */}

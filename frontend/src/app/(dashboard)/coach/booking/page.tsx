@@ -326,7 +326,7 @@ export default function BookingSettingsPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center">
-                <Globe className="w-6 h-6 text-emerald-400" />
+                <Globe className="w-6 h-6 text-[var(--accent-primary)]" />
               </div>
               <div>
                 <h3 className="text-[var(--fg-primary)] font-semibold mb-1">Tu Link de Booking</h3>
@@ -360,7 +360,7 @@ export default function BookingSettingsPage() {
               onClick={handleCopyLink}
               className="px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg hover:bg-[var(--bg-secondary)] transition-colors flex items-center gap-2"
             >
-              {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+              {copied ? <Check className="w-4 h-4 text-[var(--accent-primary)]" /> : <Copy className="w-4 h-4" />}
               {copied ? 'Copiado' : 'Copiar'}
             </button>
             <Link
@@ -472,7 +472,7 @@ export default function BookingSettingsPage() {
           {/* Session Settings */}
           <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
             <div className="flex items-center gap-2 mb-6">
-              <Settings className="w-5 h-5 text-emerald-400" />
+              <Settings className="w-5 h-5 text-[var(--accent-primary)]" />
               <h2 className="text-[var(--fg-primary)] font-semibold">Configuración de Sesión</h2>
             </div>
 
@@ -579,7 +579,7 @@ export default function BookingSettingsPage() {
           {/* Availability Settings */}
           <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
             <div className="flex items-center gap-2 mb-6">
-              <Calendar className="w-5 h-5 text-emerald-400" />
+              <Calendar className="w-5 h-5 text-[var(--accent-primary)]" />
               <h2 className="text-[var(--fg-primary)] font-semibold">Disponibilidad Semanal</h2>
             </div>
 
@@ -604,7 +604,7 @@ export default function BookingSettingsPage() {
                     {settings.availability[key]?.enabled && (
                       <button
                         onClick={() => addSlot(key)}
-                        className="text-emerald-400 hover:text-emerald-300 text-sm flex items-center gap-1"
+                        className="text-[var(--accent-primary)] hover:text-emerald-300 text-sm flex items-center gap-1"
                       >
                         <Plus className="w-3 h-3" />
                         Agregar

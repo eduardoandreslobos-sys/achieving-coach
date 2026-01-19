@@ -177,7 +177,7 @@ export default function EmotionalTriggersPage() {
         <div className="max-w-4xl mx-auto">
           <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 text-center">
             <div className={`w-16 h-16 ${isCoach ? 'bg-emerald-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
-              <Heart className={`w-8 h-8 ${isCoach ? 'text-emerald-400' : 'text-yellow-400'}`} />
+              <Heart className={`w-8 h-8 ${isCoach ? 'text-[var(--accent-primary)]' : 'text-yellow-400'}`} />
             </div>
             <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">
               {isCoach ? 'Tool for Coachees Only' : 'Access Required'}
@@ -206,7 +206,7 @@ export default function EmotionalTriggersPage() {
         <div className="max-w-4xl mx-auto">
           <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 text-center">
             <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle2 className="w-8 h-8 text-emerald-400" />
+              <CheckCircle2 className="w-8 h-8 text-[var(--accent-primary)]" />
             </div>
             <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">Tool Completed!</h2>
             <p className="text-[var(--fg-muted)] mb-6">
@@ -391,7 +391,7 @@ export default function EmotionalTriggersPage() {
                   <div className="space-y-3">
                     {entry.physicalSensations && (
                       <div className="flex items-start gap-2">
-                        <AlertCircle className="text-emerald-400 flex-shrink-0 mt-0.5" size={16} />
+                        <AlertCircle className="text-[var(--accent-primary)] flex-shrink-0 mt-0.5" size={16} />
                         <div>
                           <span className="text-sm font-medium text-[var(--fg-secondary)]">Physical: </span>
                           <span className="text-sm text-[var(--fg-muted)]">{entry.physicalSensations}</span>
@@ -415,7 +415,7 @@ export default function EmotionalTriggersPage() {
 
                     {entry.alternativeResponse && (
                       <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-3 flex items-start gap-2">
-                        <TrendingUp className="text-emerald-400 flex-shrink-0 mt-0.5" size={16} />
+                        <TrendingUp className="text-[var(--accent-primary)] flex-shrink-0 mt-0.5" size={16} />
                         <div>
                           <span className="text-sm font-medium text-emerald-300">Alternative: </span>
                           <span className="text-sm text-emerald-200">{entry.alternativeResponse}</span>

@@ -71,8 +71,8 @@ export default function SessionsPage() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'scheduled': return <span className="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded-full">Programada</span>;
-      case 'completed': return <span className="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded-full flex items-center gap-1"><CheckCircle className="w-3 h-3" />Completada</span>;
+      case 'scheduled': return <span className="px-2 py-1 bg-emerald-500/20 text-[var(--accent-primary)] text-xs rounded-full">Programada</span>;
+      case 'completed': return <span className="px-2 py-1 bg-emerald-500/20 text-[var(--accent-primary)] text-xs rounded-full flex items-center gap-1"><CheckCircle className="w-3 h-3" />Completada</span>;
       case 'cancelled': return <span className="px-2 py-1 bg-red-500/20 text-red-400 text-xs rounded-full flex items-center gap-1"><XCircle className="w-3 h-3" />Cancelada</span>;
       default: return null;
     }
@@ -118,7 +118,7 @@ export default function SessionsPage() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 bg-emerald-600/20 rounded-xl flex items-center justify-center">
-                        <Calendar className="w-6 h-6 text-emerald-400" />
+                        <Calendar className="w-6 h-6 text-[var(--accent-primary)]" />
                       </div>
                       <div>
                         <h3 className="text-[var(--fg-primary)] font-medium">{session.title}</h3>
@@ -136,7 +136,7 @@ export default function SessionsPage() {
                           <User className="w-4 h-4 text-[var(--fg-muted)]" />
                           <span className="text-[var(--fg-muted)] text-sm">{session.coachName}</span>
                           {session.confirmed && (
-                            <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs rounded-full">Confirmada</span>
+                            <span className="px-2 py-0.5 bg-emerald-500/20 text-[var(--accent-primary)] text-xs rounded-full">Confirmada</span>
                           )}
                         </div>
                       </div>
@@ -185,7 +185,7 @@ export default function SessionsPage() {
                         (session.status === 'completed' ? 'bg-emerald-600/20' : 'bg-red-600/20')
                       }>
                         {session.status === 'completed' ? (
-                          <CheckCircle className="w-6 h-6 text-emerald-400" />
+                          <CheckCircle className="w-6 h-6 text-[var(--accent-primary)]" />
                         ) : (
                           <XCircle className="w-6 h-6 text-red-400" />
                         )}

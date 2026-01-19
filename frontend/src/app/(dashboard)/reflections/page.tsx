@@ -91,7 +91,7 @@ export default function ReflectionsPage() {
             <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-12 mb-6">
               <div className="flex flex-col items-center text-center">
                 <div className="w-16 h-16 bg-emerald-600/20 rounded-2xl flex items-center justify-center mb-6">
-                  <FileText className="w-8 h-8 text-emerald-400" />
+                  <FileText className="w-8 h-8 text-[var(--accent-primary)]" />
                 </div>
                 <h2 className="text-xl font-semibold text-[var(--fg-primary)] mb-3">Aún no hay reflexiones</h2>
                 <p className="text-[var(--fg-muted)] mb-8 max-w-md">
@@ -121,7 +121,7 @@ export default function ReflectionsPage() {
 
               <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5">
                 <div className="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center mb-4">
-                  <PenTool className="w-5 h-5 text-emerald-400" />
+                  <PenTool className="w-5 h-5 text-[var(--accent-primary)]" />
                 </div>
                 <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Tips de escritura</h3>
                 <p className="text-[var(--fg-muted)] text-sm">

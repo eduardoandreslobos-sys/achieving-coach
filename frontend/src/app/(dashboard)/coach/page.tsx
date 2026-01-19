@@ -320,12 +320,12 @@ export default function CoachAnalyticsDashboard() {
             <div className="flex items-center justify-between mb-3">
               <p className="text-[var(--fg-muted)] text-xs uppercase tracking-wider">Total Active Coachees</p>
               <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
-                <Users className="w-5 h-5 text-emerald-400" />
+                <Users className="w-5 h-5 text-[var(--accent-primary)]" />
               </div>
             </div>
             <div className="flex items-baseline gap-2">
               <p className="text-3xl font-bold">{analytics.activeCoachees}</p>
-              <span className="text-emerald-400 text-sm flex items-center gap-1">
+              <span className="text-[var(--accent-primary)] text-sm flex items-center gap-1">
                 <TrendingUp className="w-3 h-3" />
                 +{analytics.coacheesChange}%
               </span>
@@ -336,7 +336,7 @@ export default function CoachAnalyticsDashboard() {
             <div className="flex items-center justify-between mb-3">
               <p className="text-[var(--fg-muted)] text-xs uppercase tracking-wider">Sessions This Month</p>
               <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
-                <Calendar className="w-5 h-5 text-emerald-400" />
+                <Calendar className="w-5 h-5 text-[var(--accent-primary)]" />
               </div>
             </div>
             <div className="flex items-baseline gap-2">
@@ -370,7 +370,7 @@ export default function CoachAnalyticsDashboard() {
             </div>
             <div className="flex items-baseline gap-2">
               <p className="text-3xl font-bold">{analytics.avgEngagement}<span className="text-lg text-[var(--fg-muted)]">/100</span></p>
-              <span className="text-emerald-400 text-sm flex items-center gap-1">
+              <span className="text-[var(--accent-primary)] text-sm flex items-center gap-1">
                 +{analytics.engagementChange}
               </span>
             </div>
@@ -387,7 +387,7 @@ export default function CoachAnalyticsDashboard() {
                 <p className="text-[var(--fg-primary)] font-medium">Session Volume Trends</p>
                 <div className="flex items-baseline gap-2 mt-1">
                   <p className="text-2xl font-bold">{analytics.sessionVolume.reduce((a, b) => a + b, 0)} Sessions</p>
-                  <span className="text-emerald-400 text-sm">+12% increase</span>
+                  <span className="text-[var(--accent-primary)] text-sm">+12% increase</span>
                 </div>
               </div>
               <button className="p-2 text-[var(--fg-muted)] hover:text-[var(--fg-primary)] transition-colors">
@@ -480,7 +480,7 @@ export default function CoachAnalyticsDashboard() {
               </div>
               <div className="text-center">
                 <p className="text-[var(--fg-muted)] text-sm mb-1">Completed</p>
-                <p className="text-2xl font-bold text-emerald-400">{analytics.goalsCompleted || 24}</p>
+                <p className="text-2xl font-bold text-[var(--accent-primary)]">{analytics.goalsCompleted || 24}</p>
               </div>
               <div className="text-center">
                 <p className="text-[var(--fg-muted)] text-sm mb-1">Delayed</p>

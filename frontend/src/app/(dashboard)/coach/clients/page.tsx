@@ -138,7 +138,7 @@ export default function CoachClientsPage() {
             <div className="bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/20 rounded-xl p-5">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                  <CheckCircle className="w-6 h-6 text-emerald-400" />
+                  <CheckCircle className="w-6 h-6 text-[var(--accent-primary)]" />
                 </div>
                 <div>
                   <p className="text-[var(--fg-muted)] text-xs uppercase tracking-wider">Activos</p>
@@ -162,7 +162,7 @@ export default function CoachClientsPage() {
             <div className="bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/20 rounded-xl p-5">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                  <Users className="w-6 h-6 text-emerald-400" />
+                  <Users className="w-6 h-6 text-[var(--accent-primary)]" />
                 </div>
                 <div>
                   <p className="text-[var(--fg-muted)] text-xs uppercase tracking-wider">Total Clientes</p>
@@ -240,7 +240,7 @@ export default function CoachClientsPage() {
 
                   <Link
                     href={`/coach/clients/${client.uid}`}
-                    className="flex items-center justify-end gap-1 text-sm text-emerald-400 hover:text-emerald-300 transition-colors font-medium"
+                    className="flex items-center justify-end gap-1 text-sm text-[var(--accent-primary)] hover:text-emerald-300 transition-colors font-medium"
                   >
                     Ver Detalles
                     <ArrowRight className="w-4 h-4" />

@@ -31,12 +31,12 @@ const CATEGORIES = [
 ];
 
 const CATEGORY_COLORS: Record<string, { bg: string; text: string }> = {
-  'EVALUACIÓN': { bg: 'bg-emerald-500/20', text: 'text-emerald-400' },
+  'EVALUACIÓN': { bg: 'bg-emerald-500/20', text: 'text-[var(--accent-primary)]' },
   'REFLEXIÓN': { bg: 'bg-orange-500/20', text: 'text-orange-400' },
-  'COGNITIVO': { bg: 'bg-emerald-500/20', text: 'text-emerald-400' },
+  'COGNITIVO': { bg: 'bg-emerald-500/20', text: 'text-[var(--accent-primary)]' },
   'HÁBITOS': { bg: 'bg-pink-500/20', text: 'text-pink-400' },
   'CARRERA': { bg: 'bg-amber-500/20', text: 'text-amber-400' },
-  'RESILIENCIA': { bg: 'bg-emerald-500/20', text: 'text-emerald-400' },
+  'RESILIENCIA': { bg: 'bg-emerald-500/20', text: 'text-[var(--accent-primary)]' },
   'ESTRATÉGICO': { bg: 'bg-violet-500/20', text: 'text-violet-400' },
   'COMUNICACIÓN': { bg: 'bg-cyan-500/20', text: 'text-cyan-400' },
 };
@@ -53,12 +53,12 @@ const TOOL_ICONS: Record<string, any> = {
 };
 
 const DARK_TOOLS = [
-  { id: 'wheel-of-life', name: 'Rueda de la Vida', description: 'Herramienta visual clásica para evaluar el nivel de...', category: 'EVALUACIÓN', time: 15, icon: RefreshCw, color: 'bg-emerald-500/20', iconColor: 'text-emerald-400' },
+  { id: 'wheel-of-life', name: 'Rueda de la Vida', description: 'Herramienta visual clásica para evaluar el nivel de...', category: 'EVALUACIÓN', time: 15, icon: RefreshCw, color: 'bg-emerald-500/20', iconColor: 'text-[var(--accent-primary)]' },
   { id: 'values-clarification', name: 'Clarificación de Valores', description: 'Ejercicio fundamental para identificar los valores...', category: 'REFLEXIÓN', time: 20, icon: Lightbulb, color: 'bg-orange-500/20', iconColor: 'text-orange-400' },
-  { id: 'limiting-beliefs', name: 'Creencias Limitantes', description: 'Guía estructurada para desafiar y reformular...', category: 'COGNITIVO', time: 30, icon: TrendingUp, color: 'bg-emerald-500/20', iconColor: 'text-emerald-400' },
+  { id: 'limiting-beliefs', name: 'Creencias Limitantes', description: 'Guía estructurada para desafiar y reformular...', category: 'COGNITIVO', time: 30, icon: TrendingUp, color: 'bg-emerald-500/20', iconColor: 'text-[var(--accent-primary)]' },
   { id: 'habits-loop', name: 'Loop de Hábitos', description: 'Framework basado en la ciencia del comportamiento...', category: 'HÁBITOS', time: 45, icon: Smile, color: 'bg-pink-500/20', iconColor: 'text-pink-400' },
   { id: 'career-compass', name: 'Brújula de Carrera', description: 'Herramienta de exploración profesional para...', category: 'CARRERA', time: 25, icon: Compass, color: 'bg-amber-500/20', iconColor: 'text-amber-400' },
-  { id: 'resilience-scale', name: 'Escala de Resiliencia', description: 'Evaluación basada en investigación para medir...', category: 'RESILIENCIA', time: 20, icon: Shield, color: 'bg-emerald-500/20', iconColor: 'text-emerald-400' },
+  { id: 'resilience-scale', name: 'Escala de Resiliencia', description: 'Evaluación basada en investigación para medir...', category: 'RESILIENCIA', time: 20, icon: Shield, color: 'bg-emerald-500/20', iconColor: 'text-[var(--accent-primary)]' },
   { id: 'stakeholder-map', name: 'Mapa de Stakeholders', description: 'Análisis visual de relaciones profesionales...', category: 'ESTRATÉGICO', time: 35, icon: Users, color: 'bg-violet-500/20', iconColor: 'text-violet-400' },
   { id: 'feedback-feedforward', name: 'Feedback Feed-Forward', description: 'Metodología moderna para dar y recibir...', category: 'COMUNICACIÓN', time: 30, icon: MessageSquare, color: 'bg-cyan-500/20', iconColor: 'text-cyan-400' },
 ];
@@ -290,7 +290,7 @@ export default function CoachToolsPage() {
                     </div>
                     <Link
                       href={`/tools/${tool.id}`}
-                      className="flex items-center gap-1 text-emerald-400 text-sm font-medium hover:text-emerald-300 transition-colors"
+                      className="flex items-center gap-1 text-[var(--accent-primary)] text-sm font-medium hover:text-emerald-300 transition-colors"
                     >
                       Ver Detalles
                       <ArrowRight className="w-4 h-4" />

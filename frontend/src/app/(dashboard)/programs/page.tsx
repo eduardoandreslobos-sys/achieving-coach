@@ -65,7 +65,7 @@ export default function ProgramsPage() {
               {/* Icon with gradient background */}
               <div className="relative mb-8">
                 <div className="w-20 h-20 bg-gradient-to-br from-emerald-600/30 to-blue-900/30 rounded-2xl flex items-center justify-center">
-                  <Flag className="w-10 h-10 text-emerald-400" />
+                  <Flag className="w-10 h-10 text-[var(--accent-primary)]" />
                 </div>
               </div>
 
@@ -90,7 +90,7 @@ export default function ProgramsPage() {
               <div key={program.id} className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-[var(--fg-primary)] font-semibold text-lg">{program.name}</h3>
-                  <span className="text-emerald-400 text-sm">{program.progress}% completado</span>
+                  <span className="text-[var(--accent-primary)] text-sm">{program.progress}% completado</span>
                 </div>
                 <p className="text-[var(--fg-muted)] text-sm mb-4">{program.description}</p>
                 <div className="h-2 bg-[var(--bg-tertiary)] rounded-full overflow-hidden">

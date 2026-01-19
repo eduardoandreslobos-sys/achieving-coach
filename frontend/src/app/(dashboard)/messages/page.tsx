@@ -385,7 +385,7 @@ export default function MessagesPage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
-                          <h4 className={'font-medium ' + (conv.unreadCount > 0 ? 'text-emerald-400' : 'text-[var(--fg-primary)]')}>
+                          <h4 className={'font-medium ' + (conv.unreadCount > 0 ? 'text-[var(--accent-primary)]' : 'text-[var(--fg-primary)]')}>
                             {conv.recipientName}
                           </h4>
                           <span className="text-[var(--fg-muted)] text-xs">{formatTime(conv.lastMessageTime)}</span>

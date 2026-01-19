@@ -199,7 +199,7 @@ export default function LimitingBeliefsPage() {
       <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center p-8">
         <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 max-w-md text-center">
           <div className={`w-16 h-16 ${isCoach ? 'bg-emerald-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
-            <Lightbulb className={`w-8 h-8 ${isCoach ? 'text-emerald-400' : 'text-yellow-400'}`} />
+            <Lightbulb className={`w-8 h-8 ${isCoach ? 'text-[var(--accent-primary)]' : 'text-yellow-400'}`} />
           </div>
           <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">
             {isCoach ? 'Tool for Coachees Only' : 'Tool Not Assigned'}
@@ -225,7 +225,7 @@ export default function LimitingBeliefsPage() {
       {/* Toast de éxito */}
       {showSuccess && (
         <div className="fixed top-4 right-4 bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 px-6 py-4 rounded-lg shadow-lg z-50 flex items-center gap-3 animate-slide-in">
-          <CheckCircle2 className="text-emerald-400" size={24} />
+          <CheckCircle2 className="text-[var(--accent-primary)]" size={24} />
           <div>
             <p className="font-bold text-emerald-300">Success!</p>
             <p className="text-sm text-emerald-200">Your results have been saved and your coach has been notified.</p>
@@ -298,7 +298,7 @@ export default function LimitingBeliefsPage() {
 
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <CheckCircle className="text-emerald-400" size={20} />
+                    <CheckCircle className="text-[var(--accent-primary)]" size={20} />
                     <label className="block text-sm font-medium text-[var(--fg-muted)]">
                       Empowering Belief
                     </label>
@@ -314,7 +314,7 @@ export default function LimitingBeliefsPage() {
 
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <Lightbulb className="text-emerald-400" size={20} />
+                    <Lightbulb className="text-[var(--accent-primary)]" size={20} />
                     <label className="block text-sm font-medium text-[var(--fg-muted)]">
                       Evidence for Empowering Belief
                     </label>
@@ -335,7 +335,7 @@ export default function LimitingBeliefsPage() {
         <div className="flex gap-4">
           <button
             onClick={addBelief}
-            className="px-6 py-3 border border-emerald-500 text-emerald-400 rounded-lg font-medium hover:bg-emerald-500/10 transition-colors"
+            className="px-6 py-3 border border-emerald-500 text-[var(--accent-primary)] rounded-lg font-medium hover:bg-emerald-500/10 transition-colors"
           >
             + Add Another Belief
           </button>

@@ -215,7 +215,7 @@ export default function SettingsPage() {
         {/* Profile Section */}
         <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6 mb-6">
           <div className="flex items-center gap-2 mb-6">
-            <User className="w-5 h-5 text-emerald-400" />
+            <User className="w-5 h-5 text-[var(--accent-primary)]" />
             <h2 className="text-[var(--fg-primary)] font-semibold">Información de Perfil</h2>
           </div>
 
@@ -300,7 +300,7 @@ export default function SettingsPage() {
             {/* Role */}
             <div>
               <label className="block text-[var(--fg-muted)] text-sm mb-2">Rol</label>
-              <span className="inline-block px-3 py-1 bg-emerald-600/20 text-emerald-400 text-sm rounded-lg capitalize">
+              <span className="inline-block px-3 py-1 bg-emerald-600/20 text-[var(--accent-primary)] text-sm rounded-lg capitalize">
                 {userProfile?.role || 'Coachee'}
               </span>
             </div>
@@ -311,7 +311,7 @@ export default function SettingsPage() {
                 <label className="block text-[var(--fg-muted)] text-sm mb-2">Tu Coach</label>
                 <p className="text-[var(--fg-muted)] text-sm">
                   Estás conectado con un coach. Ver{' '}
-                  <Link href="/dashboard" className="text-emerald-400 hover:text-emerald-300">dashboard</Link>
+                  <Link href="/dashboard" className="text-[var(--accent-primary)] hover:text-emerald-300">dashboard</Link>
                   {' '}para más detalles.
                 </p>
               </div>
@@ -322,7 +322,7 @@ export default function SettingsPage() {
         {/* Account Section */}
         <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
           <div className="flex items-center gap-2 mb-6">
-            <Shield className="w-5 h-5 text-emerald-400" />
+            <Shield className="w-5 h-5 text-[var(--accent-primary)]" />
             <h2 className="text-[var(--fg-primary)] font-semibold">Cuenta</h2>
           </div>
 
@@ -411,7 +411,7 @@ export default function SettingsPage() {
                   {confirmPassword && (
                     <div className="absolute right-3 top-1/2 -translate-y-1/2">
                       {newPassword === confirmPassword ? (
-                        <Check className="w-5 h-5 text-emerald-400" />
+                        <Check className="w-5 h-5 text-[var(--accent-primary)]" />
                       ) : (
                         <X className="w-5 h-5 text-red-400" />
                       )}

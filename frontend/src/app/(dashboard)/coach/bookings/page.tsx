@@ -57,7 +57,7 @@ const STATUS_CONFIG = {
   },
   confirmed: {
     label: 'Confirmada',
-    color: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+    color: 'bg-emerald-500/20 text-[var(--accent-primary)] border-emerald-500/30',
     icon: CheckCircle,
   },
   cancelled: {
@@ -67,7 +67,7 @@ const STATUS_CONFIG = {
   },
   completed: {
     label: 'Completada',
-    color: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+    color: 'bg-emerald-500/20 text-[var(--accent-primary)] border-emerald-500/30',
     icon: CheckCircle,
   },
   no_show: {
@@ -308,7 +308,7 @@ export default function BookingsPage() {
           <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                <CheckCircle className="w-5 h-5 text-emerald-400" />
+                <CheckCircle className="w-5 h-5 text-[var(--accent-primary)]" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-[var(--fg-primary)]">{stats.confirmed}</p>
@@ -319,7 +319,7 @@ export default function BookingsPage() {
           <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                <Calendar className="w-5 h-5 text-emerald-400" />
+                <Calendar className="w-5 h-5 text-[var(--accent-primary)]" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-[var(--fg-primary)]">{stats.total}</p>
@@ -399,11 +399,11 @@ export default function BookingsPage() {
                         </div>
                         <div className="flex items-center gap-4 text-sm text-[var(--fg-secondary)] mt-2">
                           <span className="flex items-center gap-1">
-                            <Calendar className="w-4 h-4 text-emerald-400" />
+                            <Calendar className="w-4 h-4 text-[var(--accent-primary)]" />
                             {formatDate(booking.date)}
                           </span>
                           <span className="flex items-center gap-1">
-                            <Clock className="w-4 h-4 text-emerald-400" />
+                            <Clock className="w-4 h-4 text-[var(--accent-primary)]" />
                             {formatTime(booking.time)} ({booking.duration} min)
                           </span>
                         </div>

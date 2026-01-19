@@ -37,7 +37,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
             <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">A</span>
             </div>
-            <span className="font-semibold text-emerald-400">AchievingCoach</span>
+            <span className="font-semibold text-[var(--accent-primary)]">AchievingCoach</span>
           </div>
           <NotificationBell />
         </div>

@@ -97,7 +97,7 @@ export default function GoalsPage() {
                   <Star className="w-4 h-4 text-amber-400" />
                 </div>
                 <div className="absolute -bottom-2 -left-4 w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                  <Check className="w-4 h-4 text-emerald-400" />
+                  <Check className="w-4 h-4 text-[var(--accent-primary)]" />
                 </div>
               </div>
 
@@ -134,9 +134,9 @@ export default function GoalsPage() {
                       goal.status === 'completed' ? 'bg-emerald-500/20' : 'bg-emerald-500/20'
                     }`}>
                       {goal.status === 'completed' ? (
-                        <CheckCircle className="w-5 h-5 text-emerald-400" />
+                        <CheckCircle className="w-5 h-5 text-[var(--accent-primary)]" />
                       ) : (
-                        <Target className="w-5 h-5 text-emerald-400" />
+                        <Target className="w-5 h-5 text-[var(--accent-primary)]" />
                       )}
                     </div>
                     <div>
@@ -146,8 +146,8 @@ export default function GoalsPage() {
                   </div>
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                     goal.status === 'completed' 
-                      ? 'bg-emerald-500/20 text-emerald-400' 
-                      : 'bg-emerald-500/20 text-emerald-400'
+                      ? 'bg-emerald-500/20 text-[var(--accent-primary)]' 
+                      : 'bg-emerald-500/20 text-[var(--accent-primary)]'
                   }`}>
                     {goal.status === 'completed' ? 'Completado' : `${goal.progress}%`}
                   </span>
@@ -170,7 +170,7 @@ export default function GoalsPage() {
         <div className="text-center mt-8">
           <p className="text-[var(--fg-muted)] text-sm">
             ¿Necesitas ayuda para definir tus objetivos?{' '}
-            <Link href="/messages" className="text-emerald-400 hover:text-emerald-300">
+            <Link href="/messages" className="text-[var(--accent-primary)] hover:text-emerald-300">
               Consulta a tu coach
             </Link>
           </p>

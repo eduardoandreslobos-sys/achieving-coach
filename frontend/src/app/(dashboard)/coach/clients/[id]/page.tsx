@@ -252,7 +252,7 @@ export default function ClientAnalyticsPage() {
         <div className="mb-8">
           <Link
             href="/coach/clients"
-            className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 mb-4 font-medium"
+            className="inline-flex items-center gap-2 text-[var(--accent-primary)] hover:text-emerald-300 mb-4 font-medium"
           >
             <ArrowLeft size={20} />
             Back to clients
@@ -325,7 +325,7 @@ export default function ClientAnalyticsPage() {
                 <ul className="space-y-1">
                   {program.overallGoals.map((goal: string, idx: number) => (
                     <li key={idx} className="flex items-start gap-2">
-                      <Target className="text-emerald-400 flex-shrink-0 mt-1" size={16} />
+                      <Target className="text-[var(--accent-primary)] flex-shrink-0 mt-1" size={16} />
                       <span className="text-[var(--fg-secondary)]">{goal}</span>
                     </li>
                   ))}
@@ -435,7 +435,7 @@ export default function ClientAnalyticsPage() {
                   value={`${analytics.goalCompletionRate}%`}
                   subtitle={`${analytics.completedGoals}/${analytics.totalGoals} completed`}
                   icon={Target}
-                  color="text-emerald-400"
+                  color="text-[var(--accent-primary)]"
                   bgColor="bg-emerald-500/10"
                 />
               )}
@@ -446,7 +446,7 @@ export default function ClientAnalyticsPage() {
                   value={analytics.completedSessions.toString()}
                   subtitle={`${analytics.upcomingSessions} upcoming`}
                   icon={Calendar}
-                  color="text-emerald-400"
+                  color="text-[var(--accent-primary)]"
                   bgColor="bg-emerald-500/10"
                 />
               )}
@@ -540,7 +540,7 @@ export default function ClientAnalyticsPage() {
         {sessions.length > 0 && (
           <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6 mt-8">
             <div className="flex items-center gap-2 mb-4">
-              <FileText className="text-emerald-400" size={24} />
+              <FileText className="text-[var(--accent-primary)]" size={24} />
               <h2 className="text-2xl font-bold text-[var(--fg-primary)]">Session Notes</h2>
               <span className="text-sm text-[var(--fg-muted)] ml-2">
                 ({sessions.filter(s => s.sessionReport || s.sessionAgreement).length} with notes)
@@ -568,7 +568,7 @@ export default function ClientAnalyticsPage() {
                           {session.scheduledDate?.toDate?.()?.toLocaleDateString('es-CL') || 'Sin fecha'}
                         </span>
                         {session.status === 'completed' && (
-                          <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs rounded-full">Completada</span>
+                          <span className="px-2 py-0.5 bg-emerald-500/20 text-[var(--accent-primary)] text-xs rounded-full">Completada</span>
                         )}
                       </div>
                       <ChevronDown className={`w-5 h-5 text-[var(--fg-muted)] transition-transform ${expandedSession === session.id ? 'rotate-180' : ''}`} />
@@ -578,25 +578,25 @@ export default function ClientAnalyticsPage() {
                       <div className="p-4 space-y-4 bg-[var(--bg-primary)] border-t border-[var(--border-color)]">
                         {session.sessionAgreement && (
                           <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4">
-                            <h4 className="font-semibold text-emerald-400 mb-3 flex items-center gap-2">
+                            <h4 className="font-semibold text-[var(--accent-primary)] mb-3 flex items-center gap-2">
                               <ClipboardList size={16} />
                               Acuerdo de Sesión
                             </h4>
                             <div className="space-y-2 text-sm text-emerald-300">
                               {session.sessionAgreement.previousSessionLink && (
-                                <div><strong className="text-emerald-400">Enganche con sesión anterior:</strong> {session.sessionAgreement.previousSessionLink}</div>
+                                <div><strong className="text-[var(--accent-primary)]">Enganche con sesión anterior:</strong> {session.sessionAgreement.previousSessionLink}</div>
                               )}
                               {session.sessionAgreement.sessionFocus && (
-                                <div><strong className="text-emerald-400">Foco de la sesión:</strong> {session.sessionAgreement.sessionFocus}</div>
+                                <div><strong className="text-[var(--accent-primary)]">Foco de la sesión:</strong> {session.sessionAgreement.sessionFocus}</div>
                               )}
                               {session.sessionAgreement.relevanceToProcess && (
-                                <div><strong className="text-emerald-400">Relevancia:</strong> {session.sessionAgreement.relevanceToProcess}</div>
+                                <div><strong className="text-[var(--accent-primary)]">Relevancia:</strong> {session.sessionAgreement.relevanceToProcess}</div>
                               )}
                               {session.sessionAgreement.practicesOrCompetencies && (
-                                <div><strong className="text-emerald-400">Prácticas/Competencias:</strong> {session.sessionAgreement.practicesOrCompetencies}</div>
+                                <div><strong className="text-[var(--accent-primary)]">Prácticas/Competencias:</strong> {session.sessionAgreement.practicesOrCompetencies}</div>
                               )}
                               {session.sessionAgreement.sessionIndicators && (
-                                <div><strong className="text-emerald-400">Indicadores:</strong> {session.sessionAgreement.sessionIndicators}</div>
+                                <div><strong className="text-[var(--accent-primary)]">Indicadores:</strong> {session.sessionAgreement.sessionIndicators}</div>
                               )}
                             </div>
                           </div>
@@ -604,31 +604,31 @@ export default function ClientAnalyticsPage() {
 
                         {session.sessionReport && (
                           <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4">
-                            <h4 className="font-semibold text-emerald-400 mb-3 flex items-center gap-2">
+                            <h4 className="font-semibold text-[var(--accent-primary)] mb-3 flex items-center gap-2">
                               <CheckCircle2 size={16} />
                               Tabla de Seguimiento
                             </h4>
                             <div className="space-y-2 text-sm text-emerald-300">
                               {session.sessionReport.sessionTopic && (
-                                <div><strong className="text-emerald-400">Tema:</strong> {session.sessionReport.sessionTopic}</div>
+                                <div><strong className="text-[var(--accent-primary)]">Tema:</strong> {session.sessionReport.sessionTopic}</div>
                               )}
                               {session.sessionReport.practicesWorked && (
-                                <div><strong className="text-emerald-400">Prácticas trabajadas:</strong> {session.sessionReport.practicesWorked}</div>
+                                <div><strong className="text-[var(--accent-primary)]">Prácticas trabajadas:</strong> {session.sessionReport.practicesWorked}</div>
                               )}
                               {session.sessionReport.practiceContext && (
-                                <div><strong className="text-emerald-400">Contexto:</strong> {session.sessionReport.practiceContext}</div>
+                                <div><strong className="text-[var(--accent-primary)]">Contexto:</strong> {session.sessionReport.practiceContext}</div>
                               )}
                               {session.sessionReport.progressIndicators && (
-                                <div><strong className="text-emerald-400">Indicadores de avance:</strong> {session.sessionReport.progressIndicators}</div>
+                                <div><strong className="text-[var(--accent-primary)]">Indicadores de avance:</strong> {session.sessionReport.progressIndicators}</div>
                               )}
                               {session.sessionReport.discoveriesAndLearnings && (
-                                <div><strong className="text-emerald-400">Descubrimientos y aprendizajes:</strong> {session.sessionReport.discoveriesAndLearnings}</div>
+                                <div><strong className="text-[var(--accent-primary)]">Descubrimientos y aprendizajes:</strong> {session.sessionReport.discoveriesAndLearnings}</div>
                               )}
                               {session.sessionReport.tasksForNextSession && (
-                                <div><strong className="text-emerald-400">Tareas próxima sesión:</strong> {session.sessionReport.tasksForNextSession}</div>
+                                <div><strong className="text-[var(--accent-primary)]">Tareas próxima sesión:</strong> {session.sessionReport.tasksForNextSession}</div>
                               )}
                               {session.sessionReport.observations && (
-                                <div><strong className="text-emerald-400">Observaciones:</strong> {session.sessionReport.observations}</div>
+                                <div><strong className="text-[var(--accent-primary)]">Observaciones:</strong> {session.sessionReport.observations}</div>
                               )}
                             </div>
                           </div>
@@ -637,7 +637,7 @@ export default function ClientAnalyticsPage() {
                         <div className="flex justify-end pt-2">
                           <Link
                             href={`/sessions/${session.id}`}
-                            className="text-emerald-400 hover:text-emerald-300 text-sm font-medium flex items-center gap-1"
+                            className="text-[var(--accent-primary)] hover:text-emerald-300 text-sm font-medium flex items-center gap-1"
                           >
                             Ver sesión completa
                             <ExternalLink size={14} />
@@ -658,7 +658,7 @@ export default function ClientAnalyticsPage() {
             <ul className="space-y-2">
               {(client as any).coacheeInfo.goals.map((goal: string, idx: number) => (
                 <li key={idx} className="flex items-start gap-2">
-                  <Target className="text-emerald-400 flex-shrink-0 mt-1" size={18} />
+                  <Target className="text-[var(--accent-primary)] flex-shrink-0 mt-1" size={18} />
                   <span className="text-[var(--fg-secondary)]">{goal}</span>
                 </li>
               ))}

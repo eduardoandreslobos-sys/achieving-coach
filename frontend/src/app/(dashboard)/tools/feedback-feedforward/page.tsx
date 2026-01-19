@@ -161,7 +161,7 @@ export default function FeedbackFeedForwardPage() {
         <div className="max-w-4xl mx-auto">
           <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 text-center">
             <div className={`w-16 h-16 ${isCoach ? 'bg-emerald-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
-              <Lightbulb className={`w-8 h-8 ${isCoach ? 'text-emerald-400' : 'text-yellow-400'}`} />
+              <Lightbulb className={`w-8 h-8 ${isCoach ? 'text-[var(--accent-primary)]' : 'text-yellow-400'}`} />
             </div>
             <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">
               {isCoach ? 'Tool for Coachees Only' : 'Access Required'}
@@ -190,7 +190,7 @@ export default function FeedbackFeedForwardPage() {
         <div className="max-w-4xl mx-auto">
           <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 text-center">
             <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle2 className="w-8 h-8 text-emerald-400" />
+              <CheckCircle2 className="w-8 h-8 text-[var(--accent-primary)]" />
             </div>
             <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">Tool Completed!</h2>
             <p className="text-[var(--fg-muted)] mb-6">
@@ -229,7 +229,7 @@ export default function FeedbackFeedForwardPage() {
 
         <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 mb-6">
           <div className="flex items-start gap-3">
-            <Lightbulb className="text-emerald-400 flex-shrink-0" size={24} />
+            <Lightbulb className="text-[var(--accent-primary)] flex-shrink-0" size={24} />
             <div>
               <h3 className="font-bold text-emerald-300 mb-1">Feed-Forward vs Feedback</h3>
               <p className="text-sm text-blue-200">
@@ -274,7 +274,7 @@ export default function FeedbackFeedForwardPage() {
 
               <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <ArrowRight className="text-emerald-400" size={20} />
+                  <ArrowRight className="text-[var(--accent-primary)]" size={20} />
                   <label className="font-bold text-emerald-300">Feed-Forward (Future)</label>
                 </div>
                 <textarea
@@ -331,7 +331,7 @@ export default function FeedbackFeedForwardPage() {
 
                     <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4">
                       <div className="flex items-center gap-2 mb-2">
-                        <ArrowRight className="text-emerald-400" size={16} />
+                        <ArrowRight className="text-[var(--accent-primary)]" size={16} />
                         <span className="font-bold text-emerald-300 text-sm">Feed-Forward</span>
                       </div>
                       <p className="text-sm text-[var(--fg-secondary)]">{item.feedforward}</p>
@@ -344,7 +344,7 @@ export default function FeedbackFeedForwardPage() {
                       <ul className="space-y-1">
                         {item.actionSteps.map((step, idx) => (
                           <li key={idx} className="text-sm text-[var(--fg-secondary)] flex items-start gap-2">
-                            <span className="text-emerald-400">•</span>
+                            <span className="text-[var(--accent-primary)]">•</span>
                             {step}
                           </li>
                         ))}

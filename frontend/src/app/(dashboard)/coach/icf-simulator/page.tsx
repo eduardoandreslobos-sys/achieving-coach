@@ -291,7 +291,7 @@ export default function ICFSimulatorPage() {
               <h1 className="text-3xl font-bold mb-2">Simulador de Competencias ICF</h1>
               <p className="text-[var(--fg-muted)]">
                 Entrena y evalúa tus habilidades de coaching ejecutivo alineadas estrictamente al{' '}
-                <span className="text-emerald-400">Nuevo Modelo ICF 2026</span>.
+                <span className="text-[var(--accent-primary)]">Nuevo Modelo ICF 2026</span>.
               </p>
             </div>
             <button className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors">
@@ -307,7 +307,7 @@ export default function ICFSimulatorPage() {
               <div className="flex items-start justify-between mb-4">
                 <h3 className="text-lg font-semibold text-[var(--fg-primary)]">Explorar Escenarios</h3>
                 <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
-                  <Gamepad2 className="w-5 h-5 text-emerald-400" />
+                  <Gamepad2 className="w-5 h-5 text-[var(--accent-primary)]" />
                 </div>
               </div>
               <p className="text-[var(--fg-muted)] text-sm mb-4">
@@ -352,7 +352,7 @@ export default function ICFSimulatorPage() {
               <div className="flex items-start justify-between mb-4">
                 <h3 className="text-lg font-semibold text-[var(--fg-primary)]">Evaluación Completa</h3>
                 <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
-                  <CheckSquare className="w-5 h-5 text-emerald-400" />
+                  <CheckSquare className="w-5 h-5 text-[var(--accent-primary)]" />
                 </div>
               </div>
               <p className="text-[var(--fg-muted)] text-sm mb-4">
@@ -360,7 +360,7 @@ export default function ICFSimulatorPage() {
               </p>
               <div className="flex gap-2 mb-4">
                 <span className="text-xs px-2 py-1 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded text-[var(--fg-muted)]">EXAMEN</span>
-                <span className="text-xs px-2 py-1 bg-emerald-500/20 border border-emerald-500/30 rounded text-emerald-400">CERTIFICACIÓN</span>
+                <span className="text-xs px-2 py-1 bg-emerald-500/20 border border-emerald-500/30 rounded text-[var(--accent-primary)]">CERTIFICACIÓN</span>
               </div>
               <button 
                 onClick={startExam}
@@ -382,7 +382,7 @@ export default function ICFSimulatorPage() {
                     (Última sesión: {recentResults[0]?.date.toLocaleDateString('es-CL')})
                   </span>
                 </div>
-                <Link href={`/coach/icf-simulator/results/${recentResults[0]?.id}`} className="text-emerald-400 text-sm hover:text-emerald-300 flex items-center gap-1">
+                <Link href={`/coach/icf-simulator/results/${recentResults[0]?.id}`} className="text-[var(--accent-primary)] text-sm hover:text-emerald-300 flex items-center gap-1">
                   Revisar Sesión Completa
                   <ExternalLink className="w-4 h-4" />
                 </Link>
@@ -430,7 +430,7 @@ export default function ICFSimulatorPage() {
                 {/* Quick Stats */}
                 <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
                   <div className="flex items-center gap-2 mb-6">
-                    <BarChart3 className="w-5 h-5 text-emerald-400" />
+                    <BarChart3 className="w-5 h-5 text-[var(--accent-primary)]" />
                     <h3 className="font-semibold text-[var(--fg-primary)]">Historial de Simulaciones</h3>
                   </div>
                   <div className="space-y-3">
@@ -445,7 +445,7 @@ export default function ICFSimulatorPage() {
                             result.score >= 70 ? 'bg-emerald-500/10' : 'bg-amber-500/10'
                           }`}>
                             <span className={`font-bold ${
-                              result.score >= 70 ? 'text-emerald-400' : 'text-amber-400'
+                              result.score >= 70 ? 'text-[var(--accent-primary)]' : 'text-amber-400'
                             }`}>{result.score}%</span>
                           </div>
                           <div>
@@ -512,7 +512,7 @@ export default function ICFSimulatorPage() {
         {/* Question Card */}
         <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-8 mb-6">
           {currentQuestion?.competencyName && (
-            <p className="text-emerald-400 text-xs uppercase tracking-wider mb-4">
+            <p className="text-[var(--accent-primary)] text-xs uppercase tracking-wider mb-4">
               {currentQuestion.domainName} • {currentQuestion.competencyName}
             </p>
           )}

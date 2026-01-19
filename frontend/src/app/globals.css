@@ -14,6 +14,10 @@
     --fg-secondary: #374151;
     --fg-muted: #6b7280;
 
+    /* Accent color - darker green for light mode */
+    --accent-primary: #059669;
+    --accent-secondary: #10b981;
+
     --border-color: #e5e7eb;
 
     /* Input specific */
@@ -33,6 +37,10 @@
     --fg-primary: #ffffff;
     --fg-secondary: #d1d5db;
     --fg-muted: #6b7280;
+
+    /* Accent color - lighter green for dark mode */
+    --accent-primary: #34d399;
+    --accent-secondary: #6ee7b7;
 
     --border-color: #374151;
 

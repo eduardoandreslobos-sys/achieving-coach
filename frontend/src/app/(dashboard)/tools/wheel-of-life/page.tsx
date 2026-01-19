@@ -153,7 +153,7 @@ export default function WheelOfLifePage() {
         <div className="max-w-4xl mx-auto">
           <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 text-center">
             <div className={`w-16 h-16 ${isCoach ? 'bg-emerald-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
-              <Target className={`w-8 h-8 ${isCoach ? 'text-emerald-400' : 'text-yellow-400'}`} />
+              <Target className={`w-8 h-8 ${isCoach ? 'text-[var(--accent-primary)]' : 'text-yellow-400'}`} />
             </div>
             <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">
               {isCoach ? 'Tool for Coachees Only' : 'Access Required'}
@@ -192,7 +192,7 @@ export default function WheelOfLifePage() {
         <div className="max-w-4xl mx-auto">
           <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 text-center">
             <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle2 className="w-8 h-8 text-emerald-400" />
+              <CheckCircle2 className="w-8 h-8 text-[var(--accent-primary)]" />
             </div>
             <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">Tool Completed!</h2>
             <p className="text-[var(--fg-muted)] mb-6">
@@ -230,13 +230,13 @@ export default function WheelOfLifePage() {
         <div className="mb-8">
           <Link
             href="/tools"
-            className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-medium mb-4"
+            className="inline-flex items-center gap-2 text-[var(--accent-primary)] hover:text-emerald-300 font-medium mb-4"
           >
             ← Back to Tools
           </Link>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center">
-              <Target className="w-6 h-6 text-emerald-400" />
+              <Target className="w-6 h-6 text-[var(--accent-primary)]" />
             </div>
             <div>
               <h1 className="text-3xl font-bold text-[var(--fg-primary)]">Wheel of Life</h1>
@@ -247,7 +247,7 @@ export default function WheelOfLifePage() {
 
         {/* Instructions */}
         <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 mb-8">
-          <h2 className="text-lg font-semibold text-emerald-400 mb-2">How to use this tool</h2>
+          <h2 className="text-lg font-semibold text-[var(--accent-primary)] mb-2">How to use this tool</h2>
           <p className="text-emerald-300">
             Rate each area of your life on a scale from 0-10, where 0 is completely unsatisfied and 10 is completely satisfied.
             Be honest with yourself - this assessment is about understanding where you are now, not where you think you should be.
@@ -281,7 +281,7 @@ export default function WheelOfLifePage() {
                     className="w-full h-2 bg-[var(--bg-tertiary)] rounded-lg appearance-none cursor-pointer accent-emerald-500"
                   />
                   <div className="text-center">
-                    <span className="text-2xl font-bold text-emerald-400">
+                    <span className="text-2xl font-bold text-[var(--accent-primary)]">
                       {scores[area.id] !== undefined ? scores[area.id] : '-'}
                     </span>
                     <span className="text-[var(--fg-muted)]">/10</span>
@@ -301,7 +301,7 @@ export default function WheelOfLifePage() {
                 <p className="text-[var(--fg-muted)]">Overall life satisfaction</p>
               </div>
               <div className="text-right">
-                <div className="text-4xl font-bold text-emerald-400">{averageScore.toFixed(1)}</div>
+                <div className="text-4xl font-bold text-[var(--accent-primary)]">{averageScore.toFixed(1)}</div>
                 <div className="text-sm text-[var(--fg-muted)]">out of 10</div>
               </div>
             </div>

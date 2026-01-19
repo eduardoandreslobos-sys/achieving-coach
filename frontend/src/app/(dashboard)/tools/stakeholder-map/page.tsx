@@ -170,7 +170,7 @@ export default function StakeholderMapPage() {
         <div className="max-w-4xl mx-auto">
           <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 text-center">
             <div className={`w-16 h-16 ${isCoach ? 'bg-emerald-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
-              <Users className={`w-8 h-8 ${isCoach ? 'text-emerald-400' : 'text-yellow-400'}`} />
+              <Users className={`w-8 h-8 ${isCoach ? 'text-[var(--accent-primary)]' : 'text-yellow-400'}`} />
             </div>
             <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">
               {isCoach ? 'Tool for Coachees Only' : 'Access Required'}
@@ -201,7 +201,7 @@ export default function StakeholderMapPage() {
         <div className="max-w-4xl mx-auto">
           <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 text-center">
             <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle2 className="w-8 h-8 text-emerald-400" />
+              <CheckCircle2 className="w-8 h-8 text-[var(--accent-primary)]" />
             </div>
             <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">Tool Completed!</h2>
             <p className="text-[var(--fg-muted)] mb-6">
@@ -240,7 +240,7 @@ export default function StakeholderMapPage() {
 
         <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6 mb-6">
           <h2 className="text-xl font-bold text-[var(--fg-primary)] mb-4 flex items-center gap-2">
-            <Plus size={24} className="text-emerald-400" />
+            <Plus size={24} className="text-[var(--accent-primary)]" />
             Add Stakeholder
           </h2>
 

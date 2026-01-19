@@ -76,8 +76,8 @@ export default function ICFSimulatorResultsPage() {
   }, [resultId]);
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return 'text-emerald-400';
-    if (score >= 80) return 'text-emerald-400';
+    if (score >= 90) return 'text-[var(--accent-primary)]';
+    if (score >= 80) return 'text-[var(--accent-primary)]';
     if (score >= 70) return 'text-amber-400';
     return 'text-red-400';
   };
@@ -91,9 +91,9 @@ export default function ICFSimulatorResultsPage() {
 
   const getDomainColor = (domainId: number) => {
     const colors: Record<number, { bg: string; text: string; border: string }> = {
-      1: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/30' },
+      1: { bg: 'bg-emerald-500/10', text: 'text-[var(--accent-primary)]', border: 'border-emerald-500/30' },
       2: { bg: 'bg-orange-500/10', text: 'text-orange-400', border: 'border-orange-500/30' },
-      3: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/30' },
+      3: { bg: 'bg-emerald-500/10', text: 'text-[var(--accent-primary)]', border: 'border-emerald-500/30' },
       4: { bg: 'bg-violet-500/10', text: 'text-violet-400', border: 'border-violet-500/30' },
     };
     return colors[domainId] || colors[1];
@@ -129,7 +129,7 @@ export default function ICFSimulatorResultsPage() {
         <div className="text-center">
           <XCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
           <h1 className="text-2xl font-bold mb-2">{error || 'Resultado no encontrado'}</h1>
-          <Link href="/coach/icf-simulator" className="text-emerald-400 hover:text-emerald-300">
+          <Link href="/coach/icf-simulator" className="text-[var(--accent-primary)] hover:text-emerald-300">
             Volver al simulador
           </Link>
         </div>
@@ -176,11 +176,11 @@ export default function ICFSimulatorResultsPage() {
                 : 'bg-amber-500/10 border border-amber-500/30'
             }`}>
               {result.passed ? (
-                <CheckCircle className="w-4 h-4 text-emerald-400" />
+                <CheckCircle className="w-4 h-4 text-[var(--accent-primary)]" />
               ) : (
                 <XCircle className="w-4 h-4 text-amber-400" />
               )}
-              <span className={`text-sm font-medium ${result.passed ? 'text-emerald-400' : 'text-amber-400'}`}>
+              <span className={`text-sm font-medium ${result.passed ? 'text-[var(--accent-primary)]' : 'text-amber-400'}`}>
                 {result.passed ? 'APROBADO' : 'NO APROBADO'}
               </span>
             </div>
@@ -203,7 +203,7 @@ export default function ICFSimulatorResultsPage() {
               <p className="text-2xl font-bold text-[var(--fg-primary)] mb-1">{result.level}</p>
               <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs ${
                 result.passed 
-                  ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400' 
+                  ? 'bg-emerald-500/10 border border-emerald-500/30 text-[var(--accent-primary)]' 
                   : 'bg-amber-500/10 border border-amber-500/30 text-amber-400'
               }`}>
                 {result.passed ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
@@ -233,7 +233,7 @@ export default function ICFSimulatorResultsPage() {
             {/* Desglose por Competencia - 2 columns */}
             <div className="lg:col-span-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
               <div className="flex items-center gap-2 mb-6">
-                <BarChart3 className="w-5 h-5 text-emerald-400" />
+                <BarChart3 className="w-5 h-5 text-[var(--accent-primary)]" />
                 <h2 className="text-lg font-semibold text-[var(--fg-primary)]">Desglose por Competencia ICF</h2>
               </div>
 
@@ -297,7 +297,7 @@ export default function ICFSimulatorResultsPage() {
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
                     <div className="w-8 h-8 bg-emerald-500/10 rounded-lg flex items-center justify-center">
-                      <TrendingUp className="w-4 h-4 text-emerald-400" />
+                      <TrendingUp className="w-4 h-4 text-[var(--accent-primary)]" />
                     </div>
                     <h3 className="text-[var(--fg-primary)] font-medium">Recomendación</h3>
                   </div>
@@ -309,7 +309,7 @@ export default function ICFSimulatorResultsPage() {
                 {/* Areas */}
                 <div className="grid grid-cols-2 gap-3 mb-6">
                   <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-lg p-3">
-                    <p className="text-emerald-400 text-xs uppercase mb-1">Fortaleza</p>
+                    <p className="text-[var(--accent-primary)] text-xs uppercase mb-1">Fortaleza</p>
                     <p className="text-[var(--fg-primary)] text-sm font-medium">{result.aiAnalysis?.strongestArea}</p>
                   </div>
                   <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3">
@@ -330,7 +330,7 @@ export default function ICFSimulatorResultsPage() {
                 <h3 className="text-[var(--fg-primary)] font-medium mb-4">Acciones Rápidas</h3>
                 <div className="space-y-2">
                   <Link href="/coach/icf-simulator" className="flex items-center gap-3 p-3 bg-[var(--bg-tertiary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors">
-                    <Target className="w-5 h-5 text-emerald-400" />
+                    <Target className="w-5 h-5 text-[var(--accent-primary)]" />
                     <span className="text-sm text-[var(--fg-secondary)]">Intentar nueva simulación</span>
                   </Link>
                   <Link href="/coach/icf-simulator" className="flex items-center gap-3 p-3 bg-[var(--bg-tertiary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors">
@@ -338,7 +338,7 @@ export default function ICFSimulatorResultsPage() {
                     <span className="text-sm text-[var(--fg-secondary)]">Ver historial completo</span>
                   </Link>
                   <Link href="/coach/tools" className="flex items-center gap-3 p-3 bg-[var(--bg-tertiary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors">
-                    <Clock className="w-5 h-5 text-emerald-400" />
+                    <Clock className="w-5 h-5 text-[var(--accent-primary)]" />
                     <span className="text-sm text-[var(--fg-secondary)]">Explorar herramientas</span>
                   </Link>
                 </div>

@@ -224,7 +224,7 @@ export default function ValuesClarificationPage() {
       <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center py-12 px-4">
         <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 text-center max-w-md">
           <div className={`w-16 h-16 ${isCoach ? 'bg-emerald-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
-            <Heart className={`w-8 h-8 ${isCoach ? 'text-emerald-400' : 'text-yellow-400'}`} />
+            <Heart className={`w-8 h-8 ${isCoach ? 'text-[var(--accent-primary)]' : 'text-yellow-400'}`} />
           </div>
           <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">
             {isCoach ? 'Tool for Coachees Only' : 'Access Required'}
@@ -254,7 +254,7 @@ export default function ValuesClarificationPage() {
         <div className="max-w-4xl mx-auto">
           <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 text-center">
             <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle2 className="w-8 h-8 text-emerald-400" />
+              <CheckCircle2 className="w-8 h-8 text-[var(--accent-primary)]" />
             </div>
             <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">Tool Completed!</h2>
             <p className="text-[var(--fg-muted)] mb-6">
@@ -316,7 +316,7 @@ export default function ValuesClarificationPage() {
                       }`}
                     >
                       <div className="flex items-start gap-3">
-                        <Icon className={`w-6 h-6 ${isSelected ? 'text-emerald-400' : 'text-[var(--fg-muted)]'}`} />
+                        <Icon className={`w-6 h-6 ${isSelected ? 'text-[var(--accent-primary)]' : 'text-[var(--fg-muted)]'}`} />
                         <div>
                           <h3 className="font-semibold text-[var(--fg-primary)]">{value.name}</h3>
                           <p className="text-sm text-[var(--fg-muted)]">{value.description}</p>
@@ -356,7 +356,7 @@ export default function ValuesClarificationPage() {
 
                   return (
                     <div key={valueId} className="flex items-center gap-4 p-4 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-xl">
-                      <span className="text-2xl font-bold text-emerald-400 w-8">{index + 1}</span>
+                      <span className="text-2xl font-bold text-[var(--accent-primary)] w-8">{index + 1}</span>
                       <Icon className="w-6 h-6 text-[var(--fg-muted)]" />
                       <div className="flex-1">
                         <h3 className="font-semibold text-[var(--fg-primary)]">{value.name}</h3>

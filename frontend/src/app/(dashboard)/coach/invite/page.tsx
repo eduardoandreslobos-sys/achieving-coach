@@ -38,7 +38,7 @@ export default function InviteCoacheesPage() {
           <div className="lg:col-span-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center">
-                <Link2 className="w-6 h-6 text-emerald-400" />
+                <Link2 className="w-6 h-6 text-[var(--accent-primary)]" />
               </div>
               <div>
                 <h2 className="text-xl font-semibold text-[var(--fg-primary)]">Tu Enlace de Invitación</h2>
@@ -72,7 +72,7 @@ export default function InviteCoacheesPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 text-emerald-400 text-sm">
+            <div className="flex items-center gap-2 text-[var(--accent-primary)] text-sm">
               <span className="w-2 h-2 bg-emerald-400 rounded-full"></span>
               Enlace activo y permanente
             </div>
@@ -147,7 +147,7 @@ export default function InviteCoacheesPage() {
           {/* CTA Card */}
           <div className="bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 border border-emerald-500/20 rounded-xl p-6 flex flex-col items-center justify-center text-center">
             <div className="w-14 h-14 bg-emerald-500/20 rounded-full flex items-center justify-center mb-4">
-              <Rocket className="w-7 h-7 text-emerald-400" />
+              <Rocket className="w-7 h-7 text-[var(--accent-primary)]" />
             </div>
             <h3 className="font-semibold text-[var(--fg-primary)] mb-2">Estás listo para crecer</h3>
             <p className="text-sm text-[var(--fg-muted)] mb-4">Tu enlace está activo. Comienza a compartirlo hoy.</p>

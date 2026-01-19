@@ -282,9 +282,9 @@ export default function CoachSessionsPage() {
   const getStatusBadge = (status: Session['status']) => {
     switch (status) {
       case 'scheduled':
-        return <span className="px-2 py-1 text-xs rounded-full bg-emerald-500/20 text-emerald-400">Programada</span>;
+        return <span className="px-2 py-1 text-xs rounded-full bg-emerald-500/20 text-[var(--accent-primary)]">Programada</span>;
       case 'completed':
-        return <span className="px-2 py-1 text-xs rounded-full bg-emerald-500/20 text-emerald-400">Completada</span>;
+        return <span className="px-2 py-1 text-xs rounded-full bg-emerald-500/20 text-[var(--accent-primary)]">Completada</span>;
       case 'cancelled':
         return <span className="px-2 py-1 text-xs rounded-full bg-red-500/20 text-red-400">Cancelada</span>;
       case 'no-show':
@@ -326,7 +326,7 @@ export default function CoachSessionsPage() {
         <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
-              <Calendar className="w-5 h-5 text-emerald-400" />
+              <Calendar className="w-5 h-5 text-[var(--accent-primary)]" />
             </div>
             <div>
               <p className="text-2xl font-bold">{stats.total}</p>
@@ -338,7 +338,7 @@ export default function CoachSessionsPage() {
         <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
-              <Clock className="w-5 h-5 text-emerald-400" />
+              <Clock className="w-5 h-5 text-[var(--accent-primary)]" />
             </div>
             <div>
               <p className="text-2xl font-bold">{stats.upcoming}</p>
@@ -427,7 +427,7 @@ export default function CoachSessionsPage() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center">
-                          <span className="text-emerald-400 font-medium">
+                          <span className="text-[var(--accent-primary)] font-medium">
                             {session.coacheeName.charAt(0).toUpperCase()}
                           </span>
                         </div>
@@ -466,7 +466,7 @@ export default function CoachSessionsPage() {
                             href={session.meetingLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-2 text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-colors"
+                            className="p-2 text-[var(--accent-primary)] hover:bg-emerald-500/10 rounded-lg transition-colors"
                             title="Unirse a la reunión"
                           >
                             <Video className="w-4 h-4" />

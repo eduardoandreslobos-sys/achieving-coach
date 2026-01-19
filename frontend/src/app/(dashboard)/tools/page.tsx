@@ -34,12 +34,12 @@ export default function ToolsPage() {
 
   const getIcon = (icon: string, color: string) => {
     const colorClass = {
-      blue: 'text-emerald-400 bg-emerald-500/20',
-      emerald: 'text-emerald-400 bg-emerald-500/20',
+      blue: 'text-[var(--accent-primary)] bg-emerald-500/20',
+      emerald: 'text-[var(--accent-primary)] bg-emerald-500/20',
       cyan: 'text-cyan-400 bg-cyan-500/20',
       violet: 'text-violet-400 bg-violet-500/20',
       amber: 'text-amber-400 bg-amber-500/20',
-    }[color] || 'text-emerald-400 bg-emerald-500/20';
+    }[color] || 'text-[var(--accent-primary)] bg-emerald-500/20';
 
     const iconMap: Record<string, any> = {
       refresh: RefreshCw,
@@ -100,7 +100,7 @@ export default function ToolsPage() {
               <div className="flex items-start justify-between mb-4">
                 {getIcon(tool.icon, tool.color)}
                 <span className={tool.status === 'completed' 
-                  ? 'px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-medium rounded-full flex items-center gap-1'
+                  ? 'px-3 py-1 bg-emerald-500/20 text-[var(--accent-primary)] text-xs font-medium rounded-full flex items-center gap-1'
                   : 'px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-medium rounded-full'
                 }>
                   {tool.status === 'completed' && <CheckCircle className="w-3 h-3" />}
@@ -115,7 +115,7 @@ export default function ToolsPage() {
                 <span className="text-[var(--fg-muted)] text-xs uppercase tracking-wider">{tool.category}</span>
                 <Link 
                   href={'/tools/' + tool.id}
-                  className="text-emerald-400 hover:text-emerald-300 text-sm font-medium flex items-center gap-1"
+                  className="text-[var(--accent-primary)] hover:text-emerald-300 text-sm font-medium flex items-center gap-1"
                 >
                   {tool.status === 'completed' ? 'Ver Resultados' : 'Iniciar Herramienta'}
                   <ChevronRight className="w-4 h-4" />

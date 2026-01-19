@@ -233,7 +233,7 @@ export default function ClientToolResultsPage() {
                         <h4 className="text-[var(--fg-primary)] font-medium mb-3">Valores Principales</h4>
                         {selectedResult.results.values.slice(0, 5).map((value: any, idx: number) => (
                           <div key={idx} className="flex items-center gap-3 bg-[var(--bg-tertiary)] rounded-lg p-3">
-                            <span className="w-8 h-8 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center font-bold">
+                            <span className="w-8 h-8 bg-emerald-500/20 text-[var(--accent-primary)] rounded-full flex items-center justify-center font-bold">
                               {idx + 1}
                             </span>
                             <span className="text-[var(--fg-primary)]">{value.name || value}</span>
