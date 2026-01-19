@@ -22,14 +22,20 @@ import {
   StakeholderAction
 } from '@/types/stakeholder';
 
-// ============ HELPER: Generar Token Único ============
+// ============ HELPER: Generar Token Único (Cryptographically Secure) ============
 
 function generateAccessToken(): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+  const tokenLength = 32;
   let token = '';
-  for (let i = 0; i < 32; i++) {
-    token += chars.charAt(Math.floor(Math.random() * chars.length));
+
+  // Use Web Crypto API for secure random values (works in browser and modern Node.js)
+  const randomValues = new Uint32Array(tokenLength);
+  crypto.getRandomValues(randomValues);
+  for (let i = 0; i < tokenLength; i++) {
+    token += chars.charAt(randomValues[i] % chars.length);
   }
+
   return token;
 }
 

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Target, ArrowLeft, Calendar, Clock, User } from 'lucide-react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
+import DOMPurify from 'isomorphic-dompurify';
 import { db } from '@/lib/firebase';
 import { ArticleSchema, BreadcrumbSchema } from '@/components/SchemaOrg';
 import type { BlogPost } from '@/types/blog';
@@ -179,10 +180,14 @@ export default function BlogPostContent({ slug }: Props) {
             </div>
           )}
 
-          {/* Content */}
-          <div 
+          {/* Content - sanitized to prevent XSS attacks */}
+          <div
             className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-primary-600 prose-strong:text-gray-900"
-            dangerouslySetInnerHTML={{ __html: post.content }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content, {
+              ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'br', 'strong', 'em', 'u', 's', 'a', 'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'img', 'figure', 'figcaption', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'hr', 'span', 'div'],
+              ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'id', 'target', 'rel'],
+              ALLOW_DATA_ATTR: false,
+            }) }}
           />
         </div>
       </article>
