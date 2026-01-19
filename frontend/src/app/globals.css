@@ -28,27 +28,37 @@
   }
 
   .dark {
-    /* Dark Mode Colors (matching sign-in page) */
-    --bg-primary: #0a0a0a;
-    --bg-secondary: #111111;
-    --bg-tertiary: #1a1a1a;
-    --bg-card: #111111;
+    /* Dark Mode Colors - Softer blacks (2026 trend) */
+    --bg-primary: #0f0f0f;
+    --bg-secondary: #161616;
+    --bg-tertiary: #1f1f1f;
+    --bg-card: #161616;
 
-    --fg-primary: #ffffff;
-    --fg-secondary: #d1d5db;
-    --fg-muted: #6b7280;
+    --fg-primary: #fafafa;
+    --fg-secondary: #d4d4d4;
+    --fg-muted: #737373;
 
     /* Accent color - lighter green for dark mode */
     --accent-primary: #34d399;
     --accent-secondary: #6ee7b7;
 
-    --border-color: #374151;
+    --border-color: #262626;
 
     /* Input specific */
-    --input-bg: #1a1a1a;
-    --input-border: #374151;
+    --input-bg: #1f1f1f;
+    --input-border: #2e2e2e;
     --input-focus-border: rgba(52, 211, 153, 0.5);
     --input-focus-ring: rgba(52, 211, 153, 0.5);
+
+    /* Glass effect colors for dark mode */
+    --glass-bg: rgba(22, 22, 22, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.08);
+  }
+
+  :root {
+    /* Glass effect colors for light mode */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.2);
   }
 
   html {
@@ -134,4 +144,157 @@
   .badge-info {
     @apply px-2 py-0.5 text-xs font-medium rounded-full bg-emerald-500/20 text-emerald-400;
   }
+
+  /* Glass Morphism Cards (2026 Trend) */
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    @apply rounded-2xl transition-all duration-300;
+  }
+
+  .glass-card:hover {
+    border-color: rgba(52, 211, 153, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+
+  .dark .glass-card:hover {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Bento Grid Card */
+  .bento-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    @apply rounded-2xl p-5 transition-all duration-300 ease-out;
+  }
+
+  .bento-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-primary);
+    box-shadow: 0 12px 40px -12px rgba(52, 211, 153, 0.15);
+  }
+
+  .dark .bento-card:hover {
+    box-shadow: 0 12px 40px -12px rgba(52, 211, 153, 0.25);
+  }
+
+  /* Microinteraction Buttons */
+  .btn-micro {
+    @apply transition-all duration-200 ease-out active:scale-95;
+  }
+
+  .btn-micro:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px -4px rgba(52, 211, 153, 0.4);
+  }
+
+  /* Progress Bar with Animation */
+  .progress-bar {
+    @apply h-2 rounded-full overflow-hidden;
+    background: var(--bg-tertiary);
+  }
+
+  .progress-bar-fill {
+    @apply h-full rounded-full transition-all duration-700 ease-out;
+    background: linear-gradient(90deg, #10b981, #34d399);
+  }
+
+  /* Celebration Animation for completed tasks */
+  @keyframes celebrate {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+
+  .celebrate {
+    animation: celebrate 0.4s ease-out;
+  }
+}
+
+/* Skeleton Shimmer Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--bg-tertiary) 25%,
+    var(--bg-secondary) 50%,
+    var(--bg-tertiary) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* Smooth Fade In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Staggered Animation for Lists */
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.2s; }
+.stagger-5 { animation-delay: 0.25s; }
+
+/* Calm UI Transitions */
+.calm-transition {
+  @apply transition-all duration-300 ease-out;
+}
+
+/* Variable Typography */
+.text-display {
+  @apply text-4xl md:text-5xl font-bold tracking-tight;
+  font-variation-settings: 'wght' 700;
+}
+
+.text-headline {
+  @apply text-2xl md:text-3xl font-semibold tracking-tight;
+}
+
+.text-title {
+  @apply text-lg font-medium;
+}
+
+.text-body {
+  @apply text-base;
+  color: var(--fg-secondary);
+}
+
+.text-caption {
+  @apply text-xs uppercase tracking-wider;
+  color: var(--fg-muted);
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }

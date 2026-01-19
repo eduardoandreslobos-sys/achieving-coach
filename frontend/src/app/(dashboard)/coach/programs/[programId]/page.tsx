@@ -155,6 +155,7 @@ export default function ProgramDetailPage() {
             coacheeId={program.coacheeId}
             coachId={userProfile?.uid || ''}
             coacheeName={program.coacheeName || 'Coachee'}
+            coachName={userProfile?.displayName || `${userProfile?.firstName || ''} ${userProfile?.lastName || ''}`.trim() || 'Coach'}
             programTitle={program.title || 'Programa de Coaching'}
           />
         </div>

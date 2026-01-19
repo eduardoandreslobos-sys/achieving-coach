@@ -9,6 +9,7 @@ import DashboardSidebar from '@/components/DashboardSidebar';
 import CoachSidebar from '@/components/CoachSidebar';
 import { NotificationProvider } from '@/contexts/NotificationContext';
 import { useAuth } from '@/contexts/AuthContext';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 function DashboardContent({ children }: { children: React.ReactNode }) {
   const { userProfile } = useAuth();
@@ -48,7 +49,9 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
         </div>
 
         <main className="flex-1 overflow-y-auto">
-          {children}
+          <ErrorBoundary>
+            {children}
+          </ErrorBoundary>
         </main>
       </div>
     </div>

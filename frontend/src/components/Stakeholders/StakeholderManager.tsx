@@ -1,14 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { 
-  Users, UserPlus, Mail, MoreVertical, RefreshCw, 
+import {
+  Users, UserPlus, Mail, MoreVertical, RefreshCw,
   Trash2, ExternalLink, Clock, CheckCircle, AlertCircle,
   Send, Copy, Eye, Shield
 } from 'lucide-react';
-import { 
-  Stakeholder, 
-  StakeholderRole, 
+import {
+  Stakeholder,
+  StakeholderRole,
   STAKEHOLDER_ROLE_LABELS,
   DEFAULT_PERMISSIONS
 } from '@/types/stakeholder';
@@ -20,12 +20,14 @@ import {
   markInvitationSent
 } from '@/lib/stakeholderService';
 import { Timestamp } from 'firebase/firestore';
+import logger from '@/lib/logger';
 
 interface StakeholderManagerProps {
   programId: string;
   coacheeId: string;
   coachId: string;
   coacheeName: string;
+  coachName: string;
   programTitle: string;
 }
 
@@ -34,6 +36,7 @@ export default function StakeholderManager({
   coacheeId,
   coachId,
   coacheeName,
+  coachName,
   programTitle
 }: StakeholderManagerProps) {
   const [stakeholders, setStakeholders] = useState<Stakeholder[]>([]);
@@ -41,6 +44,7 @@ export default function StakeholderManager({
   const [showAddForm, setShowAddForm] = useState(false);
   const [saving, setSaving] = useState(false);
   const [copiedToken, setCopiedToken] = useState<string | null>(null);
+  const [sendingEmail, setSendingEmail] = useState<string | null>(null);
   
   // Form state
   const [form, setForm] = useState({
@@ -61,7 +65,7 @@ export default function StakeholderManager({
       const data = await getProgramStakeholders(programId);
       setStakeholders(data);
     } catch (error) {
-      console.error('Error loading stakeholders:', error);
+      logger.firebaseError('loadStakeholders', error, { component: 'StakeholderManager', programId });
     } finally {
       setLoading(false);
     }
@@ -101,7 +105,7 @@ export default function StakeholderManager({
             stakeholderEmail: form.email,
             stakeholderRole: STAKEHOLDER_ROLE_LABELS[form.role],
             coacheeName,
-            coachName: 'Tu Coach', // TODO: obtener nombre real
+            coachName,
             programTitle,
             portalUrl,
             expiresAt: newStakeholder.tokenExpiresAt.toDate().toLocaleDateString('es-CL'),
@@ -115,12 +119,12 @@ export default function StakeholderManager({
           alert('Stakeholder agregado. Error al enviar email, usa el botón para reenviar.');
         }
       } catch (emailError) {
-        console.error('Error sending invitation email:', emailError);
+        logger.apiError('/api/send-invitation', emailError, { component: 'StakeholderManager', action: 'createStakeholder' });
         alert('Stakeholder agregado. Error al enviar email, usa el botón para reenviar.');
       }
       
     } catch (error) {
-      console.error('Error creating stakeholder:', error);
+      logger.firebaseError('createStakeholder', error, { component: 'StakeholderManager', programId });
       alert('Error al agregar stakeholder');
     } finally {
       setSaving(false);
@@ -134,17 +138,17 @@ export default function StakeholderManager({
       await deleteStakeholder(stakeholderId);
       setStakeholders(stakeholders.filter(s => s.id !== stakeholderId));
     } catch (error) {
-      console.error('Error deleting stakeholder:', error);
+      logger.firebaseError('deleteStakeholder', error, { component: 'StakeholderManager', stakeholderId });
     }
   };
 
   const handleRenewToken = async (stakeholderId: string) => {
     try {
-      const newToken = await renewStakeholderToken(stakeholderId);
+      await renewStakeholderToken(stakeholderId);
       await loadStakeholders();
       alert('Token renovado exitosamente');
     } catch (error) {
-      console.error('Error renewing token:', error);
+      logger.firebaseError('renewStakeholderToken', error, { component: 'StakeholderManager', stakeholderId });
     }
   };
 
@@ -156,29 +160,66 @@ export default function StakeholderManager({
     setTimeout(() => setCopiedToken(null), 2000);
   };
 
+  const handleSendEmail = async (stakeholder: Stakeholder) => {
+    setSendingEmail(stakeholder.id);
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+    const portalUrl = `${baseUrl}/portal/${stakeholder.accessToken}`;
+
+    try {
+      const response = await fetch('/api/send-invitation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          stakeholderName: stakeholder.name,
+          stakeholderEmail: stakeholder.email,
+          stakeholderRole: STAKEHOLDER_ROLE_LABELS[stakeholder.role],
+          coacheeName,
+          coachName,
+          programTitle,
+          portalUrl,
+          expiresAt: stakeholder.tokenExpiresAt.toDate().toLocaleDateString('es-CL'),
+        }),
+      });
+
+      if (response.ok) {
+        await markInvitationSent(stakeholder.id);
+        await loadStakeholders();
+        alert('Invitación enviada exitosamente');
+      } else {
+        const error = await response.json();
+        alert(`Error al enviar email: ${error.error || 'Error desconocido'}`);
+      }
+    } catch (error) {
+      logger.apiError('/api/send-invitation', error, { component: 'StakeholderManager', action: 'sendEmail', stakeholderId: stakeholder.id });
+      alert('Error al enviar email');
+    } finally {
+      setSendingEmail(null);
+    }
+  };
+
   const getStatusBadge = (stakeholder: Stakeholder) => {
     const isExpired = stakeholder.tokenExpiresAt.toDate() < new Date();
-    
+
     if (isExpired || stakeholder.status === 'expired') {
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-red-100 text-red-700">
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400">
           <AlertCircle size={12} />
           Expirado
         </span>
       );
     }
-    
+
     if (stakeholder.status === 'active' && stakeholder.accessCount > 0) {
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-700">
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
           <CheckCircle size={12} />
           Activo
         </span>
       );
     }
-    
+
     return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-700">
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400">
         <Clock size={12} />
         Pendiente
       </span>
@@ -194,68 +235,81 @@ export default function StakeholderManager({
   };
 
   return (
-    <div className="bg-white rounded-xl border-2 border-gray-200 p-6">
+    <div className="bg-[var(--bg-primary)] rounded-xl border-2 border-[var(--border-color)] p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary-100 rounded-lg">
-            <Users className="text-primary-600" size={24} />
+          <div className="p-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg">
+            <Users className="text-emerald-600 dark:text-emerald-400" size={24} />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-gray-900">Stakeholders</h2>
-            <p className="text-sm text-gray-500">
+            <h2 className="text-xl font-bold text-[var(--fg-primary)]">Stakeholders</h2>
+            <p className="text-sm text-[var(--fg-muted)]">
               Gestiona los participantes del proceso de coaching
             </p>
           </div>
         </div>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+          aria-expanded={showAddForm}
+          aria-controls="add-stakeholder-form"
         >
-          <UserPlus size={18} />
+          <UserPlus size={18} aria-hidden="true" />
           Agregar Stakeholder
         </button>
       </div>
 
       {/* Add Form */}
       {showAddForm && (
-        <form onSubmit={handleAddStakeholder} className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-          <h3 className="font-semibold text-gray-900 mb-4">Nuevo Stakeholder</h3>
+        <form
+          id="add-stakeholder-form"
+          onSubmit={handleAddStakeholder}
+          className="mb-6 p-4 bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)]"
+          aria-labelledby="add-stakeholder-heading"
+        >
+          <h3 id="add-stakeholder-heading" className="font-semibold text-[var(--fg-primary)] mb-4">Nuevo Stakeholder</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="stakeholder-name" className="block text-sm font-medium text-[var(--fg-secondary)] mb-1">
                 Nombre completo *
               </label>
               <input
+                id="stakeholder-name"
                 type="text"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-3 py-2 border border-[var(--border-color)] rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-[var(--bg-primary)] text-[var(--fg-primary)]"
                 placeholder="Juan Pérez"
                 required
+                aria-required="true"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="stakeholder-email" className="block text-sm font-medium text-[var(--fg-secondary)] mb-1">
                 Email *
               </label>
               <input
+                id="stakeholder-email"
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-3 py-2 border border-[var(--border-color)] rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-[var(--bg-primary)] text-[var(--fg-primary)]"
                 placeholder="juan@empresa.com"
                 required
+                aria-required="true"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="stakeholder-role" className="block text-sm font-medium text-[var(--fg-secondary)] mb-1">
                 Rol en el proceso *
               </label>
               <select
+                id="stakeholder-role"
                 value={form.role}
                 onChange={(e) => setForm({ ...form, role: e.target.value as StakeholderRole })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-3 py-2 border border-[var(--border-color)] rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-[var(--bg-primary)] text-[var(--fg-primary)]"
+                aria-required="true"
               >
                 {Object.entries(STAKEHOLDER_ROLE_LABELS).map(([value, label]) => (
                   <option key={value} value={value}>{label}</option>
@@ -263,40 +317,42 @@ export default function StakeholderManager({
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="stakeholder-position" className="block text-sm font-medium text-[var(--fg-secondary)] mb-1">
                 Cargo/Posición
               </label>
               <input
+                id="stakeholder-position"
                 type="text"
                 value={form.position}
                 onChange={(e) => setForm({ ...form, position: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-3 py-2 border border-[var(--border-color)] rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-[var(--bg-primary)] text-[var(--fg-primary)]"
                 placeholder="Gerente de Área"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="stakeholder-phone" className="block text-sm font-medium text-[var(--fg-secondary)] mb-1">
                 Teléfono
               </label>
               <input
+                id="stakeholder-phone"
                 type="tel"
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-3 py-2 border border-[var(--border-color)] rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-[var(--bg-primary)] text-[var(--fg-primary)]"
                 placeholder="+56 9 1234 5678"
               />
             </div>
           </div>
           
           {/* Permisos preview */}
-          <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-            <div className="flex items-center gap-2 text-sm font-medium text-blue-900 mb-2">
+          <div className="mt-4 p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
+            <div className="flex items-center gap-2 text-sm font-medium text-emerald-900 dark:text-emerald-300 mb-2">
               <Shield size={16} />
               Permisos para {STAKEHOLDER_ROLE_LABELS[form.role]}:
             </div>
             <div className="flex flex-wrap gap-2">
               {DEFAULT_PERMISSIONS[form.role].map(permission => (
-                <span key={permission} className="px-2 py-1 bg-emerald-100 text-blue-700 text-xs rounded">
+                <span key={permission} className="px-2 py-1 bg-emerald-100 dark:bg-emerald-800/40 text-emerald-700 dark:text-emerald-300 text-xs rounded">
                   {permission.replace(/_/g, ' ')}
                 </span>
               ))}
@@ -307,14 +363,14 @@ export default function StakeholderManager({
             <button
               type="button"
               onClick={() => setShowAddForm(false)}
-              className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              className="px-4 py-2 text-[var(--fg-secondary)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={saving || !form.name || !form.email}
-              className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50"
             >
               {saving ? (
                 <>
@@ -334,52 +390,54 @@ export default function StakeholderManager({
 
       {/* Stakeholders List */}
       {loading ? (
-        <div className="flex justify-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary-600 border-t-transparent"></div>
+        <div className="flex justify-center py-8" role="status" aria-label="Cargando stakeholders">
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-emerald-600 border-t-transparent" aria-hidden="true"></div>
+          <span className="sr-only">Cargando stakeholders...</span>
         </div>
       ) : stakeholders.length === 0 ? (
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <Users className="mx-auto text-gray-400 mb-3" size={48} />
-          <h3 className="text-lg font-medium text-gray-900 mb-1">No hay stakeholders</h3>
-          <p className="text-gray-500 mb-4">
+        <div className="text-center py-12 bg-[var(--bg-secondary)] rounded-lg">
+          <Users className="mx-auto text-[var(--fg-muted)] mb-3" size={48} />
+          <h3 className="text-lg font-medium text-[var(--fg-primary)] mb-1">No hay stakeholders</h3>
+          <p className="text-[var(--fg-muted)] mb-4">
             Agrega sponsor, HR o manager para involucrarlos en el proceso
           </p>
           <button
             onClick={() => setShowAddForm(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700"
           >
             <UserPlus size={18} />
             Agregar primer stakeholder
           </button>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-3" role="list" aria-label="Lista de stakeholders">
           {stakeholders.map((stakeholder) => (
-            <div 
-              key={stakeholder.id} 
-              className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary-300 transition-colors"
+            <div
+              key={stakeholder.id}
+              role="listitem"
+              className="flex items-center justify-between p-4 bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)] hover:border-emerald-400 dark:hover:border-emerald-500 transition-colors"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
-                  <span className="text-primary-700 font-semibold">
+                <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center">
+                  <span className="text-emerald-700 dark:text-emerald-400 font-semibold">
                     {stakeholder.name.charAt(0).toUpperCase()}
                   </span>
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h4 className="font-medium text-gray-900">{stakeholder.name}</h4>
+                    <h4 className="font-medium text-[var(--fg-primary)]">{stakeholder.name}</h4>
                     {getStatusBadge(stakeholder)}
                   </div>
-                  <p className="text-sm text-gray-500">{stakeholder.email}</p>
+                  <p className="text-sm text-[var(--fg-muted)]">{stakeholder.email}</p>
                   <div className="flex items-center gap-3 mt-1">
-                    <span className="text-xs text-gray-500 bg-gray-200 px-2 py-0.5 rounded">
+                    <span className="text-xs text-[var(--fg-muted)] bg-[var(--bg-tertiary)] px-2 py-0.5 rounded">
                       {STAKEHOLDER_ROLE_LABELS[stakeholder.role]}
                     </span>
                     {stakeholder.position && (
-                      <span className="text-xs text-gray-500">{stakeholder.position}</span>
+                      <span className="text-xs text-[var(--fg-muted)]">{stakeholder.position}</span>
                     )}
                     {stakeholder.accessCount > 0 && (
-                      <span className="text-xs text-green-600">
+                      <span className="text-xs text-emerald-600 dark:text-emerald-400">
                         <Eye size={12} className="inline mr-1" />
                         {stakeholder.accessCount} acceso(s)
                       </span>
@@ -388,68 +446,66 @@ export default function StakeholderManager({
                 </div>
               </div>
               
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2" role="group" aria-label="Acciones para stakeholder">
                 {/* Copy Link Button */}
                 <button
                   onClick={() => copyPortalLink(stakeholder.accessToken)}
-                  className="flex items-center gap-1 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-200 rounded-lg transition-colors"
-                  title="Copiar link del portal"
+                  className="flex items-center gap-1 px-3 py-1.5 text-sm text-[var(--fg-secondary)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"
+                  aria-label={`Copiar link del portal para ${stakeholder.name}`}
                 >
                   {copiedToken === stakeholder.accessToken ? (
                     <>
-                      <CheckCircle size={16} className="text-green-600" />
-                      <span className="text-green-600">Copiado</span>
+                      <CheckCircle size={16} className="text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
+                      <span className="text-emerald-600 dark:text-emerald-400">Copiado</span>
                     </>
                   ) : (
                     <>
-                      <Copy size={16} />
+                      <Copy size={16} aria-hidden="true" />
                       Link
                     </>
                   )}
                 </button>
-                
+
                 {/* Send Email Button */}
                 <button
-                  onClick={() => {
-                    // TODO: Implementar envío de email
-                    const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
-                    const link = `${baseUrl}/portal/${stakeholder.accessToken}`;
-                    const subject = encodeURIComponent(`Invitación al proceso de coaching de ${coacheeName}`);
-                    const body = encodeURIComponent(
-                      `Hola ${stakeholder.name},\n\n` +
-                      `Has sido invitado/a a participar como ${STAKEHOLDER_ROLE_LABELS[stakeholder.role]} en el proceso de coaching de ${coacheeName}.\n\n` +
-                      `Accede al portal desde aquí:\n${link}\n\n` +
-                      `Este link es personal y expira el ${formatDate(stakeholder.tokenExpiresAt)}.\n\n` +
-                      `Saludos`
-                    );
-                    window.open(`mailto:${stakeholder.email}?subject=${subject}&body=${body}`, '_blank');
-                  }}
-                  className="flex items-center gap-1 px-3 py-1.5 text-sm text-primary-700 hover:bg-primary-100 rounded-lg transition-colors"
-                  title="Enviar invitación por email"
+                  onClick={() => handleSendEmail(stakeholder)}
+                  disabled={sendingEmail === stakeholder.id}
+                  className="flex items-center gap-1 px-3 py-1.5 text-sm text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 rounded-lg transition-colors disabled:opacity-50"
+                  aria-label={`Enviar invitación por email a ${stakeholder.name}`}
+                  aria-busy={sendingEmail === stakeholder.id}
                 >
-                  <Mail size={16} />
-                  Email
+                  {sendingEmail === stakeholder.id ? (
+                    <>
+                      <RefreshCw size={16} className="animate-spin" aria-hidden="true" />
+                      Enviando...
+                    </>
+                  ) : (
+                    <>
+                      <Mail size={16} aria-hidden="true" />
+                      Email
+                    </>
+                  )}
                 </button>
-                
+
                 {/* Renew Token (if expired) */}
                 {(stakeholder.status === 'expired' || stakeholder.tokenExpiresAt.toDate() < new Date()) && (
                   <button
                     onClick={() => handleRenewToken(stakeholder.id)}
-                    className="flex items-center gap-1 px-3 py-1.5 text-sm text-orange-700 hover:bg-orange-100 rounded-lg transition-colors"
-                    title="Renovar acceso"
+                    className="flex items-center gap-1 px-3 py-1.5 text-sm text-orange-700 dark:text-orange-400 hover:bg-orange-100 dark:hover:bg-orange-900/30 rounded-lg transition-colors"
+                    aria-label={`Renovar acceso para ${stakeholder.name}`}
                   >
-                    <RefreshCw size={16} />
+                    <RefreshCw size={16} aria-hidden="true" />
                     Renovar
                   </button>
                 )}
-                
+
                 {/* Delete Button */}
                 <button
                   onClick={() => handleDelete(stakeholder.id)}
-                  className="p-1.5 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
-                  title="Eliminar stakeholder"
+                  className="p-1.5 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+                  aria-label={`Eliminar stakeholder ${stakeholder.name}`}
                 >
-                  <Trash2 size={16} />
+                  <Trash2 size={16} aria-hidden="true" />
                 </button>
               </div>
             </div>
@@ -458,12 +514,12 @@ export default function StakeholderManager({
       )}
       
       {/* Info Card */}
-      <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-        <h4 className="font-medium text-blue-900 mb-2">💡 Portal de Stakeholders</h4>
-        <p className="text-sm text-blue-800">
+      <div className="mt-6 p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg border border-emerald-200 dark:border-emerald-800">
+        <h4 className="font-medium text-emerald-900 dark:text-emerald-300 mb-2">💡 Portal de Stakeholders</h4>
+        <p className="text-sm text-emerald-800 dark:text-emerald-300">
           Cada stakeholder recibe un link único para acceder a su portal personalizado donde pueden:
         </p>
-        <ul className="mt-2 space-y-1 text-sm text-blue-700">
+        <ul className="mt-2 space-y-1 text-sm text-emerald-700 dark:text-emerald-400">
           <li>• <strong>Sponsor/HR:</strong> Ver progreso, completar 360°, participar en tripartita, ver reportes</li>
           <li>• <strong>Manager:</strong> Ver progreso, completar 360°, participar en tripartita</li>
           <li>• <strong>Pares/Reportes:</strong> Completar 360° feedback</li>
