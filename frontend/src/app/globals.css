@@ -27,6 +27,12 @@
     --input-focus-ring: rgba(16, 185, 129, 0.5);
   }
 
+  :root {
+    /* Glass effect colors for light mode */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(200, 200, 200, 0.3);
+  }
+
   .dark {
     /* Dark Mode Colors - Softer blacks (2026 trend) */
     --bg-primary: #0f0f0f;
@@ -53,12 +59,6 @@
     /* Glass effect colors for dark mode */
     --glass-bg: rgba(22, 22, 22, 0.8);
     --glass-border: rgba(255, 255, 255, 0.08);
-  }
-
-  :root {
-    /* Glass effect colors for light mode */
-    --glass-bg: rgba(255, 255, 255, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.2);
   }
 
   html {

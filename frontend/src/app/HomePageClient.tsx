@@ -141,7 +141,7 @@ export default function HomePageClient() {
               <p className="text-[var(--accent-primary)] text-xs uppercase tracking-wider mb-2">RECURSOS DE ÉLITE</p>
               <h2 className="text-3xl lg:text-4xl font-bold">¿Qué herramientas necesita un coach profesional?</h2>
             </div>
-            <Link href="/coach/tools" className="text-[var(--accent-primary)] text-sm hover:text-[var(--accent-secondary)] flex items-center gap-1">
+            <Link href="/tools" className="text-[var(--accent-primary)] text-sm hover:text-[var(--accent-secondary)] flex items-center gap-1">
               Explorar Biblioteca
               <ArrowRight className="w-4 h-4" />
             </Link>
@@ -152,7 +152,7 @@ export default function HomePageClient() {
 
           <div className="grid lg:grid-cols-2 gap-6">
             {/* Simulador ICF Card */}
-            <div className="glass-card p-6">
+            <div className="bento-card p-6">
               <p className="text-[var(--accent-primary)] text-xs uppercase tracking-wider mb-4">PREMIUM</p>
               <h3 className="text-2xl font-bold text-[var(--fg-primary)] mb-3">Simulador de Competencias ICF</h3>
               <p className="text-[var(--fg-muted)] text-sm mb-6">
@@ -170,7 +170,7 @@ export default function HomePageClient() {
             </div>
 
             {/* Tools Grid */}
-            <div className="glass-card p-6">
+            <div className="bento-card p-6">
               <div className="flex items-start justify-between mb-6">
                 <div>
                   <div className="w-10 h-10 bg-violet-500/10 rounded-lg flex items-center justify-center mb-3">
@@ -476,7 +476,7 @@ export default function HomePageClient() {
 
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((testimonial, index) => (
-              <div key={index} className="glass-card p-6">
+              <div key={index} className="bento-card p-6">
                 <div className="flex gap-1 mb-4">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Star key={star} className="w-4 h-4 text-amber-400 fill-amber-400" />
