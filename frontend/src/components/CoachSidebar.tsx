@@ -15,7 +15,8 @@ import {
   User,
   MoreVertical,
   Globe,
-  CalendarCheck
+  CalendarCheck,
+  X
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -43,11 +44,23 @@ const accountNav = [
   { name: 'Perfil', href: '/coach/profile', icon: User },
 ];
 
-export default function CoachSidebar() {
+interface CoachSidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+export default function CoachSidebar({ isOpen = false, onClose }: CoachSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { userProfile, logout } = useAuth();
   const [messageCount, setMessageCount] = useState(0);
+
+  // Close sidebar on route change (mobile)
+  useEffect(() => {
+    if (onClose) {
+      onClose();
+    }
+  }, [pathname]);
 
   const getInitials = () => {
     if (userProfile?.firstName && userProfile?.lastName) {
@@ -68,6 +81,12 @@ export default function CoachSidebar() {
     router.push('/');
   };
 
+  const handleNavClick = () => {
+    if (onClose && window.innerWidth < 768) {
+      onClose();
+    }
+  };
+
   const NavItem = ({ item, badge }: { item: typeof mainNavigation[0], badge?: number | null }) => {
     const Icon = item.icon;
     const isActive = pathname === item.href || pathname?.startsWith(item.href + '/');
@@ -75,10 +94,11 @@ export default function CoachSidebar() {
     return (
       <Link
         href={item.href}
+        onClick={handleNavClick}
         className={`w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${
           isActive
             ? 'bg-emerald-600 text-white'
-            : 'text-gray-400 hover:bg-[var(--bg-tertiary)] hover:text-white'
+            : 'text-[var(--fg-muted)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--fg-primary)]'
         }`}
       >
         <div className="flex items-center gap-3">
@@ -92,21 +112,32 @@ export default function CoachSidebar() {
     );
   };
 
-  return (
-    <div className="flex flex-col w-64 bg-[var(--bg-primary)] border-r border-[var(--border-color)] h-screen">
+  const sidebarContent = (
+    <div className="flex flex-col w-64 bg-[var(--bg-primary)] border-r border-[var(--border-color)] h-full">
       {/* Header */}
-      <div className="flex items-center gap-3 h-16 px-4 border-b border-[var(--border-color)]">
-        <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-          <span className="text-white font-bold text-sm">A</span>
+      <div className="flex items-center justify-between h-16 px-4 border-b border-[var(--border-color)]">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-sm">A</span>
+          </div>
+          <span className="font-semibold text-[var(--fg-primary)]">AchievingCoach</span>
         </div>
-        <span className="font-semibold text-white">AchievingCoach</span>
+        {/* Mobile close button */}
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="md:hidden p-2 text-[var(--fg-muted)] hover:text-[var(--fg-primary)] hover:bg-[var(--bg-tertiary)] rounded-lg"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        )}
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-6 overflow-y-auto">
         {/* Principal */}
         <div>
-          <p className="px-3 mb-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Principal</p>
+          <p className="px-3 mb-2 text-xs font-medium text-[var(--fg-muted)] uppercase tracking-wider">Principal</p>
           <div className="space-y-1">
             {mainNavigation.map((item) => (
               <NavItem key={item.name} item={item} />
@@ -116,7 +147,7 @@ export default function CoachSidebar() {
 
         {/* Comunicación */}
         <div>
-          <p className="px-3 mb-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Comunicación</p>
+          <p className="px-3 mb-2 text-xs font-medium text-[var(--fg-muted)] uppercase tracking-wider">Comunicación</p>
           <div className="space-y-1">
             {communicationNav.map((item) => (
               <NavItem key={item.name} item={item} badge={item.name === 'Mensajes' ? messageCount : null} />
@@ -126,7 +157,7 @@ export default function CoachSidebar() {
 
         {/* Booking */}
         <div>
-          <p className="px-3 mb-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Booking</p>
+          <p className="px-3 mb-2 text-xs font-medium text-[var(--fg-muted)] uppercase tracking-wider">Booking</p>
           <div className="space-y-1">
             {bookingNav.map((item) => (
               <NavItem key={item.name} item={item} />
@@ -136,7 +167,7 @@ export default function CoachSidebar() {
 
         {/* Cuenta */}
         <div>
-          <p className="px-3 mb-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Cuenta</p>
+          <p className="px-3 mb-2 text-xs font-medium text-[var(--fg-muted)] uppercase tracking-wider">Cuenta</p>
           <div className="space-y-1">
             {accountNav.map((item) => (
               <NavItem key={item.name} item={item} />
@@ -170,19 +201,19 @@ export default function CoachSidebar() {
               </div>
             )}
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">
+              <p className="text-sm font-medium text-[var(--fg-primary)] truncate">
                 {userProfile.displayName || `${userProfile.firstName || ''} ${userProfile.lastName || ''}`.trim() || 'Coach'}
               </p>
-              <p className="text-xs text-gray-500 truncate">{userProfile.email}</p>
+              <p className="text-xs text-[var(--fg-muted)] truncate">{userProfile.email}</p>
             </div>
-            <button className="p-1 text-gray-500 hover:text-white transition-colors">
+            <button className="p-1 text-[var(--fg-muted)] hover:text-[var(--fg-primary)] transition-colors">
               <MoreVertical className="w-4 h-4" />
             </button>
           </div>
 
           <button
             onClick={handleSignOut}
-            className="mt-3 w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"
+            className="mt-3 w-full flex items-center gap-2 px-3 py-2 text-sm text-[var(--fg-muted)] hover:text-[var(--fg-primary)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"
           >
             <LogOut className="w-4 h-4" />
             Cerrar Sesión
@@ -190,5 +221,35 @@ export default function CoachSidebar() {
         </div>
       )}
     </div>
+  );
+
+  return (
+    <>
+      {/* Desktop Sidebar - always visible on md+ */}
+      <div className="hidden md:block h-screen">
+        {sidebarContent}
+      </div>
+
+      {/* Mobile Drawer */}
+      <div
+        className={`md:hidden fixed inset-0 z-50 transition-opacity duration-300 ${
+          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        {/* Backdrop */}
+        <div
+          className="absolute inset-0 bg-black/50"
+          onClick={onClose}
+        />
+        {/* Sidebar */}
+        <div
+          className={`absolute left-0 top-0 h-full w-64 transform transition-transform duration-300 ${
+            isOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
+        >
+          {sidebarContent}
+        </div>
+      </div>
+    </>
   );
 }
