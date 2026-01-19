@@ -102,9 +102,35 @@ export default function AdminBlogPage() {
 
   useEffect(() => {
     if (userRole === 'admin') {
-      loadPosts();
+      publishScheduledPosts().then(() => loadPosts());
     }
   }, [userRole]);
+
+  // Auto-publish scheduled posts when admin visits
+  const publishScheduledPosts = async () => {
+    try {
+      const now = new Date();
+      const q = query(collection(db, 'blog_posts'), orderBy('scheduledAt', 'asc'));
+      const snapshot = await getDocs(q);
+
+      for (const docSnapshot of snapshot.docs) {
+        const data = docSnapshot.data();
+        if (data.scheduledAt && !data.published) {
+          const scheduledDate = data.scheduledAt.toDate ? data.scheduledAt.toDate() : new Date(data.scheduledAt);
+          if (scheduledDate <= now) {
+            await updateDoc(doc(db, 'blog_posts', docSnapshot.id), {
+              published: true,
+              scheduledAt: null,
+              updatedAt: new Date(),
+            });
+            console.log(`Auto-published: ${data.title}`);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error auto-publishing:', error);
+    }
+  };
 
   useEffect(() => {
     filterPosts();
