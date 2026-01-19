@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { User, Upload, Shield, Save, Loader2, Eye, EyeOff, Check, X } from 'lucide-react';
+import { User, Upload, Shield, Save, Loader2, Eye, EyeOff, Check, X, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { db, auth } from '@/lib/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
@@ -319,10 +319,28 @@ export default function SettingsPage() {
           </div>
         </div>
 
+        {/* Privacy Section */}
+        <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6 mb-6">
+          <div className="flex items-center gap-2 mb-4">
+            <Shield className="w-5 h-5 text-[var(--accent-primary)]" />
+            <h2 className="text-[var(--fg-primary)] font-semibold">Privacidad y Datos</h2>
+          </div>
+          <p className="text-[var(--fg-muted)] text-sm mb-4">
+            Controla tus preferencias de privacidad, exporta tus datos o elimina tu cuenta.
+          </p>
+          <Link
+            href="/settings/privacy"
+            className="flex items-center justify-between w-full px-4 py-3 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] rounded-xl hover:bg-[var(--bg-primary)] transition-colors"
+          >
+            <span>Configuración de privacidad</span>
+            <ChevronRight className="w-5 h-5 text-[var(--fg-muted)]" />
+          </Link>
+        </div>
+
         {/* Account Section */}
         <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
           <div className="flex items-center gap-2 mb-6">
-            <Shield className="w-5 h-5 text-[var(--accent-primary)]" />
+            <User className="w-5 h-5 text-[var(--accent-primary)]" />
             <h2 className="text-[var(--fg-primary)] font-semibold">Cuenta</h2>
           </div>
 

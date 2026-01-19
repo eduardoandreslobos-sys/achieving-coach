@@ -141,6 +141,27 @@ export default function AdminUsersPage() {
     }
   };
 
+  const handleDeleteUser = async (userId: string, userEmail: string) => {
+    const confirmDelete = window.confirm(
+      `¿Estás seguro de que quieres eliminar al usuario "${userEmail}"?\n\nEsta acción no se puede deshacer. El usuario perderá acceso a la plataforma y todos sus datos asociados.`
+    );
+
+    if (!confirmDelete) {
+      setOpenMenu(null);
+      return;
+    }
+
+    try {
+      await deleteDoc(doc(db, 'users', userId));
+      setUsers(users.filter(u => u.id !== userId));
+      setOpenMenu(null);
+      alert('Usuario eliminado exitosamente');
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      alert('Error al eliminar el usuario. Por favor intenta de nuevo.');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
@@ -260,24 +281,35 @@ export default function AdminUsersPage() {
                         </button>
                         {openMenu === user.id && (
                           <div className="absolute right-0 mt-2 w-48 bg-[#1a1b23] border border-gray-700 rounded-lg shadow-xl z-10">
-                            <button
-                              onClick={() => handleRoleChange(user.id, 'coach')}
-                              className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800"
-                            >
-                              Cambiar a Coach
-                            </button>
-                            <button
-                              onClick={() => handleRoleChange(user.id, 'coachee')}
-                              className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800"
-                            >
-                              Cambiar a Coachee
-                            </button>
-                            <button
-                              onClick={() => handleRoleChange(user.id, 'admin')}
-                              className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800"
-                            >
-                              Cambiar a Admin
-                            </button>
+                            <div className="py-1">
+                              <p className="px-4 py-1 text-xs text-gray-500 uppercase">Cambiar Rol</p>
+                              <button
+                                onClick={() => handleRoleChange(user.id, 'coach')}
+                                className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800"
+                              >
+                                Cambiar a Coach
+                              </button>
+                              <button
+                                onClick={() => handleRoleChange(user.id, 'coachee')}
+                                className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800"
+                              >
+                                Cambiar a Coachee
+                              </button>
+                              <button
+                                onClick={() => handleRoleChange(user.id, 'admin')}
+                                className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800"
+                              >
+                                Cambiar a Admin
+                              </button>
+                            </div>
+                            <div className="border-t border-gray-700 py-1">
+                              <button
+                                onClick={() => handleDeleteUser(user.id, user.email)}
+                                className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-500/10"
+                              >
+                                Eliminar Usuario
+                              </button>
+                            </div>
                           </div>
                         )}
                       </div>

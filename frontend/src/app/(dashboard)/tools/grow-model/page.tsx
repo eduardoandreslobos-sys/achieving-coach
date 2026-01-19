@@ -108,8 +108,8 @@ export default function GROWWorksheetPage() {
         }
       }
 
-      toast.success('GROW Worksheet saved!', {
-        description: 'Your coach has been notified.',
+      toast.success('Hoja de Trabajo GROW guardada exitosamente', {
+        description: 'Tu coach ha sido notificado.',
         duration: 4000,
       });
 
@@ -118,7 +118,7 @@ export default function GROWWorksheetPage() {
       
     } catch (error) {
       console.error('Error saving:', error);
-      toast.error('Error saving. Please try again.');
+      toast.error('Error al guardar. Por favor intenta de nuevo.');
     } finally {
       setSaving(false);
     }
@@ -132,28 +132,28 @@ export default function GROWWorksheetPage() {
     );
   }
 
-  if (!hasAccess) {
-    const isCoach = userProfile?.role === 'coach';
+  const isCoach = userProfile?.role === 'coach';
+  const isPreviewMode = isCoach && !hasAccess;
+
+  if (!hasAccess && !isCoach) {
     return (
       <div className="min-h-screen bg-[var(--bg-primary)] py-12 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 text-center">
-            <div className={`w-16 h-16 ${isCoach ? 'bg-emerald-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
-              <Target className={`w-8 h-8 ${isCoach ? 'text-[var(--accent-primary)]' : 'text-yellow-400'}`} />
+            <div className="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Target className="w-8 h-8 text-yellow-400" />
             </div>
             <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">
-              {isCoach ? 'Tool for Coachees Only' : 'Access Required'}
+              Acceso Requerido
             </h2>
             <p className="text-[var(--fg-muted)] mb-6">
-              {isCoach
-                ? 'This tool is designed to be completed by coachees. You can assign it to your clients from the client management page.'
-                : 'This tool needs to be assigned by your coach before you can access it.'}
+              Esta herramienta debe ser asignada por tu coach antes de que puedas acceder.
             </p>
             <Link
-              href={isCoach ? '/coach/clients' : '/dashboard'}
+              href="/dashboard"
               className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 transition-colors"
             >
-              {isCoach ? 'Go to Clients' : 'Return to Dashboard'}
+              Volver al Dashboard
             </Link>
           </div>
         </div>
@@ -170,22 +170,22 @@ export default function GROWWorksheetPage() {
             <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle2 className="w-8 h-8 text-[var(--accent-primary)]" />
             </div>
-            <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">Tool Completed!</h2>
+            <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">¡Herramienta Completada!</h2>
             <p className="text-[var(--fg-muted)] mb-6">
-              You've successfully completed the GROW Worksheet. Your coach has been notified.
+              Has completado exitosamente la Hoja de Trabajo GROW. Tu coach ha sido notificado.
             </p>
             <div className="flex gap-4 justify-center">
               <Link
                 href="/dashboard"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 transition-colors"
               >
-                Return to Dashboard
+                Volver al Dashboard
               </Link>
               <Link
                 href="/tools"
                 className="inline-flex items-center gap-2 px-6 py-3 border border-[var(--border-color)] text-[var(--fg-secondary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
               >
-                View Other Tools
+                Ver Otras Herramientas
               </Link>
             </div>
           </div>
@@ -198,7 +198,32 @@ export default function GROWWorksheetPage() {
     <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--fg-primary)] p-8">
       <Toaster position="top-center" richColors />
       <div className="max-w-4xl mx-auto">
+        {/* Preview Mode Banner for Coaches */}
+        {isPreviewMode && (
+          <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 mb-6 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Target className="w-5 h-5 text-amber-400" />
+              <div>
+                <p className="text-amber-400 font-medium">Modo Vista Previa</p>
+                <p className="text-amber-400/70 text-sm">Estas previsualizando esta herramienta. Asignala a un coachee para que la complete.</p>
+              </div>
+            </div>
+            <Link
+              href="/coach/tools"
+              className="px-4 py-2 bg-amber-500/20 text-amber-400 rounded-lg hover:bg-amber-500/30 transition-colors text-sm font-medium"
+            >
+              Volver a Herramientas
+            </Link>
+          </div>
+        )}
+
         <div className="mb-8">
+          <Link
+            href={isPreviewMode ? "/coach/tools" : "/tools"}
+            className="inline-flex items-center gap-2 text-[var(--accent-primary)] hover:text-emerald-300 font-medium mb-4"
+          >
+            ← Volver a Herramientas
+          </Link>
           <h1 className="text-3xl font-bold text-[var(--fg-primary)] mb-2">GROW Worksheet</h1>
           <p className="text-[var(--fg-muted)]">
             A powerful coaching framework to help you achieve your goals
@@ -283,15 +308,22 @@ export default function GROWWorksheetPage() {
           </div>
         </div>
 
-        <div className="mt-8 flex justify-end">
-          <button
-            onClick={handleSave}
-            disabled={saving || !data.goal || !data.reality || !data.options || !data.way}
-            className="px-8 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 disabled:bg-[var(--bg-tertiary)] disabled:text-[var(--fg-muted)] disabled:cursor-not-allowed flex items-center gap-2 transition-colors"
-          >
-            {saving ? 'Saving...' : 'Save Worksheet'}
-          </button>
-        </div>
+        {!isPreviewMode && (
+          <div className="mt-8 flex justify-end">
+            <button
+              onClick={handleSave}
+              disabled={saving || !data.goal || !data.reality || !data.options || !data.way}
+              className="px-8 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 disabled:bg-[var(--bg-tertiary)] disabled:text-[var(--fg-muted)] disabled:cursor-not-allowed flex items-center gap-2 transition-colors"
+            >
+              {saving ? 'Guardando...' : 'Guardar Resultados'}
+            </button>
+          </div>
+        )}
+        {isPreviewMode && (
+          <div className="text-center py-4 text-[var(--fg-muted)]">
+            <p>Esta es una vista previa. Los coaches no pueden completar herramientas.</p>
+          </div>
+        )}
       </div>
     </div>
   );

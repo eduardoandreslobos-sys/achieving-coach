@@ -294,36 +294,47 @@ export default function ICFSimulatorPage() {
                 <span className="text-[var(--accent-primary)]">Nuevo Modelo ICF 2026</span>.
               </p>
             </div>
-            <button className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors">
-              <History className="w-4 h-4" />
-              Ver Historial
-            </button>
+            {recentResults.length > 0 ? (
+              <Link
+                href={`/coach/icf-simulator/results/${recentResults[0]?.id}`}
+                className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
+              >
+                <History className="w-4 h-4" />
+                Ver Historial
+              </Link>
+            ) : (
+              <button
+                onClick={() => alert('No tienes simulaciones previas. Completa tu primera simulación para ver el historial.')}
+                className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
+              >
+                <History className="w-4 h-4" />
+                Ver Historial
+              </button>
+            )}
           </div>
 
           {/* Three Mode Cards */}
           <div className="grid md:grid-cols-3 gap-4 mb-10">
-            {/* Explorar Escenarios */}
+            {/* Práctica Rápida (antes Explorar Escenarios) */}
             <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6 hover:border-emerald-500/50 transition-colors">
               <div className="flex items-start justify-between mb-4">
-                <h3 className="text-lg font-semibold text-[var(--fg-primary)]">Explorar Escenarios</h3>
+                <h3 className="text-lg font-semibold text-[var(--fg-primary)]">Práctica Rápida</h3>
                 <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center">
                   <Gamepad2 className="w-5 h-5 text-[var(--accent-primary)]" />
                 </div>
               </div>
               <p className="text-[var(--fg-muted)] text-sm mb-4">
-                Roleplay con avatares de IA para practicar situaciones difíciles y gestión emocional.
+                Simulación corta de 20 preguntas para practicar las competencias ICF de forma rápida.
               </p>
               <div className="flex gap-2 mb-4">
-                <span className="text-xs px-2 py-1 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded text-[var(--fg-muted)]">ROLEPLAY</span>
-                <span className="text-xs px-2 py-1 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded text-[var(--fg-muted)]">IA ADAPTATIVA</span>
+                <span className="text-xs px-2 py-1 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded text-[var(--fg-muted)]">20 PREGUNTAS</span>
+                <span className="text-xs px-2 py-1 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded text-[var(--fg-muted)]">~15 MIN</span>
               </div>
-              <button 
-                onClick={startExam}
-                disabled={allQuestions.length < 60}
-                className="w-full py-2.5 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              <button
+                onClick={() => alert('Modo de práctica rápida próximamente disponible. Por ahora, usa la Evaluación Completa.')}
+                className="w-full py-2.5 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] rounded-lg font-medium hover:bg-[var(--bg-tertiary)] transition-colors flex items-center justify-center gap-2"
               >
-                Empezar Simulación
-                <ArrowRight className="w-4 h-4" />
+                Próximamente
               </button>
             </div>
 
@@ -342,8 +353,11 @@ export default function ICFSimulatorPage() {
                 <span className="text-xs px-2 py-1 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded text-[var(--fg-muted)]">MICRO-LEARNING</span>
                 <span className="text-xs px-2 py-1 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded text-[var(--fg-muted)]">FOCALIZADO</span>
               </div>
-              <button className="w-full py-2.5 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] rounded-lg font-medium hover:bg-[var(--bg-tertiary)] transition-colors">
-                Configurar Práctica
+              <button
+                onClick={() => alert('Modo de competencia individual próximamente disponible. Por ahora, usa la Evaluación Completa.')}
+                className="w-full py-2.5 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] rounded-lg font-medium hover:bg-[var(--bg-tertiary)] transition-colors"
+              >
+                Próximamente
               </button>
             </div>
 
@@ -356,18 +370,19 @@ export default function ICFSimulatorPage() {
                 </div>
               </div>
               <p className="text-[var(--fg-muted)] text-sm mb-4">
-                Simulación de sesión completa (30-60 min) con evaluación integral de los 4 dominios.
+                Examen completo de 60 preguntas (máx 60 min) con evaluación integral de los 4 dominios ICF.
               </p>
               <div className="flex gap-2 mb-4">
-                <span className="text-xs px-2 py-1 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded text-[var(--fg-muted)]">EXAMEN</span>
+                <span className="text-xs px-2 py-1 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded text-[var(--fg-muted)]">60 PREGUNTAS</span>
                 <span className="text-xs px-2 py-1 bg-emerald-500/20 border border-emerald-500/30 rounded text-[var(--accent-primary)]">CERTIFICACIÓN</span>
               </div>
-              <button 
+              <button
                 onClick={startExam}
                 disabled={allQuestions.length < 60}
-                className="w-full py-2.5 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] rounded-lg font-medium hover:bg-[var(--bg-tertiary)] transition-colors disabled:opacity-50"
+                className="w-full py-2.5 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 Iniciar Examen
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>

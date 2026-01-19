@@ -37,7 +37,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/sign-in');
+      router.push('/');
     } else if (user) {
       checkRole();
       loadNotifications();

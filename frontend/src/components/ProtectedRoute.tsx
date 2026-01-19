@@ -18,8 +18,8 @@ export default function ProtectedRoute({ children, allowedRoles }: ProtectedRout
   useEffect(() => {
     if (!loading) {
       if (!user) {
-        // Not authenticated - redirect to sign in
-        router.push('/sign-in');
+        // Not authenticated - redirect to home page
+        router.push('/');
         return;
       }
 

@@ -95,7 +95,10 @@ export default function SessionsPage() {
             <h1 className="text-3xl font-bold text-[var(--fg-primary)] mb-2">Mis Sesiones</h1>
             <p className="text-[var(--fg-muted)]">Visualiza y gestiona tus sesiones de coaching</p>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 transition-colors">
+          <button
+            onClick={() => alert('Para agendar una nueva sesión, por favor contacta a tu coach directamente a través de mensajes.')}
+            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 transition-colors"
+          >
             <Plus className="w-4 h-4" />
             Reservar Nueva Sesión
           </button>

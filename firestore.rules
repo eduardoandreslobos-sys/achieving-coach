@@ -12,8 +12,18 @@ service cloud.firestore {
     }
     
     function isAdmin() {
-      return isAuthenticated() && 
+      return isAuthenticated() &&
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function isOrgAdmin() {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'org_admin';
+    }
+
+    function isCoachAdmin() {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['org_admin', 'coach_admin'];
     }
     
     function isParticipant(participants) {
@@ -127,5 +137,25 @@ service cloud.firestore {
       allow read: if true;
       allow write: if isAuthenticated();
     }
+
+    // Audit Logs - IMMUTABLE (HIPAA Compliance)
+    // Can only be created, never updated or deleted
+    match /audit_logs/{logId} {
+      allow read: if isCoachAdmin();
+      allow create: if isAuthenticated();
+      allow update: if false; // Immutable
+      allow delete: if false; // Immutable
+    }
+
+    // Consent Records (GDPR Compliance)
+    match /consent_records/{recordId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if false; // Immutable consent records
+      allow delete: if false; // Consent history must be preserved
+    }
+
+    // Privacy Settings - stored within user document
+    // Users can only modify their own privacy settings
   }
 }

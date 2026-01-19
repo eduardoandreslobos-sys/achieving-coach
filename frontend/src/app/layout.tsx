@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import AnalyticsProvider from "@/components/analytics";
 import PreloadResources from "@/components/PreloadResources";
 import GEOSchemas from "@/components/seo/GEOMetadata";
+import CookieConsentBanner from "@/components/CookieConsentBanner";
 import { seoConfig, analyticsConfig } from "@/config/analytics";
 
 const inter = Inter({
@@ -227,6 +228,9 @@ export default function RootLayout({
           <AuthProvider>
             {children}
           </AuthProvider>
+
+          {/* Cookie consent banner for GDPR/CCPA compliance */}
+          <CookieConsentBanner />
         </ThemeProvider>
       </body>
     </html>

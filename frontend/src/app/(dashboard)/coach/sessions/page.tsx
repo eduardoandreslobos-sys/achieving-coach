@@ -110,7 +110,19 @@ export default function CoachSessionsPage() {
       const sessionsSnapshot = await getDocs(sessionsQuery);
       const sessionsData = sessionsSnapshot.docs.map(doc => {
         const data = doc.data();
-        const scheduledDate = data.scheduledDate?.toDate?.() || new Date(data.scheduledDate);
+        // Handle Firestore Timestamp, string date, or fallback to current date
+        let scheduledDate: Date;
+        if (data.scheduledDate?.toDate) {
+          scheduledDate = data.scheduledDate.toDate();
+        } else if (data.scheduledDate) {
+          scheduledDate = new Date(data.scheduledDate);
+          // Check if date is valid
+          if (isNaN(scheduledDate.getTime())) {
+            scheduledDate = new Date();
+          }
+        } else {
+          scheduledDate = new Date();
+        }
         const coachee = coacheesData.find(c => c.id === data.coacheeId);
 
         return {

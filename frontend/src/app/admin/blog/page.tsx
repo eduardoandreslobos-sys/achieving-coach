@@ -5,7 +5,7 @@ import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, orderBy 
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { Plus, Edit2, Trash2, Eye, EyeOff, AlertCircle, Image as ImageIcon, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, Edit2, Trash2, Eye, EyeOff, AlertCircle, Image as ImageIcon, Search, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import type { BlogPost } from '@/types/blog';
 import ImageUpload from '@/components/ImageUpload';
 import type { ImageUploadResult } from '@/lib/imageUtils';
@@ -26,7 +26,7 @@ export default function AdminBlogPage() {
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/sign-in');
+      router.push('/');
     } else if (user) {
       checkUserRole();
     }
@@ -226,13 +226,24 @@ export default function AdminBlogPage() {
                           <p className="text-gray-500 text-sm truncate max-w-xs">{post.description?.substring(0, 60)}...</p>
                         </div>
                         <div className="opacity-0 group-hover:opacity-100 flex gap-2">
-                          <button onClick={() => { setEditingPost(post); setShowEditor(true); }} className="p-2 hover:bg-gray-700 rounded-lg">
+                          {post.published && post.slug && (
+                            <a
+                              href={`/blog/${post.slug}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 hover:bg-gray-700 rounded-lg"
+                              title="Ver publicación"
+                            >
+                              <ExternalLink className="w-4 h-4 text-emerald-400" />
+                            </a>
+                          )}
+                          <button onClick={() => { setEditingPost(post); setShowEditor(true); }} className="p-2 hover:bg-gray-700 rounded-lg" title="Editar">
                             <Edit2 className="w-4 h-4 text-gray-400" />
                           </button>
-                          <button onClick={() => togglePublish(post)} className="p-2 hover:bg-gray-700 rounded-lg">
+                          <button onClick={() => togglePublish(post)} className="p-2 hover:bg-gray-700 rounded-lg" title={post.published ? 'Despublicar' : 'Publicar'}>
                             {post.published ? <EyeOff className="w-4 h-4 text-gray-400" /> : <Eye className="w-4 h-4 text-gray-400" />}
                           </button>
-                          <button onClick={() => handleDelete(post.id)} className="p-2 hover:bg-gray-700 rounded-lg">
+                          <button onClick={() => handleDelete(post.id)} className="p-2 hover:bg-gray-700 rounded-lg" title="Eliminar">
                             <Trash2 className="w-4 h-4 text-red-400" />
                           </button>
                         </div>

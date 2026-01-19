@@ -123,7 +123,7 @@ export default function ValuesClarificationPage() {
 
   const proceedToRanking = () => {
     if (selectedValues.length < 5) {
-      toast.error('Please select at least 5 values to continue');
+      toast.error('Por favor selecciona al menos 5 valores para continuar');
       return;
     }
       trackToolCompleted('values-clarification', 'Values Clarification');
@@ -196,7 +196,8 @@ export default function ValuesClarificationPage() {
         }
       }
 
-      toast.success('✅ Values Clarification completed successfully!', {
+      toast.success('Clarificacion de Valores completada exitosamente', {
+        description: 'Tu coach ha sido notificado.',
         duration: 3000,
       });
       
@@ -204,7 +205,7 @@ export default function ValuesClarificationPage() {
       setStep('complete');
     } catch (error) {
       console.error('Error saving results:', error);
-      toast.error('Error saving results. Please try again.');
+      toast.error('Error al guardar resultados. Por favor intenta de nuevo.');
     } finally {
       setSaving(false);
     }
@@ -218,28 +219,28 @@ export default function ValuesClarificationPage() {
     );
   }
 
-  if (!hasAccess) {
-    const isCoach = userProfile?.role === 'coach';
+  const isCoach = userProfile?.role === 'coach';
+  const isPreviewMode = isCoach && !hasAccess;
+
+  if (!hasAccess && !isCoach) {
     return (
       <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center py-12 px-4">
         <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-8 text-center max-w-md">
-          <div className={`w-16 h-16 ${isCoach ? 'bg-emerald-500/20' : 'bg-yellow-500/20'} rounded-full flex items-center justify-center mx-auto mb-4`}>
-            <Heart className={`w-8 h-8 ${isCoach ? 'text-[var(--accent-primary)]' : 'text-yellow-400'}`} />
+          <div className="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Heart className="w-8 h-8 text-yellow-400" />
           </div>
           <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">
-            {isCoach ? 'Tool for Coachees Only' : 'Access Required'}
+            Acceso Requerido
           </h2>
           <p className="text-[var(--fg-muted)] mb-6">
-            {isCoach
-              ? 'This tool is designed to be completed by coachees. You can assign it to your clients from the client management page.'
-              : 'This tool has not been assigned to you yet.'}
+            Esta herramienta debe ser asignada por tu coach antes de que puedas acceder.
           </p>
           <div className="flex gap-4 justify-center">
             <Link
-              href={isCoach ? '/coach/clients' : '/dashboard'}
+              href="/dashboard"
               className="px-6 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 transition-colors"
             >
-              {isCoach ? 'Go to Clients' : 'Return to Dashboard'}
+              Volver al Dashboard
             </Link>
           </div>
         </div>
@@ -256,22 +257,22 @@ export default function ValuesClarificationPage() {
             <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle2 className="w-8 h-8 text-[var(--accent-primary)]" />
             </div>
-            <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">Tool Completed!</h2>
+            <h2 className="text-2xl font-bold text-[var(--fg-primary)] mb-4">¡Herramienta Completada!</h2>
             <p className="text-[var(--fg-muted)] mb-6">
-              You've successfully completed the Values Clarification exercise. Your coach has been notified and can review your results.
+              Has completado exitosamente el ejercicio de Clarificación de Valores. Tu coach ha sido notificado y puede revisar tus resultados.
             </p>
             <div className="flex gap-4 justify-center">
               <Link
                 href="/dashboard"
                 className="px-6 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 transition-colors"
               >
-                Return to Dashboard
+                Volver al Dashboard
               </Link>
               <Link
                 href="/tools"
                 className="px-6 py-3 border border-[var(--border-color)] text-[var(--fg-secondary)] rounded-lg font-medium hover:bg-[var(--bg-tertiary)] transition-colors"
               >
-                Explore More Tools
+                Ver Otras Herramientas
               </Link>
             </div>
           </div>
@@ -284,6 +285,25 @@ export default function ValuesClarificationPage() {
     <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--fg-primary)] py-12 px-4">
       <Toaster position="top-center" richColors />
       <div className="max-w-6xl mx-auto">
+        {/* Preview Mode Banner for Coaches */}
+        {isPreviewMode && (
+          <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 mb-6 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Heart className="w-5 h-5 text-amber-400" />
+              <div>
+                <p className="text-amber-400 font-medium">Modo Vista Previa</p>
+                <p className="text-amber-400/70 text-sm">Estas previsualizando esta herramienta. Asignala a un coachee para que la complete.</p>
+              </div>
+            </div>
+            <Link
+              href="/coach/tools"
+              className="px-4 py-2 bg-amber-500/20 text-amber-400 rounded-lg hover:bg-amber-500/30 transition-colors text-sm font-medium"
+            >
+              Volver a Herramientas
+            </Link>
+          </div>
+        )}
+
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-[var(--fg-primary)] mb-4">Values Clarification</h1>
           <p className="text-xl text-[var(--fg-muted)]">
@@ -388,16 +408,23 @@ export default function ValuesClarificationPage() {
                   onClick={() => setStep('select')}
                   className="flex-1 py-3 border border-[var(--border-color)] text-[var(--fg-secondary)] rounded-lg font-medium hover:bg-[var(--bg-tertiary)] transition-colors"
                 >
-                  Back
+                  Atras
                 </button>
-                <button
-                  onClick={handleSave}
-                  disabled={saving}
-                  className="flex-1 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 transition-colors disabled:bg-[var(--bg-tertiary)] disabled:text-[var(--fg-muted)]"
-                >
-                  {saving ? 'Saving...' : 'Save Results'}
-                </button>
+                {!isPreviewMode && (
+                  <button
+                    onClick={handleSave}
+                    disabled={saving}
+                    className="flex-1 py-3 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium hover:bg-emerald-700 transition-colors disabled:bg-[var(--bg-tertiary)] disabled:text-[var(--fg-muted)]"
+                  >
+                    {saving ? 'Guardando...' : 'Guardar Resultados'}
+                  </button>
+                )}
               </div>
+              {isPreviewMode && (
+                <div className="text-center py-4 text-[var(--fg-muted)]">
+                  <p>Esta es una vista previa. Los coaches no pueden completar herramientas.</p>
+                </div>
+              )}
             </div>
           </div>
         )}
