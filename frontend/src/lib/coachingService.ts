@@ -1,15 +1,16 @@
-import { 
-  collection, 
-  doc, 
-  setDoc, 
-  getDoc, 
+import {
+  collection,
+  doc,
+  setDoc,
+  getDoc,
   getDocs,
   updateDoc,
-  query, 
+  query,
   where,
   orderBy,
+  limit,
   serverTimestamp,
-  Timestamp 
+  Timestamp
 } from 'firebase/firestore';
 import { db } from './firebase';
 import { 
@@ -178,9 +179,10 @@ export async function getCoachPrograms(coachId: string): Promise<CoachingProgram
   const q = query(
     collection(db, 'coaching_programs'),
     where('coachId', '==', coachId),
-    orderBy('createdAt', 'desc')
+    orderBy('createdAt', 'desc'),
+    limit(100)
   );
-  
+
   const snapshot = await getDocs(q);
   return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as CoachingProgram));
 }
@@ -189,9 +191,10 @@ export async function getCoacheePrograms(coacheeId: string): Promise<CoachingPro
   const q = query(
     collection(db, 'coaching_programs'),
     where('coacheeId', '==', coacheeId),
-    orderBy('createdAt', 'desc')
+    orderBy('createdAt', 'desc'),
+    limit(50)
   );
-  
+
   const snapshot = await getDocs(q);
   return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as CoachingProgram));
 }
@@ -348,22 +351,24 @@ export async function getCoachSessions(
   status?: Session['status']
 ): Promise<Session[]> {
   let q;
-  
+
   if (status) {
     q = query(
       collection(db, 'sessions'),
       where('coachId', '==', coachId),
       where('status', '==', status),
-      orderBy('scheduledDate', 'asc')
+      orderBy('scheduledDate', 'asc'),
+      limit(100)
     );
   } else {
     q = query(
       collection(db, 'sessions'),
       where('coachId', '==', coachId),
-      orderBy('scheduledDate', 'desc')
+      orderBy('scheduledDate', 'desc'),
+      limit(100)
     );
   }
-  
+
   const snapshot = await getDocs(q);
   return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Session));
 }

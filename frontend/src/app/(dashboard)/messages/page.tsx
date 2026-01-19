@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
 import {
   collection, query, where, orderBy, onSnapshot, addDoc,
-  serverTimestamp, getDocs, doc, updateDoc, or
+  serverTimestamp, getDocs, doc, updateDoc, limit, documentId
 } from 'firebase/firestore';
 
 interface Conversation {
@@ -50,7 +50,7 @@ export default function MessagesPage() {
   const [contactSearchQuery, setContactSearchQuery] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Load conversations
+  // Load conversations with optimized batch query (fixes N+1 problem)
   useEffect(() => {
     if (!user?.uid) return;
 
@@ -58,26 +58,60 @@ export default function MessagesPage() {
     const q = query(
       conversationsRef,
       where('participants', 'array-contains', user.uid),
-      orderBy('lastMessageTime', 'desc')
+      orderBy('lastMessageTime', 'desc'),
+      limit(50) // Pagination: limit to 50 most recent conversations
     );
 
     const unsubscribe = onSnapshot(
       q,
       async (snapshot) => {
-        const convs: Conversation[] = [];
+        if (snapshot.empty) {
+          setConversations([]);
+          setLoading(false);
+          return;
+        }
 
-        for (const docSnap of snapshot.docs) {
+        // Step 1: Collect all recipient IDs
+        const conversationData = snapshot.docs.map(docSnap => {
           const data = docSnap.data();
-          const recipientId = data.participants.find((p: string) => p !== user.uid);
-
-          // Get recipient info
-          const recipientDoc = await getDocs(
-            query(collection(db, 'users'), where('uid', '==', recipientId))
-          );
-          const recipient = recipientDoc.docs[0]?.data();
-
-          convs.push({
+          return {
             id: docSnap.id,
+            data,
+            recipientId: data.participants.find((p: string) => p !== user.uid) as string
+          };
+        });
+
+        const recipientIds = [...new Set(conversationData.map(c => c.recipientId).filter(Boolean))];
+
+        // Step 2: Batch fetch all recipients in a single query (max 30 per query due to Firestore limit)
+        const recipientMap: Record<string, any> = {};
+
+        // Firestore 'in' queries are limited to 30 items, so we batch them
+        const batches = [];
+        for (let i = 0; i < recipientIds.length; i += 30) {
+          batches.push(recipientIds.slice(i, i + 30));
+        }
+
+        await Promise.all(
+          batches.map(async (batch) => {
+            if (batch.length === 0) return;
+            const usersQuery = query(
+              collection(db, 'users'),
+              where('uid', 'in', batch)
+            );
+            const usersSnapshot = await getDocs(usersQuery);
+            usersSnapshot.docs.forEach(doc => {
+              const userData = doc.data();
+              recipientMap[userData.uid] = userData;
+            });
+          })
+        );
+
+        // Step 3: Build conversations array using the map
+        const convs: Conversation[] = conversationData.map(({ id, data, recipientId }) => {
+          const recipient = recipientMap[recipientId];
+          return {
+            id,
             recipientId,
             recipientName: recipient?.displayName || recipient?.firstName || 'Usuario',
             recipientEmail: recipient?.email || '',
@@ -85,8 +119,8 @@ export default function MessagesPage() {
             lastMessage: data.lastMessage || '',
             lastMessageTime: data.lastMessageTime?.toDate() || new Date(),
             unreadCount: data.unreadCount?.[user.uid] || 0,
-          });
-        }
+          };
+        });
 
         setConversations(convs);
         setLoading(false);
@@ -100,22 +134,28 @@ export default function MessagesPage() {
     return () => unsubscribe();
   }, [user?.uid]);
 
-  // Load messages for selected conversation
+  // Load messages for selected conversation (with pagination)
   useEffect(() => {
     if (!selectedConversation?.id) return;
 
     const messagesRef = collection(db, 'conversations', selectedConversation.id, 'messages');
-    const q = query(messagesRef, orderBy('createdAt', 'asc'));
+    // Get last 100 messages, ordered by most recent first, then reverse for display
+    const q = query(
+      messagesRef,
+      orderBy('createdAt', 'desc'),
+      limit(100)
+    );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const msgs = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() || new Date(),
+      const msgs = snapshot.docs.map(docSnap => ({
+        id: docSnap.id,
+        ...docSnap.data(),
+        createdAt: docSnap.data().createdAt?.toDate() || new Date(),
       })) as Message[];
-      
-      setMessages(msgs);
-      
+
+      // Reverse to show in chronological order (oldest first)
+      setMessages(msgs.reverse());
+
       // Mark as read
       if (user?.uid) {
         updateDoc(doc(db, 'conversations', selectedConversation.id), {

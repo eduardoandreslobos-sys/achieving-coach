@@ -1,14 +1,15 @@
-import { 
-  collection, 
-  doc, 
-  getDoc, 
-  getDocs, 
-  addDoc, 
-  updateDoc, 
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  addDoc,
+  updateDoc,
   deleteDoc,
-  query, 
-  where, 
+  query,
+  where,
   orderBy,
+  limit,
   Timestamp,
   serverTimestamp
 } from 'firebase/firestore';
@@ -95,9 +96,10 @@ export async function getProgramStakeholders(programId: string): Promise<Stakeho
   const q = query(
     collection(db, 'stakeholders'),
     where('programId', '==', programId),
-    orderBy('createdAt', 'desc')
+    orderBy('createdAt', 'desc'),
+    limit(50)
   );
-  
+
   const snapshot = await getDocs(q);
   return snapshot.docs.map(doc => ({
     id: doc.id,
