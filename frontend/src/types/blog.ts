@@ -19,6 +19,7 @@ export interface BlogPost {
   type: 'Blog Post' | 'Guide' | 'Webinar';
   readTime: string;
   published: boolean;
+  scheduledAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }

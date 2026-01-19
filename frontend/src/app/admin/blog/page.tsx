@@ -5,10 +5,77 @@ import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, orderBy 
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { Plus, Edit2, Trash2, Eye, EyeOff, AlertCircle, Image as ImageIcon, Search, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
+import { Plus, Edit2, Trash2, Eye, EyeOff, AlertCircle, Image as ImageIcon, Search, ChevronLeft, ChevronRight, ExternalLink, Download, Clock, Calendar } from 'lucide-react';
 import type { BlogPost } from '@/types/blog';
 import ImageUpload from '@/components/ImageUpload';
 import type { ImageUploadResult } from '@/lib/imageUtils';
+
+// Draft posts data for seeding
+const DRAFT_POSTS = [
+  {
+    slug: 'guia-competencias-icf-2024',
+    title: 'Guía Completa de las 8 Competencias ICF 2024',
+    description: 'Todo lo que necesitas saber sobre el nuevo modelo de competencias de la International Coaching Federation y cómo aplicarlo en tu práctica.',
+    category: 'ICF',
+    readTime: '12 min',
+    author: { name: 'AchievingCoach Team', role: 'Equipo Editorial' },
+    content: `<h2>Introducción a las Competencias ICF</h2>\n<p>La International Coaching Federation (ICF) actualizó su modelo de competencias centrales, estableciendo un nuevo estándar para la práctica profesional del coaching ejecutivo.</p>\n\n<h2>Las 8 Competencias</h2>\n<ol>\n<li><strong>Demuestra Práctica Ética</strong></li>\n<li><strong>Encarna una Mentalidad de Coaching</strong></li>\n<li><strong>Establece y Mantiene Acuerdos</strong></li>\n<li><strong>Cultiva Confianza y Seguridad</strong></li>\n<li><strong>Mantiene Presencia</strong></li>\n<li><strong>Escucha Activamente</strong></li>\n<li><strong>Evoca Conciencia</strong></li>\n<li><strong>Facilita el Crecimiento del Cliente</strong></li>\n</ol>`,
+  },
+  {
+    slug: 'estructurar-sesion-coaching',
+    title: 'Cómo Estructurar una Sesión de Coaching Efectiva',
+    description: 'Aprende el framework de 5 pasos que utilizan los coaches más exitosos para maximizar el impacto de cada sesión.',
+    category: 'Guías',
+    readTime: '8 min',
+    author: { name: 'AchievingCoach Team', role: 'Equipo Editorial' },
+    content: `<h2>La Importancia de una Estructura Clara</h2>\n<p>Una sesión bien estructurada maximiza el tiempo y genera resultados tangibles.</p>\n\n<h2>Los 5 Pasos</h2>\n<ol>\n<li><strong>Apertura y Check-in</strong> (5-10 min)</li>\n<li><strong>Exploración del Tema</strong> (15-20 min)</li>\n<li><strong>Generación de Insights</strong> (10-15 min)</li>\n<li><strong>Planificación de Acción</strong> (10-15 min)</li>\n<li><strong>Cierre y Reflexión</strong> (5 min)</li>\n</ol>`,
+  },
+  {
+    slug: 'preguntas-poderosas-coaching',
+    title: 'El Arte de las Preguntas Poderosas',
+    description: 'Descubre técnicas avanzadas para formular preguntas que generen reflexión profunda y catalicen el cambio.',
+    category: 'Habilidades',
+    readTime: '6 min',
+    author: { name: 'AchievingCoach Team', role: 'Equipo Editorial' },
+    content: `<h2>¿Qué Hace a una Pregunta "Poderosa"?</h2>\n<p>Una pregunta poderosa genera reflexión, desafía supuestos y abre nuevas posibilidades.</p>\n\n<h2>Características</h2>\n<ul>\n<li><strong>Abiertas:</strong> No pueden responderse con sí/no</li>\n<li><strong>Breves:</strong> Mientras más cortas, más impacto</li>\n<li><strong>Orientadas al futuro:</strong> Crean posibilidades</li>\n</ul>`,
+  },
+  {
+    slug: 'coaching-lideres-cambio',
+    title: 'Coaching para Líderes en Tiempos de Cambio',
+    description: 'Estrategias para apoyar a ejecutivos navegando transformaciones organizacionales complejas.',
+    category: 'Liderazgo',
+    readTime: '10 min',
+    author: { name: 'AchievingCoach Team', role: 'Equipo Editorial' },
+    content: `<h2>El Rol del Coach en la Transformación</h2>\n<p>Los tiempos de cambio organizacional son cuando el coaching ejecutivo más valor aporta.</p>\n\n<h2>Framework VUCA</h2>\n<ul>\n<li><strong>Volatilidad → Visión</strong></li>\n<li><strong>Incertidumbre → Entendimiento</strong></li>\n<li><strong>Complejidad → Claridad</strong></li>\n<li><strong>Ambigüedad → Agilidad</strong></li>\n</ul>`,
+  },
+  {
+    slug: 'roi-coaching-ejecutivo',
+    title: 'Métricas de ROI en Coaching Ejecutivo',
+    description: 'Cómo medir y comunicar el retorno de inversión del coaching a stakeholders organizacionales.',
+    category: 'Tendencias',
+    readTime: '7 min',
+    author: { name: 'AchievingCoach Team', role: 'Equipo Editorial' },
+    content: `<h2>La Importancia de Medir el ROI</h2>\n<p>El coaching ejecutivo es una inversión significativa. Demostrar valor con datos es esencial.</p>\n\n<h2>Niveles de Medición</h2>\n<ol>\n<li>Satisfacción</li>\n<li>Aprendizaje</li>\n<li>Comportamiento</li>\n<li>Resultados</li>\n</ol>\n\n<p><strong>Fórmula:</strong> ROI = (Beneficios - Costos) / Costos × 100</p>`,
+  },
+  {
+    slug: 'preparacion-examen-acc-icf',
+    title: 'Preparación para el Examen ACC de ICF',
+    description: 'Tips prácticos y recursos para aprobar tu certificación Associate Certified Coach.',
+    category: 'ICF',
+    readTime: '9 min',
+    author: { name: 'AchievingCoach Team', role: 'Equipo Editorial' },
+    content: `<h2>¿Qué es la Credencial ACC?</h2>\n<p>La credencial Associate Certified Coach (ACC) es el primer nivel de certificación internacional.</p>\n\n<h2>Requisitos</h2>\n<ul>\n<li>60+ horas de formación</li>\n<li>100+ horas de experiencia</li>\n<li>10+ horas de mentoría</li>\n<li>Aprobar el examen CKA</li>\n</ul>`,
+  },
+  {
+    slug: 'herramientas-digitales-coaching',
+    title: 'Integrando Herramientas Digitales en tu Práctica',
+    description: 'Guía práctica para adoptar tecnología sin perder el toque humano del coaching.',
+    category: 'Guías',
+    readTime: '5 min',
+    author: { name: 'AchievingCoach Team', role: 'Equipo Editorial' },
+    content: `<h2>La Transformación Digital del Coaching</h2>\n<p>El coaching moderno combina conexión humana con herramientas tecnológicas poderosas.</p>\n\n<h2>Herramientas Esenciales</h2>\n<ul>\n<li>Gestión de Clientes (CRM)</li>\n<li>Evaluaciones Digitales</li>\n<li>Videollamadas</li>\n<li>Mensajería segura</li>\n</ul>`,
+  },
+];
 
 export default function AdminBlogPage() {
   const { user, loading } = useAuth();
@@ -20,8 +87,9 @@ export default function AdminBlogPage() {
   const [userRole, setUserRole] = useState<string | null>(null);
   const [checkingAccess, setCheckingAccess] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState<'all' | 'published' | 'draft'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'published' | 'draft' | 'scheduled'>('all');
   const [currentPage, setCurrentPage] = useState(1);
+  const [seeding, setSeeding] = useState(false);
   const postsPerPage = 4;
 
   useEffect(() => {
@@ -76,18 +144,47 @@ export default function AdminBlogPage() {
     let filtered = [...posts];
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      filtered = filtered.filter(p => 
-        p.title.toLowerCase().includes(term) || 
+      filtered = filtered.filter(p =>
+        p.title.toLowerCase().includes(term) ||
         p.description?.toLowerCase().includes(term)
       );
     }
     if (activeTab === 'published') {
-      filtered = filtered.filter(p => p.published);
+      filtered = filtered.filter(p => p.published && !p.scheduledAt);
     } else if (activeTab === 'draft') {
-      filtered = filtered.filter(p => !p.published);
+      filtered = filtered.filter(p => !p.published && !p.scheduledAt);
+    } else if (activeTab === 'scheduled') {
+      filtered = filtered.filter(p => p.scheduledAt);
     }
     setFilteredPosts(filtered);
     setCurrentPage(1);
+  };
+
+  const seedDrafts = async () => {
+    if (!confirm('¿Cargar 7 borradores de ejemplo? Los posts existentes con el mismo slug serán omitidos.')) return;
+    setSeeding(true);
+    try {
+      const existingSlugs = posts.map(p => p.slug);
+      let created = 0;
+      for (const draft of DRAFT_POSTS) {
+        if (existingSlugs.includes(draft.slug)) continue;
+        await addDoc(collection(db, 'blog_posts'), {
+          ...draft,
+          published: false,
+          scheduledAt: null,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+        created++;
+      }
+      alert(`${created} borradores creados exitosamente.`);
+      loadPosts();
+    } catch (error) {
+      console.error('Error seeding drafts:', error);
+      alert('Error al cargar borradores.');
+    } finally {
+      setSeeding(false);
+    }
   };
 
   const handleDelete = async (postId: string) => {
@@ -151,13 +248,23 @@ export default function AdminBlogPage() {
             <h1 className="text-3xl font-bold text-white">Administración de Contenido</h1>
             <p className="text-gray-400 mt-1">Gestiona el contenido de tu blog corporativo y recursos educativos.</p>
           </div>
-          <button
-            onClick={() => { setEditingPost(null); setShowEditor(true); }}
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
-          >
-            <Plus className="w-4 h-4" />
-            Nueva Publicación
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={seedDrafts}
+              disabled={seeding}
+              className="flex items-center gap-2 px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors disabled:opacity-50"
+            >
+              <Download className="w-4 h-4" />
+              {seeding ? 'Cargando...' : 'Cargar Borradores'}
+            </button>
+            <button
+              onClick={() => { setEditingPost(null); setShowEditor(true); }}
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              Nueva Publicación
+            </button>
+          </div>
         </div>
 
         {showEditor ? (
@@ -182,17 +289,18 @@ export default function AdminBlogPage() {
                   />
                 </div>
                 <div className="flex gap-2">
-                  {(['all', 'published', 'draft'] as const).map((tab) => (
+                  {(['all', 'published', 'draft', 'scheduled'] as const).map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
                         activeTab === tab
                           ? 'bg-white text-gray-900'
                           : 'text-gray-400 hover:text-white hover:bg-gray-800'
                       }`}
                     >
-                      {tab === 'all' ? 'Todas' : tab === 'published' ? 'Publicadas' : 'Borradores'}
+                      {tab === 'scheduled' && <Clock className="w-3.5 h-3.5" />}
+                      {tab === 'all' ? 'Todas' : tab === 'published' ? 'Publicadas' : tab === 'draft' ? 'Borradores' : 'Programadas'}
                     </button>
                   ))}
                 </div>
@@ -257,10 +365,24 @@ export default function AdminBlogPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full ${post.published ? 'bg-emerald-400' : 'bg-amber-400'}`}></div>
-                        <span className={post.published ? 'text-emerald-400' : 'text-amber-400'}>
-                          {post.published ? 'Publicado' : 'Borrador'}
-                        </span>
+                        {post.scheduledAt ? (
+                          <>
+                            <Clock className="w-4 h-4 text-blue-400" />
+                            <div>
+                              <span className="text-blue-400">Programado</span>
+                              <p className="text-xs text-gray-500">
+                                {new Date(post.scheduledAt instanceof Date ? post.scheduledAt : (post.scheduledAt as any).toDate()).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                              </p>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className={`w-2 h-2 rounded-full ${post.published ? 'bg-emerald-400' : 'bg-amber-400'}`}></div>
+                            <span className={post.published ? 'text-emerald-400' : 'text-amber-400'}>
+                              {post.published ? 'Publicado' : 'Borrador'}
+                            </span>
+                          </>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -318,6 +440,12 @@ export default function AdminBlogPage() {
 
 // BlogEditor Component
 function BlogEditor({ post, onSave, onCancel }: { post: BlogPost | null; onSave: () => void; onCancel: () => void }) {
+  const getScheduledDate = () => {
+    if (!post?.scheduledAt) return '';
+    const date = post.scheduledAt instanceof Date ? post.scheduledAt : (post.scheduledAt as any).toDate();
+    return date.toISOString().slice(0, 16);
+  };
+
   const [formData, setFormData] = useState({
     title: post?.title || '',
     slug: post?.slug || '',
@@ -330,6 +458,8 @@ function BlogEditor({ post, onSave, onCancel }: { post: BlogPost | null; onSave:
     readTime: post?.readTime || '5 min',
     published: post?.published || false,
     featuredImage: post?.featuredImage || null,
+    scheduledAt: getScheduledDate(),
+    publishMode: post?.scheduledAt ? 'scheduled' : (post?.published ? 'now' : 'draft') as 'draft' | 'now' | 'scheduled',
   });
   const [showImageUpload, setShowImageUpload] = useState(false);
 
@@ -345,7 +475,7 @@ function BlogEditor({ post, onSave, onCancel }: { post: BlogPost | null; onSave:
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const postData = {
+      const postData: any = {
         title: formData.title,
         slug: formData.slug || generateSlug(formData.title),
         description: formData.description,
@@ -355,9 +485,20 @@ function BlogEditor({ post, onSave, onCancel }: { post: BlogPost | null; onSave:
         category: formData.category,
         type: formData.type,
         readTime: formData.readTime,
-        published: formData.published,
         updatedAt: new Date(),
       };
+
+      // Handle publish mode
+      if (formData.publishMode === 'now') {
+        postData.published = true;
+        postData.scheduledAt = null;
+      } else if (formData.publishMode === 'scheduled' && formData.scheduledAt) {
+        postData.published = false;
+        postData.scheduledAt = new Date(formData.scheduledAt);
+      } else {
+        postData.published = false;
+        postData.scheduledAt = null;
+      }
 
       if (post?.id) {
         await updateDoc(doc(db, 'blog_posts', post.id), postData);
@@ -452,9 +593,59 @@ function BlogEditor({ post, onSave, onCancel }: { post: BlogPost | null; onSave:
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <input type="checkbox" id="published" checked={formData.published} onChange={(e) => setFormData({ ...formData, published: e.target.checked })} className="w-4 h-4 rounded border-gray-600 bg-gray-700 text-emerald-600 focus:ring-emerald-500" />
-          <label htmlFor="published" className="text-sm text-gray-300">Publicar inmediatamente</label>
+        {/* Publish Options */}
+        <div className="space-y-4">
+          <label className="block text-sm font-medium text-gray-300">Opciones de Publicación</label>
+          <div className="grid md:grid-cols-3 gap-4">
+            <label className={`flex items-center gap-3 p-4 rounded-lg border cursor-pointer transition-all ${formData.publishMode === 'draft' ? 'border-amber-500 bg-amber-500/10' : 'border-gray-700 hover:border-gray-600'}`}>
+              <input type="radio" name="publishMode" checked={formData.publishMode === 'draft'} onChange={() => setFormData({ ...formData, publishMode: 'draft' })} className="sr-only" />
+              <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${formData.publishMode === 'draft' ? 'border-amber-500' : 'border-gray-600'}`}>
+                {formData.publishMode === 'draft' && <div className="w-2 h-2 bg-amber-500 rounded-full"></div>}
+              </div>
+              <div>
+                <p className="text-white font-medium">Guardar como borrador</p>
+                <p className="text-gray-500 text-xs">No se publicará aún</p>
+              </div>
+            </label>
+            <label className={`flex items-center gap-3 p-4 rounded-lg border cursor-pointer transition-all ${formData.publishMode === 'now' ? 'border-emerald-500 bg-emerald-500/10' : 'border-gray-700 hover:border-gray-600'}`}>
+              <input type="radio" name="publishMode" checked={formData.publishMode === 'now'} onChange={() => setFormData({ ...formData, publishMode: 'now' })} className="sr-only" />
+              <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${formData.publishMode === 'now' ? 'border-emerald-500' : 'border-gray-600'}`}>
+                {formData.publishMode === 'now' && <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>}
+              </div>
+              <div>
+                <p className="text-white font-medium">Publicar ahora</p>
+                <p className="text-gray-500 text-xs">Visible inmediatamente</p>
+              </div>
+            </label>
+            <label className={`flex items-center gap-3 p-4 rounded-lg border cursor-pointer transition-all ${formData.publishMode === 'scheduled' ? 'border-blue-500 bg-blue-500/10' : 'border-gray-700 hover:border-gray-600'}`}>
+              <input type="radio" name="publishMode" checked={formData.publishMode === 'scheduled'} onChange={() => setFormData({ ...formData, publishMode: 'scheduled' })} className="sr-only" />
+              <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${formData.publishMode === 'scheduled' ? 'border-blue-500' : 'border-gray-600'}`}>
+                {formData.publishMode === 'scheduled' && <div className="w-2 h-2 bg-blue-500 rounded-full"></div>}
+              </div>
+              <div>
+                <p className="text-white font-medium">Programar</p>
+                <p className="text-gray-500 text-xs">Publicar en fecha específica</p>
+              </div>
+            </label>
+          </div>
+
+          {/* Date picker for scheduled */}
+          {formData.publishMode === 'scheduled' && (
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-300 mb-2">Fecha y hora de publicación</label>
+              <div className="flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-blue-400" />
+                <input
+                  type="datetime-local"
+                  value={formData.scheduledAt}
+                  onChange={(e) => setFormData({ ...formData, scheduledAt: e.target.value })}
+                  min={new Date().toISOString().slice(0, 16)}
+                  className="px-4 py-3 bg-[#1a1b23] border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                  required
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="flex gap-4 pt-6 border-t border-gray-700">
