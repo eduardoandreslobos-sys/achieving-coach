@@ -122,7 +122,20 @@ export default function MessagesPage() {
           };
         });
 
-        setConversations(convs);
+        // Step 4: Deduplicate - keep only the most recent conversation per recipient
+        const deduplicatedConvs = convs.reduce((acc, conv) => {
+          const existing = acc.find(c => c.recipientId === conv.recipientId);
+          if (!existing) {
+            acc.push(conv);
+          } else if (conv.lastMessageTime > existing.lastMessageTime) {
+            // Replace with more recent conversation
+            const index = acc.indexOf(existing);
+            acc[index] = conv;
+          }
+          return acc;
+        }, [] as Conversation[]);
+
+        setConversations(deduplicatedConvs);
         setLoading(false);
       },
       (error) => {
@@ -234,7 +247,7 @@ export default function MessagesPage() {
   const handleSelectContact = async (contact: Contact) => {
     if (!user?.uid) return;
 
-    // Check if conversation already exists
+    // Check if conversation already exists in local state
     const existingConv = conversations.find(c => c.recipientId === contact.uid);
     if (existingConv) {
       setSelectedConversation(existingConv);
@@ -243,7 +256,36 @@ export default function MessagesPage() {
     }
 
     try {
-      // Create new conversation
+      // Double-check in Firestore to prevent duplicates
+      const existingQuery = query(
+        collection(db, 'conversations'),
+        where('participants', 'array-contains', user.uid)
+      );
+      const existingSnapshot = await getDocs(existingQuery);
+      const existingInDb = existingSnapshot.docs.find(doc => {
+        const participants = doc.data().participants as string[];
+        return participants.includes(contact.uid);
+      });
+
+      if (existingInDb) {
+        // Conversation exists in DB, use it
+        const data = existingInDb.data();
+        const existingConversation: Conversation = {
+          id: existingInDb.id,
+          recipientId: contact.uid,
+          recipientName: contact.displayName,
+          recipientEmail: contact.email,
+          recipientPhoto: contact.photoURL,
+          lastMessage: data.lastMessage || '',
+          lastMessageTime: data.lastMessageTime?.toDate() || new Date(),
+          unreadCount: data.unreadCount?.[user.uid] || 0,
+        };
+        setSelectedConversation(existingConversation);
+        setShowContactPicker(false);
+        return;
+      }
+
+      // Create new conversation only if none exists
       const conversationRef = await addDoc(collection(db, 'conversations'), {
         participants: [user.uid, contact.uid],
         lastMessage: '',
