@@ -157,22 +157,19 @@ export default function CoachToolsPage() {
               Accede a una colección curada de recursos, ejercicios y plantillas diseñados para potenciar el proceso de coaching y maximizar el impacto en tus clientes.
             </p>
           </div>
+          {/* Buttons hidden - feature coming soon */}
+          {/*
           <div className="flex gap-3">
-            <button
-              onClick={() => alert('Función de importar próximamente disponible')}
-              className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
-            >
+            <button className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] rounded-lg">
               <Upload className="w-4 h-4" />
               Importar
             </button>
-            <button
-              onClick={() => alert('Función de crear herramientas próximamente disponible')}
-              className="flex items-center gap-2 px-5 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 transition-colors font-medium"
-            >
+            <button className="flex items-center gap-2 px-5 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg font-medium">
               <Plus className="w-4 h-4" />
               Crear Herramienta
             </button>
           </div>
+          */}
         </div>
 
         {/* Tabs */}

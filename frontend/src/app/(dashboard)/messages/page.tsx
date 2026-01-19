@@ -469,20 +469,28 @@ export default function MessagesPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => alert('Videollamadas próximamente disponibles')}
-                      className="p-2 text-[var(--fg-muted)] hover:text-[var(--fg-primary)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"
-                      title="Videollamada"
-                    >
-                      <Video className="w-5 h-5" />
-                    </button>
-                    <button
-                      onClick={() => alert('Opciones de conversación próximamente disponibles')}
-                      className="p-2 text-[var(--fg-muted)] hover:text-[var(--fg-primary)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"
-                      title="Más opciones"
-                    >
-                      <MoreVertical className="w-5 h-5" />
-                    </button>
+                    <div className="relative group">
+                      <button
+                        className="p-2 text-[var(--fg-muted)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors cursor-not-allowed opacity-60"
+                        title="Próximamente"
+                      >
+                        <Video className="w-5 h-5" />
+                      </button>
+                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                        Próximamente
+                      </div>
+                    </div>
+                    <div className="relative group">
+                      <button
+                        className="p-2 text-[var(--fg-muted)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors cursor-not-allowed opacity-60"
+                        title="Próximamente"
+                      >
+                        <MoreVertical className="w-5 h-5" />
+                      </button>
+                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                        Próximamente
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -515,13 +523,17 @@ export default function MessagesPage() {
                 {/* Input */}
                 <div className="p-4 border-t border-[var(--border-color)]">
                   <div className="flex items-center gap-3">
-                    <button
-                      onClick={() => alert('Adjuntar archivos próximamente disponible')}
-                      className="p-2 text-[var(--fg-muted)] hover:text-[var(--fg-primary)] transition-colors"
-                      title="Adjuntar archivo"
-                    >
-                      <Plus className="w-5 h-5" />
-                    </button>
+                    <div className="relative group">
+                      <button
+                        className="p-2 text-[var(--fg-muted)] transition-colors cursor-not-allowed opacity-60"
+                        title="Próximamente"
+                      >
+                        <Plus className="w-5 h-5" />
+                      </button>
+                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                        Próximamente
+                      </div>
+                    </div>
                     <input
                       type="text"
                       placeholder="Escribe un mensaje..."

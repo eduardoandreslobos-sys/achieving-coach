@@ -5,9 +5,11 @@ import { BarChart3, Shield, Zap, Users, Sparkles, ArrowRight, Play, ChevronLeft,
 import { useState } from 'react';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+import DemoModal from '@/components/DemoModal';
 
 export default function HomePageClient() {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [isDemoOpen, setIsDemoOpen] = useState(false);
 
   const testimonials = [
     { quote: "La profundidad de la analítica no tiene comparación. Es como tener un supervisor en la sala conmigo, señalando matices que podría haber perdido.", name: "Sarah A.", role: "Master Certified Coach" },
@@ -56,7 +58,10 @@ export default function HomePageClient() {
                 Iniciar Prueba Gratuita
                 <ArrowRight className="w-4 h-4" />
               </Link>
-              <button className="px-8 py-3.5 bg-white/5 border border-white/10 text-white font-medium rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2">
+              <button
+                onClick={() => setIsDemoOpen(true)}
+                className="px-8 py-3.5 bg-white/5 border border-white/10 text-white font-medium rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
+              >
                 <Play className="w-4 h-4" />
                 Ver Demo
               </button>
@@ -601,6 +606,9 @@ export default function HomePageClient() {
       </section>
 
       <Footer />
+
+      {/* Demo Modal */}
+      <DemoModal isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
     </div>
   );
 }
