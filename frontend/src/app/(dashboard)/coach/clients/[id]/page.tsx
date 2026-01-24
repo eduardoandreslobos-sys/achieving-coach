@@ -268,10 +268,24 @@ export default function ClientAnalyticsPage() {
                 <span>{client.email}</span>
               </div>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-wrap">
+              <Link
+                href={`/coach/clients/${clientId}/assign-tools`}
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 transition-colors"
+              >
+                <ClipboardList size={20} />
+                Asignar Herramientas
+              </Link>
+              <Link
+                href={`/coach/sessions?newSession=true&coacheeId=${clientId}`}
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 transition-colors"
+              >
+                <Calendar size={20} />
+                Nueva Sesión
+              </Link>
               <Link
                 href={`/coach/clients/${clientId}/results`}
-                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-[var(--fg-primary)] rounded-lg hover:bg-emerald-700 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
               >
                 <BarChart3 size={20} />
                 Ver Resultados

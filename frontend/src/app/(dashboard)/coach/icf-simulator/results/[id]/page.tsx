@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Home, ChevronRight, CheckCircle, XCircle, BarChart3, Sparkles, Lightbulb, TrendingUp, BookOpen, Clock, Target, Award, ArrowLeft } from 'lucide-react';
+import { FeatureGate } from '@/components/FeatureGate';
 
 interface CompetencyScore {
   competencyId: number;
@@ -45,6 +46,14 @@ interface SimulationResult {
 }
 
 export default function ICFSimulatorResultsPage() {
+  return (
+    <FeatureGate feature="icf_simulator.access" fallback="upgrade-prompt">
+      <ICFSimulatorResultsContent />
+    </FeatureGate>
+  );
+}
+
+function ICFSimulatorResultsContent() {
   const params = useParams();
   const resultId = params.id as string;
   const [result, setResult] = useState<SimulationResult | null>(null);

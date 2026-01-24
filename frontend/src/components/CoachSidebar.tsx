@@ -16,7 +16,14 @@ import {
   MoreVertical,
   Globe,
   CalendarCheck,
-  X
+  X,
+  Inbox,
+  Settings,
+  BarChart3,
+  Target,
+  Kanban,
+  UserPlus2,
+  CreditCard,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -40,8 +47,20 @@ const bookingNav = [
   { name: 'Booking Público', href: '/coach/booking', icon: Globe },
 ];
 
+const crmNav = [
+  { name: 'Dashboard', href: '/coach/crm', icon: BarChart3 },
+  { name: 'Pipeline', href: '/coach/crm/pipeline', icon: Kanban },
+  { name: 'Leads', href: '/coach/crm/leads', icon: UserPlus2 },
+];
+
+const directoryNav = [
+  { name: 'Configuración', href: '/coach/directory-settings', icon: Settings },
+  { name: 'Consultas', href: '/coach/inquiries', icon: Inbox },
+];
+
 const accountNav = [
   { name: 'Perfil', href: '/coach/profile', icon: User },
+  { name: 'Facturación', href: '/coach/billing', icon: CreditCard },
 ];
 
 interface CoachSidebarProps {
@@ -160,6 +179,26 @@ export default function CoachSidebar({ isOpen = false, onClose }: CoachSidebarPr
           <p className="px-3 mb-2 text-xs font-medium text-[var(--fg-muted)] uppercase tracking-wider">Booking</p>
           <div className="space-y-1">
             {bookingNav.map((item) => (
+              <NavItem key={item.name} item={item} />
+            ))}
+          </div>
+        </div>
+
+        {/* CRM */}
+        <div>
+          <p className="px-3 mb-2 text-xs font-medium text-[var(--fg-muted)] uppercase tracking-wider">CRM</p>
+          <div className="space-y-1">
+            {crmNav.map((item) => (
+              <NavItem key={item.name} item={item} />
+            ))}
+          </div>
+        </div>
+
+        {/* Directorio */}
+        <div>
+          <p className="px-3 mb-2 text-xs font-medium text-[var(--fg-muted)] uppercase tracking-wider">Directorio</p>
+          <div className="space-y-1">
+            {directoryNav.map((item) => (
               <NavItem key={item.name} item={item} />
             ))}
           </div>

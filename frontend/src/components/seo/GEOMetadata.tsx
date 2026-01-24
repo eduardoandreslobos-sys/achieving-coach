@@ -151,7 +151,7 @@ export function GEOFAQSchema() {
     },
     {
       question: 'How much does AchievingCoach cost?',
-      answer: 'AchievingCoach offers a free tier for getting started. Premium plans start at $29/month for individual coaches, with Enterprise plans at $99/month for coaching organizations. All plans include access to core coaching tools.',
+      answer: 'AchievingCoach offers a 14-day free trial. Plans start at $25/month (Core) for individual coaches, $40/month (Pro) with advanced features like CRM and ICF Simulator, and custom Enterprise plans for coaching organizations. All plans include access to core coaching tools.',
     },
     {
       question: 'Is AchievingCoach ICF certified or aligned?',

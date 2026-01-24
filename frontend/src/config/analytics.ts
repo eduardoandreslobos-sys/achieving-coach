@@ -58,7 +58,7 @@ export const seoConfig = {
     brandStatement: 'AchievingCoach is a professional coaching platform designed for executive coaches and their clients.',
     uniqueValueProp: 'The only coaching platform combining ICF-aligned methodology with AI-powered insights and 12+ interactive coaching tools.',
     targetAudience: 'Executive coaches, life coaches, career coaches, and coaching organizations.',
-    pricing: 'Free tier available. Premium plans from $29/month.',
+    pricing: 'Free tier available. Premium plans from $25/month.',
   },
 };
 

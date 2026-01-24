@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/react'
 import { useAuth } from '@/contexts/AuthContext'
 import ProtectedRoute from '../ProtectedRoute'
@@ -23,8 +24,10 @@ describe('ProtectedRoute', () => {
         user: null,
         userProfile: null,
         loading: true,
-        signOut: jest.fn(),
-        refreshUserProfile: jest.fn(),
+        signIn: jest.fn(),
+        signUp: jest.fn(),
+        logout: jest.fn(),
+        refreshProfile: jest.fn(),
       })
 
       render(
@@ -44,8 +47,10 @@ describe('ProtectedRoute', () => {
         user: null,
         userProfile: null,
         loading: false,
-        signOut: jest.fn(),
-        refreshUserProfile: jest.fn(),
+        signIn: jest.fn(),
+        signUp: jest.fn(),
+        logout: jest.fn(),
+        refreshProfile: jest.fn(),
       })
 
       render(
@@ -68,8 +73,10 @@ describe('ProtectedRoute', () => {
         user: { uid: 'test-uid' } as any,
         userProfile: null,
         loading: false,
-        signOut: jest.fn(),
-        refreshUserProfile: jest.fn(),
+        signIn: jest.fn(),
+        signUp: jest.fn(),
+        logout: jest.fn(),
+        refreshProfile: jest.fn(),
       })
 
       render(
@@ -89,8 +96,10 @@ describe('ProtectedRoute', () => {
         user: { uid: 'test-uid' } as any,
         userProfile: { uid: 'test-uid', role: 'coach' } as any,
         loading: false,
-        signOut: jest.fn(),
-        refreshUserProfile: jest.fn(),
+        signIn: jest.fn(),
+        signUp: jest.fn(),
+        logout: jest.fn(),
+        refreshProfile: jest.fn(),
       })
 
       render(
@@ -107,8 +116,10 @@ describe('ProtectedRoute', () => {
         user: { uid: 'test-uid' } as any,
         userProfile: { uid: 'test-uid', role: 'coachee' } as any,
         loading: false,
-        signOut: jest.fn(),
-        refreshUserProfile: jest.fn(),
+        signIn: jest.fn(),
+        signUp: jest.fn(),
+        logout: jest.fn(),
+        refreshProfile: jest.fn(),
       })
 
       render(
@@ -127,8 +138,10 @@ describe('ProtectedRoute', () => {
         user: { uid: 'test-uid' } as any,
         userProfile: { uid: 'test-uid', role: 'coach' } as any,
         loading: false,
-        signOut: jest.fn(),
-        refreshUserProfile: jest.fn(),
+        signIn: jest.fn(),
+        signUp: jest.fn(),
+        logout: jest.fn(),
+        refreshProfile: jest.fn(),
       })
 
       render(
@@ -150,8 +163,10 @@ describe('ProtectedRoute', () => {
         user: { uid: 'test-uid' } as any,
         userProfile: { uid: 'test-uid', role: 'coach' } as any,
         loading: false,
-        signOut: jest.fn(),
-        refreshUserProfile: jest.fn(),
+        signIn: jest.fn(),
+        signUp: jest.fn(),
+        logout: jest.fn(),
+        refreshProfile: jest.fn(),
       })
 
       render(

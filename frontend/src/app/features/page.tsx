@@ -240,6 +240,145 @@ export default function FeaturesPage() {
         </div>
       </section>
 
+      {/* CRM Section */}
+      <section className="py-20 px-6 bg-[#080808]">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <p className="text-blue-400 text-xs uppercase tracking-wider mb-4">CRM DE VENTAS</p>
+              <h2 className="text-3xl font-bold mb-4">Gestiona tus Oportunidades de Negocio</h2>
+              <p className="text-gray-400 mb-6">
+                Convierte prospectos en clientes con un CRM diseñado específicamente para coaches. Pipeline visual, calificación BANT y seguimiento de actividades.
+              </p>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-center gap-3 text-gray-300">
+                  <div className="w-6 h-6 bg-blue-500/10 rounded flex items-center justify-center">
+                    <CheckCircle className="w-4 h-4 text-blue-400" />
+                  </div>
+                  Pipeline visual estilo Kanban
+                </li>
+                <li className="flex items-center gap-3 text-gray-300">
+                  <div className="w-6 h-6 bg-blue-500/10 rounded flex items-center justify-center">
+                    <CheckCircle className="w-4 h-4 text-blue-400" />
+                  </div>
+                  Calificación BANT de prospectos
+                </li>
+                <li className="flex items-center gap-3 text-gray-300">
+                  <div className="w-6 h-6 bg-blue-500/10 rounded flex items-center justify-center">
+                    <CheckCircle className="w-4 h-4 text-blue-400" />
+                  </div>
+                  Lead scoring automático
+                </li>
+                <li className="flex items-center gap-3 text-gray-300">
+                  <div className="w-6 h-6 bg-blue-500/10 rounded flex items-center justify-center">
+                    <CheckCircle className="w-4 h-4 text-blue-400" />
+                  </div>
+                  Registro de actividades y tareas
+                </li>
+              </ul>
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-xs">
+                Disponible en Plan Pro
+              </div>
+            </div>
+            <div className="bg-[#111111] border border-gray-800 rounded-xl p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Workflow className="w-5 h-5 text-blue-400" />
+                <span className="text-blue-400 text-sm font-medium">PIPELINE DE VENTAS</span>
+              </div>
+              <div className="grid grid-cols-4 gap-2 mb-4">
+                {['Prospección', 'Calificación', 'Propuesta', 'Negociación'].map((stage, i) => (
+                  <div key={i} className="bg-[#1a1a1a] rounded-lg p-2 text-center">
+                    <p className="text-xs text-gray-400 truncate">{stage}</p>
+                    <p className="text-white font-semibold text-sm">{[3, 5, 2, 1][i]}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-[#1a1a1a] rounded-lg p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-gray-300 text-sm">Pipeline Total</span>
+                  <span className="text-emerald-400 font-semibold">$45,000</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-300 text-sm">Valor Ponderado</span>
+                  <span className="text-blue-400 font-semibold">$22,500</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Directory Section */}
+      <section className="py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="bg-[#111111] border border-gray-800 rounded-xl p-6 order-2 lg:order-1">
+              <div className="flex items-center gap-2 mb-4">
+                <Users className="w-5 h-5 text-violet-400" />
+                <span className="text-violet-400 text-sm font-medium">DIRECTORIO DE COACHES</span>
+              </div>
+              <div className="space-y-3">
+                {[
+                  { name: 'María González', specialty: 'Coaching Ejecutivo', rating: 4.9 },
+                  { name: 'Carlos Mendez', specialty: 'Liderazgo', rating: 4.8 },
+                  { name: 'Ana López', specialty: 'Carrera', rating: 4.7 },
+                ].map((coach, i) => (
+                  <div key={i} className="bg-[#1a1a1a] rounded-lg p-3 flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-violet-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+                      {coach.name.split(' ').map(n => n[0]).join('')}
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-white text-sm font-medium">{coach.name}</p>
+                      <p className="text-gray-500 text-xs">{coach.specialty}</p>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-amber-400">★</span>
+                      <span className="text-gray-300 text-sm">{coach.rating}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="order-1 lg:order-2">
+              <p className="text-violet-400 text-xs uppercase tracking-wider mb-4">COMUNIDAD</p>
+              <h2 className="text-3xl font-bold mb-4">Directorio Público de Coaches</h2>
+              <p className="text-gray-400 mb-6">
+                Aumenta tu visibilidad y atrae nuevos clientes. Crea tu perfil profesional en nuestro directorio público y recibe consultas de potenciales coachees.
+              </p>
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-center gap-3 text-gray-300">
+                  <div className="w-6 h-6 bg-violet-500/10 rounded flex items-center justify-center">
+                    <CheckCircle className="w-4 h-4 text-violet-400" />
+                  </div>
+                  Perfil profesional personalizable
+                </li>
+                <li className="flex items-center gap-3 text-gray-300">
+                  <div className="w-6 h-6 bg-violet-500/10 rounded flex items-center justify-center">
+                    <CheckCircle className="w-4 h-4 text-violet-400" />
+                  </div>
+                  Muestra tus especialidades y certificaciones
+                </li>
+                <li className="flex items-center gap-3 text-gray-300">
+                  <div className="w-6 h-6 bg-violet-500/10 rounded flex items-center justify-center">
+                    <CheckCircle className="w-4 h-4 text-violet-400" />
+                  </div>
+                  Recibe consultas de potenciales clientes
+                </li>
+                <li className="flex items-center gap-3 text-gray-300">
+                  <div className="w-6 h-6 bg-violet-500/10 rounded flex items-center justify-center">
+                    <CheckCircle className="w-4 h-4 text-violet-400" />
+                  </div>
+                  Convierte consultas en leads del CRM
+                </li>
+              </ul>
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-violet-500/10 border border-violet-500/20 rounded-full text-violet-400 text-xs">
+                Disponible en Plan Pro
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Security */}
       <section className="py-20 px-6 bg-[#080808]">
         <div className="max-w-7xl mx-auto text-center">

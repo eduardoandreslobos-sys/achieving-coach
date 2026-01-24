@@ -117,22 +117,22 @@ export default function HomePageClient() {
               <p className="text-[var(--fg-muted)] text-sm">Firma legalmente documentos como acuerdos integrados para alinearte sin el flujo de onboarding.</p>
             </div>
 
-            {/* Card 5 */}
+            {/* Card 5 - CRM */}
             <div className="bento-card">
-              <div className="w-10 h-10 bg-pink-500/10 rounded-lg flex items-center justify-center mb-4">
-                <BarChart3 className="w-5 h-5 text-pink-400" />
+              <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center mb-4">
+                <BarChart3 className="w-5 h-5 text-blue-400" />
               </div>
-              <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Dashboards por Rol</h3>
-              <p className="text-[var(--fg-muted)] text-sm">Vistas prediseñadas para administradores, coaches y clientes.</p>
+              <h3 className="text-[var(--fg-primary)] font-semibold mb-2">CRM de Ventas</h3>
+              <p className="text-[var(--fg-muted)] text-sm">Pipeline visual para gestionar leads y oportunidades. Calificación BANT y seguimiento de actividades.</p>
             </div>
 
-            {/* Card 6 */}
+            {/* Card 6 - Directory */}
             <div className="bento-card">
-              <div className="w-10 h-10 bg-cyan-500/10 rounded-lg flex items-center justify-center mb-4">
-                <Target className="w-5 h-5 text-cyan-400" />
+              <div className="w-10 h-10 bg-violet-500/10 rounded-lg flex items-center justify-center mb-4">
+                <Users className="w-5 h-5 text-violet-400" />
               </div>
-              <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Metodología de 9 Fases</h3>
-              <p className="text-[var(--fg-muted)] text-sm">Sigue nuestro marco estructurado paso a paso del comportamiento en 9 pasos.</p>
+              <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Directorio de Coaches</h3>
+              <p className="text-[var(--fg-muted)] text-sm">Perfil público profesional para atraer nuevos clientes y recibir consultas.</p>
             </div>
           </div>
         </div>
@@ -537,7 +537,7 @@ export default function HomePageClient() {
                 <span className="text-[var(--fg-muted)] group-open:rotate-180 transition-transform">▼</span>
               </summary>
               <div className="px-6 pb-6 text-[var(--fg-muted)]">
-                AchievingCoach ofrece un plan gratuito para comenzar. Los planes Premium comienzan en $29/mes para coaches individuales, con planes Enterprise a $99/mes para organizaciones de coaching. Todos los planes incluyen acceso a las herramientas principales de coaching.
+                AchievingCoach ofrece una prueba gratuita de 14 días. Los planes comienzan en $25/mes (Core) con herramientas esenciales, $40/mes (Pro) con CRM, simulador ICF, directorio y analytics avanzados, y planes Enterprise personalizados para organizaciones. Ahorra 25% con pago anual.
               </div>
             </details>
 

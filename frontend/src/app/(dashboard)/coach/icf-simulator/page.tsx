@@ -7,6 +7,7 @@ import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { FeatureGate } from '@/components/FeatureGate';
 
 interface Question {
   id?: string;
@@ -40,6 +41,14 @@ const COMPETENCIES = [
 ];
 
 export default function ICFSimulatorPage() {
+  return (
+    <FeatureGate feature="icf_simulator.access" fallback="upgrade-prompt">
+      <ICFSimulatorContent />
+    </FeatureGate>
+  );
+}
+
+function ICFSimulatorContent() {
   const { userProfile } = useAuth();
   const router = useRouter();
   const [allQuestions, setAllQuestions] = useState<Question[]>([]);

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
 import {
@@ -61,6 +62,7 @@ interface Coachee {
 
 export default function CoachSessionsPage() {
   const { user, userProfile } = useAuth();
+  const searchParams = useSearchParams();
   const [sessions, setSessions] = useState<Session[]>([]);
   const [coachees, setCoachees] = useState<Coachee[]>([]);
   const [loading, setLoading] = useState(true);
@@ -72,7 +74,7 @@ export default function CoachSessionsPage() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   const [newSession, setNewSession] = useState({
-    coacheeId: '',
+    coacheeId: searchParams?.get('coacheeId') || '',
     scheduledDate: '',
     scheduledTime: '',
     duration: 60,
@@ -83,6 +85,13 @@ export default function CoachSessionsPage() {
   useEffect(() => {
     loadData();
   }, [user, userProfile]);
+
+  // Auto-open create modal when redirected from client profile
+  useEffect(() => {
+    if (searchParams?.get('newSession') === 'true' && !loading) {
+      setShowCreateModal(true);
+    }
+  }, [searchParams, loading]);
 
   const loadData = async () => {
     if (!user || !userProfile) return;

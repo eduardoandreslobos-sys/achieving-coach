@@ -49,6 +49,8 @@ steps:
       - '--platform'
       - 'managed'
       - '--allow-unauthenticated'
+      - '--set-secrets'
+      - 'GEMINI_API_KEY=GEMINI_API_KEY:latest'
 
 images:
   - 'gcr.io/$PROJECT_ID/achieving-coach-frontend-staging:$COMMIT_SHA'

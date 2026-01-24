@@ -1,435 +1,445 @@
-# 📊 Estado Actual de AchievingCoach
+# Estado Actual de AchievingCoach
 
-**Última actualización:** 25 de Noviembre, 2025  
-**Proyecto GCP:** `triple-shift-478220-b2`  
+**Ultima actualizacion:** 23 de Enero, 2026
+**Version:** 0.8.0
+**Proyecto GCP:** `triple-shift-478220-b2`
 **URL Frontend:** https://achieving-coach-frontend-977373202400.us-central1.run.app
+**URL Produccion:** https://achievingcoach.com
+**URL Staging:** https://staging-achievingcoach.com
 
 ---
 
-## 🎯 Resumen General
+## Resumen General
 
-AchievingCoach es una plataforma profesional de coaching desplegada en Google Cloud Platform con arquitectura serverless. Actualmente tiene **~40% de completitud** con funcionalidades core operativas.
+AchievingCoach es una plataforma SaaS profesional de coaching ejecutivo desplegada en Google Cloud Platform con arquitectura serverless. Actualmente tiene **~70% de completitud** con funcionalidades core operativas, sistema de suscripciones, CRM, directorio de coaches y paginas de marketing.
 
-**Stack Tecnológico:**
+**Stack Tecnologico:**
 - **Frontend:** Next.js 14 (App Router) + TypeScript + TailwindCSS
 - **Backend:** Node.js + Express + TypeScript
 - **Base de datos:** Firebase Firestore
-- **Autenticación:** Firebase Auth
+- **Autenticacion:** Firebase Auth
+- **Pagos:** Stripe (Checkout + Billing Portal)
+- **IA:** Google Gemini 1.5 Flash
+- **Analytics:** Google Analytics 4 + Search Console + Microsoft Clarity
 - **Infraestructura:** Cloud Run (GCP)
-- **CI/CD:** Cloud Build automatizado con GitHub
+- **CI/CD:** GitHub Actions + Cloud Build
+- **Secrets:** Google Secret Manager
 
 ---
 
-## ✅ Funcionalidades Implementadas
+## Funcionalidades Implementadas
 
-### 1. Sistema de Autenticación y Onboarding
+### 1. Sistema de Autenticacion y Onboarding
 
 | Funcionalidad | Estado | Ruta |
 |--------------|--------|------|
-| Sign In | ✅ | `/sign-in` |
-| Sign Up | ✅ | `/sign-up` |
-| Onboarding | ✅ | `/onboarding` |
-| Join (invitación coach) | ✅ | `/join/[coachId]` |
-| Subscription expired | ✅ | `/subscription-expired` |
-| Protected Routes | ✅ | Componente |
-| Subscription Guard | ✅ | Componente |
-
-**Características:**
-- Firebase Auth con email/password
-- Flujo de onboarding para coaches y coachees
-- Sistema de invitaciones via link
-- Guards de suscripción
+| Sign In | Completo | `/sign-in` |
+| Sign Up | Completo | `/sign-up` |
+| Onboarding | Completo | `/onboarding` |
+| Join (invitacion coach) | Completo | `/join/[coachId]` |
+| Subscription expired | Completo | `/subscription-expired` |
+| Protected Routes | Completo | Componente |
+| Subscription Guard | Completo | Componente |
+| Feature Gate | Completo | Componente |
 
 ---
 
-### 2. Coach Dashboard Completo
+### 2. Paginas Publicas (Marketing Site)
 
-| Módulo | Estado | Ruta |
+| Pagina | Estado | Ruta |
 |--------|--------|------|
-| Dashboard principal | ✅ | `/coach` |
-| Client list | ✅ | `/coach/clients` |
-| Client detail | ✅ | `/coach/clients/[id]` |
-| Assign tools | ✅ | `/coach/clients/[id]/assign-tools` |
-| ICF Simulator | ✅ | `/coach/icf-simulator` |
-| Invite coachees | ✅ | `/coach/invite` |
-| Profile | ✅ | `/coach/profile` |
-| Programs (new) | ✅ | `/coach/programs/new` |
-| Program detail | ✅ | `/coach/programs/[programId]` |
-| Tools management | ✅ | `/coach/tools` |
-
-**Componentes del Dashboard:**
-- `ICFCompetencyWheel.tsx` - Rueda de competencias ICF
-- `StatsCard.tsx` - Tarjetas de estadísticas
-- `ActiveClients.tsx` - Lista de clientes activos
-- `UpcomingSessions.tsx` - Próximas sesiones
-- `TasksDue.tsx` - Tareas pendientes
-- `ReflectiveNotes.tsx` - Notas reflexivas
-- `CoachSidebar.tsx` - Navegación lateral
-
-**Características:**
-- Vista 360° de clientes
-- Asignación de herramientas a coachees
-- Simulador de examen ICF
-- Sistema de invitaciones
-- Gestión de programas de coaching
+| Home (Landing) | Completo | `/` |
+| Features | Completo | `/features` |
+| Pricing | Completo | `/pricing` |
+| Organizations | Completo | `/organizations` |
+| About | Completo | `/about` |
+| Contact | Completo | `/contact` |
+| Blog | Completo | `/blog` |
+| Blog Post | Completo | `/blog/[slug]` |
+| Coach Directory | Completo | `/coaches` |
+| Coach Profile | Completo | `/coaches/[slug]` |
+| Privacy Policy | Completo | `/privacy` |
+| Terms of Service | Completo | `/terms` |
 
 ---
 
-### 3. Coachee Dashboard
+### 3. Sistema de Suscripciones y Pagos (Stripe)
 
-| Módulo | Estado | Ruta |
+| Funcionalidad | Estado | Ruta |
+|--------------|--------|------|
+| Planes de suscripcion | Completo | `/pricing` |
+| Checkout (Stripe) | Completo | `/api/stripe/checkout` |
+| Billing Portal | Completo | `/api/stripe/portal` |
+| Webhooks | Completo | `/api/stripe/webhook` |
+| Billing Dashboard | Completo | `/coach/billing` |
+
+**Planes:**
+| Plan | Precio Mensual | Precio Anual | Clientes |
+|------|---------------|--------------|----------|
+| Core | $25/mes | $225/ano (25% dto) | 15 |
+| Pro | $40/mes | $360/ano (25% dto) | Ilimitados |
+| Enterprise | Custom | Custom | Ilimitados |
+
+**Caracteristicas del Feature Gate:**
+- `FeatureGate` - Componente wrapper que muestra/oculta segun plan
+- `useFeatureAccess()` - Hook para verificar acceso a features
+- Fallbacks: hide, blur, upgrade-prompt
+- 70+ feature SKUs definidos por categoria
+
+---
+
+### 4. Coach Dashboard
+
+| Modulo | Estado | Ruta |
 |--------|--------|------|
-| Dashboard principal | ✅ | `/dashboard` |
-| Goals | ✅ | `/goals` |
-| Sessions | ✅ | `/sessions` |
-| Messages | ✅ | `/messages` |
-| Reflections | ✅ | `/reflections` |
-| Resources | ✅ | `/resources` |
-| GROW Worksheet | ✅ | `/grow-worksheet` |
+| Dashboard principal | Completo | `/coach` |
+| Client list | Completo | `/coach/clients` |
+| Client detail (analytics) | Completo | `/coach/clients/[id]` |
+| Assign tools | Completo | `/coach/clients/[id]/assign-tools` |
+| Client results | Completo | `/coach/clients/[id]/results` |
+| ICF Simulator | Completo | `/coach/icf-simulator` |
+| ICF Results | Completo | `/coach/icf-simulator/results/[id]` |
+| Invite coachees | Completo | `/coach/invite` |
+| Profile | Completo | `/coach/profile` |
+| Programs (new) | Completo | `/coach/programs/new` |
+| Program detail | Completo | `/coach/programs/[programId]` |
+| Tools management | Completo | `/coach/tools` |
+| Sessions | Completo | `/coach/sessions` |
+| Billing | Completo | `/coach/billing` |
 
-**Componentes del Dashboard:**
-- `ActiveGoalsWidget.tsx` - Widget de objetivos activos
-- `ProgressOverview.tsx` - Resumen de progreso
-- `QuickActionsWidget.tsx` - Acciones rápidas
-- `RecentActivityFeed.tsx` - Feed de actividad
-- `UpcomingSessionCard.tsx` - Próxima sesión
-- `DashboardSidebar.tsx` - Navegación lateral
-- `GrowWorksheet.tsx` - Hoja de trabajo GROW completa
-
-**Características:**
-- Vista personalizada del progreso
-- Acceso a herramientas asignadas
-- Sistema de mensajería
-- Reflexiones y recursos
-
----
-
-### 4. Herramientas de Coaching (11 Tools)
-
-#### 4.1 DISC Assessment ✅ **[RECIÉN IMPLEMENTADO]**
-
-**Rutas:**
-- `/tools/disc` - Evaluación (6.76 kB)
-- `/tools/disc/result/[resultId]` - Resultados (6.81 kB)
-
-**Componentes:**
-- `DISCAssessment.tsx` - Cuestionario de 10 preguntas
-- `DISCResults.tsx` - Página de resultados
-- `DISCCircleChart.tsx` - Gráfico círculo interpersonal
-- `DISCBarChart.tsx` - Gráfico de barras con perfil
-
-**Características:**
-- Cuestionario de elección forzada (most/least)
-- 10 grupos de 4 afirmaciones
-- Cálculo de 8 perfiles DISC (D, I, S, C, DI, DC, IS, SC)
-- Visualización en círculo interpersonal
-- Gráfico de barras con línea de perfil
-- Guardado en Firestore
-- Fortalezas, áreas de desarrollo, estilo de trabajo, comunicación
-
-**Perfiles DISC disponibles:**
-1. D - Dominante
-2. I - Influyente
-3. S - Estable
-4. C - Concienzudo
-5. DI - Líder Carismático
-6. DC - Ejecutor Exigente
-7. IS - Consejero Amigable
-8. SC - Especialista Detallista
+**Navegacion del Coach (Sidebar):**
+- Principal: Dashboard, Clientes, Herramientas, Invitar Coachees, Simulador ICF
+- Comunicacion: Mensajes, Sesiones
+- Booking: Reservas, Booking Publico
+- CRM: Dashboard, Pipeline, Leads
+- Directorio: Configuracion, Consultas
+- Cuenta: Perfil, Facturacion
 
 ---
 
-#### 4.2 Wheel of Life ✅
+### 5. CRM (Customer Relationship Management)
 
-**Ruta:** `/tools/wheel-of-life` (71.7 kB)
+| Modulo | Estado | Ruta |
+|--------|--------|------|
+| CRM Dashboard | Completo | `/coach/crm` |
+| Pipeline Board (Kanban) | Completo | `/coach/crm/pipeline` |
+| Leads List | Completo | `/coach/crm/leads` |
+| Lead Details | Completo | `/coach/crm/leads/[id]` |
 
-**Características:**
-- Evaluación de 8 áreas de vida
-- Visualización en rueda
-- Identificación de áreas de mejora
+**Etapas del Pipeline (alineadas con Salesforce):**
+- Prospecting (10%)
+- Qualification (25%)
+- Needs Analysis (40%)
+- Proposal (60%)
+- Negotiation (90%)
+- Closed Won (100%)
+- Closed Lost (0%)
 
----
+**Lead Scoring:**
+- BANT Qualification (Budget, Authority, Need, Timeline)
+- Engagement Score (0-30)
+- Fit Score (0-30)
+- Total Score (0-100)
+- Categorias: Hot (80+), Warm (60-79), Neutral (40-59), Cold (0-39)
 
-#### 4.3 Career Compass ✅
-
-**Ruta:** `/tools/career-compass` (6.29 kB)
-
-**Componentes:**
-- `CareerCompassForm.tsx`
-- `CareerCompassResults.tsx`
-
-**Características:**
-- Evaluación de dirección profesional
-- Resultados personalizados
-
----
-
-#### 4.4 Resilience Scale ✅
-
-**Ruta:** `/tools/resilience-scale` (4.81 kB)
-
-**Componentes:**
-- `ResilienceQuestionnaire.tsx`
-- `ResilienceResults.tsx`
-
-**Características:**
-- Evaluación de resiliencia
-- Análisis de resultados
+**Componentes CRM:**
+- `LeadCard.tsx` - Tarjeta resumen de lead
+- `LeadScoreBadge.tsx` - Badge de puntuacion
+- `PipelineBoard.tsx` - Vista Kanban
+- `BANTQualification.tsx` - Evaluacion BANT
+- `ActivityTimeline.tsx` - Historial de actividades
+- `SalesPath.tsx` - Guia por etapa
 
 ---
 
-#### 4.5 Limiting Beliefs ✅
+### 6. Directorio de Coaches
 
-**Ruta:** `/tools/limiting-beliefs` (3.83 kB)
+| Modulo | Estado | Ruta |
+|--------|--------|------|
+| Directorio publico | Completo | `/coaches` |
+| Perfil publico coach | Completo | `/coaches/[slug]` |
+| Configuracion perfil | Completo | `/coach/directory-settings` |
+| Gestion de consultas | Completo | `/coach/inquiries` |
 
-**Componentes:**
-- `BeliefReframeForm.tsx`
-- `BeliefReframeResults.tsx`
+**Campos del perfil publico:**
+- Nombre, headline, bio, foto, cover photo
+- Especialidades (12+ opciones)
+- Certificaciones (ICF ACC/PCC/MCC, CTI CPCC, etc.)
+- Idiomas, anos de experiencia
+- Precios por sesion y programa
+- Disponibilidad por dia
+- Ubicacion (ciudad, pais, timezone)
+- Audiencia target, industrias, metodologias
+- Links sociales (LinkedIn, website, Instagram, video intro)
 
-**Características:**
-- Identificación de creencias limitantes
-- Ejercicios de reencuadre
-
----
-
-#### 4.6 Habit Loop ✅
-
-**Ruta:** `/tools/habit-loop` (5.6 kB)
-
-**Componentes:**
-- `HabitLoopForm.tsx`
-- `HabitAnalysisResults.tsx`
-
-**Características:**
-- Análisis del ciclo de hábitos
-- Estrategias de cambio
-
----
-
-#### 4.7 Values Clarification ✅
-
-**Ruta:** `/tools/values-clarification` (4.59 kB)
-
-**Componentes:**
-- `ValuesMatrix.tsx`
-- `ValuesResults.tsx`
-
-**Características:**
-- Identificación de valores personales
-- Matriz de priorización
+**Flujo de consultas:**
+- New -> Viewed -> Responded -> Converted/Declined
+- Captura de datos del prospecto
+- Conversion a lead del CRM
 
 ---
 
-#### 4.8 Emotional Triggers ✅
+### 7. Coachee Dashboard
 
-**Ruta:** `/tools/emotional-triggers` (4.3 kB)
-
-**Características:**
-- Identificación de triggers emocionales
-- Estrategias de manejo
-
----
-
-#### 4.9 Feedback/Feedforward ✅
-
-**Ruta:** `/tools/feedback-feedforward` (3.77 kB)
-
-**Características:**
-- Framework de feedback constructivo
-- Práctica de feedforward
+| Modulo | Estado | Ruta |
+|--------|--------|------|
+| Dashboard principal | Completo | `/dashboard` |
+| Goals | Completo | `/goals` |
+| Sessions | Completo | `/sessions` |
+| Messages | Completo | `/messages` |
+| Reflections | Completo | `/reflections` |
+| Resources | Completo | `/resources` |
+| Programs | Completo | `/programs` |
+| Program detail | Completo | `/programs/[programId]` |
+| Settings | Completo | `/settings` |
 
 ---
 
-#### 4.10 Stakeholder Map ✅
+### 8. Herramientas de Coaching (12 Tools)
 
-**Ruta:** `/tools/stakeholder-map` (3.85 kB)
-
-**Características:**
-- Mapeo de stakeholders
-- Análisis de relaciones
-
----
-
-#### 4.11 GROW Worksheet ✅
-
-**Ruta:** `/grow-worksheet` (2.96 kB)
-
-**Componente:** `GrowWorksheet.tsx`
-
-**Características:**
-- Framework GROW completo
-- Goal, Reality, Options, Will
-- Guardado de sesiones
+| Herramienta | Ruta | Descripcion |
+|-------------|------|-------------|
+| DISC Assessment | `/tools/disc` | Perfil conductual (D, I, S, C) |
+| Wheel of Life | `/tools/wheel-of-life` | Balance de 8 areas de vida |
+| GROW Model | `/tools/grow-model` | Framework Goal-Reality-Options-Will |
+| Values Clarification | `/tools/values-clarification` | Priorizacion de valores personales |
+| Limiting Beliefs | `/tools/limiting-beliefs` | Transformacion de creencias |
+| Resilience Scale | `/tools/resilience-scale` | Medicion de resiliencia |
+| Career Compass | `/tools/career-compass` | Orientacion profesional |
+| Emotional Triggers | `/tools/emotional-triggers` | Disparadores emocionales |
+| Feedback-Feedforward | `/tools/feedback-feedforward` | Retroalimentacion estructurada |
+| Habit Loop | `/tools/habit-loop` | Analisis senal-rutina-recompensa |
+| Stakeholder Map | `/tools/stakeholder-map` | Mapeo de relaciones |
+| ICF Simulator | `/coach/icf-simulator` | Practica competencias ICF (solo coaches) |
 
 ---
 
-### 5. Backend APIs
+### 9. Proceso de Coaching Ejecutivo (9 Fases)
 
-**Puerto:** 8080  
-**Base URL (local):** http://localhost:8080
+| Fase | Nombre | Estado |
+|------|--------|--------|
+| 1 | Antecedentes Generales | Completo |
+| 2 | Reunion Tripartita | Completo |
+| 3 | Acuerdo de Coaching | Completo |
+| 4 | Calendarizacion | Completo |
+| 5 | Sesiones 1-3 | Completo |
+| 6 | Reporte de Proceso (IA) | Completo |
+| 7 | Sesion Observada | Completo |
+| 8 | Sesiones 5-6 | Completo |
+| 9 | Informe Final (IA) | Completo |
 
-| Endpoint | Método | Descripción |
+**Reportes con IA (Google Gemini):**
+- Generacion automatica de Reporte de Proceso (Fase 6)
+- Generacion automatica de Informe Final (Fase 9)
+- Sintesis de temas, fuerzas conservadoras/transformadoras
+- Practicas clave, descubrimientos, recomendaciones
+- Editable por el coach
+
+---
+
+### 10. Sistema de Mensajeria
+
+| Funcionalidad | Estado |
+|--------------|--------|
+| Conversaciones en tiempo real (Firestore onSnapshot) | Completo |
+| Lista de conversaciones con busqueda | Completo |
+| Auto-seleccion de primera conversacion | Completo |
+| Contact picker para nueva conversacion | Completo |
+| Indicador de mensajes no leidos | Completo |
+| Mark as read automatico | Completo |
+| Deduplicacion de conversaciones | Completo |
+| Batch fetch de recipientes (optimizado N+1) | Completo |
+
+---
+
+### 11. Gestion de Sesiones
+
+| Funcionalidad | Estado |
+|--------------|--------|
+| Crear sesion (modal) | Completo |
+| Pre-seleccion de coachee desde perfil de cliente | Completo |
+| Editar sesion | Completo |
+| Eliminar sesion | Completo |
+| Cambiar estado (scheduled/completed/cancelled/no-show) | Completo |
+| Filtros (todas/proximas/pasadas/canceladas) | Completo |
+| Busqueda por nombre/email | Completo |
+| Link de reunion (Zoom, Meet, etc.) | Completo |
+| Notas pre/post sesion | Completo |
+| Notificacion automatica al coachee | Completo |
+| Estadisticas (total, proximas, completadas, canceladas) | Completo |
+
+---
+
+### 12. Panel de Administracion
+
+| Modulo | Estado | Ruta |
+|--------|--------|------|
+| Admin Dashboard | Completo | `/admin` |
+| User Management | Completo | `/admin/users` |
+| Blog Management | Completo | `/admin/blog` |
+| Blog Drafts & Scheduling | Completo | `/admin/blog` |
+| Seed Blog | Completo | `/admin/seed-blog` |
+| SEO Dashboard (GA4 + Search Console) | Completo | `/admin/seo` |
+| Analytics | Completo | `/admin/analytics` |
+| Settings | Completo | `/admin/settings` |
+
+---
+
+### 13. SEO y Analytics
+
+| Funcionalidad | Estado |
+|--------------|--------|
+| Google Analytics 4 integrado | Completo |
+| Google Search Console | Completo |
+| Microsoft Clarity | Completo |
+| GEO Metadata componente | Completo |
+| Sitemap dinamico | Completo |
+| Blog con SEO optimizado | Completo |
+| Post scheduling y auto-publish | Completo |
+
+---
+
+### 14. Seguridad y Compliance
+
+| Funcionalidad | Estado |
+|--------------|--------|
+| Firebase Auth (email/password) | Completo |
+| Firestore Security Rules | Completo |
+| Firmas digitales (SHA-256) | Completo |
+| GDPR Compliance | Completo |
+| CCPA Compliance | Completo |
+| HIPAA Considerations | Completo |
+| Secret Manager (GCP) | Completo |
+
+---
+
+### 15. Customer Success (Types definidos)
+
+| Funcionalidad | Estado |
+|--------------|--------|
+| Client Health Score | Types definidos |
+| Expansion Opportunities | Types definidos |
+| Coach Reviews | Types definidos |
+| Referral Program | Types definidos |
+| Success Stories | Types definidos |
+| NPS Surveys | Types definidos |
+
+---
+
+## Arquitectura CI/CD
+
+### Cloud Build
+
+**Produccion (`cloudbuild.yaml`):**
+- Build Docker image del frontend
+- Push a Google Container Registry
+- Deploy a Cloud Run (`achieving-coach-frontend`)
+- Region: us-central1
+- Secrets: GA4_CREDENTIALS, GEMINI_API_KEY, CLARITY_API_TOKEN
+- Machine: E2_HIGHCPU_8, Timeout: 1800s
+
+**Staging (`cloudbuild-staging.yaml`):**
+- Build con credenciales Firebase de staging
+- Deploy a Cloud Run (`achieving-coach-frontend-staging`)
+
+### GitHub Actions
+
+| Workflow | Trigger | Accion |
+|----------|---------|--------|
+| `deploy-staging.yaml` | Push a `main` | Deploy a staging |
+| `deploy-production.yaml` | Manual (workflow_dispatch) | UAT + Deploy a prod |
+| `pr-tests.yaml` | Pull requests | Unit tests + build check + UAT |
+| `test.yml` | PRs y pushes | Tests con coverage |
+
+### Flujo de Despliegue
+
+```
+Push a main → GitHub Actions → Deploy Staging
+Manual trigger → UAT en staging → Deploy Produccion
+```
+
+---
+
+## Colecciones Firestore
+
+| Coleccion | Descripcion |
+|-----------|-------------|
+| `users` | Usuarios (coaches, coachees, admins) |
+| `goals` | Objetivos de coachees |
+| `sessions` | Sesiones de coaching |
+| `conversations` | Conversaciones de mensajeria |
+| `conversations/{id}/messages` | Mensajes individuales |
+| `notifications` | Notificaciones del sistema |
+| `coaching_programs` | Programas de coaching |
+| `tool_assignments` | Herramientas asignadas |
+| `discResults` | Resultados DISC |
+| `growSessions` | Sesiones GROW |
+| `reflections` | Reflexiones de coachees |
+| `blog_posts` | Posts del blog |
+| `subscriptions` | Suscripciones activas |
+| `billing_history` | Historial de facturas |
+| `coaches` | Perfiles publicos de coaches |
+| `inquiries` | Consultas del directorio |
+| `leads` | Leads del CRM |
+| `activities` | Actividades de leads |
+
+---
+
+## API Endpoints
+
+### Next.js API Routes (Frontend)
+
+| Endpoint | Metodo | Descripcion |
 |----------|--------|-------------|
-| `/api/v1/auth/signup` | POST | Registro de usuarios |
+| `/api/ai-report` | POST | Generar reportes con IA (Gemini) |
+| `/api/test-gemini` | GET | Test de conexion Gemini |
+| `/api/analytics` | GET | Metricas de Analytics |
+| `/api/stripe/checkout` | POST | Crear sesion de checkout |
+| `/api/stripe/portal` | POST | Portal de billing del cliente |
+| `/api/stripe/webhook` | POST | Webhook de Stripe |
+
+### Backend Express APIs
+
+| Endpoint | Metodo | Descripcion |
+|----------|--------|-------------|
+| `/api/v1/auth/signup` | POST | Registro |
 | `/api/v1/auth/signin` | POST | Login |
-| `/api/v1/users/:id` | GET | Obtener usuario |
-| `/api/v1/users/:id` | PUT | Actualizar usuario |
-| `/api/v1/goals` | GET | Listar objetivos |
-| `/api/v1/goals` | POST | Crear objetivo |
-| `/api/v1/goals/:id` | PUT | Actualizar objetivo |
-| `/api/v1/goals/:id` | DELETE | Eliminar objetivo |
-| `/api/v1/grow-sessions` | GET | Listar sesiones GROW |
-| `/api/v1/grow-sessions` | POST | Crear sesión GROW |
-| `/api/v1/grow-sessions/:id` | GET | Obtener sesión GROW |
-
-**Archivos Backend:**
-```
-backend/
-├── src/
-│   ├── app.ts                    # Configuración Express
-│   ├── server.ts                 # Servidor principal
-│   ├── config/
-│   │   ├── environment.ts        # Variables de entorno
-│   │   └── firebase.ts           # Firebase Admin SDK
-│   ├── middleware/
-│   │   └── auth.ts               # Middleware de autenticación
-│   ├── models/
-│   │   ├── goal.model.ts         # Modelo de objetivos
-│   │   └── GrowSession.ts        # Modelo de sesiones GROW
-│   ├── routes/
-│   │   ├── auth.routes.ts        # Rutas de autenticación
-│   │   ├── goals.routes.ts       # Rutas de objetivos
-│   │   ├── growSessions.ts       # Rutas de sesiones GROW
-│   │   ├── users.routes.ts       # Rutas de usuarios
-│   │   └── index.ts              # Router principal
-│   └── services/
-│       ├── goals.service.ts      # Lógica de objetivos
-│       └── GrowSessionService.ts # Lógica de sesiones GROW
-```
+| `/api/v1/users/:id` | GET/PUT | Gestion de usuario |
+| `/api/v1/goals` | GET/POST | Objetivos |
+| `/api/v1/goals/:id` | PUT/DELETE | Objetivo especifico |
+| `/api/v1/grow-sessions` | GET/POST | Sesiones GROW |
+| `/api/v1/grow-sessions/:id` | GET | Sesion GROW especifica |
 
 ---
 
-### 6. Servicios y Librerías
+## Estructura del Proyecto
 
-**Frontend Services:**
-
-| Servicio | Archivo | Descripción |
-|----------|---------|-------------|
-| API Client | `lib/api-client.ts` | Cliente HTTP para backend |
-| Firebase | `lib/firebase.ts` | Configuración Firebase |
-| Coaching Service | `lib/coachingService.ts` | Lógica de coaching |
-| DISC Service | `lib/discService.ts` | Cálculos y guardado DISC |
-| Activity Logger | `lib/activityLogger.ts` | Log de actividades |
-| Utils | `lib/utils.ts` | Utilidades generales |
-
-**Contexts:**
-- `AuthContext.tsx` - Contexto de autenticación
-
-**Types:**
-```
-types/
-├── index.ts              # Exports principales
-├── user.ts               # Tipos de usuario
-├── coaching.ts           # Tipos de coaching
-├── activity.ts           # Tipos de actividad
-├── toolAssignment.ts     # Tipos de asignación de herramientas
-├── disc.ts               # Tipos DISC
-├── resilience.ts         # Tipos resiliencia
-├── belief.ts             # Tipos creencias
-├── career.ts             # Tipos carrera
-├── habit.ts              # Tipos hábitos
-└── values.ts             # Tipos valores
-```
-
----
-
-### 7. Testing
-
-**Framework:** Playwright
-
-**Tests UAT implementados:**
-```
-tests/uat/
-├── accessibility.spec.ts           # Tests de accesibilidad
-├── coach-assign-tool.spec.ts       # Asignación de herramientas
-├── coach-invite-coachee.spec.ts    # Invitación de coachees
-├── coach-onboarding.spec.ts        # Onboarding de coach
-├── coachee-complete-tool.spec.ts   # Completar herramienta
-└── icf-simulator.spec.ts           # Simulador ICF
-```
-
-**Comandos:**
-```bash
-npm run test:uat      # Tests UAT
-npm run test:e2e      # Tests E2E
-npm run test:all      # Todos los tests
-```
-
----
-
-## 🔄 En Progreso
-
-| Funcionalidad | Progreso | Prioridad |
-|---------------|----------|-----------|
-| Backend en Cloud Run | 0% | Alta |
-| Infraestructura Terraform | 0% | Media |
-| CI/CD completo | 50% | Media |
-| Marketing Site | 0% | Baja |
-
----
-
-## ❌ Pendientes
-
-### Infraestructura
-- [ ] Backend desplegado en Cloud Run
-- [ ] Terraform para infraestructura completa
-- [ ] Cloud SQL o Firestore optimizado
-- [ ] Cloud CDN configurado
-- [ ] Secret Manager para credenciales
-- [ ] Cloud Logging y Monitoring
-
-### Features Faltantes
-- [ ] Sistema de pagos (Stripe)
-- [ ] Notificaciones (email, push)
-- [ ] Video calls (integración)
-- [ ] Chat en tiempo real
-- [ ] Calendario integrado
-- [ ] Reportes y analytics avanzados
-- [ ] Multi-idioma (i18n)
-- [ ] Mobile apps (React Native)
-
-### Marketing Site (6 páginas)
-- [ ] Home
-- [ ] Features
-- [ ] Pricing
-- [ ] About
-- [ ] Contact
-- [ ] Blog
-
-### Herramientas Adicionales
-- [ ] Ikigai
-- [ ] Competency Matrix
-- [ ] 360° Feedback
-- [ ] Energy Audit
-- [ ] Time Management Matrix
-
----
-
-## 📦 Estructura del Proyecto
 ```
 achieving-coach/
-├── frontend/                    # Next.js App
+├── frontend/                    # Next.js 14 App
 │   ├── src/
 │   │   ├── app/                # App Router pages
 │   │   │   ├── (auth)/         # Auth pages
-│   │   │   ├── (dashboard)/    # Dashboard pages
-│   │   │   └── layout.tsx      # Root layout
+│   │   │   ├── (dashboard)/    # Dashboard (coach + coachee)
+│   │   │   ├── admin/          # Admin panel
+│   │   │   ├── api/            # API routes (Stripe, AI, Analytics)
+│   │   │   ├── blog/           # Blog publico
+│   │   │   ├── coaches/        # Directorio de coaches
+│   │   │   ├── pricing/        # Pagina de precios
+│   │   │   └── ...             # Otras paginas publicas
 │   │   ├── components/         # React components
-│   │   ├── contexts/           # React contexts
-│   │   ├── lib/                # Services & utils
+│   │   │   ├── crm/            # Componentes CRM
+│   │   │   ├── directory/      # Componentes directorio
+│   │   │   ├── seo/            # Componentes SEO
+│   │   │   └── ...
+│   │   ├── contexts/           # React contexts (Auth)
+│   │   ├── hooks/              # Custom hooks (useFeatureAccess)
+│   │   ├── lib/                # Firebase, Stripe, services
+│   │   ├── services/           # Business logic services
 │   │   ├── types/              # TypeScript types
-│   │   └── data/               # Data files
-│   ├── public/                 # Static files
+│   │   ├── config/             # Analytics config
+│   │   └── data/               # Static data
+│   ├── tests/                  # Playwright + Jest tests
 │   ├── Dockerfile              # Docker config
 │   └── package.json
 │
@@ -440,197 +450,102 @@ achieving-coach/
 │   │   ├── models/            # Data models
 │   │   ├── routes/            # API routes
 │   │   ├── services/          # Business logic
-│   │   ├── app.ts             # Express app
-│   │   └── server.ts          # Server entry
+│   │   └── types/             # TypeScript types
 │   ├── Dockerfile             # Docker config
 │   └── package.json
 │
-├── tests/                      # Playwright tests
-│   ├── uat/                   # User acceptance tests
-│   └── e2e/                   # End-to-end tests
-│
-├── infrastructure/             # (Pendiente)
-│   └── terraform/
-│
-├── cloudbuild.yaml            # Cloud Build config
+├── .github/workflows/          # CI/CD pipelines
+├── cloudbuild.yaml            # Cloud Build (prod)
+├── cloudbuild-staging.yaml    # Cloud Build (staging)
 ├── firebase.json              # Firebase config
-└── firestore.rules            # Firestore security rules
+├── firestore.rules            # Security rules
+├── firestore.indexes.json     # Firestore indexes
+└── package.json               # Root monorepo
 ```
 
 ---
 
-## 🔐 Colecciones Firestore
+## Metricas de Progreso
 
-| Colección | Descripción | Campos principales |
-|-----------|-------------|-------------------|
-| `users` | Usuarios (coaches y coachees) | uid, email, role, displayName |
-| `goals` | Objetivos de coachees | userId, coachId, title, status |
-| `growSessions` | Sesiones GROW | userId, coachId, goal, reality, options, will |
-| `discResults` | Resultados DISC | userId, profile, responses, completedAt |
-| `toolAssignments` | Herramientas asignadas | coachId, coacheeId, toolId, status |
-| `coaching_programs` | Programas de coaching | coachId, name, description, duration |
+### Por Modulo
 
----
-
-## 🚀 Comandos Útiles
-
-### Desarrollo Local
-```bash
-# Frontend
-cd frontend
-npm install
-npm run dev              # http://localhost:3000
-
-# Backend
-cd backend
-npm install
-npm run dev              # http://localhost:8080
-
-# Tests
-npm run test:uat
-npm run test:all
-```
-
-### Build
-```bash
-# Frontend
-cd frontend
-npm run build
-npm start
-
-# Backend
-cd backend
-npm run build
-npm start
-```
-
-### Deployment
-```bash
-# Push a GitHub (trigger automático Cloud Build)
-git add -A
-git commit -m "Feature: descripción"
-git push origin main
-
-# Manual Cloud Build
-gcloud builds submit --config cloudbuild.yaml
-
-# Ver builds
-gcloud builds list --limit=5
-
-# Ver logs de un build
-gcloud builds log [BUILD_ID]
-```
-
-### Cloud Run
-```bash
-# Ver servicios
-gcloud run services list
-
-# Ver logs
-gcloud logging read "resource.type=cloud_run_revision AND resource.labels.service_name=achieving-coach-frontend" --limit 50 --format json
-
-# Actualizar variables de entorno
-gcloud run services update achieving-coach-frontend \
-  --set-env-vars="KEY=value"
-```
-
----
-
-## 📊 Métricas de Progreso
-
-### Por Módulo
-
-| Módulo | Progreso | Status |
+| Modulo | Progreso | Status |
 |--------|----------|--------|
-| Autenticación | 100% | ✅ Completo |
-| Coach Dashboard | 95% | ✅ Completo |
-| Coachee Dashboard | 90% | ✅ Completo |
-| Herramientas de Coaching | 70% | 🔄 11/16 tools |
-| Backend APIs | 60% | 🔄 En progreso |
-| Testing | 40% | 🔄 UAT básicos |
-| Infraestructura | 30% | ⚠️ Cloud Run manual |
-| Marketing Site | 0% | ❌ Pendiente |
+| Autenticacion | 100% | Completo |
+| Marketing Site | 100% | Completo |
+| Coach Dashboard | 95% | Completo |
+| Coachee Dashboard | 90% | Completo |
+| Herramientas de Coaching | 80% | 12/16 tools |
+| Suscripciones/Pagos (Stripe) | 90% | Completo |
+| CRM | 85% | Completo |
+| Directorio de Coaches | 85% | Completo |
+| Mensajeria | 90% | Completo |
+| Sesiones | 95% | Completo |
+| Blog + SEO | 90% | Completo |
+| Admin Panel | 85% | Completo |
+| Backend APIs | 60% | En progreso |
+| Testing | 50% | UAT + functional |
+| Infraestructura CI/CD | 80% | Completo |
 
 ### General
-- **Completitud total:** ~40%
-- **Frontend:** ~65%
+- **Completitud total:** ~70%
+- **Frontend:** ~85%
 - **Backend:** ~50%
-- **Infraestructura:** ~30%
-- **Testing:** ~40%
+- **Infraestructura:** ~80%
+- **Testing:** ~50%
 
 ---
 
-## 🔧 Decisiones Técnicas Clave
+## Pendientes
 
-### 1. Next.js App Router
-**Por qué:** SSR para SEO, mejor performance, React Server Components
+### Infraestructura
+- [ ] Backend desplegado en Cloud Run (Dockerfile listo)
+- [ ] Cloud CDN configurado
+- [ ] Cloud Logging y Monitoring avanzado
 
-### 2. Firebase Firestore
-**Por qué:** Tiempo real, escalable, fácil integración, sin gestión de infraestructura
+### Features Faltantes
+- [ ] Notificaciones push (Firebase Cloud Messaging)
+- [ ] Email transaccional (SendGrid/Mailgun)
+- [ ] Video calls integrados
+- [ ] Calendario integrado (Google Calendar sync)
+- [ ] Multi-idioma (i18n)
+- [ ] Mobile apps (React Native)
+- [ ] Booking publico funcional
+- [ ] Customer Success dashboards (types definidos, falta UI)
 
-### 3. Cloud Run
-**Por qué:** Serverless, auto-scaling, pay-per-use, fácil deployment
+### Herramientas Adicionales
+- [ ] Ikigai
+- [ ] Competency Matrix
+- [ ] 360 Feedback
+- [ ] Energy Audit
+- [ ] Time Management Matrix
 
-### 4. TypeScript
-**Por qué:** Type safety, mejor DX, menos bugs en producción
-
-### 5. Tailwind CSS
-**Por qué:** Desarrollo rápido, consistencia, fácil customización
-
----
-
-## 🐛 Problemas Conocidos
-
-1. **Backend no está en Cloud Run** - Actualmente solo local
-2. **No hay sistema de pagos** - Falta integración Stripe
-3. **Autenticación básica** - Falta social login (Google, Microsoft)
-4. **Sin notificaciones** - Email y push pendientes
-5. **Sin analytics** - Falta Google Analytics / Mixpanel
-
----
-
-## 🎯 Próximos Pasos Sugeridos
-
-### Corto Plazo (1-2 semanas)
-1. ✅ Implementar DISC Assessment (COMPLETADO)
-2. Deployar Backend en Cloud Run
-3. Configurar dominio personalizado
-4. Implementar sistema de pagos básico
-
-### Mediano Plazo (1 mes)
-1. Completar herramientas faltantes
-2. Implementar notificaciones por email
-3. Marketing site básico
-4. Tests E2E completos
-
-### Largo Plazo (3 meses)
-1. Video calls integrados
-2. Chat en tiempo real
-3. Mobile apps
-4. Multi-idioma
+### Testing
+- [ ] Coverage > 80%
+- [ ] E2E tests completos para CRM
+- [ ] E2E tests para Stripe flows
+- [ ] E2E tests para directorio
 
 ---
 
-## 📞 Información del Proyecto
+## Problemas Conocidos (Corregidos)
 
-**Proyecto GCP:** `triple-shift-478220-b2`  
-**Región:** us-central1  
-**Frontend URL:** https://achieving-coach-frontend-977373202400.us-central1.run.app  
+1. ~~No se podia iniciar sesion desde perfil de cliente~~ - CORREGIDO (boton "Nueva Sesion" agregado)
+2. ~~No se podian asignar herramientas desde perfil de cliente~~ - CORREGIDO (boton "Asignar Herramientas" agregado)
+3. ~~Mensajeria no mostraba historial en primera vista~~ - CORREGIDO (auto-seleccion de primera conversacion)
+
+---
+
+## Informacion del Proyecto
+
+**Proyecto GCP:** `triple-shift-478220-b2`
+**Region:** us-central1
+**Frontend URL:** https://achieving-coach-frontend-977373202400.us-central1.run.app
 **GitHub:** https://github.com/eduardoandreslobos-sys/achieving-coach
-
-**CI/CD:** Automático con Cloud Build al hacer push a `main`
-
----
-
-## 📝 Notas Importantes
-
-1. **Variables de entorno:** Frontend usa `.env.local` con credenciales Firebase
-2. **Firestore rules:** Actualizadas para soportar `coaching_programs`
-3. **Build time:** ~5-7 minutos en Cloud Build
-4. **Preguntas DISC:** Incluidas en el código como fallback si Firestore vacío
+**CI/CD:** GitHub Actions + Cloud Build
 
 ---
 
-**Última actualización:** 25 de Noviembre, 2025  
-**Versión:** 0.4.0  
+**Ultima actualizacion:** 23 de Enero, 2026
+**Version:** 0.8.0
 **Estado:** En desarrollo activo

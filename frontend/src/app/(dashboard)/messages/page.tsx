@@ -180,6 +180,13 @@ export default function MessagesPage() {
     return () => unsubscribe();
   }, [selectedConversation?.id, user?.uid]);
 
+  // Auto-select first conversation when conversations load and none is selected
+  useEffect(() => {
+    if (conversations.length > 0 && !selectedConversation) {
+      setSelectedConversation(conversations[0]);
+    }
+  }, [conversations]);
+
   // Auto scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
