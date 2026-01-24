@@ -6,3 +6,10 @@ npm-debug.log
 README.md
 .next
 out
+tests
+test-results
+test-results.json
+test-results.xml
+playwright-report
+coverage
+*.spec.ts

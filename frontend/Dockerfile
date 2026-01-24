@@ -26,7 +26,8 @@ RUN npm install
 # Copy source code
 COPY . .
 
-# Build
+# Build with increased memory for Next.js
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN npm run build
 
 # Production image
