@@ -1096,17 +1096,19 @@ function CalendarTab({
   );
 }
 
-function SessionsTab({ 
-  program, 
+function SessionsTab({
+  program,
   sessions,
   isObserved,
   onRefresh
-}: { 
+}: {
   program: CoachingProgram;
   sessions: Session[];
   isObserved?: boolean;
   onRefresh: () => void;
 }) {
+  const router = useRouter();
+
   return (
     <div className="space-y-6">
       <div>
@@ -1114,9 +1116,9 @@ function SessionsTab({
           {isObserved ? 'Sesión de Reunión Observada' : 'Sesiones de Coaching'}
         </h2>
         <p className="text-[var(--fg-muted)] text-sm">
-          {isObserved 
+          {isObserved
             ? 'Sesión especial de observación en contexto de trabajo real.'
-            : 'Gestione las sesiones del proceso de coaching.'}
+            : 'Gestione las sesiones del proceso de coaching. Haga clic en una sesión para ver detalles y completar el acuerdo.'}
         </p>
       </div>
 
@@ -1124,11 +1126,16 @@ function SessionsTab({
         <div className="text-center py-8 text-[var(--fg-muted)]">
           <Calendar className="w-12 h-12 mx-auto mb-3 opacity-50" />
           <p>No hay sesiones programadas</p>
+          <p className="text-sm mt-2">Complete la calendarización en la fase 4 para crear las sesiones.</p>
         </div>
       ) : (
         <div className="space-y-4">
           {sessions.map((session) => (
-            <div key={session.id} className="bg-white border rounded-xl p-4 hover:border-primary-300 transition-colors">
+            <div
+              key={session.id}
+              onClick={() => router.push(`/sessions/${session.id}`)}
+              className="bg-white border rounded-xl p-4 hover:border-primary-500 hover:shadow-md transition-all cursor-pointer"
+            >
               <div className="flex items-start justify-between">
                 <div>
                   <h3 className="font-semibold text-[var(--fg-primary)]">{session.title}</h3>
@@ -1139,18 +1146,21 @@ function SessionsTab({
                     <p className="text-sm text-[var(--fg-muted)]">{session.location}</p>
                   )}
                 </div>
-                <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                  session.status === 'completed' ? 'bg-green-100 text-green-800' :
-                  session.status === 'in-progress' ? 'bg-emerald-100 text-blue-800' :
-                  session.status === 'cancelled' ? 'bg-red-100 text-red-800' :
-                  'bg-[var(--bg-secondary)] text-[var(--fg-secondary)]'
-                }`}>
-                  {session.status === 'completed' ? 'Completada' :
-                   session.status === 'in-progress' ? 'En Progreso' :
-                   session.status === 'cancelled' ? 'Cancelada' : 'Programada'}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                    session.status === 'completed' ? 'bg-green-100 text-green-800' :
+                    session.status === 'in-progress' ? 'bg-blue-100 text-blue-800' :
+                    session.status === 'cancelled' ? 'bg-red-100 text-red-800' :
+                    'bg-[var(--bg-secondary)] text-[var(--fg-secondary)]'
+                  }`}>
+                    {session.status === 'completed' ? 'Completada' :
+                     session.status === 'in-progress' ? 'En Progreso' :
+                     session.status === 'cancelled' ? 'Cancelada' : 'Programada'}
+                  </span>
+                  <ChevronRight className="w-5 h-5 text-[var(--fg-muted)]" />
+                </div>
               </div>
-              
+
               {/* Session Report Status */}
               <div className="mt-3 pt-3 border-t flex items-center gap-4 text-sm">
                 <span className={`flex items-center gap-1 ${session.sessionAgreement ? 'text-green-600' : 'text-[var(--fg-muted)]'}`}>
