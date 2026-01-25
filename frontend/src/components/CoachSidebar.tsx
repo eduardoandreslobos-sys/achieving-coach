@@ -32,6 +32,7 @@ import Image from 'next/image';
 const mainNavigation = [
   { name: 'Dashboard', href: '/coach', icon: LayoutDashboard },
   { name: 'Clientes', href: '/coach/clients', icon: Users },
+  { name: 'Programas', href: '/coach/programs', icon: Target },
   { name: 'Herramientas', href: '/coach/tools', icon: Wrench },
   { name: 'Invitar Coachees', href: '/coach/invite', icon: UserPlus },
   { name: 'Simulador ICF', href: '/coach/icf-simulator', icon: Award },

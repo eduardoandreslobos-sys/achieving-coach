@@ -286,7 +286,7 @@ export default function CoachToolsPage() {
                   <h3 className="text-[var(--fg-primary)] font-semibold mb-1">{tool.name}</h3>
                   <p className="text-[var(--fg-muted)] text-sm line-clamp-2 mb-4">{tool.description}</p>
 
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-1 text-[var(--fg-muted)] text-sm">
                       <Clock className="w-4 h-4" />
                       {tool.time} min
@@ -299,6 +299,13 @@ export default function CoachToolsPage() {
                       <ArrowRight className="w-4 h-4" />
                     </Link>
                   </div>
+                  <button
+                    onClick={() => setAssignTool(tool)}
+                    className="w-full py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Users className="w-4 h-4" />
+                    Asignar a Cliente
+                  </button>
                 </div>
               </div>
             );
