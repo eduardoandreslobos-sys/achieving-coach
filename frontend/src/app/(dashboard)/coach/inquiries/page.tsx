@@ -88,9 +88,12 @@ function InquiriesContent() {
       const profile = await getCoachProfileByUserId(user.uid);
       if (profile) {
         setCoachId(profile.id);
+      } else {
+        setLoading(false);
       }
     } catch (error) {
       console.error('Error loading coach profile:', error);
+      setLoading(false);
     }
   };
 
