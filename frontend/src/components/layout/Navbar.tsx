@@ -11,6 +11,7 @@ export function Navbar() {
   const isActive = (path: string) => pathname === path;
 
   const navLinks = [
+    { href: '/coaches', label: 'Encontrar Coach' },
     { href: '/features', label: 'Características' },
     { href: '/pricing', label: 'Precios' },
     { href: '/about', label: 'Nosotros' },

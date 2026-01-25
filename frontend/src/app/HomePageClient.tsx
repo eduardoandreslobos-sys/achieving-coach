@@ -53,7 +53,7 @@ export default function HomePageClient() {
               Eleva tu práctica con insights impulsados por IA, gestión fluida y herramientas integrales diseñadas para el futuro del coaching de alto impacto.
             </p>
 
-            <div className="flex flex-wrap gap-4 justify-center mb-12">
+            <div className="flex flex-wrap gap-4 justify-center mb-6">
               <Link href="/sign-up" className="px-8 py-3.5 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2">
                 Iniciar Prueba Gratuita
                 <ArrowRight className="w-4 h-4" />
@@ -65,6 +65,13 @@ export default function HomePageClient() {
                 <Play className="w-4 h-4" />
                 Ver Demo
               </button>
+            </div>
+
+            <div className="flex justify-center mb-12">
+              <Link href="/coaches" className="text-[var(--fg-muted)] hover:text-violet-400 transition-colors flex items-center gap-2 text-sm">
+                <Users className="w-4 h-4" />
+                ¿Buscas un coach? Explora nuestro directorio
+              </Link>
             </div>
           </div>
         </div>
@@ -127,13 +134,16 @@ export default function HomePageClient() {
             </div>
 
             {/* Card 6 - Directory */}
-            <div className="bento-card">
+            <Link href="/coaches" className="bento-card hover:border-violet-500/50 transition-colors">
               <div className="w-10 h-10 bg-violet-500/10 rounded-lg flex items-center justify-center mb-4">
                 <Users className="w-5 h-5 text-violet-400" />
               </div>
               <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Directorio de Coaches</h3>
               <p className="text-[var(--fg-muted)] text-sm">Perfil público profesional para atraer nuevos clientes y recibir consultas.</p>
-            </div>
+              <span className="inline-flex items-center gap-1 mt-3 text-violet-400 text-sm font-medium">
+                Explorar directorio <ArrowRight className="w-4 h-4" />
+              </span>
+            </Link>
           </div>
         </div>
       </section>
