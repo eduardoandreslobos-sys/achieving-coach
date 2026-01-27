@@ -77,6 +77,23 @@ const DRAFT_POSTS = [
   },
 ];
 
+// Helper function to notify IndexNow when a post is published
+async function notifyIndexNow(slug: string) {
+  try {
+    const url = `https://achievingcoach.com/blog/${slug}`;
+    const response = await fetch('/api/indexnow', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ urls: [url] }),
+    });
+    if (response.ok) {
+      console.log(`IndexNow notified for: ${url}`);
+    }
+  } catch (error) {
+    console.error('IndexNow notification failed:', error);
+  }
+}
+
 export default function AdminBlogPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -124,6 +141,10 @@ export default function AdminBlogPage() {
               updatedAt: new Date(),
             });
             console.log(`Auto-published: ${data.title}`);
+            // Notify IndexNow for instant indexing
+            if (data.slug) {
+              notifyIndexNow(data.slug);
+            }
           }
         }
       }
@@ -225,7 +246,12 @@ export default function AdminBlogPage() {
 
   const togglePublish = async (post: BlogPost) => {
     try {
-      await updateDoc(doc(db, 'blog_posts', post.id), { published: !post.published });
+      const newPublishedState = !post.published;
+      await updateDoc(doc(db, 'blog_posts', post.id), { published: newPublishedState });
+      // Notify IndexNow when publishing (not when unpublishing)
+      if (newPublishedState && post.slug) {
+        notifyIndexNow(post.slug);
+      }
       loadPosts();
     } catch (error) {
       console.error('Error toggling publish:', error);
@@ -531,6 +557,12 @@ function BlogEditor({ post, onSave, onCancel }: { post: BlogPost | null; onSave:
       } else {
         await addDoc(collection(db, 'blog_posts'), { ...postData, createdAt: new Date() });
       }
+
+      // Notify IndexNow when publishing immediately
+      if (formData.publishMode === 'now' && postData.slug) {
+        notifyIndexNow(postData.slug);
+      }
+
       onSave();
     } catch (error) {
       console.error('Error saving post:', error);

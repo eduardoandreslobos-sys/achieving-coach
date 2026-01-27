@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     siteName: 'AchievingCoach',
     images: [
       {
-        url: '/og-home.png',
+        url: '/opengraph-image',
         width: 1200,
         height: 630,
         alt: 'AchievingCoach - Dashboard de Plataforma Profesional de Coaching',
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'AchievingCoach - Plataforma Profesional de Coaching Ejecutivo',
     description: 'Transforma tu práctica de coaching con herramientas profesionales y gestión de clientes.',
-    images: ['/twitter-home.png'],
+    images: ['/opengraph-image'],
   },
   alternates: {
     canonical: 'https://achievingcoach.com',

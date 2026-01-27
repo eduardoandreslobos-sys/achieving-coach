@@ -20,6 +20,21 @@ export const analyticsConfig = {
     verificationCode: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
   },
 
+  // Bing Webmaster Tools
+  bingWebmaster: {
+    verificationCode: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION || '',
+  },
+
+  // Yandex Webmaster
+  yandexWebmaster: {
+    verificationCode: process.env.NEXT_PUBLIC_YANDEX_SITE_VERIFICATION || '',
+  },
+
+  // IndexNow API Key (for Bing, Yandex, Seznam, Naver instant indexing)
+  indexNow: {
+    apiKey: process.env.INDEXNOW_API_KEY || '',
+  },
+
   // Hotjar - Heatmaps & Session Recording
   hotjar: {
     siteId: process.env.NEXT_PUBLIC_HOTJAR_ID || '',

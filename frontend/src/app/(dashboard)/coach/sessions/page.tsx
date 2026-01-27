@@ -33,7 +33,10 @@ import {
   AlertCircle,
   ChevronLeft,
   ChevronRight,
-  X
+  X,
+  Play,
+  ExternalLink,
+  Eye
 } from 'lucide-react';
 import Link from 'next/link';
 import { toast, Toaster } from 'sonner';
@@ -45,13 +48,14 @@ interface Session {
   coacheeEmail: string;
   scheduledDate: Date;
   duration: number;
-  status: 'scheduled' | 'completed' | 'cancelled' | 'no-show';
+  status: 'scheduled' | 'in-progress' | 'completed' | 'cancelled' | 'no-show';
   meetingLink?: string;
   notes?: string;
   preSessionNotes?: string;
   postSessionNotes?: string;
   programId?: string;
   programName?: string;
+  startedAt?: Date;
 }
 
 interface Coachee {
@@ -269,6 +273,26 @@ export default function CoachSessionsPage() {
     }
   };
 
+  const handleStartSession = async (session: Session) => {
+    try {
+      await updateDoc(doc(db, 'sessions', session.id), {
+        status: 'in-progress',
+        startedAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+      toast.success('Sesión iniciada');
+      loadData();
+
+      // Open meeting link if available
+      if (session.meetingLink) {
+        window.open(session.meetingLink, '_blank');
+      }
+    } catch (error) {
+      console.error('Error starting session:', error);
+      toast.error('Error al iniciar sesión');
+    }
+  };
+
   const filteredSessions = sessions.filter(session => {
     const now = new Date();
     const matchesSearch =
@@ -303,9 +327,11 @@ export default function CoachSessionsPage() {
   const getStatusBadge = (status: Session['status']) => {
     switch (status) {
       case 'scheduled':
-        return <span className="px-2 py-1 text-xs rounded-full bg-emerald-500/20 text-[var(--accent-primary)]">Programada</span>;
+        return <span className="px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-400">Programada</span>;
+      case 'in-progress':
+        return <span className="px-2 py-1 text-xs rounded-full bg-emerald-500/20 text-[var(--accent-primary)] animate-pulse">En curso</span>;
       case 'completed':
-        return <span className="px-2 py-1 text-xs rounded-full bg-emerald-500/20 text-[var(--accent-primary)]">Completada</span>;
+        return <span className="px-2 py-1 text-xs rounded-full bg-violet-500/20 text-violet-400">Completada</span>;
       case 'cancelled':
         return <span className="px-2 py-1 text-xs rounded-full bg-red-500/20 text-red-400">Cancelada</span>;
       case 'no-show':
@@ -482,6 +508,35 @@ export default function CoachSessionsPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
+                        {/* Start Session Button - only for scheduled sessions */}
+                        {session.status === 'scheduled' && (
+                          <button
+                            onClick={() => handleStartSession(session)}
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white text-sm rounded-lg hover:bg-emerald-700 transition-colors"
+                            title="Iniciar sesión"
+                          >
+                            <Play className="w-3.5 h-3.5" />
+                            Iniciar
+                          </button>
+                        )}
+                        {/* Continue Session Button - for in-progress sessions */}
+                        {session.status === 'in-progress' && (
+                          <Link
+                            href={`/coach/sessions/${session.id}`}
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white text-sm rounded-lg hover:bg-emerald-700 transition-colors"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5" />
+                            Continuar
+                          </Link>
+                        )}
+                        {/* View Session Detail */}
+                        <Link
+                          href={`/coach/sessions/${session.id}`}
+                          className="p-2 text-[var(--fg-muted)] hover:text-[var(--fg-primary)] hover:bg-[var(--bg-tertiary)] rounded-lg transition-colors"
+                          title="Ver detalle"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </Link>
                         {session.meetingLink && (
                           <a
                             href={session.meetingLink}
@@ -665,6 +720,7 @@ export default function CoachSessionsPage() {
                   className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] focus:outline-none focus:border-emerald-500"
                 >
                   <option value="scheduled">Programada</option>
+                  <option value="in-progress">En curso</option>
                   <option value="completed">Completada</option>
                   <option value="cancelled">Cancelada</option>
                   <option value="no-show">No asistió</option>

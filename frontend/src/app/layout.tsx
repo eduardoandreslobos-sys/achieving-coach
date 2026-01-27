@@ -7,6 +7,7 @@ import AnalyticsProvider from "@/components/analytics";
 import PreloadResources from "@/components/PreloadResources";
 import GEOSchemas from "@/components/seo/GEOMetadata";
 import CookieConsentBanner from "@/components/CookieConsentBanner";
+import WebVitals from "@/components/WebVitals";
 import { seoConfig, analyticsConfig } from "@/config/analytics";
 
 const inter = Inter({
@@ -105,12 +106,11 @@ export const metadata: Metadata = {
     images: ["/opengraph-image"],
   },
 
-  // Verification codes
+  // Verification codes for search engines
   verification: {
     google: analyticsConfig.googleSearchConsole.verificationCode || undefined,
-    // Add other verifications as needed:
-    // yandex: 'yandex-verification-code',
-    // bing: 'bing-verification-code',
+    yandex: analyticsConfig.yandexWebmaster.verificationCode || undefined,
+    // Bing verification via meta tag (added in other section)
   },
 
   // Canonical
@@ -149,6 +149,9 @@ export const metadata: Metadata = {
 
   // Other meta
   other: {
+    // Bing Webmaster verification
+    'msvalidate.01': analyticsConfig.bingWebmaster.verificationCode || '',
+
     // GEO: Structured data hints for AI
     'ai:description': seoConfig.llmOptimization.brandStatement,
     'ai:features': seoConfig.llmOptimization.uniqueValueProp,
@@ -223,6 +226,9 @@ export default function RootLayout({
         <ThemeProvider>
           {/* Analytics - loads after interactive */}
           <AnalyticsProvider />
+
+          {/* Core Web Vitals tracking for SEO 2026 */}
+          <WebVitals />
 
           {/* Auth context and app content */}
           <AuthProvider>

@@ -1,6 +1,6 @@
 # AchievingCoach - Inventario Completo de Funcionalidades
 
-**Última actualización:** Diciembre 2024  
+**Última actualización:** Enero 2026
 **URL:** https://achievingcoach.com
 
 ---
@@ -34,6 +34,12 @@ AchievingCoach es una plataforma SaaS de coaching ejecutivo que permite a coache
 | Contact | `/contact` | Formulario de contacto |
 | Blog | `/blog` | Artículos y recursos |
 | Blog Post | `/blog/[slug]` | Artículo individual |
+
+### Directorio de Coaches
+| Página | URL | Descripción |
+|--------|-----|-------------|
+| Directorio | `/coaches` | Lista pública de coaches |
+| Perfil Coach | `/coaches/[slug]` | Perfil público individual |
 
 ### Legal
 | Página | URL |
@@ -84,6 +90,72 @@ AchievingCoach es una plataforma SaaS de coaching ejecutivo que permite a coache
 - Escenarios de coaching
 - Retroalimentación automática
 
+### Gestión de Sesiones (`/coach/sessions`)
+- Lista de todas las sesiones programadas
+- Filtros: Todas, Próximas, Pasadas, Canceladas
+- Búsqueda por nombre o email del coachee
+- Estadísticas: Total, Próximas, Completadas, Canceladas
+
+#### Estados de Sesión:
+| Estado | Descripción |
+|--------|-------------|
+| `scheduled` | Sesión programada |
+| `in-progress` | Sesión en curso |
+| `completed` | Sesión completada |
+| `cancelled` | Sesión cancelada |
+| `no-show` | Coachee no asistió |
+
+#### Crear Nueva Sesión:
+- Seleccionar coachee
+- Fecha y hora
+- Duración (30, 45, 60, 90, 120 min)
+- Link de reunión (Zoom, Meet, etc.)
+- Notas
+
+#### Acciones en Lista:
+- **Iniciar** - Cambia estado a "en curso" y abre link de reunión
+- **Continuar** - Para sesiones en curso, ir al detalle
+- **Ver detalle** - Página completa de la sesión
+- **Editar** - Modificar estado, link, notas
+- **Eliminar** - Borrar sesión
+
+### Detalle de Sesión (`/coach/sessions/[sessionId]`)
+Página completa para gestionar una sesión individual:
+
+#### Información:
+- Datos del coachee
+- Fecha y hora programada
+- Duración y link de reunión
+- Estado actual con timestamps
+
+#### Acciones:
+- **Iniciar Sesión** - Para sesiones programadas
+- **Unirse a Reunión** - Abrir link de videollamada
+- **Completar Sesión** - Marcar como terminada
+
+#### Pestañas de Contenido:
+
+**1. Resumen:**
+- Notas generales
+- Timestamps de inicio y fin
+- Indicadores de estado
+
+**2. Acuerdo de Sesión (Pre-sesión):**
+- Meta del Coachee
+- Objetivo de la Sesión
+- Indicadores de Éxito
+- Obstáculos Identificados
+- Recursos Disponibles
+- Plan de Acción
+- Compromiso
+
+**3. Reporte de Sesión (Post-sesión):**
+- Temas Discutidos
+- Insights / Descubrimientos
+- Acciones a Tomar
+- Seguimiento
+- Notas del Coach (privadas)
+
 ### Gestión de Herramientas (`/coach/tools`)
 - Ver todas las herramientas disponibles
 - Estadísticas de uso
@@ -93,6 +165,124 @@ AchievingCoach es una plataforma SaaS de coaching ejecutivo que permite a coache
 - Editar información personal
 - Foto de perfil
 - Credenciales y certificaciones
+
+### Booking (`/coach/bookings` & `/coach/booking`)
+
+#### Reservas (`/coach/bookings`):
+- Lista de reservaciones de clientes
+- Estado de cada reserva
+- Historial de citas
+
+#### Booking Público (`/coach/booking`):
+- Configuración de disponibilidad
+- Página pública de agendamiento
+- Integración con calendario
+
+---
+
+## 🌐 DIRECTORIO DE COACHES (Público)
+
+### Listado de Coaches (`/coaches`)
+- Directorio público de coaches publicados
+- Filtros por especialidad, ubicación, idioma, precio
+- Coaches destacados
+- Tarjetas con info resumida
+
+### Perfil Público del Coach (`/coaches/[slug]`)
+- Información completa del coach
+- Especialidades y certificaciones
+- Reviews de clientes
+- Videos introductorios
+- Enlaces a LinkedIn y sitio web
+- **Botón "Contactar"** - Abre formulario de inquietud
+
+### Formulario de Contacto (InquiryForm)
+Cuando un visitante hace clic en "Contactar":
+
+| Campo | Obligatorio |
+|-------|-------------|
+| Nombre | Sí |
+| Email | Sí |
+| Teléfono | No |
+| Áreas de interés | No |
+| ¿Cuándo te gustaría empezar? | No |
+| Medio de contacto preferido | No |
+| Mensaje | Sí |
+| Experiencia previa con coaching | No |
+
+---
+
+## 📊 CRM DEL COACH
+
+### Consultas del Directorio (`/coach/inquiries`)
+Cuando alguien contacta al coach desde el directorio público:
+
+#### Estados de Consulta:
+| Estado | Color | Descripción |
+|--------|-------|-------------|
+| `new` | Azul | Nueva, no leída |
+| `viewed` | Ámbar | Vista por el coach |
+| `responded` | Verde | Respondida |
+| `converted` | Púrpura | Convertida a Lead |
+| `declined` | Rojo | Rechazada |
+
+#### Acciones:
+- Ver detalles de la consulta
+- Responder (aceptar/rechazar)
+- **Convertir a Lead del CRM**
+
+### Dashboard CRM (`/coach/crm`)
+- Métricas generales del pipeline
+- Valor estimado del pipeline
+- Leads por etapa
+- Actividad reciente
+
+### Pipeline (`/coach/crm/pipeline`)
+- Vista Kanban de leads
+- Arrastrar y soltar entre etapas
+- Filtros por fuente, score, fecha
+
+### Leads (`/coach/crm/leads`)
+Lista completa de leads con:
+
+#### Información del Lead:
+- Nombre, email, teléfono
+- Empresa y cargo
+- Fuente (directory, referral, etc.)
+- Etapa en el pipeline
+- Score de engagement
+
+#### Etapas del Pipeline:
+| Etapa | Probabilidad |
+|-------|--------------|
+| Prospecting | 10% |
+| Qualification | 25% |
+| Proposal | 50% |
+| Negotiation | 75% |
+| Won | 100% |
+| Lost | 0% |
+
+#### Flujo Directorio → Lead:
+```
+Visitante contacta coach desde /coaches/[slug]
+        ↓
+Se crea Inquietud (coach_inquiries)
+        ↓
+Coach revisa en /coach/inquiries
+        ↓
+Coach hace clic "Convertir a Lead"
+        ↓
+Se crea Lead en CRM con source: "directory"
+        ↓
+Lead visible en /coach/crm/leads
+```
+
+### Configuración del Directorio (`/coach/directory-settings`)
+- Activar/desactivar perfil público
+- Configurar slug personalizado
+- Especialidades y precios
+- Fotos y videos
+- Testimonios
 
 ---
 
@@ -450,3 +640,6 @@ Si la IA falla, el sistema extrae datos manualmente de los reportes de sesión.
 6. **🔔 Notificaciones en Tiempo Real** - Actualizaciones automáticas
 7. **📱 100% Responsive** - Funciona en cualquier dispositivo
 8. **🔐 Seguridad Enterprise** - Firebase + GCP
+9. **🌐 Directorio Público de Coaches** - Marketplace para encontrar coaches
+10. **📊 CRM Integrado** - Pipeline de ventas con leads y conversiones
+11. **📅 Gestión de Sesiones** - Iniciar, documentar y completar sesiones con acuerdos y reportes
