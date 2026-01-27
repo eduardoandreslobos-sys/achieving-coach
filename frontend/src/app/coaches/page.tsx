@@ -5,6 +5,7 @@ import { Search, Filter, Users, Sparkles, ChevronRight } from 'lucide-react';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { CoachCard, CoachFilters, SortDropdown } from '@/components/directory';
+import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import {
   CoachPublicProfile,
   CoachFilters as CoachFiltersType,
@@ -91,8 +92,15 @@ export default function CoachesDirectoryPage() {
     <div className="min-h-screen bg-[var(--bg-primary)]">
       <Navbar />
 
+      {/* Breadcrumbs */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24">
+        <Breadcrumbs
+          items={[{ name: 'Directorio de Coaches', url: 'https://achievingcoach.com/coaches' }]}
+        />
+      </div>
+
       {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden">
+      <section className="relative py-12 overflow-hidden">
         {/* Background decoration */}
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/10 via-transparent to-emerald-800/10" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/5 rounded-full blur-3xl" />

@@ -27,6 +27,8 @@ import { InquiryForm } from '@/components/directory';
 import { CoachPublicProfile } from '@/types/directory';
 import { getPublicReviews } from '@/services/customer-success.service';
 import { CoachReview } from '@/types/customer-success';
+import Breadcrumbs from '@/components/seo/Breadcrumbs';
+import PersonSchema from '@/components/seo/PersonSchema';
 
 interface CoachProfileContentProps {
   coach: CoachPublicProfile;
@@ -83,19 +85,46 @@ export default function CoachProfileContent({ coach }: CoachProfileContentProps)
     }
   };
 
+  // Build Person Schema data
+  const coachUrl = `https://achievingcoach.com/coaches/${coach.slug}`;
+  const socialLinks: string[] = [];
+  if (coach.linkedInUrl) socialLinks.push(coach.linkedInUrl);
+  if (coach.websiteUrl) socialLinks.push(coach.websiteUrl);
+
   return (
     <div className="min-h-screen bg-[var(--bg-primary)]">
       <Navbar />
 
-      {/* Breadcrumb */}
+      {/* Person Schema for SEO - Critical for E-E-A-T */}
+      <PersonSchema
+        name={coach.displayName}
+        jobTitle={coach.headline || 'Coach Profesional'}
+        description={coach.shortBio || coach.headline}
+        image={coach.photoURL}
+        url={coachUrl}
+        sameAs={socialLinks}
+        knowsAbout={coach.specialties || []}
+        hasCredential={coach.certifications?.map(cert => ({
+          name: cert,
+          credentialCategory: 'Coaching Certification',
+          issuedBy: cert.includes('ICF') ? 'International Coaching Federation' : undefined,
+        })) || []}
+        areaServed={coach.location?.city ? [coach.location.city, coach.location.country || ''].filter(Boolean) : ['Online', 'Worldwide']}
+        priceRange={formatPrice() || undefined}
+        aggregateRating={coach.rating && coach.reviewCount ? {
+          ratingValue: coach.rating,
+          reviewCount: coach.reviewCount,
+        } : undefined}
+      />
+
+      {/* Breadcrumb with Schema */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <Link
-          href="/coaches"
-          className="inline-flex items-center gap-2 text-[var(--fg-muted)] hover:text-emerald-400 transition-colors"
-        >
-          <ChevronLeft className="w-4 h-4" />
-          <span>Volver al directorio</span>
-        </Link>
+        <Breadcrumbs
+          items={[
+            { name: 'Directorio de Coaches', url: 'https://achievingcoach.com/coaches' },
+            { name: coach.displayName, url: coachUrl },
+          ]}
+        />
       </div>
 
       {/* Hero Section */}

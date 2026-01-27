@@ -51,6 +51,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
+      url: `${baseUrl}/faq`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/book`,
       lastModified: currentDate,
       changeFrequency: 'weekly',
@@ -101,7 +107,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const postsSnapshot = await getDocs(collection(db, 'blog_posts'));
     blogPosts = postsSnapshot.docs
-      .filter(doc => doc.data().status === 'published')
+      .filter(doc => doc.data().published === true)
       .map(doc => {
         const data = doc.data();
         const updatedAt = data.updatedAt?.toDate?.() || data.createdAt?.toDate?.() || new Date();

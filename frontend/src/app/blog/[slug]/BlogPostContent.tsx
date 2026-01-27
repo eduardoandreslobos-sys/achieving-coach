@@ -6,7 +6,8 @@ import { Target, ArrowLeft, Calendar, Clock, User } from 'lucide-react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import DOMPurify from 'isomorphic-dompurify';
 import { db } from '@/lib/firebase';
-import { ArticleSchema, BreadcrumbSchema } from '@/components/SchemaOrg';
+import { ArticleSchema } from '@/components/SchemaOrg';
+import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import type { BlogPost } from '@/types/blog';
 
 interface Props {
@@ -90,14 +91,6 @@ export default function BlogPostContent({ slug }: Props) {
         authorName={post.author?.name || 'AchievingCoach Team'}
       />
       
-      {/* Breadcrumb Schema */}
-      <BreadcrumbSchema
-        items={[
-          { name: 'Home', url: 'https://achievingcoach.com' },
-          { name: 'Blog', url: 'https://achievingcoach.com/blog' },
-          { name: post.title, url: `https://achievingcoach.com/blog/${slug}` },
-        ]}
-      />
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-200 z-50">
@@ -125,14 +118,14 @@ export default function BlogPostContent({ slug }: Props) {
       {/* Article */}
       <article className="pt-24 pb-16">
         <div className="max-w-3xl mx-auto px-6">
-          {/* Back link */}
-          <Link 
-            href="/blog" 
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-primary-600 mb-8"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Blog
-          </Link>
+          {/* Breadcrumbs with Schema */}
+          <Breadcrumbs
+            items={[
+              { name: 'Blog', url: 'https://achievingcoach.com/blog' },
+              { name: post.title, url: `https://achievingcoach.com/blog/${slug}` },
+            ]}
+            className="mb-8"
+          />
 
           {/* Header */}
           <header className="mb-8">

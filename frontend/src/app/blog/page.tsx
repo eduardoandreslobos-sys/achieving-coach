@@ -8,6 +8,7 @@ import { collection, query, where, orderBy, getDocs, limit as firestoreLimit } f
 import { db, isFirebaseAvailable } from '@/lib/firebase';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+import Breadcrumbs from '@/components/seo/Breadcrumbs';
 import type { BlogPost } from '@/types/blog';
 
 const categories = [
@@ -120,6 +121,10 @@ export default function BlogPage() {
       {/* Hero */}
       <section className="pt-32 pb-12 px-6">
         <div className="max-w-7xl mx-auto">
+          <Breadcrumbs
+            items={[{ name: 'Blog', url: 'https://achievingcoach.com/blog' }]}
+            className="mb-8"
+          />
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-12">
             <div>
               <h1 className="text-4xl lg:text-5xl font-bold mb-4">Blog</h1>
