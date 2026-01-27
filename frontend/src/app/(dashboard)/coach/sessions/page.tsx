@@ -337,7 +337,8 @@ export default function CoachSessionsPage() {
       case 'no-show':
         return <span className="px-2 py-1 text-xs rounded-full bg-amber-500/20 text-amber-400">No asistió</span>;
       default:
-        return null;
+        // For sessions without status, show as "Pendiente" (ready to start)
+        return <span className="px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-400">Pendiente</span>;
     }
   };
 
@@ -508,8 +509,8 @@ export default function CoachSessionsPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        {/* Start Session Button - only for scheduled sessions */}
-                        {session.status === 'scheduled' && (
+                        {/* Start Session Button - show for any session that can be started */}
+                        {(!session.status || session.status === 'scheduled') && (
                           <button
                             onClick={() => handleStartSession(session)}
                             className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white text-sm rounded-lg hover:bg-emerald-700 transition-colors"
