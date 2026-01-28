@@ -32,6 +32,7 @@ AchievingCoach es una plataforma SaaS de coaching ejecutivo que permite a coache
 | Organizations | `/organizations` | Soluciones para empresas |
 | About | `/about` | Acerca de AchievingCoach |
 | Contact | `/contact` | Formulario de contacto |
+| FAQ | `/faq` | Preguntas frecuentes (18 FAQs con Schema) |
 | Blog | `/blog` | Artículos y recursos |
 | Blog Post | `/blog/[slug]` | Artículo individual |
 
@@ -528,13 +529,19 @@ Si la IA falla, el sistema extrae datos manualmente de los reportes de sesión.
   - Sesiones
   - Páginas vistas
   - Fuentes de tráfico
-  
+
 - **Google Search Console:**
   - Keywords
   - Clicks
   - Impresiones
   - CTR
   - Posiciones
+
+- **Bing Webmaster Tools:**
+  - Keywords de Bing
+  - Páginas indexadas
+  - Estado de rastreo
+  - Errores de crawl
 
 - **Auditoría Técnica:**
   - Score SEO (0-100)
@@ -583,6 +590,108 @@ Si la IA falla, el sistema extrae datos manualmente de los reportes de sesión.
 | `/api/analytics` | GET | Métricas de Analytics |
 | `/api/goals` | GET/POST | Gestión de objetivos |
 | `/api/goals/[id]` | GET/PUT/DELETE | Objetivo específico |
+| `/api/bing-webmaster` | GET/POST | Datos de Bing Webmaster Tools |
+| `/api/indexnow` | POST | Notificar URLs a IndexNow |
+| `/api/search-console` | GET | Datos de Google Search Console |
+
+---
+
+## 🔍 SEO / GEO 2026
+
+### Core Web Vitals
+Tracking automático de métricas de rendimiento:
+- **LCP** (Largest Contentful Paint) < 2.5s
+- **INP** (Interaction to Next Paint) < 200ms
+- **CLS** (Cumulative Layout Shift) < 0.1
+- **FCP** (First Contentful Paint) < 1.8s
+- **TTFB** (Time to First Byte) < 200ms
+
+Envío automático a Google Analytics 4.
+
+### Schema.org Estructurado
+| Tipo | Ubicación | Descripción |
+|------|-----------|-------------|
+| Organization | Global | Datos de la empresa |
+| SoftwareApplication | Global | Info del producto |
+| FAQPage | `/faq`, Global | Preguntas frecuentes |
+| HowTo | Global | Guía de uso |
+| Review/AggregateRating | Global | Testimonios |
+| Service | Global | Servicios ofrecidos |
+| BreadcrumbList | Todas las páginas | Navegación |
+| Person | `/coaches/[slug]` | Perfil de coaches |
+| ProfessionalService | `/coaches/[slug]` | Servicios del coach |
+| Article | `/blog/[slug]` | Posts del blog |
+| WebSite | Global | Búsqueda del sitio |
+
+### IndexNow (Indexación Instantánea)
+- **Endpoint:** `/api/indexnow`
+- **Motores:** Bing, Yandex, Seznam, Naver
+- **Auto-notificación:** Al publicar posts del blog
+- **Archivo de verificación:** `/e22a5f1e9f924a879e5ccfdc3375faf1.txt`
+
+### Bing Webmaster Tools
+- **API Integration:** Dashboard con métricas de Bing
+- **Endpoints disponibles:**
+  - Stats generales
+  - Keywords
+  - Páginas indexadas
+  - Estado de rastreo
+  - Envío de URLs
+
+### Robots.txt con AI Crawlers
+Configuración para crawlers de IA:
+- GPTBot (OpenAI)
+- ChatGPT-User
+- Google-Extended (Gemini)
+- anthropic-ai (Claude)
+- PerplexityBot
+- cohere-ai
+- FacebookBot (Meta AI)
+- YouBot
+- Applebot-Extended (Siri)
+
+### LLMs.txt
+Archivos de documentación para LLMs:
+- `/llms.txt` - Versión resumida
+- `/llms-full.txt` - Documentación completa
+
+### Página FAQ (`/faq`)
+- 18 preguntas frecuentes organizadas por categoría
+- Categorías: General, Precios, Herramientas, Funcionalidades, Seguridad
+- FAQ Schema completo para Featured Snippets
+- Búsqueda integrada
+- Diseño responsive
+
+### Breadcrumbs con Schema
+Navegación estructurada en:
+- `/coaches` - Directorio
+- `/coaches/[slug]` - Perfil de coach
+- `/blog` - Lista de posts
+- `/blog/[slug]` - Post individual
+- `/faq` - Preguntas frecuentes
+
+### Person Schema para Coaches
+Datos estructurados E-E-A-T para cada coach:
+- Nombre y cargo
+- Credenciales y certificaciones
+- Áreas de conocimiento
+- Ubicación y área de servicio
+- Rating agregado
+- Enlaces sociales
+
+### GEO (Generative Engine Optimization)
+Meta tags optimizados para IA:
+- `ai:description` - Descripción de marca
+- `ai:features` - Propuesta de valor
+- `ai:audience` - Audiencia objetivo
+- `ai:pricing` - Información de precios
+
+### Freshness Signals
+- `article:published_time`
+- `article:modified_time`
+- `last-modified`
+- `revision-date`
+- Sitemap con `lastModified` dinámico
 
 ---
 
@@ -636,10 +745,12 @@ Si la IA falla, el sistema extrae datos manualmente de los reportes de sesión.
 2. **📝 Metodología Estructurada** - 9 fases basadas en CCC
 3. **✍️ Firmas Digitales** - Acuerdos con hash SHA-256
 4. **🛠 12 Herramientas Profesionales** - DISC, Wheel of Life, GROW, etc.
-5. **📊 SEO Dashboard Integrado** - GA4 + Search Console
+5. **📊 SEO Dashboard Integrado** - GA4 + Search Console + Bing Webmaster
 6. **🔔 Notificaciones en Tiempo Real** - Actualizaciones automáticas
 7. **📱 100% Responsive** - Funciona en cualquier dispositivo
 8. **🔐 Seguridad Enterprise** - Firebase + GCP
 9. **🌐 Directorio Público de Coaches** - Marketplace para encontrar coaches
 10. **📊 CRM Integrado** - Pipeline de ventas con leads y conversiones
 11. **📅 Gestión de Sesiones** - Iniciar, documentar y completar sesiones con acuerdos y reportes
+12. **🔍 SEO/GEO 2026** - IndexNow, Person Schema, Core Web Vitals, AI crawlers optimizados
+13. **⚡ Indexación Instantánea** - Auto-notificación a Bing/Yandex al publicar contenido
