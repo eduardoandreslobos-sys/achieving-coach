@@ -511,8 +511,8 @@ export default function CoachSessionsPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        {/* Start Session Button - show for any session that can be started */}
-                        {(!session.status || session.status === 'scheduled' || !['in-progress', 'completed', 'cancelled', 'no-show'].includes(session.status)) && (
+                        {/* Start Session Button - show unless session is in a final/active state */}
+                        {!['in-progress', 'completed', 'cancelled', 'no-show'].includes(session.status) && (
                           <button
                             onClick={() => handleStartSession(session)}
                             className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white text-sm rounded-lg hover:bg-emerald-700 transition-colors"
