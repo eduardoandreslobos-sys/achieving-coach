@@ -16,18 +16,18 @@ steps:
       - '--build-arg'
       - 'NEXT_PUBLIC_FIREBASE_APP_ID=1:360022789814:web:5fb7a9f08dad3ecdb6e017'
       - '-t'
-      - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:$COMMIT_SHA'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/achieving-coach/frontend:$COMMIT_SHA'
       - '-t'
-      - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:latest'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/achieving-coach/frontend:latest'
       - '.'
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:$COMMIT_SHA'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/achieving-coach/frontend:$COMMIT_SHA'
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:latest'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/achieving-coach/frontend:latest'
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -35,7 +35,7 @@ steps:
       - 'deploy'
       - 'achieving-coach-frontend'
       - '--image'
-      - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:$COMMIT_SHA'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/achieving-coach/frontend:$COMMIT_SHA'
       - '--region'
       - 'us-central1'
       - '--platform'
@@ -44,8 +44,8 @@ steps:
       - '--set-secrets'
       - 'GA4_CREDENTIALS=ga4-credentials:latest,GEMINI_API_KEY=GEMINI_API_KEY:latest,CLARITY_API_TOKEN=CLARITY_API_TOKEN:latest'
 images:
-  - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:$COMMIT_SHA'
-  - 'gcr.io/$PROJECT_ID/achieving-coach-frontend:latest'
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/achieving-coach/frontend:$COMMIT_SHA'
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/achieving-coach/frontend:latest'
 options:
   machineType: 'E2_HIGHCPU_8'
   logging: CLOUD_LOGGING_ONLY
