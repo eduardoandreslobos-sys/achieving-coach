@@ -1,10 +1,20 @@
 'use client';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export function Footer() {
-  const currentYear = new Date().getFullYear();
-  const currentMonth = new Date().toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
-  const currentDate = new Date().toISOString().split('T')[0];
+  // Use static year for initial render to avoid hydration mismatch
+  const [currentYear] = useState(() => new Date().getFullYear());
+  const [dateInfo, setDateInfo] = useState({ month: '', date: '' });
+
+  useEffect(() => {
+    // Only set locale-dependent dates on client to avoid hydration mismatch
+    const now = new Date();
+    setDateInfo({
+      month: now.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }),
+      date: now.toISOString().split('T')[0],
+    });
+  }, []);
 
   return (
     <footer className="py-12 px-6 border-t border-white/5 bg-[#0a0a0a]" role="contentinfo">
@@ -129,11 +139,13 @@ export function Footer() {
           <p className="text-gray-600 text-sm">
             © {currentYear} AchievingCoach Inc. Todos los derechos reservados.
           </p>
-          <p className="text-gray-600 text-sm mt-2 md:mt-0">
-            <time dateTime={currentDate}>
-              Última actualización: {currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1)}
-            </time>
-          </p>
+          {dateInfo.month && (
+            <p className="text-gray-600 text-sm mt-2 md:mt-0">
+              <time dateTime={dateInfo.date}>
+                Última actualización: {dateInfo.month.charAt(0).toUpperCase() + dateInfo.month.slice(1)}
+              </time>
+            </p>
+          )}
         </div>
       </div>
     </footer>
