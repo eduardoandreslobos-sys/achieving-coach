@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { loadDISCQuestions, calculateDISCProfile, saveDISCResultComplete } from '@/lib/discService';
 import { DISCQuestionGroup, DISCResponse, DISCStatement } from '@/types/disc';
 import { Loader2, CheckCircle2, ArrowLeft, ArrowRight } from 'lucide-react';
+import { m, AnimatePresence } from 'framer-motion';
 
 export function DISCAssessment() {
   const { user, userProfile } = useAuth();
@@ -173,77 +174,93 @@ export function DISCAssessment() {
       </div>
 
       {/* Question Card */}
-      <div className="bg-white rounded-xl shadow-sm border p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-6">
-          Selecciona la afirmación que MÁS te describe y la que MENOS te describe
-        </h2>
-        
-        <div className="space-y-4">
-          {currentQuestion.statements.map((statement: DISCStatement, index: number) => (
-            <div
-              key={index}
-              className="p-4 border rounded-lg hover:border-blue-300 transition-colors"
-            >
-              <p className="text-gray-700 mb-4">{statement.text}</p>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => selectStatement(statement.dimension, 'most')}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
-                    selectedMost === statement.dimension
-                      ? 'bg-green-600 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {selectedMost === statement.dimension && (
-                    <CheckCircle2 className="h-4 w-4" />
-                  )}
-                  MÁS como yo
-                </button>
-                <button
-                  onClick={() => selectStatement(statement.dimension, 'least')}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
-                    selectedLeast === statement.dimension
-                      ? 'bg-red-600 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {selectedLeast === statement.dimension && (
-                    <CheckCircle2 className="h-4 w-4" />
-                  )}
-                  MENOS como yo
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+      <AnimatePresence mode="wait">
+        <m.div
+          key={currentGroup}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
+          className="bg-white rounded-xl shadow-sm border p-6"
+        >
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">
+            Selecciona la afirmación que MÁS te describe y la que MENOS te describe
+          </h2>
 
-        {/* Validation Message */}
-        {selectedMost && selectedLeast && selectedMost === selectedLeast && (
-          <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-800">
-            Por favor selecciona diferentes afirmaciones para "MÁS" y "MENOS"
+          <div className="space-y-4">
+            {currentQuestion.statements.map((statement: DISCStatement, index: number) => (
+              <m.div
+                key={index}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                className="p-4 border rounded-lg hover:border-blue-300 transition-colors"
+              >
+                <p className="text-gray-700 mb-4">{statement.text}</p>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => selectStatement(statement.dimension, 'most')}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                      selectedMost === statement.dimension
+                        ? 'bg-green-600 text-white scale-105'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {selectedMost === statement.dimension && (
+                      <CheckCircle2 className="h-4 w-4" />
+                    )}
+                    MÁS como yo
+                  </button>
+                  <button
+                    onClick={() => selectStatement(statement.dimension, 'least')}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                      selectedLeast === statement.dimension
+                        ? 'bg-red-600 text-white scale-105'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {selectedLeast === statement.dimension && (
+                      <CheckCircle2 className="h-4 w-4" />
+                    )}
+                    MENOS como yo
+                  </button>
+                </div>
+              </m.div>
+            ))}
           </div>
-        )}
 
-        {/* Navigation */}
-        <div className="flex justify-between pt-6 mt-6 border-t">
-          <button
-            onClick={handleBack}
-            disabled={currentGroup === 0}
-            className="px-4 py-2 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Anterior
-          </button>
-          <button
-            onClick={handleNext}
-            disabled={!canProceed}
-            className="px-6 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-          >
-            {currentGroup === questions.length - 1 ? 'Finalizar' : 'Siguiente'}
-            <ArrowRight className="h-4 w-4" />
-          </button>
-        </div>
-      </div>
+          {/* Validation Message */}
+          {selectedMost && selectedLeast && selectedMost === selectedLeast && (
+            <m.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-800"
+            >
+              Por favor selecciona diferentes afirmaciones para "MÁS" y "MENOS"
+            </m.div>
+          )}
+
+          {/* Navigation */}
+          <div className="flex justify-between pt-6 mt-6 border-t">
+            <button
+              onClick={handleBack}
+              disabled={currentGroup === 0}
+              className="px-4 py-2 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 transition-transform active:scale-95"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Anterior
+            </button>
+            <button
+              onClick={handleNext}
+              disabled={!canProceed}
+              className="px-6 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 transition-transform active:scale-95"
+            >
+              {currentGroup === questions.length - 1 ? 'Finalizar' : 'Siguiente'}
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+        </m.div>
+      </AnimatePresence>
     </div>
   );
 }

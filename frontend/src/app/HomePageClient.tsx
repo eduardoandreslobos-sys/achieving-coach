@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import DemoModal from '@/components/DemoModal';
+import { FadeIn, StaggerContainer, StaggerItem, ScaleIn, SmoothScrollWrapper } from '@/components/animations';
 
 export default function HomePageClient() {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -27,8 +28,9 @@ export default function HomePageClient() {
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--fg-primary)]">
-      <Navbar />
+    <SmoothScrollWrapper>
+      <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--fg-primary)]">
+        <Navbar />
 
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-6 relative overflow-hidden">
@@ -39,40 +41,50 @@ export default function HomePageClient() {
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-xs mb-6">
-              <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
-              NUEVA VERSIÓN 2026
-            </div>
+            <FadeIn delay={0} direction="down">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-xs mb-6">
+                <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+                NUEVA VERSIÓN 2026
+              </div>
+            </FadeIn>
 
-            <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-              El Sistema Operativo del<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-violet-400">Coaching Ejecutivo</span>
-            </h1>
+            <FadeIn delay={0.1}>
+              <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
+                El Sistema Operativo del<br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-violet-400">Coaching Ejecutivo</span>
+              </h1>
+            </FadeIn>
 
-            <p className="text-[var(--fg-muted)] text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
-              Eleva tu práctica con insights impulsados por IA, gestión fluida y herramientas integrales diseñadas para el futuro del coaching de alto impacto.
-            </p>
+            <FadeIn delay={0.2}>
+              <p className="text-[var(--fg-muted)] text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
+                Eleva tu práctica con insights impulsados por IA, gestión fluida y herramientas integrales diseñadas para el futuro del coaching de alto impacto.
+              </p>
+            </FadeIn>
 
-            <div className="flex flex-wrap gap-4 justify-center mb-6">
-              <Link href="/sign-up" className="px-8 py-3.5 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2">
-                Iniciar Prueba Gratuita
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <button
-                onClick={() => setIsDemoOpen(true)}
-                className="px-8 py-3.5 bg-white/5 border border-white/10 text-white font-medium rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
-              >
-                <Play className="w-4 h-4" />
-                Ver Demo
-              </button>
-            </div>
+            <FadeIn delay={0.3}>
+              <div className="flex flex-wrap gap-4 justify-center mb-6">
+                <Link href="/sign-up" className="px-8 py-3.5 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2">
+                  Iniciar Prueba Gratuita
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <button
+                  onClick={() => setIsDemoOpen(true)}
+                  className="px-8 py-3.5 bg-white/5 border border-white/10 text-white font-medium rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
+                >
+                  <Play className="w-4 h-4" />
+                  Ver Demo
+                </button>
+              </div>
+            </FadeIn>
 
-            <div className="flex justify-center mb-12">
-              <Link href="/coaches" className="text-[var(--fg-muted)] hover:text-violet-400 transition-colors flex items-center gap-2 text-sm">
-                <Users className="w-4 h-4" />
-                ¿Buscas un coach? Explora nuestro directorio
-              </Link>
-            </div>
+            <FadeIn delay={0.4}>
+              <div className="flex justify-center mb-12">
+                <Link href="/coaches" className="text-[var(--fg-muted)] hover:text-violet-400 transition-colors flex items-center gap-2 text-sm">
+                  <Users className="w-4 h-4" />
+                  ¿Buscas un coach? Explora nuestro directorio
+                </Link>
+              </div>
+            </FadeIn>
           </div>
         </div>
       </section>
@@ -80,71 +92,83 @@ export default function HomePageClient() {
       {/* Gestión de Coaching Avanzada */}
       <section className="py-20 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-12">
+          <FadeIn className="mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">¿Cómo gestionar tu práctica de coaching de forma eficiente?</h2>
             <p className="text-[var(--fg-muted)] max-w-2xl">
               Optimiza tu flujo de trabajo con una plataforma unificada que maneja la complejidad con elegancia.
             </p>
-          </div>
+          </FadeIn>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-4" staggerDelay={0.1}>
             {/* Card 1 */}
-            <div className="bento-card">
-              <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center mb-4">
-                <Users className="w-5 h-5 text-[var(--accent-primary)]" />
+            <StaggerItem>
+              <div className="bento-card h-full">
+                <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center mb-4">
+                  <Users className="w-5 h-5 text-[var(--accent-primary)]" />
+                </div>
+                <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Perfiles y Viajes del Cliente</h3>
+                <p className="text-[var(--fg-muted)] text-sm">Centraliza y visualiza la evolución de cada cliente: objetivos, notas, planes de acción y progreso consolidados de forma intuitiva e interactiva.</p>
               </div>
-              <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Perfiles y Viajes del Cliente</h3>
-              <p className="text-[var(--fg-muted)] text-sm">Centraliza y visualiza la evolución de cada cliente: objetivos, notas, planes de acción y progreso consolidados de forma intuitiva e interactiva.</p>
-            </div>
+            </StaggerItem>
 
             {/* Card 2 */}
-            <div className="bento-card">
-              <div className="w-10 h-10 bg-violet-500/10 rounded-lg flex items-center justify-center mb-4">
-                <Calendar className="w-5 h-5 text-violet-400" />
+            <StaggerItem>
+              <div className="bento-card h-full">
+                <div className="w-10 h-10 bg-violet-500/10 rounded-lg flex items-center justify-center mb-4">
+                  <Calendar className="w-5 h-5 text-violet-400" />
+                </div>
+                <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Agendamiento Inteligente</h3>
+                <p className="text-[var(--fg-muted)] text-sm">Organiza tus sesiones con el calendario inteligente: recordatorios automáticos, gestión de reprogramaciones y toma de notas en tiempo real.</p>
               </div>
-              <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Agendamiento Inteligente</h3>
-              <p className="text-[var(--fg-muted)] text-sm">Organiza tus sesiones con el calendario inteligente: recordatorios automáticos, gestión de reprogramaciones y toma de notas en tiempo real.</p>
-            </div>
+            </StaggerItem>
 
             {/* Card 3 */}
-            <div className="bento-card">
-              <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center mb-4">
-                <Layers className="w-5 h-5 text-[var(--accent-primary)]" />
+            <StaggerItem>
+              <div className="bento-card h-full">
+                <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center mb-4">
+                  <Layers className="w-5 h-5 text-[var(--accent-primary)]" />
+                </div>
+                <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Portal del Cliente</h3>
+                <p className="text-[var(--fg-muted)] text-sm">Centraliza las interacciones del coachee: ejercicios interactivos, acceso rápido a sesiones y seguimiento de su evolución.</p>
               </div>
-              <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Portal del Cliente</h3>
-              <p className="text-[var(--fg-muted)] text-sm">Centraliza las interacciones del coachee: ejercicios interactivos, acceso rápido a sesiones y seguimiento de su evolución.</p>
-            </div>
+            </StaggerItem>
 
             {/* Card 4 */}
-            <div className="bento-card">
-              <div className="w-10 h-10 bg-amber-500/10 rounded-lg flex items-center justify-center mb-4">
-                <FileSignature className="w-5 h-5 text-amber-400" />
+            <StaggerItem>
+              <div className="bento-card h-full">
+                <div className="w-10 h-10 bg-amber-500/10 rounded-lg flex items-center justify-center mb-4">
+                  <FileSignature className="w-5 h-5 text-amber-400" />
+                </div>
+                <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Firmas Digitales</h3>
+                <p className="text-[var(--fg-muted)] text-sm">Firma legalmente documentos como acuerdos integrados para alinearte sin el flujo de onboarding.</p>
               </div>
-              <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Firmas Digitales</h3>
-              <p className="text-[var(--fg-muted)] text-sm">Firma legalmente documentos como acuerdos integrados para alinearte sin el flujo de onboarding.</p>
-            </div>
+            </StaggerItem>
 
             {/* Card 5 - CRM */}
-            <div className="bento-card">
-              <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center mb-4">
-                <BarChart3 className="w-5 h-5 text-blue-400" />
+            <StaggerItem>
+              <div className="bento-card h-full">
+                <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center mb-4">
+                  <BarChart3 className="w-5 h-5 text-blue-400" />
+                </div>
+                <h3 className="text-[var(--fg-primary)] font-semibold mb-2">CRM de Ventas</h3>
+                <p className="text-[var(--fg-muted)] text-sm">Pipeline visual para gestionar leads y oportunidades. Calificación BANT y seguimiento de actividades.</p>
               </div>
-              <h3 className="text-[var(--fg-primary)] font-semibold mb-2">CRM de Ventas</h3>
-              <p className="text-[var(--fg-muted)] text-sm">Pipeline visual para gestionar leads y oportunidades. Calificación BANT y seguimiento de actividades.</p>
-            </div>
+            </StaggerItem>
 
             {/* Card 6 - Directory */}
-            <Link href="/coaches" className="bento-card hover:border-violet-500/50 transition-colors">
-              <div className="w-10 h-10 bg-violet-500/10 rounded-lg flex items-center justify-center mb-4">
-                <Users className="w-5 h-5 text-violet-400" />
-              </div>
-              <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Directorio de Coaches</h3>
-              <p className="text-[var(--fg-muted)] text-sm">Perfil público profesional para atraer nuevos clientes y recibir consultas.</p>
-              <span className="inline-flex items-center gap-1 mt-3 text-violet-400 text-sm font-medium">
-                Explorar directorio <ArrowRight className="w-4 h-4" />
-              </span>
-            </Link>
-          </div>
+            <StaggerItem>
+              <Link href="/coaches" className="bento-card hover:border-violet-500/50 transition-colors h-full block">
+                <div className="w-10 h-10 bg-violet-500/10 rounded-lg flex items-center justify-center mb-4">
+                  <Users className="w-5 h-5 text-violet-400" />
+                </div>
+                <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Directorio de Coaches</h3>
+                <p className="text-[var(--fg-muted)] text-sm">Perfil público profesional para atraer nuevos clientes y recibir consultas.</p>
+                <span className="inline-flex items-center gap-1 mt-3 text-violet-400 text-sm font-medium">
+                  Explorar directorio <ArrowRight className="w-4 h-4" />
+                </span>
+              </Link>
+            </StaggerItem>
+          </StaggerContainer>
         </div>
       </section>
 
@@ -445,77 +469,87 @@ export default function HomePageClient() {
       {/* Seguridad */}
       <section className="py-20 px-6">
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-3xl lg:text-4xl font-bold mb-4">¿Es seguro almacenar datos de clientes en AchievingCoach?</h2>
-          <p className="text-[var(--fg-muted)] mb-12 max-w-2xl mx-auto">
-            Protegemos tu práctica y la privacidad de tus clientes con los estándares más altos de la industria.
-          </p>
+          <FadeIn>
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4">¿Es seguro almacenar datos de clientes en AchievingCoach?</h2>
+            <p className="text-[var(--fg-muted)] mb-12 max-w-2xl mx-auto">
+              Protegemos tu práctica y la privacidad de tus clientes con los estándares más altos de la industria.
+            </p>
+          </FadeIn>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="bento-card text-left">
-              <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center mb-4">
-                <Shield className="w-5 h-5 text-[var(--accent-primary)]" />
+          <StaggerContainer className="grid md:grid-cols-3 gap-6" staggerDelay={0.1}>
+            <StaggerItem>
+              <div className="bento-card text-left h-full">
+                <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center mb-4">
+                  <Shield className="w-5 h-5 text-[var(--accent-primary)]" />
+                </div>
+                <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Seguridad Enterprise</h3>
+                <p className="text-[var(--fg-muted)] text-sm">Encriptación de nivel bancario (AES-256) para recibir datos del cliente y notas de sesión, en reposo y en tránsito.</p>
               </div>
-              <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Seguridad Enterprise</h3>
-              <p className="text-[var(--fg-muted)] text-sm">Encriptación de nivel bancario (AES-256) para recibir datos del cliente y notas de sesión, en reposo y en tránsito.</p>
-            </div>
+            </StaggerItem>
 
-            <div className="bento-card text-left">
-              <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center mb-4">
-                <Lock className="w-5 h-5 text-[var(--accent-primary)]" />
+            <StaggerItem>
+              <div className="bento-card text-left h-full">
+                <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center mb-4">
+                  <Lock className="w-5 h-5 text-[var(--accent-primary)]" />
+                </div>
+                <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Privacidad & Compliance</h3>
+                <p className="text-[var(--fg-muted)] text-sm">Infraestructura totalmente compatible con GDPR, CCPA e HIPAA (disponible con complementos de coaching de salud y bienestar).</p>
               </div>
-              <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Privacidad & Compliance</h3>
-              <p className="text-[var(--fg-muted)] text-sm">Infraestructura totalmente compatible con GDPR, CCPA e HIPAA (disponible con complementos de coaching de salud y bienestar).</p>
-            </div>
+            </StaggerItem>
 
-            <div className="bento-card text-left">
-              <div className="w-10 h-10 bg-violet-500/10 rounded-lg flex items-center justify-center mb-4">
-                <Eye className="w-5 h-5 text-violet-400" />
+            <StaggerItem>
+              <div className="bento-card text-left h-full">
+                <div className="w-10 h-10 bg-violet-500/10 rounded-lg flex items-center justify-center mb-4">
+                  <Eye className="w-5 h-5 text-violet-400" />
+                </div>
+                <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Confidencialidad por Diseño</h3>
+                <p className="text-[var(--fg-muted)] text-sm">Controles de permisos granulares para asegurar que solo el personal autorizado tiene acceso a registros específicos de datos de clientes.</p>
               </div>
-              <h3 className="text-[var(--fg-primary)] font-semibold mb-2">Confidencialidad por Diseño</h3>
-              <p className="text-[var(--fg-muted)] text-sm">Controles de permisos granulares para asegurar que solo el personal autorizado tiene acceso a registros específicos de datos de clientes.</p>
-            </div>
-          </div>
+            </StaggerItem>
+          </StaggerContainer>
         </div>
       </section>
 
       {/* Testimonios - Social Proof */}
       <section className="py-20 px-6 bg-[var(--bg-secondary)]">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
+          <FadeIn className="text-center mb-12">
             <p className="text-amber-400 text-xs uppercase tracking-wider mb-4">TESTIMONIOS</p>
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">Lo Que Dicen Nuestros Coaches</h2>
             <p className="text-[var(--fg-muted)] max-w-2xl mx-auto">
               Coaches profesionales de todo el mundo confían en AchievingCoach para transformar su práctica de coaching ejecutivo.
             </p>
-          </div>
+          </FadeIn>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <StaggerContainer className="grid md:grid-cols-3 gap-6" staggerDelay={0.15}>
             {testimonials.map((testimonial, index) => (
-              <div key={index} className="bento-card p-6">
-                <div className="flex gap-1 mb-4">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} className="w-4 h-4 text-amber-400 fill-amber-400" />
-                  ))}
-                </div>
-                <p className="text-[var(--fg-secondary)] mb-6 italic">&ldquo;{testimonial.quote}&rdquo;</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-violet-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                    {testimonial.name.charAt(0)}
+              <StaggerItem key={index}>
+                <div className="bento-card p-6 h-full">
+                  <div className="flex gap-1 mb-4">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star key={star} className="w-4 h-4 text-amber-400 fill-amber-400" />
+                    ))}
                   </div>
-                  <div>
-                    <p className="text-[var(--fg-primary)] font-medium">{testimonial.name}</p>
-                    <p className="text-[var(--fg-muted)] text-sm">{testimonial.role}</p>
+                  <p className="text-[var(--fg-secondary)] mb-6 italic">&ldquo;{testimonial.quote}&rdquo;</p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-violet-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                      {testimonial.name.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="text-[var(--fg-primary)] font-medium">{testimonial.name}</p>
+                      <p className="text-[var(--fg-muted)] text-sm">{testimonial.role}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
 
-          <div className="text-center mt-8">
+          <FadeIn delay={0.5} className="text-center mt-8">
             <p className="text-[var(--fg-muted)] text-sm">
               Valoración promedio de <span className="text-amber-400 font-semibold">4.8/5</span> basada en más de 150 reseñas
             </p>
-          </div>
+          </FadeIn>
         </div>
       </section>
 
@@ -597,28 +631,31 @@ export default function HomePageClient() {
       {/* CTA Final */}
       <section className="py-20 px-6 bg-gradient-to-b from-[var(--bg-secondary)] to-[var(--bg-primary)]">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-            Comienza a Transformar tu Práctica de Coaching Ejecutivo Hoy
-          </h2>
-          <p className="text-[var(--fg-muted)] mb-8 max-w-2xl mx-auto">
-            Únete a cientos de coaches profesionales que ya utilizan AchievingCoach como su sistema operativo de coaching. Prueba gratis, sin compromiso.
-          </p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/sign-up" className="btn-micro px-8 py-3.5 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2">
-              Crear Cuenta Gratis
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link href="/contact" className="px-8 py-3.5 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] font-medium rounded-lg hover:bg-[var(--bg-secondary)] transition-colors">
-              Contactar Ventas
-            </Link>
-          </div>
+          <ScaleIn>
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
+              Comienza a Transformar tu Práctica de Coaching Ejecutivo Hoy
+            </h2>
+            <p className="text-[var(--fg-muted)] mb-8 max-w-2xl mx-auto">
+              Únete a cientos de coaches profesionales que ya utilizan AchievingCoach como su sistema operativo de coaching. Prueba gratis, sin compromiso.
+            </p>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Link href="/sign-up" className="btn-micro px-8 py-3.5 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2">
+                Crear Cuenta Gratis
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link href="/contact" className="px-8 py-3.5 bg-[var(--bg-tertiary)] border border-[var(--border-color)] text-[var(--fg-primary)] font-medium rounded-lg hover:bg-[var(--bg-secondary)] transition-colors">
+                Contactar Ventas
+              </Link>
+            </div>
+          </ScaleIn>
         </div>
       </section>
 
-      <Footer />
+        <Footer />
 
-      {/* Demo Modal */}
-      <DemoModal isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
-    </div>
+        {/* Demo Modal */}
+        <DemoModal isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
+      </div>
+    </SmoothScrollWrapper>
   );
 }

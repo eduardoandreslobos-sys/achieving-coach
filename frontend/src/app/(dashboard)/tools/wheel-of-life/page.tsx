@@ -1,11 +1,13 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, query, where, getDocs, serverTimestamp, updateDoc, doc } from 'firebase/firestore';
 import { Target, TrendingUp, Briefcase, DollarSign, Heart, Users, Smile, Home, Sprout, Sparkles, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 import { toast, Toaster } from 'sonner';
+import { FadeIn, StaggerContainer, StaggerItem, AnimatedCounter } from '@/components/animations';
+import gsap from 'gsap';
 
 const lifeAreas = [
   { id: 'career', name: 'Carrera', icon: Briefcase, color: 'text-emerald-600' },
@@ -267,57 +269,63 @@ export default function WheelOfLifePage() {
         </div>
 
         {/* Life Areas */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8" staggerDelay={0.08}>
           {lifeAreas.map((area) => {
             const Icon = area.icon;
             return (
-              <div key={area.id} className="bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] p-6 hover:border-emerald-500/50 transition-colors">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className={`w-10 h-10 rounded-lg bg-[var(--bg-tertiary)] flex items-center justify-center`}>
-                    <Icon className={`w-5 h-5 ${area.color}`} />
+              <StaggerItem key={area.id}>
+                <div className="bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] p-6 hover:border-emerald-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/5">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className={`w-10 h-10 rounded-lg bg-[var(--bg-tertiary)] flex items-center justify-center transition-transform duration-300 hover:scale-110`}>
+                      <Icon className={`w-5 h-5 ${area.color}`} />
+                    </div>
+                    <h3 className="text-lg font-semibold text-[var(--fg-primary)]">{area.name}</h3>
                   </div>
-                  <h3 className="text-lg font-semibold text-[var(--fg-primary)]">{area.name}</h3>
-                </div>
 
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm text-[var(--fg-muted)]">
-                    <span>Insatisfecho</span>
-                    <span>Satisfecho</span>
-                  </div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="10"
-                    value={scores[area.id] || 0}
-                    onChange={(e) => setScores({ ...scores, [area.id]: parseInt(e.target.value) })}
-                    className="w-full h-2 bg-[var(--bg-tertiary)] rounded-lg appearance-none cursor-pointer accent-emerald-500"
-                  />
-                  <div className="text-center">
-                    <span className="text-2xl font-bold text-[var(--accent-primary)]">
-                      {scores[area.id] !== undefined ? scores[area.id] : '-'}
-                    </span>
-                    <span className="text-[var(--fg-muted)]">/10</span>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm text-[var(--fg-muted)]">
+                      <span>Insatisfecho</span>
+                      <span>Satisfecho</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0"
+                      max="10"
+                      value={scores[area.id] || 0}
+                      onChange={(e) => setScores({ ...scores, [area.id]: parseInt(e.target.value) })}
+                      className="w-full h-2 bg-[var(--bg-tertiary)] rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                    />
+                    <div className="text-center">
+                      <span className="text-2xl font-bold text-[var(--accent-primary)] transition-all duration-300">
+                        {scores[area.id] !== undefined ? scores[area.id] : '-'}
+                      </span>
+                      <span className="text-[var(--fg-muted)]">/10</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </StaggerItem>
             );
           })}
-        </div>
+        </StaggerContainer>
 
         {/* Average Score */}
         {Object.keys(scores).length > 0 && (
-          <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 mb-8">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold text-[var(--fg-primary)] mb-1">Puntaje Promedio</h3>
-                <p className="text-[var(--fg-muted)]">Satisfacción general de vida</p>
-              </div>
-              <div className="text-right">
-                <div className="text-4xl font-bold text-[var(--accent-primary)]">{averageScore.toFixed(1)}</div>
-                <div className="text-sm text-[var(--fg-muted)]">de 10</div>
+          <FadeIn>
+            <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 mb-8">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold text-[var(--fg-primary)] mb-1">Puntaje Promedio</h3>
+                  <p className="text-[var(--fg-muted)]">Satisfacción general de vida</p>
+                </div>
+                <div className="text-right">
+                  <div className="text-4xl font-bold text-[var(--accent-primary)]">
+                    <AnimatedCounter target={averageScore} duration={1} decimals={1} />
+                  </div>
+                  <div className="text-sm text-[var(--fg-muted)]">de 10</div>
+                </div>
               </div>
             </div>
-          </div>
+          </FadeIn>
         )}
 
         {/* Save Button */}

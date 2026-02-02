@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { MotionProvider } from "@/components/animations/MotionProvider";
 import AnalyticsProvider from "@/components/analytics";
 import PreloadResources from "@/components/PreloadResources";
 import GEOSchemas from "@/components/seo/GEOMetadata";
@@ -235,7 +236,9 @@ export default function RootLayout({
 
           {/* Auth context and app content */}
           <AuthProvider>
-            {children}
+            <MotionProvider>
+              {children}
+            </MotionProvider>
           </AuthProvider>
 
           {/* Cookie consent banner for GDPR/CCPA compliance */}
