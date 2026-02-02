@@ -36,12 +36,12 @@ interface Program {
 }
 
 const statusConfig = {
-  draft: { label: 'Borrador', color: 'bg-[var(--bg-secondary)] text-[var(--fg-muted)]', icon: FileSignature },
-  pending_acceptance: { label: 'Pendiente Firma', color: 'bg-yellow-100 text-yellow-700', icon: AlertCircle },
-  active: { label: 'Activo', color: 'bg-green-100 text-green-700', icon: CheckCircle },
-  completed: { label: 'Completado', color: 'bg-emerald-100 text-blue-700', icon: CheckCircle },
-  paused: { label: 'Pausado', color: 'bg-orange-100 text-orange-700', icon: Clock },
-  cancelled: { label: 'Cancelado', color: 'bg-red-100 text-red-700', icon: AlertCircle },
+  draft: { label: 'Borrador', color: 'bg-[var(--bg-tertiary)] text-[var(--fg-muted)]', icon: FileSignature },
+  pending_acceptance: { label: 'Pendiente Firma', color: 'bg-yellow-500/20 text-yellow-400', icon: AlertCircle },
+  active: { label: 'Activo', color: 'bg-emerald-500/20 text-emerald-400', icon: CheckCircle },
+  completed: { label: 'Completado', color: 'bg-blue-500/20 text-blue-400', icon: CheckCircle },
+  paused: { label: 'Pausado', color: 'bg-orange-500/20 text-orange-400', icon: Clock },
+  cancelled: { label: 'Cancelado', color: 'bg-red-500/20 text-red-400', icon: AlertCircle },
 };
 
 export default function CoachProgramsPage() {
@@ -123,77 +123,77 @@ export default function CoachProgramsPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-[var(--fg-primary)]">Coaching Programs</h1>
-          <p className="text-[var(--fg-muted)] mt-1">Manage all your executive coaching programs</p>
+          <h1 className="text-3xl font-bold text-[var(--fg-primary)]">Programas de Coaching</h1>
+          <p className="text-[var(--fg-muted)] mt-1">Gestiona todos tus programas de coaching ejecutivo</p>
         </div>
         <Link
           href="/coach/programs/new"
-          className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-[var(--fg-primary)] rounded-lg hover:bg-primary-700 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
         >
           <Plus className="w-5 h-5" />
-          New Program
+          Nuevo Programa
         </Link>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white p-6 rounded-xl border border-[var(--border-color)]">
+        <div className="bg-[var(--bg-secondary)] p-6 rounded-xl border border-[var(--border-color)]">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-[var(--bg-secondary)] rounded-lg flex items-center justify-center">
               <BarChart3 className="w-5 h-5 text-[var(--fg-muted)]" />
             </div>
             <div>
               <p className="text-2xl font-bold text-[var(--fg-primary)]">{stats.total}</p>
-              <p className="text-sm text-[var(--fg-muted)]">Total Programs</p>
+              <p className="text-sm text-[var(--fg-muted)]">Total Programas</p>
             </div>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-xl border border-[var(--border-color)]">
+        <div className="bg-[var(--bg-secondary)] p-6 rounded-xl border border-[var(--border-color)]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-              <CheckCircle className="w-5 h-5 text-green-600" />
+            <div className="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+              <CheckCircle className="w-5 h-5 text-emerald-400" />
             </div>
             <div>
               <p className="text-2xl font-bold text-[var(--fg-primary)]">{stats.active}</p>
-              <p className="text-sm text-[var(--fg-muted)]">Active</p>
+              <p className="text-sm text-[var(--fg-muted)]">Activos</p>
             </div>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-xl border border-[var(--border-color)]">
+        <div className="bg-[var(--bg-secondary)] p-6 rounded-xl border border-[var(--border-color)]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-              <AlertCircle className="w-5 h-5 text-yellow-600" />
+            <div className="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+              <AlertCircle className="w-5 h-5 text-yellow-400" />
             </div>
             <div>
               <p className="text-2xl font-bold text-[var(--fg-primary)]">{stats.pending}</p>
-              <p className="text-sm text-[var(--fg-muted)]">Pending Signature</p>
+              <p className="text-sm text-[var(--fg-muted)]">Pendiente Firma</p>
             </div>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-xl border border-[var(--border-color)]">
+        <div className="bg-[var(--bg-secondary)] p-6 rounded-xl border border-[var(--border-color)]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-              <CheckCircle className="w-5 h-5 text-emerald-600" />
+            <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+              <CheckCircle className="w-5 h-5 text-blue-400" />
             </div>
             <div>
               <p className="text-2xl font-bold text-[var(--fg-primary)]">{stats.completed}</p>
-              <p className="text-sm text-[var(--fg-muted)]">Completed</p>
+              <p className="text-sm text-[var(--fg-muted)]">Completados</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl border border-[var(--border-color)] p-4 mb-6">
+      <div className="bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] p-4 mb-6">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--fg-muted)]" />
             <input
               type="text"
-              placeholder="Search by program title or coachee name..."
+              placeholder="Buscar por título o nombre del coachee..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-[var(--border-color)] rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full pl-10 pr-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
             />
           </div>
           <div className="flex items-center gap-2">
@@ -201,15 +201,15 @@ export default function CoachProgramsPage() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 border border-[var(--border-color)] rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
             >
-              <option value="all">All Status</option>
-              <option value="draft">Draft</option>
-              <option value="pending_acceptance">Pending Signature</option>
-              <option value="active">Active</option>
-              <option value="completed">Completed</option>
-              <option value="paused">Paused</option>
-              <option value="cancelled">Cancelled</option>
+              <option value="all">Todos los Estados</option>
+              <option value="draft">Borrador</option>
+              <option value="pending_acceptance">Pendiente Firma</option>
+              <option value="active">Activo</option>
+              <option value="completed">Completado</option>
+              <option value="paused">Pausado</option>
+              <option value="cancelled">Cancelado</option>
             </select>
           </div>
         </div>
@@ -217,41 +217,41 @@ export default function CoachProgramsPage() {
 
       {/* Programs List */}
       {filteredPrograms.length === 0 ? (
-        <div className="bg-white rounded-xl border border-[var(--border-color)] p-12 text-center">
+        <div className="bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] p-12 text-center">
           <div className="w-16 h-16 bg-[var(--bg-secondary)] rounded-full flex items-center justify-center mx-auto mb-4">
             <FileSignature className="w-8 h-8 text-[var(--fg-muted)]" />
           </div>
-          <h3 className="text-lg font-semibold text-[var(--fg-primary)] mb-2">No programs found</h3>
+          <h3 className="text-lg font-semibold text-[var(--fg-primary)] mb-2">No se encontraron programas</h3>
           <p className="text-[var(--fg-muted)] mb-6">
-            {searchTerm || statusFilter !== 'all' 
-              ? 'Try adjusting your filters'
-              : 'Create your first coaching program to get started'}
+            {searchTerm || statusFilter !== 'all'
+              ? 'Intenta ajustar los filtros'
+              : 'Crea tu primer programa de coaching para comenzar'}
           </p>
           {!searchTerm && statusFilter === 'all' && (
             <Link
               href="/coach/programs/new"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-[var(--fg-primary)] rounded-lg hover:bg-primary-700 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
             >
               <Plus className="w-5 h-5" />
-              Create Program
+              Crear Programa
             </Link>
           )}
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-[var(--border-color)] overflow-hidden">
+        <div className="bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] overflow-hidden">
           <table className="w-full">
-            <thead className="bg-[var(--bg-secondary)] border-b border-[var(--border-color)]">
+            <thead className="bg-[var(--bg-tertiary)] border-b border-[var(--border-color)]">
               <tr>
-                <th className="text-left px-6 py-4 text-sm font-semibold text-[var(--fg-primary)]">Program</th>
+                <th className="text-left px-6 py-4 text-sm font-semibold text-[var(--fg-primary)]">Programa</th>
                 <th className="text-left px-6 py-4 text-sm font-semibold text-[var(--fg-primary)]">Coachee</th>
-                <th className="text-left px-6 py-4 text-sm font-semibold text-[var(--fg-primary)]">Status</th>
-                <th className="text-left px-6 py-4 text-sm font-semibold text-[var(--fg-primary)]">Phase</th>
-                <th className="text-left px-6 py-4 text-sm font-semibold text-[var(--fg-primary)]">Sessions</th>
-                <th className="text-left px-6 py-4 text-sm font-semibold text-[var(--fg-primary)]">Created</th>
+                <th className="text-left px-6 py-4 text-sm font-semibold text-[var(--fg-primary)]">Estado</th>
+                <th className="text-left px-6 py-4 text-sm font-semibold text-[var(--fg-primary)]">Fase</th>
+                <th className="text-left px-6 py-4 text-sm font-semibold text-[var(--fg-primary)]">Sesiones</th>
+                <th className="text-left px-6 py-4 text-sm font-semibold text-[var(--fg-primary)]">Creado</th>
                 <th className="text-right px-6 py-4 text-sm font-semibold text-[var(--fg-primary)]"></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-[var(--border-color)]">
               {filteredPrograms.map((program) => {
                 const status = statusConfig[program.status] || statusConfig.draft;
                 const StatusIcon = status.icon;
@@ -267,10 +267,10 @@ export default function CoachProgramsPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
-                          <User className="w-4 h-4 text-primary-600" />
+                        <div className="w-8 h-8 bg-emerald-500/20 rounded-full flex items-center justify-center">
+                          <User className="w-4 h-4 text-emerald-400" />
                         </div>
-                        <span className="text-[var(--fg-muted)]">{program.coacheeName || 'Not assigned'}</span>
+                        <span className="text-[var(--fg-muted)]">{program.coacheeName || 'Sin asignar'}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
