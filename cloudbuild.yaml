@@ -42,7 +42,7 @@ steps:
       - 'managed'
       - '--allow-unauthenticated'
       - '--set-secrets'
-      - 'GA4_CREDENTIALS=ga4-credentials:latest,GEMINI_API_KEY=GEMINI_API_KEY:latest,CLARITY_API_TOKEN=CLARITY_API_TOKEN:latest'
+      - 'CLARITY_API_TOKEN=CLARITY_API_TOKEN:latest'
 images:
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/achieving-coach/frontend:$COMMIT_SHA'
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/achieving-coach/frontend:latest'
