@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
   CreditCard,
@@ -32,7 +32,7 @@ import {
 } from '@/services/subscription.service';
 
 
-export default function BillingPage() {
+function BillingPageContent() {
   const { user } = useAuth();
   const searchParams = useSearchParams();
   const [subscription, setSubscription] = useState<CoachSubscription | null>(null);
@@ -441,5 +441,20 @@ export default function BillingPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function BillingPage() {
+  return (
+    <Suspense fallback={
+      <div className="p-6">
+        <div className="animate-pulse space-y-6">
+          <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-48" />
+          <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded-xl" />
+        </div>
+      </div>
+    }>
+      <BillingPageContent />
+    </Suspense>
   );
 }

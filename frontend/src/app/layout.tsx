@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -228,7 +229,9 @@ export default function RootLayout({
           <AnalyticsProvider />
 
           {/* Core Web Vitals tracking for SEO 2026 */}
-          <WebVitals />
+          <Suspense fallback={null}>
+            <WebVitals />
+          </Suspense>
 
           {/* Auth context and app content */}
           <AuthProvider>
