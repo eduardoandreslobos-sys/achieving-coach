@@ -13,19 +13,21 @@ export default function SubscriptionGuard({ children }: SubscriptionGuardProps) 
   const router = useRouter();
   const { userProfile, loading } = useAuth();
   const [showWarning, setShowWarning] = useState(false);
+  const [daysRemaining, setDaysRemaining] = useState(0);
 
   useEffect(() => {
     if (!loading && userProfile?.role === 'coach') {
       const status = userProfile.subscriptionStatus;
-      
+
       if (status === 'expired' || status === 'canceled') {
         router.push('/subscription-expired');
       } else if (status === 'trial' && userProfile.trialEndsAt) {
         // Convert Firestore Timestamp to Date
         const trialEndDate = userProfile.trialEndsAt.toDate();
-        const daysRemaining = Math.ceil((trialEndDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-        
-        if (daysRemaining <= 3) {
+        const days = Math.ceil((trialEndDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+        setDaysRemaining(days);
+
+        if (days <= 3) {
           setShowWarning(true);
         }
       }
@@ -39,11 +41,6 @@ export default function SubscriptionGuard({ children }: SubscriptionGuardProps) 
       </div>
     );
   }
-
-  const trialEndsAt = userProfile?.trialEndsAt;
-  const daysRemaining = trialEndsAt 
-    ? Math.ceil((trialEndsAt.toDate().getTime() - Date.now()) / (1000 * 60 * 60 * 24))
-    : 0;
 
   return (
     <>
