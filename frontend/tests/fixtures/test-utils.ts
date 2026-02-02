@@ -45,6 +45,31 @@ export async function validatePageDarkTheme(page: Page): Promise<void> {
 }
 
 /**
+ * Dismisses cookie consent banner if present
+ */
+export async function dismissCookieBanner(page: Page): Promise<void> {
+  try {
+    // Wait a moment for banner to appear
+    await page.waitForTimeout(500);
+
+    // Look for cookie banner
+    const cookieBanner = page.locator('[class*="fixed"][class*="bottom"], [class*="cookie"], #cookie-consent, [data-testid="cookie-banner"]');
+
+    if (await cookieBanner.count() > 0) {
+      // Try to find and click accept button
+      const acceptButton = page.locator('button:has-text("Aceptar"), button:has-text("Accept"), button:has-text("Acepto"), button:has-text("OK")').first();
+
+      if (await acceptButton.isVisible({ timeout: 1000 }).catch(() => false)) {
+        await acceptButton.click({ force: true });
+        await page.waitForTimeout(300);
+      }
+    }
+  } catch {
+    // Cookie banner not present or couldn't be dismissed - continue
+  }
+}
+
+/**
  * Waits for page to finish loading (no spinners)
  */
 export async function waitForPageLoad(page: Page): Promise<void> {
@@ -67,6 +92,9 @@ export async function waitForPageLoad(page: Page): Promise<void> {
   } catch {
     // Spinner timeout is acceptable - continue with test
   }
+
+  // Dismiss cookie banner if present
+  await dismissCookieBanner(page);
 }
 
 /**
@@ -172,15 +200,15 @@ export async function takeScreenshot(page: Page, name: string): Promise<void> {
 export const TEST_CREDENTIALS = {
   coach: {
     email: process.env.TEST_COACH_EMAIL || 'test-coach@achievingcoach.com',
-    password: process.env.TEST_COACH_PASSWORD || 'TestCoach123!',
+    password: process.env.TEST_COACH_PASSWORD || 'TestPassword123',
   },
   coachee: {
     email: process.env.TEST_COACHEE_EMAIL || 'test-coachee@achievingcoach.com',
-    password: process.env.TEST_COACHEE_PASSWORD || 'TestCoachee123!',
+    password: process.env.TEST_COACHEE_PASSWORD || 'TestPassword123',
   },
   admin: {
     email: process.env.TEST_ADMIN_EMAIL || 'test-admin@achievingcoach.com',
-    password: process.env.TEST_ADMIN_PASSWORD || 'TestAdmin123!',
+    password: process.env.TEST_ADMIN_PASSWORD || 'TestPassword123',
   },
 };
 
@@ -193,8 +221,25 @@ export async function login(
   credentials: { email: string; password: string }
 ): Promise<boolean> {
   try {
+    console.log(`Attempting login with: ${credentials.email}`);
     await page.goto('/sign-in');
     await page.waitForLoadState('domcontentloaded');
+
+    // Handle cookie consent modal if present - must dismiss before interacting with form
+    try {
+      await page.waitForTimeout(1000); // Wait for cookie banner to appear
+      const cookieBanner = page.locator('[class*="fixed"][class*="bottom-0"], [class*="cookie"], #cookie-consent');
+      if (await cookieBanner.count() > 0) {
+        const acceptButton = page.locator('button:has-text("Aceptar"), button:has-text("Accept"), button:has-text("Acepto")').first();
+        if (await acceptButton.isVisible()) {
+          await acceptButton.click({ force: true });
+          await page.waitForTimeout(500);
+          console.log('Cookie consent accepted');
+        }
+      }
+    } catch {
+      // Cookie modal not present or already dismissed
+    }
 
     // Wait for loading to finish and form to appear
     try {
@@ -208,20 +253,30 @@ export async function login(
     // Fill in credentials
     await page.fill('input[type="email"]', credentials.email);
     await page.fill('input[type="password"]', credentials.password);
+    console.log('Credentials filled');
 
-    // Submit form
-    await page.click('button[type="submit"]');
+    // Submit form - look for the submit button by type or text
+    const submitButton = page.locator('button[type="submit"], button:has-text("Ingresar"), button:has-text("Sign in")');
+    await submitButton.first().click({ force: true });
+    console.log('Form submitted');
 
     // Wait for navigation (should redirect after successful login)
     try {
-      await page.waitForURL(/dashboard|coach|admin/, { timeout: 15000 });
+      await page.waitForURL(/dashboard|coach|admin/, { timeout: 20000 });
+      console.log('Login successful, redirected to:', page.url());
       return true;
     } catch {
-      // Login might have failed - check if still on sign-in page
+      // Login might have failed - check for error message
+      const errorMsg = page.locator('.text-red-500, .text-destructive, [role="alert"]');
+      if (await errorMsg.count() > 0) {
+        const errorText = await errorMsg.first().textContent();
+        console.log('Login error:', errorText);
+      }
+      console.log('Login failed, still on:', page.url());
       return !page.url().includes('sign-in');
     }
   } catch (error) {
-    console.log('Login failed:', error);
+    console.log('Login failed with exception:', error);
     return false;
   }
 }

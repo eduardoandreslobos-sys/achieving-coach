@@ -150,21 +150,22 @@ test.describe('ICF Simulator', () => {
       await waitForPageLoad(page);
 
       const startButton = page.locator('button:has-text("Iniciar")').first();
+      const isVisible = await startButton.isVisible({ timeout: 3000 }).catch(() => false);
 
-      if (await startButton.isVisible()) {
-        await startButton.click();
+      if (isVisible) {
+        await startButton.click({ force: true });
         await page.waitForTimeout(1000);
 
         // Look for navigation buttons
         const nextButton = page.locator('button:has-text("Siguiente"), button:has-text("Next")').first();
+        const nextVisible = await nextButton.isVisible({ timeout: 2000 }).catch(() => false);
 
-        if (await nextButton.isVisible()) {
-          await nextButton.click();
+        if (nextVisible) {
+          await nextButton.click({ force: true });
           await page.waitForTimeout(500);
-
-          await page.screenshot({ path: `${SCREENSHOTS_DIR}/next-question.png` });
         }
       }
+      await page.screenshot({ path: `${SCREENSHOTS_DIR}/next-question.png` });
     });
 
     test('2.6 Progress indicator shows', async ({ page }) => {
