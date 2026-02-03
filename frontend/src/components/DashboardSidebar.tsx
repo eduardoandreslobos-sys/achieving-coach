@@ -15,13 +15,15 @@ import {
   Settings,
   FolderKanban,
   ChevronLeft,
-  X
+  X,
+  TrendingUp
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  { name: 'Mi Progreso', href: '/progress', icon: TrendingUp },
   { name: 'Metas', href: '/goals', icon: Target },
   { name: 'Mis Herramientas', href: '/tools', icon: Wrench },
   { name: 'Mensajes', href: '/messages', icon: MessageSquare, badge: 2 },

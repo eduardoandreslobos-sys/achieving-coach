@@ -23,10 +23,41 @@ import {
   FileText,
   Save,
   ExternalLink,
-  AlertCircle
+  AlertCircle,
+  Eye,
+  EyeOff,
+  Share2,
+  Lock
 } from 'lucide-react';
 import Link from 'next/link';
 import { toast, Toaster } from 'sonner';
+import GuidanceBox from '@/components/ui/GuidanceBox';
+import LabelWithTooltip from '@/components/ui/LabelWithTooltip';
+import {
+  getSessionGuidance,
+  FIELD_PLACEHOLDERS,
+  FIELD_TOOLTIPS,
+  CoachingType,
+  RescheduleEntry,
+  SessionStatus
+} from '@/types/coaching';
+import {
+  cancelSession,
+  requestSessionReschedule,
+  acceptReschedule,
+  rejectReschedule
+} from '@/lib/coachingService';
+import {
+  SessionCancellationModal,
+  RescheduleRequestModal,
+  RescheduleResponseBanner
+} from '@/components/sessions';
+
+interface SessionSharing {
+  agreementSharedWithCoachee: boolean;
+  reportSharedWithCoachee: boolean;
+  sharedAt?: Date;
+}
 
 interface Session {
   id: string;
@@ -36,7 +67,8 @@ interface Session {
   coacheeEmail: string;
   scheduledDate: Date;
   duration: number;
-  status?: 'scheduled' | 'in-progress' | 'completed' | 'cancelled' | 'no-show';
+  status?: SessionStatus;
+  currentRescheduleRequest?: RescheduleEntry;
   meetingLink?: string;
   notes?: string;
   preSessionNotes?: string;
@@ -45,6 +77,8 @@ interface Session {
   programName?: string;
   startedAt?: Date;
   completedAt?: Date;
+  sessionNumber?: number;
+  coachingType?: CoachingType;
   sessionAgreement?: {
     coacheeGoal?: string;
     sessionObjective?: string;
@@ -53,6 +87,13 @@ interface Session {
     resources?: string;
     actionPlan?: string;
     commitment?: string;
+    // CE fields
+    previousSessionLink?: string;
+    sessionFocus?: string;
+    relevanceToProcess?: string;
+    practicesOrCompetencies?: string;
+    sessionIndicators?: string;
+    learningContext?: string;
   };
   sessionReport?: {
     topicsDiscussed?: string;
@@ -60,7 +101,17 @@ interface Session {
     actionItems?: string;
     followUp?: string;
     coachNotes?: string;
+    // CE fields
+    sessionTopic?: string;
+    practicesWorked?: string;
+    previousSessionLink?: string;
+    practiceContext?: string;
+    progressIndicators?: string;
+    discoveriesAndLearnings?: string;
+    tasksForNextSession?: string;
+    observations?: string;
   };
+  sharing?: SessionSharing;
 }
 
 export default function SessionDetailPage() {
@@ -73,6 +124,10 @@ export default function SessionDetailPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'agreement' | 'report'>('overview');
+
+  // Modal states
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [showRescheduleModal, setShowRescheduleModal] = useState(false);
 
   // Session Agreement form state
   const [agreement, setAgreement] = useState({
@@ -144,8 +199,11 @@ export default function SessionDetailPage() {
         programName: data.programName,
         startedAt: data.startedAt?.toDate?.() || undefined,
         completedAt: data.completedAt?.toDate?.() || undefined,
+        sessionNumber: data.sessionNumber || 1,
+        coachingType: data.coachingType || 'corporate',
         sessionAgreement: data.sessionAgreement || {},
-        sessionReport: data.sessionReport || {}
+        sessionReport: data.sessionReport || {},
+        sharing: data.sharing || { agreementSharedWithCoachee: false, reportSharedWithCoachee: false }
       };
 
       setSession(sessionData);
@@ -177,6 +235,65 @@ export default function SessionDetailPage() {
       toast.error('Error al cargar la sesión');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Cancellation handler
+  const handleCancelSession = async (reason: string) => {
+    if (!session || !user) return;
+    try {
+      await cancelSession(sessionId, user.uid, 'coach', reason);
+      toast.success('Sesión cancelada');
+      loadSession();
+    } catch (error: any) {
+      toast.error(error.message || 'Error al cancelar la sesión');
+    }
+  };
+
+  // Reschedule handlers
+  const handleRequestReschedule = async (data: {
+    proposedDate: Date;
+    proposedStartTime: string;
+    proposedEndTime: string;
+    reason: string;
+  }) => {
+    if (!session || !user) return;
+    try {
+      await requestSessionReschedule(
+        sessionId,
+        user.uid,
+        'coach',
+        data.proposedDate,
+        data.proposedStartTime,
+        data.proposedEndTime,
+        data.reason
+      );
+      toast.success('Solicitud de reprogramación enviada');
+      loadSession();
+    } catch (error: any) {
+      toast.error(error.message || 'Error al solicitar reprogramación');
+    }
+  };
+
+  const handleAcceptReschedule = async () => {
+    if (!session || !user) return;
+    try {
+      await acceptReschedule(sessionId, user.uid);
+      toast.success('Reprogramación aceptada');
+      loadSession();
+    } catch (error: any) {
+      toast.error(error.message || 'Error al aceptar reprogramación');
+    }
+  };
+
+  const handleRejectReschedule = async (note: string) => {
+    if (!session || !user) return;
+    try {
+      await rejectReschedule(sessionId, user.uid, note);
+      toast.success('Reprogramación rechazada');
+      loadSession();
+    } catch (error: any) {
+      toast.error(error.message || 'Error al rechazar reprogramación');
     }
   };
 
@@ -254,8 +371,43 @@ export default function SessionDetailPage() {
     }
   };
 
+  const handleToggleSharing = async (field: 'agreementSharedWithCoachee' | 'reportSharedWithCoachee') => {
+    if (!session) return;
+
+    const currentValue = session.sharing?.[field] ?? false;
+    const newSharing = {
+      ...session.sharing,
+      [field]: !currentValue,
+      sharedAt: !currentValue ? serverTimestamp() : session.sharing?.sharedAt
+    };
+
+    try {
+      await updateDoc(doc(db, 'sessions', session.id), {
+        sharing: newSharing,
+        updatedAt: serverTimestamp()
+      });
+
+      setSession({
+        ...session,
+        sharing: {
+          ...session.sharing,
+          agreementSharedWithCoachee: session.sharing?.agreementSharedWithCoachee ?? false,
+          reportSharedWithCoachee: session.sharing?.reportSharedWithCoachee ?? false,
+          [field]: !currentValue
+        }
+      });
+
+      toast.success(!currentValue ? 'Compartido con el coachee' : 'Ya no está compartido con el coachee');
+    } catch (error) {
+      console.error('Error updating sharing:', error);
+      toast.error('Error al actualizar visibilidad');
+    }
+  };
+
   const getStatusBadge = (status: Session['status']) => {
     switch (status) {
+      case 'pending_confirmation':
+        return <span className="px-3 py-1 text-sm rounded-full bg-amber-500/20 text-amber-400">Pendiente Confirmación</span>;
       case 'scheduled':
         return <span className="px-3 py-1 text-sm rounded-full bg-blue-500/20 text-blue-400">Programada</span>;
       case 'in-progress':
@@ -266,6 +418,8 @@ export default function SessionDetailPage() {
         return <span className="px-3 py-1 text-sm rounded-full bg-red-500/20 text-red-400">Cancelada</span>;
       case 'no-show':
         return <span className="px-3 py-1 text-sm rounded-full bg-amber-500/20 text-amber-400">No asistió</span>;
+      case 'rejected':
+        return <span className="px-3 py-1 text-sm rounded-full bg-red-500/20 text-red-400">Rechazada</span>;
       default:
         return null;
     }
@@ -287,9 +441,29 @@ export default function SessionDetailPage() {
     );
   }
 
+  const canCancel = session.status && !['completed', 'cancelled', 'rejected'].includes(session.status);
+  const isRequester = session.currentRescheduleRequest?.requestedBy === user?.uid;
+
   return (
     <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--fg-primary)] p-8">
       <Toaster position="top-center" richColors />
+
+      {/* Modals */}
+      <SessionCancellationModal
+        isOpen={showCancelModal}
+        onClose={() => setShowCancelModal(false)}
+        onConfirm={handleCancelSession}
+        sessionTitle={`Sesión con ${session.coacheeName}`}
+        coacheeName={session.coacheeName}
+      />
+
+      <RescheduleRequestModal
+        isOpen={showRescheduleModal}
+        onClose={() => setShowRescheduleModal(false)}
+        onSubmit={handleRequestReschedule}
+        currentDate={session.scheduledDate}
+        sessionTitle={`Sesión con ${session.coacheeName}`}
+      />
 
       {/* Header */}
       <div className="mb-8">
@@ -300,6 +474,16 @@ export default function SessionDetailPage() {
           <ArrowLeft className="w-4 h-4" />
           Volver a Sesiones
         </Link>
+
+        {/* Reschedule Response Banner */}
+        {session.currentRescheduleRequest && (
+          <RescheduleResponseBanner
+            rescheduleRequest={session.currentRescheduleRequest}
+            onAccept={handleAcceptReschedule}
+            onReject={handleRejectReschedule}
+            isRequester={isRequester}
+          />
+        )}
 
         <div className="flex items-start justify-between">
           <div>
@@ -351,6 +535,25 @@ export default function SessionDetailPage() {
                 >
                   <CheckCircle className="w-4 h-4" />
                   Completar Sesión
+                </button>
+              </>
+            )}
+            {/* Cancel and Reschedule buttons for coach */}
+            {canCancel && (
+              <>
+                <button
+                  onClick={() => setShowRescheduleModal(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  <Calendar className="w-4 h-4" />
+                  Reprogramar
+                </button>
+                <button
+                  onClick={() => setShowCancelModal(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  <XCircle className="w-4 h-4" />
+                  Cancelar
                 </button>
               </>
             )}
@@ -510,92 +713,157 @@ export default function SessionDetailPage() {
 
         {activeTab === 'agreement' && (
           <div className="space-y-6">
+            {/* Session Guidance Box */}
+            {(() => {
+              const guidance = getSessionGuidance(session.sessionNumber || 1, session.coachingType || 'corporate');
+              return guidance ? (
+                <GuidanceBox
+                  title={`Guía para Sesión ${session.sessionNumber || 1}: ${guidance.title}`}
+                  tips={guidance.agreementTips}
+                  variant={guidance.isSpecial ? 'tip' : 'info'}
+                  collapsible={true}
+                  defaultExpanded={true}
+                />
+              ) : null;
+            })()}
+
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Acuerdo de Sesión</h3>
-              <button
-                onClick={handleSaveAgreement}
-                disabled={saving}
-                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50"
-              >
-                <Save className="w-4 h-4" />
-                {saving ? 'Guardando...' : 'Guardar'}
-              </button>
+              <div className="flex items-center gap-3">
+                <h3 className="text-lg font-semibold">Acuerdo de Sesión</h3>
+                {session.sharing?.agreementSharedWithCoachee ? (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full bg-emerald-500/20 text-emerald-400">
+                    <Eye className="w-3 h-3" />
+                    Compartido
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full bg-gray-500/20 text-gray-400">
+                    <Lock className="w-3 h-3" />
+                    Privado
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => handleToggleSharing('agreementSharedWithCoachee')}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                    session.sharing?.agreementSharedWithCoachee
+                      ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'
+                      : 'bg-[var(--bg-primary)] text-[var(--fg-muted)] hover:text-[var(--fg-primary)] border border-[var(--border-color)]'
+                  }`}
+                >
+                  {session.sharing?.agreementSharedWithCoachee ? (
+                    <>
+                      <Eye className="w-4 h-4" />
+                      Visible para Coachee
+                    </>
+                  ) : (
+                    <>
+                      <EyeOff className="w-4 h-4" />
+                      Compartir con Coachee
+                    </>
+                  )}
+                </button>
+                <button
+                  onClick={handleSaveAgreement}
+                  disabled={saving}
+                  className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50"
+                >
+                  <Save className="w-4 h-4" />
+                  {saving ? 'Guardando...' : 'Guardar'}
+                </button>
+              </div>
             </div>
 
             <div className="grid gap-4">
               <div>
-                <label className="block text-sm font-medium text-[var(--fg-muted)] mb-2">
-                  Meta del Coachee
-                </label>
+                <LabelWithTooltip
+                  label={session.sessionNumber === 1 ? 'Enganche con Reunión Tripartita' : 'Enganche con Sesión Anterior'}
+                  tooltip={FIELD_TOOLTIPS.sessionAgreement.previousSessionLink}
+                  required
+                  className="mb-2"
+                />
                 <textarea
                   value={agreement.coacheeGoal}
                   onChange={(e) => setAgreement({ ...agreement, coacheeGoal: e.target.value })}
-                  placeholder="¿Cuál es la meta general del coachee?"
-                  rows={2}
+                  placeholder={FIELD_PLACEHOLDERS.sessionAgreement.previousSessionLink}
+                  rows={3}
                   className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500 resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[var(--fg-muted)] mb-2">
-                  Objetivo de la Sesión
-                </label>
+                <LabelWithTooltip
+                  label="Qué se trabajará en la Sesión"
+                  tooltip={FIELD_TOOLTIPS.sessionAgreement.sessionFocus}
+                  required
+                  className="mb-2"
+                />
                 <textarea
                   value={agreement.sessionObjective}
                   onChange={(e) => setAgreement({ ...agreement, sessionObjective: e.target.value })}
-                  placeholder="¿Qué quiere lograr el coachee en esta sesión?"
-                  rows={2}
+                  placeholder={FIELD_PLACEHOLDERS.sessionAgreement.sessionFocus}
+                  rows={3}
                   className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500 resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[var(--fg-muted)] mb-2">
-                  Indicadores de Éxito
-                </label>
+                <LabelWithTooltip
+                  label="Prácticas o Competencias Observables"
+                  tooltip={FIELD_TOOLTIPS.sessionAgreement.practicesOrCompetencies}
+                  required
+                  className="mb-2"
+                />
                 <textarea
                   value={agreement.successIndicators}
                   onChange={(e) => setAgreement({ ...agreement, successIndicators: e.target.value })}
-                  placeholder="¿Cómo sabremos que la sesión fue exitosa?"
-                  rows={2}
+                  placeholder={FIELD_PLACEHOLDERS.sessionAgreement.practicesOrCompetencies}
+                  rows={3}
                   className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500 resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[var(--fg-muted)] mb-2">
-                  Obstáculos Identificados
-                </label>
+                <LabelWithTooltip
+                  label="Indicadores Particulares para la Sesión"
+                  tooltip={FIELD_TOOLTIPS.sessionAgreement.sessionIndicators}
+                  required
+                  className="mb-2"
+                />
                 <textarea
                   value={agreement.obstacles}
                   onChange={(e) => setAgreement({ ...agreement, obstacles: e.target.value })}
-                  placeholder="¿Qué obstáculos podrían surgir?"
+                  placeholder={FIELD_PLACEHOLDERS.sessionAgreement.sessionIndicators}
                   rows={2}
                   className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500 resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[var(--fg-muted)] mb-2">
-                  Recursos Disponibles
-                </label>
+                <LabelWithTooltip
+                  label="Relevancia dentro del Proceso"
+                  tooltip={FIELD_TOOLTIPS.sessionAgreement.relevanceToProcess}
+                  className="mb-2"
+                />
                 <textarea
                   value={agreement.resources}
                   onChange={(e) => setAgreement({ ...agreement, resources: e.target.value })}
-                  placeholder="¿Qué recursos tiene el coachee disponibles?"
+                  placeholder={FIELD_PLACEHOLDERS.sessionAgreement.relevanceToProcess}
                   rows={2}
                   className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500 resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[var(--fg-muted)] mb-2">
-                  Plan de Acción
-                </label>
+                <LabelWithTooltip
+                  label="Contexto para Experiencias de Aprendizaje"
+                  tooltip={FIELD_TOOLTIPS.sessionAgreement.learningContext}
+                  className="mb-2"
+                />
                 <textarea
                   value={agreement.actionPlan}
                   onChange={(e) => setAgreement({ ...agreement, actionPlan: e.target.value })}
-                  placeholder="¿Cuáles son los pasos a seguir?"
+                  placeholder={FIELD_PLACEHOLDERS.sessionAgreement.learningContext}
                   rows={3}
                   className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500 resize-none"
                 />
@@ -603,12 +871,12 @@ export default function SessionDetailPage() {
 
               <div>
                 <label className="block text-sm font-medium text-[var(--fg-muted)] mb-2">
-                  Compromiso
+                  Notas Adicionales
                 </label>
                 <textarea
                   value={agreement.commitment}
                   onChange={(e) => setAgreement({ ...agreement, commitment: e.target.value })}
-                  placeholder="¿A qué se compromete el coachee?"
+                  placeholder="Observaciones o notas adicionales para esta sesión..."
                   rows={2}
                   className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500 resize-none"
                 />
@@ -619,66 +887,161 @@ export default function SessionDetailPage() {
 
         {activeTab === 'report' && (
           <div className="space-y-6">
+            {/* Session Report Guidance Box */}
+            {(() => {
+              const guidance = getSessionGuidance(session.sessionNumber || 1, session.coachingType || 'corporate');
+              return guidance ? (
+                <GuidanceBox
+                  title={`Guía para Tabla de Seguimiento - Sesión ${session.sessionNumber || 1}`}
+                  tips={guidance.reportTips}
+                  variant="info"
+                  collapsible={true}
+                  defaultExpanded={false}
+                />
+              ) : null;
+            })()}
+
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Reporte de Sesión</h3>
-              <button
-                onClick={handleSaveReport}
-                disabled={saving}
-                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50"
-              >
-                <Save className="w-4 h-4" />
-                {saving ? 'Guardando...' : 'Guardar'}
-              </button>
+              <div className="flex items-center gap-3">
+                <h3 className="text-lg font-semibold">Tabla de Seguimiento</h3>
+                {session.sharing?.reportSharedWithCoachee ? (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full bg-emerald-500/20 text-emerald-400">
+                    <Eye className="w-3 h-3" />
+                    Compartido
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full bg-gray-500/20 text-gray-400">
+                    <Lock className="w-3 h-3" />
+                    Privado
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => handleToggleSharing('reportSharedWithCoachee')}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                    session.sharing?.reportSharedWithCoachee
+                      ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'
+                      : 'bg-[var(--bg-primary)] text-[var(--fg-muted)] hover:text-[var(--fg-primary)] border border-[var(--border-color)]'
+                  }`}
+                >
+                  {session.sharing?.reportSharedWithCoachee ? (
+                    <>
+                      <Eye className="w-4 h-4" />
+                      Visible para Coachee
+                    </>
+                  ) : (
+                    <>
+                      <EyeOff className="w-4 h-4" />
+                      Compartir con Coachee
+                    </>
+                  )}
+                </button>
+                <button
+                  onClick={handleSaveReport}
+                  disabled={saving}
+                  className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50"
+                >
+                  <Save className="w-4 h-4" />
+                  {saving ? 'Guardando...' : 'Guardar'}
+                </button>
+              </div>
             </div>
 
             <div className="grid gap-4">
-              <div>
-                <label className="block text-sm font-medium text-[var(--fg-muted)] mb-2">
-                  Temas Discutidos
-                </label>
-                <textarea
-                  value={report.topicsDiscussed}
-                  onChange={(e) => setReport({ ...report, topicsDiscussed: e.target.value })}
-                  placeholder="¿Qué temas se trataron en la sesión?"
-                  rows={3}
-                  className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500 resize-none"
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <LabelWithTooltip
+                    label="Tema de la Sesión"
+                    tooltip={FIELD_TOOLTIPS.sessionReport.sessionTopic}
+                    required
+                    className="mb-2"
+                  />
+                  <textarea
+                    value={report.topicsDiscussed}
+                    onChange={(e) => setReport({ ...report, topicsDiscussed: e.target.value })}
+                    placeholder={FIELD_PLACEHOLDERS.sessionReport.sessionTopic}
+                    rows={2}
+                    className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500 resize-none"
+                  />
+                </div>
+
+                <div>
+                  <LabelWithTooltip
+                    label="Enganche con Sesión Anterior"
+                    tooltip={FIELD_TOOLTIPS.sessionReport.previousSessionLink}
+                    required
+                    className="mb-2"
+                  />
+                  <textarea
+                    value={report.followUp}
+                    onChange={(e) => setReport({ ...report, followUp: e.target.value })}
+                    placeholder={FIELD_PLACEHOLDERS.sessionReport.previousSessionLink}
+                    rows={2}
+                    className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500 resize-none"
+                  />
+                </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[var(--fg-muted)] mb-2">
-                  Insights / Descubrimientos
-                </label>
-                <textarea
-                  value={report.insights}
-                  onChange={(e) => setReport({ ...report, insights: e.target.value })}
-                  placeholder="¿Qué descubrimientos o insights surgieron?"
-                  rows={3}
-                  className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500 resize-none"
+                <LabelWithTooltip
+                  label="Contextos de Práctica"
+                  tooltip={FIELD_TOOLTIPS.sessionReport.practiceContext}
+                  required
+                  className="mb-2"
                 />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-[var(--fg-muted)] mb-2">
-                  Acciones a Tomar
-                </label>
                 <textarea
                   value={report.actionItems}
                   onChange={(e) => setReport({ ...report, actionItems: e.target.value })}
-                  placeholder="¿Qué acciones va a realizar el coachee?"
+                  placeholder={FIELD_PLACEHOLDERS.sessionReport.practiceContext}
+                  rows={2}
+                  className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500 resize-none"
+                />
+              </div>
+
+              <div>
+                <LabelWithTooltip
+                  label="Indicadores de Avance"
+                  tooltip={FIELD_TOOLTIPS.sessionReport.progressIndicators}
+                  required
+                  className="mb-2"
+                />
+                <textarea
+                  value={report.insights}
+                  onChange={(e) => setReport({ ...report, insights: e.target.value })}
+                  placeholder={FIELD_PLACEHOLDERS.sessionReport.progressIndicators}
+                  rows={2}
+                  className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500 resize-none"
+                />
+              </div>
+
+              <div>
+                <LabelWithTooltip
+                  label="Descubrimientos y Aprendizajes"
+                  tooltip={FIELD_TOOLTIPS.sessionReport.discoveriesAndLearnings}
+                  required
+                  className="mb-2"
+                />
+                <textarea
+                  value={report.coachNotes}
+                  onChange={(e) => setReport({ ...report, coachNotes: e.target.value })}
+                  placeholder={FIELD_PLACEHOLDERS.sessionReport.discoveriesAndLearnings}
                   rows={3}
                   className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500 resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[var(--fg-muted)] mb-2">
-                  Seguimiento
-                </label>
+                <LabelWithTooltip
+                  label="Tareas para Próxima Sesión"
+                  tooltip={FIELD_TOOLTIPS.sessionReport.tasksForNextSession}
+                  required
+                  className="mb-2"
+                />
                 <textarea
-                  value={report.followUp}
-                  onChange={(e) => setReport({ ...report, followUp: e.target.value })}
-                  placeholder="¿Qué seguimiento se requiere para la próxima sesión?"
+                  value={report.actionItems}
+                  onChange={(e) => setReport({ ...report, actionItems: e.target.value })}
+                  placeholder={FIELD_PLACEHOLDERS.sessionReport.tasksForNextSession}
                   rows={2}
                   className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500 resize-none"
                 />
@@ -686,12 +1049,12 @@ export default function SessionDetailPage() {
 
               <div>
                 <label className="block text-sm font-medium text-[var(--fg-muted)] mb-2">
-                  Notas del Coach (Privadas)
+                  Observaciones (Privadas del Coach)
                 </label>
                 <textarea
                   value={report.coachNotes}
                   onChange={(e) => setReport({ ...report, coachNotes: e.target.value })}
-                  placeholder="Notas personales del coach (no visibles para el coachee)"
+                  placeholder={FIELD_PLACEHOLDERS.sessionReport.observations}
                   rows={3}
                   className="w-full px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-[var(--fg-primary)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-emerald-500 resize-none"
                 />
