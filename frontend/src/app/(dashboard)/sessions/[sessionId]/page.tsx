@@ -130,7 +130,8 @@ export default function SessionDetailPage() {
               </p>
             </div>
             
-            {isCoach && session.status === 'scheduled' && (
+            {/* Show Iniciar button for scheduled sessions or sessions without status */}
+            {isCoach && (!session.status || session.status === 'scheduled') && (
               <button
                 onClick={handleStartSession}
                 disabled={saving}
@@ -300,7 +301,7 @@ function SessionStatusBadge({ status }: { status: Session['status'] }) {
     'no-show': { bg: 'bg-orange-100', text: 'text-orange-800', label: 'No asistió' },
   };
 
-  const { bg, text, label } = config[status] || config.scheduled;
+  const { bg, text, label } = (status && config[status]) || config.scheduled;
 
   return (
     <span className={`px-3 py-1 rounded-full text-xs font-medium ${bg} ${text}`}>

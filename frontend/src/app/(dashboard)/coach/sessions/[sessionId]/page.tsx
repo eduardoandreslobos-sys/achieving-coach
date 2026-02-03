@@ -36,7 +36,7 @@ interface Session {
   coacheeEmail: string;
   scheduledDate: Date;
   duration: number;
-  status: 'scheduled' | 'in-progress' | 'completed' | 'cancelled' | 'no-show';
+  status?: 'scheduled' | 'in-progress' | 'completed' | 'cancelled' | 'no-show';
   meetingLink?: string;
   notes?: string;
   preSessionNotes?: string;
@@ -322,7 +322,8 @@ export default function SessionDetailPage() {
           </div>
 
           <div className="flex items-center gap-3">
-            {session.status === 'scheduled' && (
+            {/* Show Iniciar button for scheduled sessions or sessions without status */}
+            {(!session.status || session.status === 'scheduled') && (
               <button
                 onClick={handleStartSession}
                 className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"

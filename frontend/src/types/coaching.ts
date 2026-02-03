@@ -359,7 +359,7 @@ export interface Session {
   scheduledTime: string;
   duration: number;
   location?: string;
-  status: 'scheduled' | 'in-progress' | 'completed' | 'cancelled' | 'no-show';
+  status?: 'scheduled' | 'in-progress' | 'completed' | 'cancelled' | 'no-show';
   
   // Estructura de sesión
   goal: string;
