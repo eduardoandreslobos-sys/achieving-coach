@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { CheckCircle, AlertCircle, Calendar, Target, MessageSquare } from 'lucide-react';
 import { useNotifications } from '@/hooks/useNotifications';
@@ -29,9 +30,20 @@ const colorMap = {
 export default function NotificationItem({ notification, onClose }: NotificationItemProps) {
   const router = useRouter();
   const { markAsRead } = useNotifications();
+  const [timeAgo, setTimeAgo] = useState('');
 
   const Icon = iconMap[notification.type] || AlertCircle;
   const colorClass = colorMap[notification.type] || 'text-gray-600 bg-gray-100';
+
+  // Calculate time ago on client only to avoid hydration mismatch
+  useEffect(() => {
+    setTimeAgo(getTimeAgo(notification.createdAt));
+    // Update time ago every minute
+    const interval = setInterval(() => {
+      setTimeAgo(getTimeAgo(notification.createdAt));
+    }, 60000);
+    return () => clearInterval(interval);
+  }, [notification.createdAt]);
 
   const handleClick = async () => {
     if (!notification.read) {
@@ -42,8 +54,6 @@ export default function NotificationItem({ notification, onClose }: Notification
     }
     onClose();
   };
-
-  const timeAgo = getTimeAgo(notification.createdAt);
 
   return (
     <button

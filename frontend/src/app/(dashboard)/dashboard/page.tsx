@@ -39,12 +39,21 @@ export default function CoacheeDashboard() {
   const [upcomingSessions, setUpcomingSessions] = useState<Session[]>([]);
   const [assignedTools, setAssignedTools] = useState<ToolAssignment[]>([]);
   const [loading, setLoading] = useState(true);
+  const [greeting, setGreeting] = useState('Hola');
   const [stats, setStats] = useState({
     completedGoals: 0,
     totalSessions: 0,
     streak: 7,
     toolsCompleted: 0,
   });
+
+  // Set greeting on client only to avoid hydration mismatch
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) setGreeting('Buenos días');
+    else if (hour < 18) setGreeting('Buenas tardes');
+    else setGreeting('Buenas noches');
+  }, []);
 
   useEffect(() => {
     const loadDashboardData = async () => {
@@ -147,12 +156,6 @@ export default function CoacheeDashboard() {
     });
   };
 
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'Buenos días';
-    if (hour < 18) return 'Buenas tardes';
-    return 'Buenas noches';
-  };
 
   if (loading) {
     return (
@@ -233,7 +236,7 @@ export default function CoacheeDashboard() {
               <Sparkles className="w-5 h-5 text-[var(--accent-primary)]" />
             </div>
             <h1 className="text-2xl lg:text-3xl font-bold text-[var(--fg-primary)]">
-              {getGreeting()}, {userProfile?.displayName?.split(' ')[0] || 'Coachee'}
+              {greeting}, {userProfile?.displayName?.split(' ')[0] || 'Coachee'}
             </h1>
           </div>
           <p className="text-[var(--fg-muted)] ml-13">Tu progreso de coaching de un vistazo.</p>

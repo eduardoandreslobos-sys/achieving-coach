@@ -51,6 +51,15 @@ export default function CoachDashboard() {
   const [customEndDate, setCustomEndDate] = useState('');
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [greeting, setGreeting] = useState('Hola');
+
+  // Set greeting on client only to avoid hydration mismatch
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) setGreeting('Buenos días');
+    else if (hour < 18) setGreeting('Buenas tardes');
+    else setGreeting('Buenas noches');
+  }, []);
 
   useEffect(() => {
     const loadAnalytics = async () => {
@@ -268,12 +277,6 @@ export default function CoachDashboard() {
     doc.save(fileName);
   };
 
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'Buenos días';
-    if (hour < 18) return 'Buenas tardes';
-    return 'Buenas noches';
-  };
 
   // Loading state with skeleton
   if (loading || !analytics) {
@@ -300,7 +303,7 @@ export default function CoachDashboard() {
         <div className="flex flex-wrap items-start justify-between gap-4 mb-8 animate-fade-in">
           <div>
             <h1 className="text-display mb-2">
-              {getGreeting()}, {userProfile?.firstName || 'Coach'}
+              {greeting}, {userProfile?.firstName || 'Coach'}
             </h1>
             <p className="text-body flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-[var(--accent-primary)]" />

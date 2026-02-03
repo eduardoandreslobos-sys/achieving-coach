@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Target, Clock } from 'lucide-react';
 import Link from 'next/link';
 
@@ -17,6 +17,13 @@ interface ActiveGoalsWidgetProps {
 }
 
 export default function ActiveGoalsWidget({ goals }: ActiveGoalsWidgetProps) {
+  const [mounted, setMounted] = useState(false);
+
+  // Set mounted on client to avoid hydration mismatch with date calculations
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <div className="bg-white rounded-xl border-2 border-gray-200 p-6">
       <div className="flex items-center justify-between mb-6">
@@ -46,8 +53,11 @@ export default function ActiveGoalsWidget({ goals }: ActiveGoalsWidgetProps) {
       ) : (
         <div className="space-y-4">
           {goals.slice(0, 3).map((goal) => {
-            const daysUntilDue = Math.ceil((goal.dueDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
-            const isUrgent = daysUntilDue <= 7;
+            // Only calculate days until due after mount to avoid hydration mismatch
+            const daysUntilDue = mounted
+              ? Math.ceil((goal.dueDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+              : 0;
+            const isUrgent = mounted && daysUntilDue <= 7;
 
             return (
               <div key={goal.id} className="bg-gray-50 rounded-lg p-4 border-2 border-gray-200 hover:border-primary-300 transition-colors">
@@ -73,7 +83,9 @@ export default function ActiveGoalsWidget({ goals }: ActiveGoalsWidgetProps) {
                 <div className="flex items-center gap-1 text-xs">
                   <Clock className={`w-3 h-3 ${isUrgent ? 'text-red-600' : 'text-gray-500'}`} />
                   <span className={isUrgent ? 'text-red-600 font-medium' : 'text-gray-600'}>
-                    {daysUntilDue > 0 ? `${daysUntilDue} days left` : 'Due today'}
+                    {mounted
+                      ? (daysUntilDue > 0 ? `${daysUntilDue} days left` : 'Due today')
+                      : '...'}
                   </span>
                 </div>
               </div>

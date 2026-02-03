@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, Video, MapPin } from 'lucide-react';
 
 interface Session {
@@ -19,6 +19,19 @@ interface UpcomingSessionCardProps {
 }
 
 export default function UpcomingSessionCard({ session }: UpcomingSessionCardProps) {
+  const [isToday, setIsToday] = useState(false);
+  const [hoursUntil, setHoursUntil] = useState(0);
+
+  // Calculate time-based values on client only to avoid hydration mismatch
+  useEffect(() => {
+    if (session) {
+      const now = new Date();
+      setIsToday(now.toDateString() === session.date.toDateString());
+      const timeUntil = session.date.getTime() - now.getTime();
+      setHoursUntil(Math.floor(timeUntil / (1000 * 60 * 60)));
+    }
+  }, [session]);
+
   if (!session) {
     return (
       <div className="bg-white rounded-xl border-2 border-gray-200 p-6">
@@ -36,10 +49,6 @@ export default function UpcomingSessionCard({ session }: UpcomingSessionCardProp
       </div>
     );
   }
-
-  const isToday = new Date().toDateString() === session.date.toDateString();
-  const timeUntil = session.date.getTime() - new Date().getTime();
-  const hoursUntil = Math.floor(timeUntil / (1000 * 60 * 60));
 
   return (
     <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl border-2 border-primary-200 p-6">
