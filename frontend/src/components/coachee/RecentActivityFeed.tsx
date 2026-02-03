@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Activity, Calendar, Target, FileText, CheckCircle } from 'lucide-react';
 
 interface ActivityItem {
@@ -16,6 +16,12 @@ interface RecentActivityFeedProps {
 }
 
 export default function RecentActivityFeed({ activities }: RecentActivityFeedProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const getIcon = (type: string) => {
     switch (type) {
       case 'session': return Calendar;
@@ -37,8 +43,11 @@ export default function RecentActivityFeed({ activities }: RecentActivityFeedPro
   };
 
   const getTimeAgo = (date: Date) => {
+    // Return placeholder until mounted to avoid hydration mismatch
+    if (!mounted) return '...';
+
     const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
-    
+
     if (seconds < 60) return 'Just now';
     if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
     if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
