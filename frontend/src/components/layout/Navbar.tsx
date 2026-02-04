@@ -1,12 +1,30 @@
 'use client';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Menu, X } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { Menu, X, LogOut, User } from 'lucide-react';
 import { useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 
 export function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, userProfile, logout, loading } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push('/');
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
+  };
+
+  const getDashboardLink = () => {
+    if (userProfile?.role === 'admin') return '/admin';
+    if (userProfile?.role === 'coach') return '/coach';
+    return '/dashboard';
+  };
 
   const isActive = (path: string) => pathname === path;
 
@@ -49,12 +67,33 @@ export function Navbar() {
 
           {/* Auth Buttons */}
           <div className="hidden md:flex items-center gap-4">
-            <Link href="/sign-in" className="text-gray-400 hover:text-white text-sm transition-colors">
-              Iniciar Sesión
-            </Link>
-            <Link href="/sign-up" className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors">
-              Comenzar Gratis
-            </Link>
+            {!loading && user ? (
+              <>
+                <Link
+                  href={getDashboardLink()}
+                  className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition-colors"
+                >
+                  <User className="w-4 h-4" />
+                  Mi Panel
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 px-4 py-2 text-gray-400 hover:text-white text-sm transition-colors"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Cerrar sesión
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/sign-in" className="text-gray-400 hover:text-white text-sm transition-colors">
+                  Iniciar Sesión
+                </Link>
+                <Link href="/sign-up" className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors">
+                  Comenzar Gratis
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -86,12 +125,37 @@ export function Navbar() {
                 </Link>
               ))}
               <div className="flex flex-col gap-2 pt-4 border-t border-white/5">
-                <Link href="/sign-in" className="text-gray-400 hover:text-white text-sm">
-                  Iniciar Sesión
-                </Link>
-                <Link href="/sign-up" className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors text-center">
-                  Comenzar Gratis
-                </Link>
+                {!loading && user ? (
+                  <>
+                    <Link
+                      href={getDashboardLink()}
+                      className="flex items-center gap-2 text-gray-400 hover:text-white text-sm"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <User className="w-4 h-4" />
+                      Mi Panel
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        handleLogout();
+                      }}
+                      className="flex items-center gap-2 text-gray-400 hover:text-white text-sm text-left"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Cerrar sesión
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/sign-in" className="text-gray-400 hover:text-white text-sm">
+                      Iniciar Sesión
+                    </Link>
+                    <Link href="/sign-up" className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors text-center">
+                      Comenzar Gratis
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>

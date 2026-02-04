@@ -5,9 +5,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { User, Upload, Shield, Save, Loader2, Eye, EyeOff, Check, X, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { db, auth } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
-import { updatePassword, EmailAuthProvider, reauthenticateWithCredential, signOut } from 'firebase/auth';
+import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/lib/firebase';
 import { toast, Toaster } from 'sonner';
@@ -15,7 +16,7 @@ import imageCompression from 'browser-image-compression';
 
 export default function SettingsPage() {
   const router = useRouter();
-  const { user, userProfile, refreshProfile } = useAuth();
+  const { user, userProfile, refreshProfile, logout } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState('');
@@ -175,10 +176,10 @@ export default function SettingsPage() {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
+      await logout();
       router.push('/');
     } catch (error) {
-      console.error('Error signing out:', error);
+      console.error('Error al cerrar sesión:', error);
       toast.error('Error al cerrar sesión');
     }
   };

@@ -97,8 +97,12 @@ export default function CoachSidebar({ isOpen = false, onClose }: CoachSidebarPr
   };
 
   const handleSignOut = async () => {
-    await logout();
-    router.push('/');
+    try {
+      await logout();
+      router.push('/');
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
   };
 
   const handleNavClick = () => {

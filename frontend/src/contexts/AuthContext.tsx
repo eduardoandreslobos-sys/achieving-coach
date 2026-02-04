@@ -141,8 +141,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUserProfile(null);
       return;
     }
-    await signOut(auth);
-    setUserProfile(null);
+    try {
+      await signOut(auth);
+      setUserProfile(null);
+    } catch (error) {
+      console.error('Error signing out:', error);
+      throw error;
+    }
   };
 
   return (

@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { doc, getDoc, collection, getDocs, orderBy, limit, query } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { toast, Toaster } from 'sonner';
 
 interface Notification {
   id: string;
@@ -81,7 +82,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       await logout();
       router.push('/');
     } catch (error) {
-      console.error('Error logging out:', error);
+      console.error('Error al cerrar sesión:', error);
+      toast.error('Error al cerrar sesión');
     }
   };
 
@@ -129,6 +131,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="min-h-screen bg-[#0a0a0f] flex">
+      <Toaster position="top-center" richColors />
       {/* Sidebar */}
       <aside className="fixed inset-y-0 left-0 w-64 bg-[#0f1117] border-r border-gray-800/50 z-30">
         <div className="flex flex-col h-full">

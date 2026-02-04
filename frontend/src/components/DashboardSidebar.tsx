@@ -53,8 +53,12 @@ export default function DashboardSidebar({ isOpen = false, onClose }: DashboardS
   }, [pathname]);
 
   const handleSignOut = async () => {
-    await logout();
-    router.push('/');
+    try {
+      await logout();
+      router.push('/');
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
   };
 
   const handleNavClick = () => {

@@ -9,8 +9,12 @@ export default function UserMenu() {
   const router = useRouter();
 
   const handleSignOut = async () => {
-    await logout();
-    router.push('/');
+    try {
+      await logout();
+      router.push('/');
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
   };
 
   const getInitials = () => {
@@ -44,7 +48,7 @@ export default function UserMenu() {
         className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
       >
         <LogOut size={18} />
-        Sign Out
+        Cerrar sesión
       </button>
     </div>
   );
