@@ -7,10 +7,10 @@ import { useAuth } from '@/contexts/AuthContext';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { getCoacheeProgram } from '@/lib/coachingService';
-import { 
-  ArrowLeft, 
-  MessageSquare, 
-  Calendar, 
+import {
+  ArrowLeft,
+  MessageSquare,
+  Calendar,
   Target,
   CheckCircle2,
   ClipboardList,
@@ -24,7 +24,9 @@ import {
   ExternalLink,
   Settings,
   Eye,
-  EyeOff
+  EyeOff,
+  Building2,
+  User
 } from 'lucide-react';
 
 interface CoacheeData {
@@ -74,31 +76,39 @@ export default function ClientAnalyticsPage() {
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [sessions, setSessions] = useState<any[]>([]);
   const [expandedSession, setExpandedSession] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [analyticsLoading, setAnalyticsLoading] = useState(false);
   const [timeRange, setTimeRange] = useState<'30' | '90' | 'all'>('30');
   const [showMetricSelector, setShowMetricSelector] = useState(false);
-  const [visibleMetrics, setVisibleMetrics] = useState<string[]>(() => 
+  const [visibleMetrics, setVisibleMetrics] = useState<string[]>(() =>
     AVAILABLE_METRICS.filter(m => m.enabled).map(m => m.id)
   );
 
+  // Initial load - client and program data
   useEffect(() => {
     if (clientId && userProfile?.uid) {
-      loadAllData();
+      loadInitialData();
     }
-  }, [clientId, userProfile, timeRange]);
+  }, [clientId, userProfile?.uid]);
 
-  const loadAllData = async () => {
-    setLoading(true);
+  // Analytics load - separate effect for time range changes
+  useEffect(() => {
+    if (clientId && client) {
+      loadAnalytics();
+    }
+  }, [clientId, timeRange, client]);
+
+  const loadInitialData = async () => {
+    setInitialLoading(true);
     try {
       await Promise.all([
         loadClient(),
-        loadProgram(),
-        loadAnalytics()
+        loadProgram()
       ]);
     } catch (error) {
       console.error('Error loading data:', error);
     } finally {
-      setLoading(false);
+      setInitialLoading(false);
     }
   };
 
@@ -125,6 +135,7 @@ export default function ClientAnalyticsPage() {
   };
 
   const loadAnalytics = async () => {
+    setAnalyticsLoading(true);
     try {
       // Calculate date range
       const now = new Date();
@@ -226,6 +237,8 @@ export default function ClientAnalyticsPage() {
       });
     } catch (error) {
       console.error('Error loading analytics:', error);
+    } finally {
+      setAnalyticsLoading(false);
     }
   };
 
@@ -237,7 +250,7 @@ export default function ClientAnalyticsPage() {
     );
   };
 
-  if (loading || !client) {
+  if (initialLoading || !client) {
     return (
       <div className="flex items-center justify-center h-screen bg-[var(--bg-primary)]">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
@@ -267,6 +280,27 @@ export default function ClientAnalyticsPage() {
                 <Mail size={18} />
                 <span>{client.email}</span>
               </div>
+              {/* Coachee Type Badge */}
+              {program && (
+                <div className="flex items-center gap-3 mt-2">
+                  <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${
+                    program.coachingType === 'corporate'
+                      ? 'bg-blue-500/20 text-blue-400'
+                      : 'bg-emerald-500/20 text-emerald-400'
+                  }`}>
+                    {program.coachingType === 'corporate' ? (
+                      <><Building2 size={14} /> Corporativo</>
+                    ) : (
+                      <><User size={14} /> Particular</>
+                    )}
+                  </span>
+                  {program.coachingType === 'corporate' && program.backgroundInfo?.organizationName && (
+                    <span className="text-[var(--fg-muted)] text-sm">
+                      {program.backgroundInfo.organizationName}
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
             <div className="flex gap-3 flex-wrap">
               <Link
@@ -548,10 +582,143 @@ export default function ClientAnalyticsPage() {
           </div>
         )}
 
-        {/* Goals Section - PRESERVED FROM ORIGINAL */}
-        
-        {/* Session Notes Section */}
+        {/* All Sessions Section */}
         {sessions.length > 0 && (
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6 mt-8">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Calendar className="text-[var(--accent-primary)]" size={24} />
+                <h2 className="text-2xl font-bold text-[var(--fg-primary)]">Sesiones</h2>
+                <span className="text-sm text-[var(--fg-muted)] ml-2">
+                  ({sessions.length} total)
+                </span>
+              </div>
+              <Link
+                href={`/coach/sessions?newSession=true&coacheeId=${clientId}`}
+                className="flex items-center gap-2 px-3 py-1.5 bg-emerald-600 text-white text-sm rounded-lg hover:bg-emerald-700 transition-colors"
+              >
+                <Plus size={16} />
+                Nueva Sesión
+              </Link>
+            </div>
+
+            {/* Upcoming Sessions */}
+            {sessions.filter(s => s.status === 'scheduled' || s.status === 'confirmed').length > 0 && (
+              <div className="mb-6">
+                <h3 className="text-sm font-semibold text-[var(--fg-muted)] uppercase tracking-wider mb-3">
+                  Próximas Sesiones
+                </h3>
+                <div className="space-y-2">
+                  {sessions
+                    .filter(s => s.status === 'scheduled' || s.status === 'confirmed')
+                    .sort((a, b) => (a.scheduledDate?.seconds || 0) - (b.scheduledDate?.seconds || 0))
+                    .map((session) => (
+                      <Link
+                        key={session.id}
+                        href={`/coach/sessions/${session.id}`}
+                        className="flex items-center justify-between p-3 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg hover:border-emerald-500/50 transition-colors"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                            <Calendar className="text-emerald-400" size={18} />
+                          </div>
+                          <div>
+                            <p className="font-medium text-[var(--fg-primary)]">
+                              {session.title || `Sesión ${session.sessionNumber || ''}`}
+                            </p>
+                            <p className="text-sm text-[var(--fg-muted)]">
+                              {session.scheduledDate?.toDate?.()?.toLocaleDateString('es-CL', {
+                                weekday: 'long',
+                                day: 'numeric',
+                                month: 'long',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              }) || 'Sin fecha'}
+                            </p>
+                          </div>
+                        </div>
+                        <span className="px-2 py-1 bg-yellow-500/20 text-yellow-400 text-xs rounded-full">
+                          {session.status === 'confirmed' ? 'Confirmada' : 'Agendada'}
+                        </span>
+                      </Link>
+                    ))}
+                </div>
+              </div>
+            )}
+
+            {/* Past Sessions */}
+            {sessions.filter(s => s.status === 'completed' || s.status === 'cancelled').length > 0 && (
+              <div>
+                <h3 className="text-sm font-semibold text-[var(--fg-muted)] uppercase tracking-wider mb-3">
+                  Historial de Sesiones
+                </h3>
+                <div className="space-y-2">
+                  {sessions
+                    .filter(s => s.status === 'completed' || s.status === 'cancelled')
+                    .sort((a, b) => (b.scheduledDate?.seconds || 0) - (a.scheduledDate?.seconds || 0))
+                    .slice(0, 5)
+                    .map((session) => (
+                      <Link
+                        key={session.id}
+                        href={`/coach/sessions/${session.id}`}
+                        className="flex items-center justify-between p-3 bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-lg hover:border-emerald-500/50 transition-colors"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                            session.status === 'completed' ? 'bg-emerald-500/20' : 'bg-red-500/20'
+                          }`}>
+                            {session.status === 'completed' ? (
+                              <CheckCircle2 className="text-emerald-400" size={18} />
+                            ) : (
+                              <Clock className="text-red-400" size={18} />
+                            )}
+                          </div>
+                          <div>
+                            <p className="font-medium text-[var(--fg-primary)]">
+                              {session.title || `Sesión ${session.sessionNumber || ''}`}
+                            </p>
+                            <p className="text-sm text-[var(--fg-muted)]">
+                              {session.scheduledDate?.toDate?.()?.toLocaleDateString('es-CL', {
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric'
+                              }) || 'Sin fecha'}
+                            </p>
+                          </div>
+                        </div>
+                        <span className={`px-2 py-1 text-xs rounded-full ${
+                          session.status === 'completed'
+                            ? 'bg-emerald-500/20 text-emerald-400'
+                            : 'bg-red-500/20 text-red-400'
+                        }`}>
+                          {session.status === 'completed' ? 'Completada' : 'Cancelada'}
+                        </span>
+                      </Link>
+                    ))}
+                </div>
+                {sessions.filter(s => s.status === 'completed' || s.status === 'cancelled').length > 5 && (
+                  <Link
+                    href={`/coach/sessions?coacheeId=${clientId}`}
+                    className="block text-center text-sm text-[var(--accent-primary)] hover:text-emerald-300 mt-3"
+                  >
+                    Ver todas las sesiones →
+                  </Link>
+                )}
+              </div>
+            )}
+
+            {/* Empty state */}
+            {sessions.filter(s => s.status === 'scheduled' || s.status === 'confirmed').length === 0 &&
+             sessions.filter(s => s.status === 'completed').length === 0 && (
+              <p className="text-[var(--fg-muted)] text-center py-4">
+                No hay sesiones registradas aún
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Session Notes Section */}
+        {sessions.filter(s => s.sessionReport || s.sessionAgreement).length > 0 && (
           <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6 mt-8">
             <div className="flex items-center gap-2 mb-4">
               <FileText className="text-[var(--accent-primary)]" size={24} />

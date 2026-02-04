@@ -138,8 +138,8 @@ function BillingPageContent() {
     return (
       <div className="p-6">
         <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-48" />
-          <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded-xl" />
+          <div className="h-8 bg-[var(--bg-tertiary)] rounded w-48" />
+          <div className="h-64 bg-[var(--bg-tertiary)] rounded-xl" />
         </div>
       </div>
     );
@@ -449,8 +449,8 @@ export default function BillingPage() {
     <Suspense fallback={
       <div className="p-6">
         <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-48" />
-          <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded-xl" />
+          <div className="h-8 bg-[var(--bg-tertiary)] rounded w-48" />
+          <div className="h-64 bg-[var(--bg-tertiary)] rounded-xl" />
         </div>
       </div>
     }>

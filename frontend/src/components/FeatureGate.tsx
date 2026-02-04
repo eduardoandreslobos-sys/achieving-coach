@@ -28,7 +28,7 @@ export function FeatureGate({
   if (isLoading) {
     return (
       <div className="animate-pulse">
-        <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded-lg" />
+        <div className="h-32 bg-[var(--bg-tertiary)] rounded-lg" />
       </div>
     );
   }

@@ -172,11 +172,11 @@ function LeadsListContent() {
     return (
       <div className="p-6">
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-48" />
-          <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded" />
+          <div className="h-8 bg-[var(--bg-tertiary)] rounded w-48" />
+          <div className="h-12 bg-[var(--bg-tertiary)] rounded" />
           <div className="space-y-2">
             {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="h-16 bg-gray-200 dark:bg-gray-700 rounded" />
+              <div key={i} className="h-16 bg-[var(--bg-tertiary)] rounded" />
             ))}
           </div>
         </div>
