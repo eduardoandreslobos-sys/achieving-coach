@@ -1,6 +1,6 @@
 # AchievingCoach - Inventario Completo de Funcionalidades
 
-**Última actualización:** Enero 2026
+**Última actualización:** Febrero 2026
 **URL:** https://achievingcoach.com
 
 ---
@@ -331,6 +331,7 @@ Lead visible en /coach/crm/leads
 - Indicadores de progreso
 - Responsabilidades de cada actor
 - **Firma digital con hash SHA-256**
+- **✨ Firma visual dibujada (canvas)** - Coach y coachee pueden dibujar su firma
 - Aceptación de: confidencialidad, política de asistencia, vigencia
 
 **Fase 4 - Calendario:**
@@ -370,6 +371,8 @@ Lead visible en /coach/crm/leads
 - Descubrimientos relevantes
 - Recomendaciones profesionales
 - Editable por el coach
+- **✨ Exportar a PDF** - Generación de PDF profesional
+- **✨ Enviar por Email** - Envío directo del PDF al coachee vía Brevo API
 
 ---
 
@@ -403,6 +406,11 @@ Lead visible en /coach/crm/leads
 - Ver información de la sesión
 - Objetivo y agenda
 - Estado de acuerdo y reporte
+- **✨ Ver notas compartidas** - Acceso a acuerdo e informe cuando el coach los comparte
+
+### Sesiones con Notas Compartidas (`/sessions`)
+- **✨ Indicadores visuales** de notas compartidas (badges)
+- **✨ Botón "Ver Notas"** para acceder directamente a contenido compartido
 
 ### Objetivos (`/goals`)
 - Crear y gestionar metas personales
@@ -467,12 +475,15 @@ Lead visible en /coach/crm/leads
 | `program` | Actualización en programa (firma, reporte) |
 | `file` | Nuevo archivo compartido |
 | `general` | Notificaciones generales |
+| **`notes_shared`** | ✨ Notas de sesión compartidas por el coach |
 
 ### Notificaciones Automáticas:
 - 🔔 Cuando coachee completa una herramienta
 - 🔔 Cuando hay acuerdo pendiente de firma
 - 🔔 Cuando se genera reporte con IA
 - 🔔 Recordatorios de sesiones
+- **🔔 ✨ Cuando coach comparte acuerdo de sesión**
+- **🔔 ✨ Cuando coach comparte informe de sesión**
 
 ---
 
@@ -593,6 +604,7 @@ Si la IA falla, el sistema extrae datos manualmente de los reportes de sesión.
 | `/api/bing-webmaster` | GET/POST | Datos de Bing Webmaster Tools |
 | `/api/indexnow` | POST | Notificar URLs a IndexNow |
 | `/api/search-console` | GET | Datos de Google Search Console |
+| **`/api/send-pdf-report`** | POST | ✨ Enviar reportes PDF por email (Brevo) |
 
 ---
 
@@ -744,13 +756,16 @@ Meta tags optimizados para IA:
 1. **🤖 AI-Powered Reports** - Reportes auto-generados con Gemini
 2. **📝 Metodología Estructurada** - 9 fases basadas en CCC
 3. **✍️ Firmas Digitales** - Acuerdos con hash SHA-256
-4. **🛠 12 Herramientas Profesionales** - DISC, Wheel of Life, GROW, etc.
-5. **📊 SEO Dashboard Integrado** - GA4 + Search Console + Bing Webmaster
-6. **🔔 Notificaciones en Tiempo Real** - Actualizaciones automáticas
-7. **📱 100% Responsive** - Funciona en cualquier dispositivo
-8. **🔐 Seguridad Enterprise** - Firebase + GCP
-9. **🌐 Directorio Público de Coaches** - Marketplace para encontrar coaches
-10. **📊 CRM Integrado** - Pipeline de ventas con leads y conversiones
-11. **📅 Gestión de Sesiones** - Iniciar, documentar y completar sesiones con acuerdos y reportes
-12. **🔍 SEO/GEO 2026** - IndexNow, Person Schema, Core Web Vitals, AI crawlers optimizados
-13. **⚡ Indexación Instantánea** - Auto-notificación a Bing/Yandex al publicar contenido
+4. **🖊️ Firma Visual Dibujada** - Canvas interactivo para firmas manuscritas
+5. **🛠 12 Herramientas Profesionales** - DISC, Wheel of Life, GROW, etc.
+6. **📊 SEO Dashboard Integrado** - GA4 + Search Console + Bing Webmaster
+7. **🔔 Notificaciones en Tiempo Real** - Actualizaciones automáticas
+8. **📱 100% Responsive** - Funciona en cualquier dispositivo
+9. **🔐 Seguridad Enterprise** - Firebase + GCP
+10. **🌐 Directorio Público de Coaches** - Marketplace para encontrar coaches
+11. **📊 CRM Integrado** - Pipeline de ventas con leads y conversiones
+12. **📅 Gestión de Sesiones** - Iniciar, documentar y completar sesiones con acuerdos y reportes
+13. **🔍 SEO/GEO 2026** - IndexNow, Person Schema, Core Web Vitals, AI crawlers optimizados
+14. **⚡ Indexación Instantánea** - Auto-notificación a Bing/Yandex al publicar contenido
+15. **📧 Envío de PDFs por Email** - Reportes y acuerdos enviados directamente al coachee
+16. **👁️ Notas Compartidas** - Coach puede compartir acuerdos e informes con el coachee

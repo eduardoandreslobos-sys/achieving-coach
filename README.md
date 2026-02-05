@@ -11,19 +11,28 @@ Professional Coaching Platform with ICF ACC Exam Simulator
 - 💬 **Messaging** - Real-time communication between coaches and coachees
 - 🔐 **Secure Authentication** - Firebase Auth
 - 📱 **Responsive Design** - Works on desktop, tablet, and mobile
+- 🤖 **AI-Powered Reports** - Auto-generated reports with Google Gemini
+- ✍️ **Digital Signatures** - Visual signature pad for agreements
+- 📧 **PDF Email Reports** - Send reports directly to coachees
+- 👁️ **Shared Notes** - Coaches can share session notes with coachees
 
 ## Tech Stack
 
 - **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS
 - **Backend**: Firebase (Firestore, Auth, Functions)
+- **AI**: Google Gemini 1.5 Flash
+- **Email**: Brevo API
+- **PDF**: jsPDF
 - **Hosting**: Google Cloud Run
-- **CI/CD**: Cloud Build + GitHub Actions
-- **Testing**: Playwright (UAT), Jest (Unit tests)
+- **CI/CD**: Cloud Build (32GB RAM) + GitHub Actions
+- **Testing**: Playwright (E2E), Jest (207 unit tests)
 
 ## CI/CD Status
 
-✅ Automated deployment via Cloud Build
+✅ Automated deployment via Cloud Build (E2_HIGHCPU_32)
 ✅ GitHub integration configured
 ✅ Firebase environment variables secured
+✅ 207 unit tests passing
+✅ Playwright functional tests
 
-Last updated: Fri Nov 21 05:03:02 PM UTC 2025
+Last updated: February 5, 2026

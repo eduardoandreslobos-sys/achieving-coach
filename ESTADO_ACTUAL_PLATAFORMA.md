@@ -1,7 +1,7 @@
 # Estado Actual de AchievingCoach
 
-**Ultima actualizacion:** 23 de Enero, 2026
-**Version:** 0.8.0
+**Ultima actualizacion:** 5 de Febrero, 2026
+**Version:** 0.9.0
 **Proyecto GCP:** `triple-shift-478220-b2`
 **URL Frontend:** https://achieving-coach-frontend-977373202400.us-central1.run.app
 **URL Produccion:** https://achievingcoach.com
@@ -234,6 +234,14 @@ AchievingCoach es una plataforma SaaS profesional de coaching ejecutivo desplega
 - Sintesis de temas, fuerzas conservadoras/transformadoras
 - Practicas clave, descubrimientos, recomendaciones
 - Editable por el coach
+- **✨ Exportar a PDF** - Generacion de documentos profesionales
+- **✨ Enviar por Email** - Envio directo al coachee via Brevo API
+
+**Firma Visual (Febrero 2026):**
+- **✨ Canvas interactivo** para dibujar firma manuscrita
+- Soporte touch para dispositivos moviles
+- Guardado como imagen base64 PNG
+- Visualizacion de firmas en acuerdos
 
 ---
 
@@ -336,11 +344,13 @@ AchievingCoach es una plataforma SaaS profesional de coaching ejecutivo desplega
 - Deploy a Cloud Run (`achieving-coach-frontend`)
 - Region: us-central1
 - Secrets: GA4_CREDENTIALS, GEMINI_API_KEY, CLARITY_API_TOKEN
-- Machine: E2_HIGHCPU_8, Timeout: 1800s
+- **Machine: E2_HIGHCPU_32 (32GB RAM)** - ✨ Actualizado Feb 2026
+- Timeout: 1800s
 
 **Staging (`cloudbuild-staging.yaml`):**
 - Build con credenciales Firebase de staging
 - Deploy a Cloud Run (`achieving-coach-frontend-staging`)
+- **Machine: E2_HIGHCPU_32 (32GB RAM)** - ✨ Actualizado Feb 2026
 
 ### GitHub Actions
 
@@ -505,7 +515,7 @@ achieving-coach/
 
 ### Features Faltantes
 - [ ] Notificaciones push (Firebase Cloud Messaging)
-- [ ] Email transaccional (SendGrid/Mailgun)
+- [x] ✅ Email transaccional (Brevo API) - **Completado Feb 2026**
 - [ ] Video calls integrados
 - [ ] Calendario integrado (Google Calendar sync)
 - [ ] Multi-idioma (i18n)
@@ -528,11 +538,47 @@ achieving-coach/
 
 ---
 
+## Nuevas Funcionalidades (Febrero 2026)
+
+### 1. Notas Compartidas para Coachee
+- Vista de sesiones con indicadores de notas compartidas
+- Badges visuales: "Acuerdo Compartido", "Informe Compartido"
+- Boton "Ver Notas" para acceso directo
+- Coach puede activar/desactivar compartir desde detalle de sesion
+
+### 2. Notificaciones de Notas Compartidas
+- Nuevo tipo de notificacion: `notes_shared`
+- Notificacion automatica cuando coach comparte acuerdo
+- Notificacion automatica cuando coach comparte informe
+- Icono y color diferenciado (Share2, azul)
+
+### 3. Firma Visual Dibujada
+- Componente `SignaturePad` con canvas interactivo
+- Soporte para mouse y touch (dispositivos moviles)
+- Boton "Limpiar" para reiniciar firma
+- Guardado como imagen base64 PNG
+- Visualizacion de firmas en acuerdos de programa
+
+### 4. Envio de PDFs por Email
+- Generacion de PDFs profesionales (jsPDF)
+- Envio via Brevo API con adjuntos
+- Soporte para: Reporte de Proceso, Informe Final, Acuerdo
+- Boton "Enviar por Email" en cada reporte
+- Boton "Exportar PDF" para descarga local
+
+### 5. Infraestructura
+- Cloud Build actualizado a E2_HIGHCPU_32 (32GB RAM)
+- Tests unitarios: 207 tests pasando
+- Tests funcionales Playwright para nuevas features
+
+---
+
 ## Problemas Conocidos (Corregidos)
 
 1. ~~No se podia iniciar sesion desde perfil de cliente~~ - CORREGIDO (boton "Nueva Sesion" agregado)
 2. ~~No se podian asignar herramientas desde perfil de cliente~~ - CORREGIDO (boton "Asignar Herramientas" agregado)
 3. ~~Mensajeria no mostraba historial en primera vista~~ - CORREGIDO (auto-seleccion de primera conversacion)
+4. ~~Build fallaba por memoria insuficiente~~ - CORREGIDO (Cloud Build a 32GB RAM)
 
 ---
 
@@ -546,6 +592,6 @@ achieving-coach/
 
 ---
 
-**Ultima actualizacion:** 23 de Enero, 2026
-**Version:** 0.8.0
+**Ultima actualizacion:** 5 de Febrero, 2026
+**Version:** 0.9.0
 **Estado:** En desarrollo activo
