@@ -47,6 +47,6 @@ images:
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/achieving-coach/frontend:$COMMIT_SHA'
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/achieving-coach/frontend:latest'
 options:
-  machineType: 'E2_HIGHCPU_8'
+  machineType: 'E2_HIGHCPU_32'
   logging: CLOUD_LOGGING_ONLY
 timeout: '1800s'
