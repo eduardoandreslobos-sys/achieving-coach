@@ -11,7 +11,7 @@
 
 ## Resumen General
 
-AchievingCoach es una plataforma SaaS profesional de coaching ejecutivo desplegada en Google Cloud Platform con arquitectura serverless. Actualmente tiene **~70% de completitud** con funcionalidades core operativas, sistema de suscripciones, CRM, directorio de coaches y paginas de marketing.
+AchievingCoach es una plataforma SaaS profesional de coaching ejecutivo desplegada en Google Cloud Platform con arquitectura serverless. Actualmente tiene **~75% de completitud** con funcionalidades core operativas, sistema de suscripciones, CRM, directorio de coaches, paginas de marketing, firma visual, envio de PDFs por email y sistema de notas compartidas.
 
 **Stack Tecnologico:**
 - **Frontend:** Next.js 14 (App Router) + TypeScript + TailwindCSS
@@ -20,10 +20,13 @@ AchievingCoach es una plataforma SaaS profesional de coaching ejecutivo desplega
 - **Autenticacion:** Firebase Auth
 - **Pagos:** Stripe (Checkout + Billing Portal)
 - **IA:** Google Gemini 1.5 Flash
+- **Email:** Brevo API (transaccional + PDFs)
+- **PDF:** jsPDF (generacion de reportes)
 - **Analytics:** Google Analytics 4 + Search Console + Microsoft Clarity
-- **Infraestructura:** Cloud Run (GCP)
+- **Infraestructura:** Cloud Run (GCP) - E2_HIGHCPU_32 (32GB RAM)
 - **CI/CD:** GitHub Actions + Cloud Build
 - **Secrets:** Google Secret Manager
+- **Testing:** Jest (207 unit tests) + Playwright (21 E2E tests)
 
 ---
 
@@ -407,6 +410,7 @@ Manual trigger → UAT en staging → Deploy Produccion
 | `/api/stripe/checkout` | POST | Crear sesion de checkout |
 | `/api/stripe/portal` | POST | Portal de billing del cliente |
 | `/api/stripe/webhook` | POST | Webhook de Stripe |
+| `/api/send-pdf-report` | POST | ✨ Enviar reportes PDF por email (Brevo) |
 
 ### Backend Express APIs
 
@@ -498,11 +502,11 @@ achieving-coach/
 | Infraestructura CI/CD | 80% | Completo |
 
 ### General
-- **Completitud total:** ~70%
-- **Frontend:** ~85%
+- **Completitud total:** ~75%
+- **Frontend:** ~90%
 - **Backend:** ~50%
-- **Infraestructura:** ~80%
-- **Testing:** ~50%
+- **Infraestructura:** ~85%
+- **Testing:** ~65% (207 unit + 21 E2E tests)
 
 ---
 
@@ -531,6 +535,8 @@ achieving-coach/
 - [ ] Time Management Matrix
 
 ### Testing
+- [x] ✅ Unit tests: 207 tests pasando (Jest)
+- [x] ✅ E2E tests nuevas features: 21 tests (Playwright)
 - [ ] Coverage > 80%
 - [ ] E2E tests completos para CRM
 - [ ] E2E tests para Stripe flows
