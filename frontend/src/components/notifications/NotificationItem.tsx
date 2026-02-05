@@ -2,29 +2,31 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { CheckCircle, AlertCircle, Calendar, Target, MessageSquare } from 'lucide-react';
+import { CheckCircle, AlertCircle, Calendar, Target, MessageSquare, Share2 } from 'lucide-react';
 import { useNotifications } from '@/hooks/useNotifications';
-import type { Notification } from '@/types/notification';
+import type { Notification, NotificationType } from '@/types/notification';
 
 interface NotificationItemProps {
   notification: Notification;
   onClose: () => void;
 }
 
-const iconMap = {
+const iconMap: Record<NotificationType, typeof Target> = {
   tool_assigned: Target,
   tool_completed: CheckCircle,
   session_scheduled: Calendar,
   goal_updated: Target,
   message_received: MessageSquare,
+  notes_shared: Share2,
 };
 
-const colorMap = {
+const colorMap: Record<NotificationType, string> = {
   tool_assigned: 'text-emerald-600 bg-emerald-100',
   tool_completed: 'text-green-600 bg-green-100',
   session_scheduled: 'text-purple-600 bg-purple-100',
   goal_updated: 'text-orange-600 bg-orange-100',
   message_received: 'text-indigo-600 bg-indigo-100',
+  notes_shared: 'text-blue-600 bg-blue-100',
 };
 
 export default function NotificationItem({ notification, onClose }: NotificationItemProps) {

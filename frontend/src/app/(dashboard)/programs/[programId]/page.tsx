@@ -9,10 +9,11 @@ import {
   Session,
   DEFAULT_CONFIDENTIALITY_NOTE 
 } from '@/types/coaching';
-import { 
+import {
   FileSignature, Check, Clock, AlertCircle, ArrowLeft,
   Calendar, Target, Shield, FileText, ChevronDown, ChevronUp
 } from 'lucide-react';
+import SignaturePad from '@/components/ui/SignaturePad';
 
 export default function CoacheeProgramPage() {
   const params = useParams();
@@ -30,6 +31,7 @@ export default function CoacheeProgramPage() {
   const [acceptConfidentiality, setAcceptConfidentiality] = useState(false);
   const [acceptAttendance, setAcceptAttendance] = useState(false);
   const [acceptValidity, setAcceptValidity] = useState(false);
+  const [signatureImage, setSignatureImage] = useState<string | null>(null);
 
   useEffect(() => {
     if (programId && userProfile?.uid) {
@@ -68,9 +70,14 @@ export default function CoacheeProgramPage() {
 
   const handleSign = async () => {
     if (!user || !userProfile || !program?.agreement) return;
-    
+
     if (!acceptConfidentiality || !acceptAttendance || !acceptValidity) {
       alert('Debes aceptar todos los términos para continuar');
+      return;
+    }
+
+    if (!signatureImage) {
+      alert('Por favor, dibuja tu firma en el recuadro antes de continuar');
       return;
     }
 
@@ -88,7 +95,8 @@ export default function CoacheeProgramPage() {
         userProfile.displayName || user.email || 'Coachee',
         user.email || '',
         'coachee',
-        acceptedTerms
+        acceptedTerms,
+        signatureImage
       );
 
       alert('¡Acuerdo firmado exitosamente!');
@@ -314,11 +322,25 @@ export default function CoacheeProgramPage() {
               </div>
             </div>
 
+            {/* Signature Pad */}
+            <div className="mt-6 p-4 bg-white rounded-lg border border-[var(--border-color)]">
+              <h3 className="font-semibold text-[var(--fg-primary)] mb-4 flex items-center gap-2">
+                <FileSignature className="text-primary-600" size={18} />
+                Tu Firma
+              </h3>
+              <SignaturePad
+                onSignatureChange={setSignatureImage}
+                width={350}
+                height={120}
+                disabled={signing}
+              />
+            </div>
+
             {/* Sign Button */}
             <div className="mt-6 flex justify-end">
               <button
                 onClick={handleSign}
-                disabled={signing || !acceptConfidentiality || !acceptAttendance || !acceptValidity}
+                disabled={signing || !acceptConfidentiality || !acceptAttendance || !acceptValidity || !signatureImage}
                 className="flex items-center gap-2 px-8 py-3 bg-primary-600 text-[var(--fg-primary)] rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
               >
                 <FileSignature size={20} />
@@ -331,20 +353,38 @@ export default function CoacheeProgramPage() {
         {/* Already Signed */}
         {hasSignedAsCoachee && (
           <div className="bg-green-50 border-2 border-green-300 rounded-xl p-6 mb-6">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 mb-4">
               <Check className="text-green-600" size={28} />
               <div>
                 <h2 className="text-xl font-bold text-[var(--fg-primary)]">Acuerdo Firmado</h2>
                 <p className="text-[var(--fg-muted)]">
-                  Has firmado el acuerdo de coaching. 
-                  {program.agreement?.signatures && (
-                    <span>
-                      {' '}Firmas: {program.agreement.signatures.map(s => `${s.name} (${s.role})`).join(', ')}
-                    </span>
-                  )}
+                  Has firmado el acuerdo de coaching.
                 </p>
               </div>
             </div>
+            {/* Display visual signatures */}
+            {program.agreement?.signatures && program.agreement.signatures.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                {program.agreement.signatures.map((sig, idx) => (
+                  <div key={idx} className="bg-white rounded-lg p-4 border border-green-200">
+                    <p className="font-medium text-[var(--fg-primary)]">{sig.name}</p>
+                    <p className="text-sm text-[var(--fg-muted)] capitalize">{sig.role}</p>
+                    {sig.signatureImage && (
+                      <div className="mt-2 border-t pt-2">
+                        <img
+                          src={sig.signatureImage}
+                          alt={`Firma de ${sig.name}`}
+                          className="max-h-16 object-contain"
+                        />
+                      </div>
+                    )}
+                    <p className="text-xs text-[var(--fg-muted)] mt-2">
+                      Firmado el {sig.signedAt?.toDate?.()?.toLocaleDateString('es-CL') || 'N/A'}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 

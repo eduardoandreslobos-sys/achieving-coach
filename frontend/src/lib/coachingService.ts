@@ -64,10 +64,11 @@ export async function signAgreement(
   userName: string,
   userEmail: string,
   role: 'coachee' | 'sponsor' | 'hr' | 'coach',
-  acceptedTerms: string[]
+  acceptedTerms: string[],
+  signatureImage?: string
 ): Promise<DigitalSignature> {
   const signatureHash = await generateSignatureHash(userId, programId, role);
-  
+
   const signature: DigitalSignature = {
     oduid: userId,
     name: userName,
@@ -76,6 +77,7 @@ export async function signAgreement(
     signedAt: Timestamp.now(),
     signatureHash,
     acceptedTerms,
+    ...(signatureImage && { signatureImage }),
   };
   
   // Update program with new signature

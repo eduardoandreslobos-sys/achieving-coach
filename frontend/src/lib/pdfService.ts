@@ -296,6 +296,54 @@ export function downloadPDF(doc: jsPDF, filename: string): void {
   doc.save(filename);
 }
 
+export function getPDFBase64(doc: jsPDF): string {
+  // Get base64 without the "data:application/pdf;base64," prefix
+  return doc.output('datauristring').split(',')[1];
+}
+
+export async function sendPDFByEmail(params: {
+  doc: jsPDF;
+  fileName: string;
+  recipientEmail: string;
+  recipientName: string;
+  coacheeName: string;
+  coachName: string;
+  programTitle: string;
+  reportType: 'process' | 'final' | 'agreement' | 'progress';
+}): Promise<{ success: boolean; error?: string }> {
+  try {
+    const pdfBase64 = getPDFBase64(params.doc);
+
+    const response = await fetch('/api/send-pdf-report', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        recipientEmail: params.recipientEmail,
+        recipientName: params.recipientName,
+        coacheeName: params.coacheeName,
+        coachName: params.coachName,
+        reportType: params.reportType,
+        programTitle: params.programTitle,
+        pdfBase64,
+        fileName: params.fileName,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { success: false, error: data.error || 'Failed to send email' };
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error sending PDF by email:', error);
+    return { success: false, error: 'Error al enviar el email' };
+  }
+}
+
 // ============ COACHEE PROGRESS REPORT PDF ============
 
 interface CoacheeProgressReportData {

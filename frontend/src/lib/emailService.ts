@@ -1,11 +1,17 @@
 const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
 
+interface EmailAttachment {
+  name: string;
+  content: string; // base64 encoded content
+}
+
 interface EmailParams {
   to: { email: string; name?: string }[];
   subject: string;
   htmlContent: string;
   textContent?: string;
   replyTo?: { email: string; name?: string };
+  attachment?: EmailAttachment[];
 }
 
 export async function sendEmail(params: EmailParams): Promise<{ success: boolean; messageId?: string; error?: string }> {
@@ -31,6 +37,7 @@ export async function sendEmail(params: EmailParams): Promise<{ success: boolean
         htmlContent: params.htmlContent,
         textContent: params.textContent,
         replyTo: params.replyTo,
+        ...(params.attachment && { attachment: params.attachment }),
       }),
     });
 
@@ -186,4 +193,115 @@ Accede a tu portal: ${data.portalUrl}
   `.trim();
 
   return { subject, htmlContent, textContent };
+}
+
+// ============ PDF REPORT EMAIL ============
+
+export function getPdfReportEmail(data: {
+  recipientName: string;
+  coacheeName: string;
+  coachName: string;
+  reportType: 'process' | 'final' | 'agreement' | 'progress';
+  programTitle: string;
+}): { subject: string; htmlContent: string; textContent: string } {
+  const reportTypeNames: Record<typeof data.reportType, string> = {
+    process: 'Reporte de Proceso',
+    final: 'Informe Final',
+    agreement: 'Acuerdo de Coaching',
+    progress: 'Reporte de Progreso',
+  };
+
+  const reportName = reportTypeNames[data.reportType];
+  const subject = `${reportName} - ${data.programTitle}`;
+
+  const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 30px; border-radius: 12px 12px 0 0; text-align: center;">
+    <h1 style="color: white; margin: 0; font-size: 24px;">📄 ${reportName}</h1>
+    <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">AchievingCoach</p>
+  </div>
+
+  <div style="background: #f9fafb; padding: 30px; border: 1px solid #e5e7eb; border-top: none;">
+    <h2 style="color: #111; margin-top: 0;">Hola ${data.recipientName},</h2>
+
+    <p>Adjunto encontrarás el <strong>${reportName}</strong> del proceso de coaching.</p>
+
+    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin: 20px 0;">
+      <p style="margin: 0 0 10px 0;"><strong>Programa:</strong> ${data.programTitle}</p>
+      <p style="margin: 0 0 10px 0;"><strong>Coachee:</strong> ${data.coacheeName}</p>
+      <p style="margin: 0;"><strong>Coach:</strong> ${data.coachName}</p>
+    </div>
+
+    <div style="background: #ecfdf5; border: 1px solid #10b981; border-radius: 8px; padding: 15px; margin: 20px 0;">
+      <p style="margin: 0; color: #059669;">
+        <strong>📎 Archivo adjunto:</strong> ${reportName.toLowerCase().replace(/ /g, '-')}.pdf
+      </p>
+    </div>
+
+    <p style="font-size: 14px; color: #666;">
+      Este documento es confidencial y está destinado únicamente para el destinatario indicado.
+    </p>
+  </div>
+
+  <div style="text-align: center; padding: 20px; color: #666; font-size: 12px;">
+    <p>© 2025 AchievingCoach. Todos los derechos reservados.</p>
+    <p>Este es un mensaje automático, por favor no respondas a este correo.</p>
+  </div>
+</body>
+</html>
+  `.trim();
+
+  const textContent = `
+Hola ${data.recipientName},
+
+Adjunto encontrarás el ${reportName} del proceso de coaching.
+
+Programa: ${data.programTitle}
+Coachee: ${data.coacheeName}
+Coach: ${data.coachName}
+
+Este documento es confidencial y está destinado únicamente para el destinatario indicado.
+
+© 2025 AchievingCoach
+  `.trim();
+
+  return { subject, htmlContent, textContent };
+}
+
+export async function sendPdfReport(data: {
+  recipientEmail: string;
+  recipientName: string;
+  coacheeName: string;
+  coachName: string;
+  reportType: 'process' | 'final' | 'agreement' | 'progress';
+  programTitle: string;
+  pdfBase64: string;
+  fileName: string;
+}): Promise<{ success: boolean; error?: string }> {
+  const emailContent = getPdfReportEmail({
+    recipientName: data.recipientName,
+    coacheeName: data.coacheeName,
+    coachName: data.coachName,
+    reportType: data.reportType,
+    programTitle: data.programTitle,
+  });
+
+  return sendEmail({
+    to: [{ email: data.recipientEmail, name: data.recipientName }],
+    subject: emailContent.subject,
+    htmlContent: emailContent.htmlContent,
+    textContent: emailContent.textContent,
+    attachment: [
+      {
+        name: data.fileName,
+        content: data.pdfBase64,
+      },
+    ],
+  });
 }

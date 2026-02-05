@@ -14,6 +14,8 @@ export interface DigitalSignature {
   signatureHash: string;
   // Texto que aceptó
   acceptedTerms: string[];
+  // Imagen de firma dibujada (base64 PNG)
+  signatureImage?: string;
 }
 
 // ============ PARTICIPANT ============

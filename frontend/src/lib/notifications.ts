@@ -178,4 +178,34 @@ export const notificationHelpers = {
       actionUrl: isCoach ? `/coach/sessions/${sessionId}` : `/sessions/${sessionId}`,
     });
   },
+
+  // Session Agreement Shared (sent to coachee)
+  sessionAgreementShared: async (
+    coacheeId: string,
+    coachName: string,
+    sessionId: string
+  ) => {
+    return createNotification({
+      userId: coacheeId,
+      type: 'notes_shared',
+      title: '📋 Acuerdo de Sesión Compartido',
+      message: `${coachName} ha compartido contigo el acuerdo de la sesión.`,
+      actionUrl: `/sessions/${sessionId}`,
+    });
+  },
+
+  // Session Report Shared (sent to coachee)
+  sessionReportShared: async (
+    coacheeId: string,
+    coachName: string,
+    sessionId: string
+  ) => {
+    return createNotification({
+      userId: coacheeId,
+      type: 'notes_shared',
+      title: '📊 Informe de Sesión Compartido',
+      message: `${coachName} ha compartido contigo el informe de la sesión.`,
+      actionUrl: `/sessions/${sessionId}`,
+    });
+  },
 };

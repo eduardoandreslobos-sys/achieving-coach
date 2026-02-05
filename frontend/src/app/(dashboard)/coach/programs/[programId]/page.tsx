@@ -3,12 +3,13 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { 
-  getCoachingProgram, 
-  getProgramSessions, 
+import {
+  getCoachingProgram,
+  getProgramSessions,
   updateCoachingProgram,
   saveBackgroundInfo,
   saveTripartiteMeeting,
+  saveAlignmentSession,
   saveCoachingAgreement,
   saveSessionCalendar,
   generateProcessReportWithAI,
@@ -16,11 +17,12 @@ import {
   generateFinalReportWithAI,
   updateFinalReport,
   completeFinalReport,
-  createSession
+  createSession,
+  getProgramPhaseStatus
 } from '@/lib/coachingService';
-import { 
-  CoachingProgram, 
-  Session, 
+import {
+  CoachingProgram,
+  Session,
   PROGRAM_PHASES,
   TRIPARTITE_QUESTIONS,
   DEFAULT_CONFIDENTIALITY_NOTE,
@@ -35,16 +37,29 @@ import {
   CoachingAgreement,
   SessionCalendarEntry,
   ProcessReport,
-  FinalReport
+  FinalReport,
+  AlignmentSession,
+  getPendingRequirements,
+  isPhaseComplete,
+  getPhaseProgress,
+  getPhaseName,
+  getPhaseDescription,
+  FIELD_PLACEHOLDERS,
+  FIELD_TOOLTIPS
 } from '@/types/coaching';
+import GuidanceBox from '@/components/ui/GuidanceBox';
+import LabelWithTooltip from '@/components/ui/LabelWithTooltip';
 import { Timestamp } from 'firebase/firestore';
-import { 
-  FileText, Users, FileSignature, Calendar, Play, Eye, 
+import {
+  FileText, Users, FileSignature, Calendar, Play, Eye,
   ClipboardList, Award, ChevronRight, Check, Clock, Bell,
-  Save, Plus, Trash2, ArrowLeft, AlertCircle, Download
+  Save, Plus, Trash2, ArrowLeft, AlertCircle, Download,
+  Building2, User, Sparkles, Mail
 } from 'lucide-react';
-import { generateProcessReportPDF, generateFinalReportPDF, generateAgreementPDF, downloadPDF } from '@/lib/pdfService';
+import { generateProcessReportPDF, generateFinalReportPDF, generateAgreementPDF, downloadPDF, sendPDFByEmail } from '@/lib/pdfService';
 import StakeholderManager from '@/components/Stakeholders/StakeholderManager';
+import SignaturePad from '@/components/ui/SignaturePad';
+import { signAgreement } from '@/lib/coachingService';
 const ICON_MAP: Record<string, any> = {
   FileText, Users, FileSignature, Calendar, Play, Eye, ClipboardList, Award
 };
@@ -120,11 +135,31 @@ export default function ProgramDetailPage() {
             <ArrowLeft size={20} />
             Volver al cliente
           </button>
-          <h1 className="text-3xl font-bold text-[var(--fg-primary)]">{program.title}</h1>
+          <div className="flex items-center gap-3 mb-2">
+            <h1 className="text-3xl font-bold text-[var(--fg-primary)]">{program.title}</h1>
+            {/* Coaching Type Badge */}
+            <span className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${
+              program.coachingType === 'individual'
+                ? 'bg-emerald-100 text-emerald-800'
+                : 'bg-primary-100 text-primary-800'
+            }`}>
+              {program.coachingType === 'individual' ? (
+                <>
+                  <User size={14} />
+                  Individual
+                </>
+              ) : (
+                <>
+                  <Building2 size={14} />
+                  Ejecutivo
+                </>
+              )}
+            </span>
+          </div>
           <p className="text-[var(--fg-muted)]">{program.coacheeName}</p>
         </div>
 
-        {/* Progress Bar */}
+        {/* Progress Bar with Phase Requirements */}
         <div className="bg-white rounded-xl border border-[var(--border-color)] p-4 mb-6">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-[var(--fg-muted)]">Progreso del Proceso</span>
@@ -132,20 +167,47 @@ export default function ProgramDetailPage() {
               Fase {program.currentPhase || 1} de {PROGRAM_PHASES.length}
             </span>
           </div>
-          <div className="flex gap-1">
-            {PROGRAM_PHASES.map((phase) => (
-              <div
-                key={phase.id}
-                className={`flex-1 h-2 rounded ${
-                  (program.phasesCompleted || []).includes(phase.id)
-                    ? 'bg-green-500'
-                    : phase.id === program.currentPhase
-                    ? 'bg-primary-500'
-                    : 'bg-[var(--bg-tertiary)]'
-                }`}
-              />
-            ))}
+          <div className="flex gap-1 mb-3">
+            {PROGRAM_PHASES.map((phase) => {
+              const isComplete = isPhaseComplete(phase.id, program, sessions);
+              const isCurrent = phase.id === program.currentPhase;
+              const progress = getPhaseProgress(phase.id, program, sessions);
+
+              return (
+                <div
+                  key={phase.id}
+                  className="flex-1 relative group"
+                  title={`${phase.name}: ${isComplete ? 'Completada' : `${progress}%`}`}
+                >
+                  <div
+                    className={`h-2 rounded ${
+                      isComplete
+                        ? 'bg-green-500'
+                        : isCurrent
+                        ? 'bg-primary-500'
+                        : 'bg-[var(--bg-tertiary)]'
+                    }`}
+                  >
+                    {isCurrent && !isComplete && progress > 0 && (
+                      <div
+                        className="h-full bg-primary-400 rounded"
+                        style={{ width: `${progress}%` }}
+                      />
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </div>
+
+          {/* Current Phase Requirements */}
+          {program.currentPhase && program.currentPhase <= 9 && (
+            <PhaseRequirementsIndicator
+              program={program}
+              sessions={sessions}
+              currentPhase={program.currentPhase}
+            />
+          )}
         </div>
 
         {/* Stakeholder Manager */}
@@ -191,7 +253,7 @@ export default function ProgramDetailPage() {
                     ) : (
                       <Icon size={16} />
                     )}
-                    <span className="hidden md:inline">{phase.name}</span>
+                    <span className="hidden md:inline">{getPhaseName(phase.id, program.coachingType || 'corporate')}</span>
                     {/* Indicador de reporte nuevo */}
                     {((phase.id === 6 && program.processReport?.autoGenerated && !program.processReport?.editedByCoach) ||
                       (phase.id === 9 && program.finalReport?.autoGenerated && !program.finalReport?.editedByCoach)) && (
@@ -223,24 +285,42 @@ export default function ProgramDetailPage() {
             )}
 
             {activeTab === 2 && (
-              <TripartiteMeetingTab
-                program={program}
-                onSave={async (data) => {
-                  setSaving(true);
-                  try {
-                    await saveTripartiteMeeting(programId, data);
-                    await loadData();
-                  } finally {
-                    setSaving(false);
-                  }
-                }}
-                saving={saving}
-              />
+              program.coachingType === 'individual' ? (
+                <AlignmentSessionTab
+                  program={program}
+                  onSave={async (data) => {
+                    setSaving(true);
+                    try {
+                      await saveAlignmentSession(programId, data);
+                      await loadData();
+                    } finally {
+                      setSaving(false);
+                    }
+                  }}
+                  saving={saving}
+                />
+              ) : (
+                <TripartiteMeetingTab
+                  program={program}
+                  onSave={async (data) => {
+                    setSaving(true);
+                    try {
+                      await saveTripartiteMeeting(programId, data);
+                      await loadData();
+                    } finally {
+                      setSaving(false);
+                    }
+                  }}
+                  saving={saving}
+                />
+              )
             )}
 
             {activeTab === 3 && (
               <AgreementTab
                 program={program}
+                programId={programId}
+                userProfile={userProfile}
                 onSave={async (data) => {
                   setSaving(true);
                   try {
@@ -250,6 +330,7 @@ export default function ProgramDetailPage() {
                     setSaving(false);
                   }
                 }}
+                onReload={loadData}
                 saving={saving}
               />
             )}
@@ -384,24 +465,100 @@ export default function ProgramDetailPage() {
   );
 }
 
+// ============ PHASE REQUIREMENTS INDICATOR ============
+
+function PhaseRequirementsIndicator({
+  program,
+  sessions,
+  currentPhase
+}: {
+  program: CoachingProgram;
+  sessions: Session[];
+  currentPhase: number;
+}) {
+  const phase = PROGRAM_PHASES.find(p => p.id === currentPhase);
+  if (!phase) return null;
+
+  const pendingReqs = getPendingRequirements(currentPhase, program, sessions);
+  const completedReqs = phase.requirements.filter(req => req.check(program, sessions));
+  const totalReqs = phase.requirements.length;
+
+  const phaseName = getPhaseName(currentPhase, program.coachingType || 'corporate');
+
+  if (pendingReqs.length === 0) {
+    return (
+      <div className="flex items-center gap-2 text-sm text-green-600 bg-green-50 rounded-lg px-3 py-2">
+        <Check size={16} />
+        <span>Fase {currentPhase} completada - {phaseName}</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-blue-50 rounded-lg px-3 py-2">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-sm font-medium text-blue-800">
+          Fase {currentPhase}: {phaseName}
+        </span>
+        <span className="text-xs text-blue-600">
+          {completedReqs.length}/{totalReqs} requisitos
+        </span>
+      </div>
+      <div className="space-y-1">
+        {phase.requirements.map((req, idx) => {
+          const isComplete = req.check(program, sessions);
+          return (
+            <div
+              key={idx}
+              className={`flex items-center gap-2 text-xs ${
+                isComplete ? 'text-green-600' : 'text-blue-700'
+              }`}
+            >
+              {isComplete ? (
+                <Check size={12} className="text-green-500" />
+              ) : (
+                <Clock size={12} className="text-blue-500" />
+              )}
+              <span>{req.description}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // ============ TAB COMPONENTS ============
 
 function BackgroundInfoTab({ 
   program, 
   onSave, 
   saving 
-}: { 
-  program: CoachingProgram; 
+}: {
+  program: CoachingProgram;
   onSave: (data: BackgroundInfo) => Promise<void>;
   saving: boolean;
 }) {
   const [form, setForm] = useState<BackgroundInfo>(program.backgroundInfo || {});
+  const isIndividual = program.coachingType === 'individual';
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold text-[var(--fg-primary)] mb-2">Antecedentes Generales del Proceso</h2>
-        <p className="text-[var(--fg-muted)] text-sm">Complete la información general del coachee y los actores del proceso.</p>
+        <div className="flex items-center gap-2 mb-2">
+          <h2 className="text-xl font-bold text-[var(--fg-primary)]">Antecedentes Generales del Proceso</h2>
+          {isIndividual && (
+            <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+              <User size={12} />
+              Individual
+            </span>
+          )}
+        </div>
+        <p className="text-[var(--fg-muted)] text-sm">
+          {isIndividual
+            ? 'Complete la información del coachee y del coach.'
+            : 'Complete la información general del coachee y los actores del proceso.'}
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -455,78 +612,82 @@ function BackgroundInfoTab({
           </div>
         </div>
 
-        {/* Supervisor */}
-        <div className="space-y-4">
-          <h3 className="font-semibold text-[var(--fg-primary)] border-b pb-2">Jefe Directo / Sponsor</h3>
-          <div>
-            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Nombre</label>
-            <input
-              type="text"
-              value={form.supervisorName || ''}
-              onChange={(e) => setForm({ ...form, supervisorName: e.target.value })}
-              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
-            />
+        {/* Supervisor - Solo para coaching corporativo */}
+        {!isIndividual && (
+          <div className="space-y-4">
+            <h3 className="font-semibold text-[var(--fg-primary)] border-b pb-2">Jefe Directo / Sponsor</h3>
+            <div>
+              <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Nombre</label>
+              <input
+                type="text"
+                value={form.supervisorName || ''}
+                onChange={(e) => setForm({ ...form, supervisorName: e.target.value })}
+                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Cargo</label>
+              <input
+                type="text"
+                value={form.supervisorPosition || ''}
+                onChange={(e) => setForm({ ...form, supervisorPosition: e.target.value })}
+                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Teléfono</label>
+              <input
+                type="tel"
+                value={form.supervisorPhone || ''}
+                onChange={(e) => setForm({ ...form, supervisorPhone: e.target.value })}
+                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Email</label>
+              <input
+                type="email"
+                value={form.supervisorEmail || ''}
+                onChange={(e) => setForm({ ...form, supervisorEmail: e.target.value })}
+                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Cargo</label>
-            <input
-              type="text"
-              value={form.supervisorPosition || ''}
-              onChange={(e) => setForm({ ...form, supervisorPosition: e.target.value })}
-              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Teléfono</label>
-            <input
-              type="tel"
-              value={form.supervisorPhone || ''}
-              onChange={(e) => setForm({ ...form, supervisorPhone: e.target.value })}
-              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Email</label>
-            <input
-              type="email"
-              value={form.supervisorEmail || ''}
-              onChange={(e) => setForm({ ...form, supervisorEmail: e.target.value })}
-              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
-            />
-          </div>
-        </div>
+        )}
 
-        {/* HR */}
-        <div className="space-y-4">
-          <h3 className="font-semibold text-[var(--fg-primary)] border-b pb-2">RRHH (Opcional)</h3>
-          <div>
-            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Nombre</label>
-            <input
-              type="text"
-              value={form.hrName || ''}
-              onChange={(e) => setForm({ ...form, hrName: e.target.value })}
-              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
-            />
+        {/* HR - Solo para coaching corporativo */}
+        {!isIndividual && (
+          <div className="space-y-4">
+            <h3 className="font-semibold text-[var(--fg-primary)] border-b pb-2">RRHH (Opcional)</h3>
+            <div>
+              <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Nombre</label>
+              <input
+                type="text"
+                value={form.hrName || ''}
+                onChange={(e) => setForm({ ...form, hrName: e.target.value })}
+                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Teléfono</label>
+              <input
+                type="tel"
+                value={form.hrPhone || ''}
+                onChange={(e) => setForm({ ...form, hrPhone: e.target.value })}
+                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Email</label>
+              <input
+                type="email"
+                value={form.hrEmail || ''}
+                onChange={(e) => setForm({ ...form, hrEmail: e.target.value })}
+                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Teléfono</label>
-            <input
-              type="tel"
-              value={form.hrPhone || ''}
-              onChange={(e) => setForm({ ...form, hrPhone: e.target.value })}
-              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Email</label>
-            <input
-              type="email"
-              value={form.hrEmail || ''}
-              onChange={(e) => setForm({ ...form, hrEmail: e.target.value })}
-              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
-            />
-          </div>
-        </div>
+        )}
 
         {/* Coach */}
         <div className="space-y-4">
@@ -679,13 +840,214 @@ function TripartiteMeetingTab({
   );
 }
 
-function AgreementTab({ 
-  program, 
-  onSave, 
-  saving 
-}: { 
-  program: CoachingProgram; 
+function AlignmentSessionTab({
+  program,
+  onSave,
+  saving
+}: {
+  program: CoachingProgram;
+  onSave: (data: AlignmentSession) => Promise<void>;
+  saving: boolean;
+}) {
+  const [form, setForm] = useState<AlignmentSession>(
+    program.alignmentSession || {
+      personalGoals: '',
+      currentSituation: '',
+      successVision: '',
+      progressIndicators: '',
+      strengthsToLeverage: '',
+      areasToImprove: '',
+      initialCommitments: '',
+      observations: '',
+    }
+  );
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <div className="flex items-center gap-2 mb-2">
+          <User className="text-emerald-600" size={24} />
+          <h2 className="text-xl font-bold text-[var(--fg-primary)]">Sesión de Alineación Personal</h2>
+        </div>
+        <p className="text-[var(--fg-muted)] text-sm">
+          Esta sesión reemplaza la reunión tripartita para procesos de coaching individual (sin empresa/sponsor).
+          El objetivo es establecer una alineación clara entre coach y coachee sobre los objetivos del proceso.
+        </p>
+      </div>
+
+      {/* Indicador de completado */}
+      {program.alignmentSession?.completedAt && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center gap-3">
+          <Check className="text-green-600" size={20} />
+          <div>
+            <span className="font-medium text-green-800">Sesión de Alineación Completada</span>
+            <p className="text-sm text-green-600">
+              {program.alignmentSession.completedAt.toDate?.()?.toLocaleDateString()}
+            </p>
+          </div>
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div>
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Fecha de la sesión</label>
+          <input
+            type="date"
+            value={form.date ? new Date((form.date as any).seconds * 1000).toISOString().split('T')[0] : ''}
+            onChange={(e) => setForm({ ...form, date: Timestamp.fromDate(new Date(e.target.value)) })}
+            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Lugar / Modalidad</label>
+          <input
+            type="text"
+            value={form.location || ''}
+            onChange={(e) => setForm({ ...form, location: e.target.value })}
+            placeholder="Presencial / Zoom / Teams"
+            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500"
+          />
+        </div>
+      </div>
+
+      <div className="space-y-6">
+        {/* Metas Personales */}
+        <div className="bg-emerald-50 rounded-xl p-4 border border-emerald-200">
+          <h3 className="font-semibold text-emerald-800 mb-2 flex items-center gap-2">
+            <Sparkles size={18} />
+            Metas Personales del Proceso
+          </h3>
+          <p className="text-xs text-emerald-600 mb-2">¿Qué quieres lograr con este proceso de coaching?</p>
+          <textarea
+            value={form.personalGoals || ''}
+            onChange={(e) => setForm({ ...form, personalGoals: e.target.value })}
+            rows={4}
+            placeholder="Describe las metas que deseas alcanzar..."
+            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-emerald-500 text-sm"
+          />
+        </div>
+
+        {/* Situación Actual */}
+        <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
+          <h3 className="font-semibold text-blue-800 mb-2">Situación Actual</h3>
+          <p className="text-xs text-blue-600 mb-2">¿Cómo describes tu situación actual respecto a estas metas?</p>
+          <textarea
+            value={form.currentSituation || ''}
+            onChange={(e) => setForm({ ...form, currentSituation: e.target.value })}
+            rows={4}
+            placeholder="Describe tu punto de partida..."
+            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+          />
+        </div>
+
+        {/* Visión de Éxito */}
+        <div className="bg-purple-50 rounded-xl p-4 border border-purple-200">
+          <h3 className="font-semibold text-purple-800 mb-2">Visión de Éxito</h3>
+          <p className="text-xs text-purple-600 mb-2">¿Cómo se verá tu vida cuando hayas alcanzado estas metas?</p>
+          <textarea
+            value={form.successVision || ''}
+            onChange={(e) => setForm({ ...form, successVision: e.target.value })}
+            rows={4}
+            placeholder="Describe tu visión de éxito..."
+            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 text-sm"
+          />
+        </div>
+
+        {/* Indicadores de Progreso */}
+        <div className="bg-orange-50 rounded-xl p-4 border border-orange-200">
+          <h3 className="font-semibold text-orange-800 mb-2">Indicadores de Progreso</h3>
+          <p className="text-xs text-orange-600 mb-2">¿Cómo sabrás que estás avanzando?</p>
+          <textarea
+            value={form.progressIndicators || ''}
+            onChange={(e) => setForm({ ...form, progressIndicators: e.target.value })}
+            rows={3}
+            placeholder="Define indicadores medibles u observables..."
+            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 text-sm"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Fortalezas */}
+          <div className="bg-green-50 rounded-xl p-4 border border-green-200">
+            <h3 className="font-semibold text-green-800 mb-2">Fortalezas a Potenciar</h3>
+            <p className="text-xs text-green-600 mb-2">¿Qué recursos y fortalezas tienes a tu favor?</p>
+            <textarea
+              value={form.strengthsToLeverage || ''}
+              onChange={(e) => setForm({ ...form, strengthsToLeverage: e.target.value })}
+              rows={4}
+              placeholder="Lista tus fortalezas..."
+              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 text-sm"
+            />
+          </div>
+
+          {/* Áreas de Mejora */}
+          <div className="bg-red-50 rounded-xl p-4 border border-red-200">
+            <h3 className="font-semibold text-red-800 mb-2">Áreas a Desarrollar</h3>
+            <p className="text-xs text-red-600 mb-2">¿Qué aspectos necesitas trabajar?</p>
+            <textarea
+              value={form.areasToImprove || ''}
+              onChange={(e) => setForm({ ...form, areasToImprove: e.target.value })}
+              rows={4}
+              placeholder="Identifica áreas de mejora..."
+              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 text-sm"
+            />
+          </div>
+        </div>
+
+        {/* Compromisos Iniciales */}
+        <div className="bg-indigo-50 rounded-xl p-4 border border-indigo-200">
+          <h3 className="font-semibold text-indigo-800 mb-2">Compromisos Iniciales</h3>
+          <p className="text-xs text-indigo-600 mb-2">¿Qué te comprometes a hacer para avanzar hacia tus metas?</p>
+          <textarea
+            value={form.initialCommitments || ''}
+            onChange={(e) => setForm({ ...form, initialCommitments: e.target.value })}
+            rows={4}
+            placeholder="Define tus compromisos iniciales..."
+            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 text-sm"
+          />
+        </div>
+
+        {/* Observaciones del Coach */}
+        <div className="bg-[var(--bg-secondary)] rounded-xl p-4 border border-[var(--border-color)]">
+          <h3 className="font-semibold text-[var(--fg-primary)] mb-2">Observaciones del Coach</h3>
+          <p className="text-xs text-[var(--fg-muted)] mb-2">Notas adicionales del coach sobre esta sesión de alineación.</p>
+          <textarea
+            value={form.observations || ''}
+            onChange={(e) => setForm({ ...form, observations: e.target.value })}
+            rows={3}
+            placeholder="Observaciones adicionales..."
+            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 text-sm"
+          />
+        </div>
+      </div>
+
+      <div className="flex justify-end pt-4 border-t">
+        <button
+          onClick={() => onSave(form)}
+          disabled={saving}
+          className="flex items-center gap-2 px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50"
+        >
+          <Save size={18} />
+          {saving ? 'Guardando...' : 'Guardar y Continuar'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function AgreementTab({
+  program,
+  programId,
+  userProfile,
+  onSave,
+  onReload,
+  saving
+}: {
+  program: CoachingProgram;
+  programId: string;
+  userProfile: any;
   onSave: (data: Omit<CoachingAgreement, 'signatures' | 'status'>) => Promise<void>;
+  onReload: () => Promise<void>;
   saving: boolean;
 }) {
   const [form, setForm] = useState<Partial<CoachingAgreement>>(
@@ -706,6 +1068,39 @@ function AgreementTab({
     }
   );
 
+  // Coach signing state
+  const [coachSignatureImage, setCoachSignatureImage] = useState<string | null>(null);
+  const [signingAsCoach, setSigningAsCoach] = useState(false);
+
+  const hasCoachSigned = program.agreement?.signatures?.some(s => s.role === 'coach') ?? false;
+
+  const handleCoachSign = async () => {
+    if (!userProfile || !coachSignatureImage) {
+      alert('Por favor, dibuja tu firma antes de continuar');
+      return;
+    }
+
+    setSigningAsCoach(true);
+    try {
+      await signAgreement(
+        programId,
+        userProfile.uid,
+        userProfile.displayName || userProfile.name || 'Coach',
+        userProfile.email || '',
+        'coach',
+        ['Acuerdo de Coaching'],
+        coachSignatureImage
+      );
+      alert('¡Acuerdo firmado como coach exitosamente!');
+      await onReload();
+    } catch (error: any) {
+      console.error('Error signing as coach:', error);
+      alert(error.message || 'Error al firmar');
+    } finally {
+      setSigningAsCoach(false);
+    }
+  };
+
   const updateArrayField = (field: keyof CoachingAgreement, index: number, value: string) => {
     const arr = [...(form[field] as string[] || [])];
     arr[index] = value;
@@ -722,13 +1117,32 @@ function AgreementTab({
     setForm({ ...form, [field]: arr });
   };
 
+  const isIndividual = program.coachingType === 'individual';
+
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold text-[var(--fg-primary)] mb-2">Acuerdo de Coaching CE</h2>
+        <div className="flex items-center gap-2 mb-2">
+          <h2 className="text-xl font-bold text-[var(--fg-primary)]">
+            {isIndividual ? 'Acuerdo de Coaching Personal' : 'Acuerdo de Coaching CE'}
+          </h2>
+          {isIndividual && (
+            <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+              <User size={12} />
+              Individual
+            </span>
+          )}
+        </div>
         <p className="text-[var(--fg-muted)] text-sm">
-          Este acuerdo es para darle estructura de formalidad al proceso de Coaching Ejecutivo.
+          {isIndividual
+            ? 'Este acuerdo formaliza el proceso de coaching personal entre coach y coachee.'
+            : 'Este acuerdo es para darle estructura de formalidad al proceso de Coaching Ejecutivo.'}
         </p>
+        {isIndividual && (
+          <p className="text-emerald-600 text-xs mt-1">
+            Solo requiere firma del coach y coachee (sin sponsor).
+          </p>
+        )}
       </div>
 
       {/* Status */}
@@ -753,10 +1167,60 @@ function AgreementTab({
             </span>
           </div>
           {program.agreement.signatures && program.agreement.signatures.length > 0 && (
-            <div className="mt-2 text-sm text-[var(--fg-muted)]">
-              Firmas: {program.agreement.signatures.map(s => `${s.name} (${s.role})`).join(', ')}
+            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {program.agreement.signatures.map((sig, idx) => (
+                <div key={idx} className="bg-white rounded-lg p-3 border">
+                  <p className="font-medium text-[var(--fg-primary)]">{sig.name}</p>
+                  <p className="text-xs text-[var(--fg-muted)] capitalize">{sig.role}</p>
+                  {sig.signatureImage && (
+                    <div className="mt-2 border-t pt-2">
+                      <img
+                        src={sig.signatureImage}
+                        alt={`Firma de ${sig.name}`}
+                        className="max-h-12 object-contain"
+                      />
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           )}
+        </div>
+      )}
+
+      {/* Coach Signing Section */}
+      {program.agreement?.status === 'pending_signatures' && !hasCoachSigned && (
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <h3 className="font-semibold text-[var(--fg-primary)] mb-3 flex items-center gap-2">
+            <FileSignature className="text-blue-600" size={18} />
+            Firmar como Coach
+          </h3>
+          <p className="text-sm text-[var(--fg-muted)] mb-4">
+            Dibuja tu firma para firmar el acuerdo como coach.
+          </p>
+          <SignaturePad
+            onSignatureChange={setCoachSignatureImage}
+            width={350}
+            height={120}
+            disabled={signingAsCoach}
+          />
+          <div className="mt-4 flex justify-end">
+            <button
+              onClick={handleCoachSign}
+              disabled={signingAsCoach || !coachSignatureImage}
+              className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+            >
+              <FileSignature size={18} />
+              {signingAsCoach ? 'Firmando...' : 'Firmar Acuerdo'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {hasCoachSigned && (
+        <div className="p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2">
+          <Check className="text-green-600" size={18} />
+          <span className="text-green-700 font-medium">Ya has firmado este acuerdo</span>
         </div>
       )}
 
@@ -1186,13 +1650,13 @@ function SessionsTab({
   );
 }
 
-function ProcessReportTab({ 
+function ProcessReportTab({
   coachName,
-  program, 
+  program,
   onGenerate,
-  onUpdate, 
-  saving 
-}: { 
+  onUpdate,
+  saving
+}: {
   coachName: string;
   program: CoachingProgram;
   onGenerate: () => Promise<void>;
@@ -1201,6 +1665,41 @@ function ProcessReportTab({
 }) {
   const report = program.processReport;
   const [form, setForm] = useState<Partial<ProcessReport>>(report || {});
+  const [sendingEmail, setSendingEmail] = useState(false);
+
+  const handleSendEmail = async () => {
+    const email = prompt('Ingresa el email del destinatario:', program.backgroundInfo?.coacheeEmail || '');
+    if (!email) return;
+
+    setSendingEmail(true);
+    try {
+      const doc = generateProcessReportPDF(
+        { title: program.title, coacheeName: program.coacheeName || "", coachName: coachName, organizationName: program.backgroundInfo?.organizationName },
+        { centralThemes: form.centralThemes, coacheeAspects: form.coacheeAspects, organizationalContext: form.organizationalContext, newPractices: form.newPractices, relevantDiscoveries: form.relevantDiscoveries, observations: form.observations, aiGenerated: report?.aiGenerated },
+      );
+
+      const result = await sendPDFByEmail({
+        doc,
+        fileName: `reporte-proceso-${program.title.replace(/\s+/g, "-")}.pdf`,
+        recipientEmail: email,
+        recipientName: program.coacheeName || 'Coachee',
+        coacheeName: program.coacheeName || 'Coachee',
+        coachName: coachName,
+        programTitle: program.title,
+        reportType: 'process',
+      });
+
+      if (result.success) {
+        alert('Reporte enviado exitosamente');
+      } else {
+        alert(`Error al enviar: ${result.error}`);
+      }
+    } catch (error) {
+      alert('Error al enviar el reporte');
+    } finally {
+      setSendingEmail(false);
+    }
+  };
 
   if (!report) {
     return (
@@ -1223,6 +1722,19 @@ function ProcessReportTab({
 
   return (
     <div className="space-y-6">
+      <GuidanceBox
+        title="Guía para el Reporte de Proceso"
+        tips={[
+          'Este reporte captura el estado del proceso después de las primeras 3 sesiones',
+          'Identifica las fuerzas que resisten y las que impulsan el cambio',
+          'Documenta los temas centrales que se están trabajando',
+          'Sirve como punto de referencia para las sesiones siguientes',
+        ]}
+        variant="info"
+        collapsible={true}
+        defaultExpanded={false}
+      />
+
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-[var(--fg-primary)]">Reporte de Seguimiento del Proceso</h2>
@@ -1236,37 +1748,52 @@ function ProcessReportTab({
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Temas Centrales que se están tratando</label>
+          <LabelWithTooltip
+            label="Temas Centrales que se están tratando"
+            tooltip="Los hilos conductores del proceso. ¿Cuáles son los temas recurrentes que emergen en las sesiones?"
+            className="mb-1"
+          />
           <textarea
             value={form.centralThemes || ''}
             onChange={(e) => setForm({ ...form, centralThemes: e.target.value })}
             rows={4}
+            placeholder={FIELD_PLACEHOLDERS.processReport.centralThemes}
             className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-red-50 rounded-xl p-4">
-            <h3 className="font-semibold text-red-800 mb-2">Fuerzas Conservadoras del Coachee</h3>
+            <LabelWithTooltip
+              label="Fuerzas Conservadoras del Coachee"
+              tooltip={FIELD_TOOLTIPS.processReport.conservativeForces}
+              className="mb-2 text-red-800"
+            />
             <textarea
               value={form.coacheeAspects?.conservativeForces || ''}
-              onChange={(e) => setForm({ 
-                ...form, 
+              onChange={(e) => setForm({
+                ...form,
                 coacheeAspects: { ...form.coacheeAspects, conservativeForces: e.target.value } as any
               })}
               rows={3}
+              placeholder={FIELD_PLACEHOLDERS.processReport.conservativeForces}
               className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
             />
           </div>
           <div className="bg-green-50 rounded-xl p-4">
-            <h3 className="font-semibold text-green-800 mb-2">Fuerzas Transformadoras del Coachee</h3>
+            <LabelWithTooltip
+              label="Fuerzas Transformadoras del Coachee"
+              tooltip={FIELD_TOOLTIPS.processReport.transformativeForces}
+              className="mb-2 text-green-800"
+            />
             <textarea
               value={form.coacheeAspects?.transformativeForces || ''}
-              onChange={(e) => setForm({ 
-                ...form, 
+              onChange={(e) => setForm({
+                ...form,
                 coacheeAspects: { ...form.coacheeAspects, transformativeForces: e.target.value } as any
               })}
               rows={3}
+              placeholder={FIELD_PLACEHOLDERS.processReport.transformativeForces}
               className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
             />
           </div>
@@ -1274,26 +1801,36 @@ function ProcessReportTab({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-orange-50 rounded-xl p-4">
-            <h3 className="font-semibold text-orange-800 mb-2">Fuerzas Conservadoras del Sistema</h3>
+            <LabelWithTooltip
+              label="Fuerzas Conservadoras del Sistema"
+              tooltip={FIELD_TOOLTIPS.processReport.systemConservative}
+              className="mb-2 text-orange-800"
+            />
             <textarea
               value={form.organizationalContext?.conservativeForces || ''}
-              onChange={(e) => setForm({ 
-                ...form, 
+              onChange={(e) => setForm({
+                ...form,
                 organizationalContext: { ...form.organizationalContext, conservativeForces: e.target.value } as any
               })}
               rows={3}
+              placeholder={FIELD_PLACEHOLDERS.processReport.systemConservative}
               className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
             />
           </div>
           <div className="bg-blue-50 rounded-xl p-4">
-            <h3 className="font-semibold text-blue-800 mb-2">Fuerzas Transformadoras del Sistema</h3>
+            <LabelWithTooltip
+              label="Fuerzas Transformadoras del Sistema"
+              tooltip={FIELD_TOOLTIPS.processReport.systemTransformative}
+              className="mb-2 text-blue-800"
+            />
             <textarea
               value={form.organizationalContext?.transformativeForces || ''}
-              onChange={(e) => setForm({ 
-                ...form, 
+              onChange={(e) => setForm({
+                ...form,
                 organizationalContext: { ...form.organizationalContext, transformativeForces: e.target.value } as any
               })}
               rows={3}
+              placeholder={FIELD_PLACEHOLDERS.processReport.systemTransformative}
               className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
             />
           </div>
@@ -1305,6 +1842,7 @@ function ProcessReportTab({
             value={form.relevantDiscoveries || ''}
             onChange={(e) => setForm({ ...form, relevantDiscoveries: e.target.value })}
             rows={4}
+            placeholder={FIELD_PLACEHOLDERS.processReport.relevantDiscoveries}
             className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
           />
         </div>
@@ -1315,6 +1853,7 @@ function ProcessReportTab({
             value={form.observations || ''}
             onChange={(e) => setForm({ ...form, observations: e.target.value })}
             rows={3}
+            placeholder="Observaciones adicionales del coach sobre el proceso hasta este punto."
             className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
           />
         </div>
@@ -1332,6 +1871,14 @@ function ProcessReportTab({
         >
           <Download size={18} />
           Exportar PDF
+        </button>
+        <button
+          onClick={handleSendEmail}
+          disabled={sendingEmail}
+          className="flex items-center gap-2 px-4 py-2 border border-emerald-500 text-emerald-600 rounded-lg hover:bg-emerald-50 disabled:opacity-50"
+        >
+          <Mail size={18} />
+          {sendingEmail ? 'Enviando...' : 'Enviar por Email'}
         </button>
         <button
           onClick={() => onUpdate(form)}
@@ -1353,7 +1900,7 @@ function FinalReportTab({
   onUpdate,
   onComplete,
   saving 
-}: { 
+}: {
   coachName: string;
   onGenerate: () => Promise<void>;
   program: CoachingProgram;
@@ -1363,6 +1910,41 @@ function FinalReportTab({
 }) {
   const report = program.finalReport;
   const [form, setForm] = useState<Partial<FinalReport>>(report || {});
+  const [sendingEmail, setSendingEmail] = useState(false);
+
+  const handleSendEmail = async () => {
+    const email = prompt('Ingresa el email del destinatario:', program.backgroundInfo?.coacheeEmail || '');
+    if (!email) return;
+
+    setSendingEmail(true);
+    try {
+      const doc = generateFinalReportPDF(
+        { title: program.title, coacheeName: program.coacheeName || "", coachName: coachName, organizationName: program.backgroundInfo?.organizationName },
+        { startingPointData: form.startingPointData, closingAspects: form.closingAspects, incorporatedPractices: form.incorporatedPractices, gapsToReinforce: form.gapsToReinforce, sustainabilityRecommendations: form.sustainabilityRecommendations, finalObservations: form.finalObservations, aiGenerated: report?.aiGenerated }
+      );
+
+      const result = await sendPDFByEmail({
+        doc,
+        fileName: `informe-final-${program.title.replace(/\s+/g, "-")}.pdf`,
+        recipientEmail: email,
+        recipientName: program.coacheeName || 'Coachee',
+        coacheeName: program.coacheeName || 'Coachee',
+        coachName: coachName,
+        programTitle: program.title,
+        reportType: 'final',
+      });
+
+      if (result.success) {
+        alert('Informe enviado exitosamente');
+      } else {
+        alert(`Error al enviar: ${result.error}`);
+      }
+    } catch (error) {
+      alert('Error al enviar el informe');
+    } finally {
+      setSendingEmail(false);
+    }
+  };
 
   if (!report) {
     return (
@@ -1385,6 +1967,19 @@ function FinalReportTab({
 
   return (
     <div className="space-y-6">
+      <GuidanceBox
+        title="Guía para el Informe Final"
+        tips={[
+          'Compara el punto de partida (tripartita) con el punto de cierre actual',
+          'Documenta las prácticas que el coachee ha incorporado a su desempeño',
+          'Identifica las brechas que aún requieren trabajo futuro',
+          'Incluye recomendaciones para que los aprendizajes sean sostenibles',
+        ]}
+        variant="tip"
+        collapsible={true}
+        defaultExpanded={false}
+      />
+
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-[var(--fg-primary)]">Informe Final CE</h2>
@@ -1398,47 +1993,61 @@ function FinalReportTab({
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">Datos del Punto de Partida</label>
+          <LabelWithTooltip
+            label="Datos del Punto de Partida"
+            tooltip={FIELD_TOOLTIPS.finalReport.startingPointData}
+            className="mb-1"
+          />
           <textarea
             value={form.startingPointData || ''}
             onChange={(e) => setForm({ ...form, startingPointData: e.target.value })}
             rows={4}
+            placeholder={FIELD_PLACEHOLDERS.finalReport.startingPointData}
             className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
-            Tres aspectos del coachee que hacen visible el punto de cierre
-          </label>
+          <LabelWithTooltip
+            label="Tres aspectos del coachee que hacen visible el punto de cierre"
+            tooltip={FIELD_TOOLTIPS.finalReport.closingAspects}
+            className="mb-1"
+          />
           <textarea
             value={form.closingAspects || ''}
             onChange={(e) => setForm({ ...form, closingAspects: e.target.value })}
             rows={4}
+            placeholder={FIELD_PLACEHOLDERS.finalReport.closingAspects}
             className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
-            Prácticas Organizacionales Incorporadas
-          </label>
+          <LabelWithTooltip
+            label="Prácticas Organizacionales Incorporadas"
+            tooltip={FIELD_TOOLTIPS.finalReport.incorporatedPractices}
+            className="mb-1"
+          />
           <textarea
             value={form.incorporatedPractices || ''}
             onChange={(e) => setForm({ ...form, incorporatedPractices: e.target.value })}
             rows={4}
+            placeholder={FIELD_PLACEHOLDERS.finalReport.incorporatedPractices}
             className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
-            Brechas que el coachee debiera reforzar a futuro
-          </label>
+          <LabelWithTooltip
+            label="Brechas que el coachee debiera reforzar a futuro"
+            tooltip={FIELD_TOOLTIPS.finalReport.gapsToReinforce}
+            className="mb-1"
+          />
           <textarea
             value={form.gapsToReinforce || ''}
             onChange={(e) => setForm({ ...form, gapsToReinforce: e.target.value })}
             rows={3}
+            placeholder={FIELD_PLACEHOLDERS.finalReport.gapsToReinforce}
             className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
           />
         </div>
@@ -1451,6 +2060,7 @@ function FinalReportTab({
             value={form.sustainabilityRecommendations || ''}
             onChange={(e) => setForm({ ...form, sustainabilityRecommendations: e.target.value })}
             rows={4}
+            placeholder={FIELD_PLACEHOLDERS.finalReport.sustainabilityRecommendations}
             className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
           />
         </div>
@@ -1461,6 +2071,7 @@ function FinalReportTab({
             value={form.finalObservations || ''}
             onChange={(e) => setForm({ ...form, finalObservations: e.target.value })}
             rows={3}
+            placeholder="Observaciones finales del coach sobre el proceso completado."
             className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
           />
         </div>
@@ -1478,6 +2089,14 @@ function FinalReportTab({
         >
           <Download size={18} />
           Exportar PDF
+        </button>
+        <button
+          onClick={handleSendEmail}
+          disabled={sendingEmail}
+          className="flex items-center gap-2 px-4 py-2 border border-emerald-500 text-emerald-600 rounded-lg hover:bg-emerald-50 disabled:opacity-50"
+        >
+          <Mail size={18} />
+          {sendingEmail ? 'Enviando...' : 'Enviar por Email'}
         </button>
         <button
           onClick={() => onUpdate(form)}

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Calendar, Clock, User, Play, CheckCircle, XCircle, Plus, Video } from 'lucide-react';
+import { Calendar, Clock, User, Play, CheckCircle, XCircle, Plus, Video, FileText, Share2 } from 'lucide-react';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
@@ -17,6 +17,8 @@ interface Session {
   coachId: string;
   confirmed: boolean;
   meetingUrl?: string;
+  agreementSharedWithCoachee?: boolean;
+  reportSharedWithCoachee?: boolean;
 }
 
 export default function SessionsPage() {
@@ -47,6 +49,8 @@ export default function SessionsPage() {
         coachId: doc.data().coachId || '',
         confirmed: doc.data().confirmed || false,
         meetingUrl: doc.data().meetingUrl,
+        agreementSharedWithCoachee: doc.data().agreementSharedWithCoachee || false,
+        reportSharedWithCoachee: doc.data().reportSharedWithCoachee || false,
       })) as Session[];
       setSessions(data);
     } catch (error) {
@@ -210,14 +214,27 @@ export default function SessionsPage() {
                         </div>
                       </div>
                     </div>
-                    {session.status === 'completed' && (
-                      <Link
-                        href={'/sessions/' + session.id}
-                        className="px-4 py-2 bg-[var(--bg-tertiary)] text-[var(--fg-primary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
-                      >
-                        Ver Notas
-                      </Link>
-                    )}
+                    <div className="flex items-center gap-2">
+                      {(session.agreementSharedWithCoachee || session.reportSharedWithCoachee) && (
+                        <span className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/20 text-blue-400 text-xs rounded-full">
+                          <Share2 className="w-3 h-3" />
+                          {session.agreementSharedWithCoachee && session.reportSharedWithCoachee
+                            ? 'Acuerdo e Informe'
+                            : session.agreementSharedWithCoachee
+                              ? 'Acuerdo Compartido'
+                              : 'Informe Compartido'}
+                        </span>
+                      )}
+                      {session.status === 'completed' && (
+                        <Link
+                          href={'/sessions/' + session.id}
+                          className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-tertiary)] text-[var(--fg-primary)] rounded-lg hover:bg-[var(--bg-tertiary)] transition-colors"
+                        >
+                          <FileText className="w-4 h-4" />
+                          Ver Notas
+                        </Link>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}

@@ -1,9 +1,10 @@
-export type NotificationType = 
-  | 'tool_assigned' 
-  | 'tool_completed' 
-  | 'session_scheduled' 
+export type NotificationType =
+  | 'tool_assigned'
+  | 'tool_completed'
+  | 'session_scheduled'
   | 'goal_updated'
-  | 'message_received';
+  | 'message_received'
+  | 'notes_shared';
 
 export interface Notification {
   id: string;

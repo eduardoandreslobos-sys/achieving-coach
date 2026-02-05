@@ -52,6 +52,7 @@ import {
   RescheduleRequestModal,
   RescheduleResponseBanner
 } from '@/components/sessions';
+import { notificationHelpers } from '@/lib/notifications';
 
 interface SessionSharing {
   agreementSharedWithCoachee: boolean;
@@ -117,7 +118,7 @@ interface Session {
 export default function SessionDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, userProfile } = useAuth();
   const sessionId = params?.sessionId as string;
 
   const [session, setSession] = useState<Session | null>(null);
@@ -396,6 +397,20 @@ export default function SessionDetailPage() {
           [field]: !currentValue
         }
       });
+
+      // Send notification to coachee when sharing is enabled
+      if (!currentValue && session.coacheeId) {
+        const coachName = userProfile?.name || userProfile?.displayName || 'Tu coach';
+        try {
+          if (field === 'agreementSharedWithCoachee') {
+            await notificationHelpers.sessionAgreementShared(session.coacheeId, coachName, session.id);
+          } else {
+            await notificationHelpers.sessionReportShared(session.coacheeId, coachName, session.id);
+          }
+        } catch (notifError) {
+          console.error('Error sending notification:', notifError);
+        }
+      }
 
       toast.success(!currentValue ? 'Compartido con el coachee' : 'Ya no está compartido con el coachee');
     } catch (error) {
